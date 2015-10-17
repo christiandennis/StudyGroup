@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  subject: MyString
+  description: MyText
+  date: 1.5
+  location: MyString
+  school: MyString
+  capacity: 1
+  guestlist: MyText
+  comments: MyText
+  privacy: 1
+  host: 1
+
+two:
+  title: MyString
+  subject: MyString
+  description: MyText
+  date: 1.5
+  location: MyString
+  school: MyString
+  capacity: 1
+  guestlist: MyText
+  comments: MyText
+  privacy: 1
+  host: 1
