@@ -6,7 +6,7 @@
 </head>
 
 <body>
-
+	<!-- NAVBAR -->
 	<nav class="navbar navbar-default">
 	  <div class="container-fluid">
 	    <!-- Brand and toggle get grouped for better mobile display -->
@@ -16,16 +16,18 @@
 	  </div>
 	</nav>
 
-
+	<!-- SIDEBAR HERE -->
 	<div class="row">
-	  <div class="col-md-4">
+	  <div class="col-md-3">
 
 
 
 	  </div>
 	  
-	  <div class="col-md-8 group-container">
-	  	<div class="card">
+	  <!-- GROUP VIEW HERE -->
+	  <div class="col-md-9 group-container studyGroups">
+	  	
+	  	<div class="card studyGroup">
 	  		<div class="colorBar"></div>
 	  		<table>
 	  			<tr class="row1">
@@ -34,6 +36,7 @@
 	  					<span class="subject">CS169: </span>
 	  					<span class="title">Ruby night!</span>
 	  				</td>
+
 	  				<td colspan="2" align="right" class="dateTimeHolder">
 	  					<div class="date">25 Sept</div>
 	  					<div class="time">01:00 pm</div>
@@ -50,23 +53,14 @@
 	  					</div>
 	  					<div class="seeMore">See more...</div>
 	  				</td>
-	  				<td>
-	  					
-	  				</td>
 	  			</tr>
 
 	  			<tr  class="row3">
-	  				<td>
-	  					
+	  				<td class="pinHolder">
+	  					<div class="pin"></div>
 	  				</td>
 	  				<td colspan="2">
 	  					<div class="location">Wozniak Longue, <br>Soda Hall</div>
-	  				</td>
-	  				<td>
-	  					
-	  				</td>
-	  				<td>
-	  					
 	  				</td>
 	  			</tr>
 
@@ -92,7 +86,16 @@
 	  </div>
 	</div>
 
-	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script src="main.js"></script>
+	<script type="text/javascript">
+    // This is a jQuery convention to say that once all the files
+    // load, the function Smile.start() should run.
+    // This function is defined in the smiles.js
+    $(function() {
+      main.start();
+    });
+  </script>
 </body>
 
 </html>
