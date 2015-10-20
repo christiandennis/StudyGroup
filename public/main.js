@@ -61,7 +61,7 @@ var main = (function() {
         newElem.find('.time').text(studyGroup.datetime.slice(11,16));
         newElem.find(".description").text(studyGroup.description);
         newElem.find(".location").text(studyGroup.location);
-        newElem.find(".capacity").text(studyGroup.location);
+        newElem.find(".capacity").text(studyGroup.capacity);
 
 
 

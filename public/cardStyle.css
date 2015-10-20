@@ -50,9 +50,19 @@ tr {
 	align-items: center;
 }
 
-.userPhoto {
-	max-width: 80%;
-	max-height: 80%;
+.photoHolder {
+	width: 62px;
+	height: 62px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: auto auto;
+}
+
+.circle img {
+ 	max-width: 80%;
+ 	max-height: 80%;
+    border-radius: 50%;
 }
 
 .subject {
@@ -87,6 +97,8 @@ tr {
 	position: relative;
 	border: solid;
 	border-width: 1px;
+	float: left;
+
 
 }
 
@@ -101,8 +113,9 @@ tr {
 
 .capacityHolder {
 	width: 50px;
-	height: 40px;
-	position: relative;
+	height: 30px;
+ 	position: relative;
+	float: left;
 }
 
 .capacity {
