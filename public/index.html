@@ -1,98 +1,149 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="cardStyle.css">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="cardStyle.css">
+
+    <!--    this is link for sidebar's style-->
+    <link href="simple-sidebar.css" rel="stylesheet">
+
+    <!--    Jquery-->
+    <script src="jquery.js"></script>
 </head>
 
 <body>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <a class="navbar-brand" id="menu-toggle">Study Group</a>
+            </div>
+        </div>
+    </nav>
 
-	<nav class="navbar navbar-default">
-	  <div class="container-fluid">
-	    <!-- Brand and toggle get grouped for better mobile display -->
-	    <div class="navbar-header">
-	      <a class="navbar-brand" href="#">Study Group</a>
-	    </div>
-	  </div>
-	</nav>
+    <!--    THIS IS THE SIDEBAR-->
+    <div id="wrapper" class="toggled">
 
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#" class="prof_name">
+                        Hi, Henry Clubbing!
+                    </a>
+                </li>
+                <li>
+                    <img src="zen_stone.jpg" class="prof_pic"></img>
+                </li>
+                <li>
+                    <a href="#">Logout</a>
+                </li>
 
-	<div class="row">
-	  <div class="col-md-4">
-
-
-
-	  </div>
-	  
-	  <div class="col-md-8 group-container">
-	  	<div class="card">
-	  		<div class="colorBar"></div>
-	  		<table>
-	  			<tr class="row1">
-	  				<td class="userPhotoHolder"> <img class="userPhoto" src="http://nick.mtvnimages.com/nick/properties/spongebob-squarepants/characters/spongebob-about-web-desktop.jpg?quality=0.75"></td>
-	  				<td colspan="2">
-	  					<span class="subject">CS169: </span>
-	  					<span class="title">Ruby night!</span>
-	  				</td>
-	  				<td colspan="2" align="right" class="dateTimeHolder">
-	  					<div class="date">25 Sept</div>
-	  					<div class="time">01:00 pm</div>
-	  				</td>
-	  			</tr>
-
-	  			<tr class="row2">
-	  				<td class="exclamationHolder">
-	  					<div class="exclamation"></div>
-	  				</td>
-	  				<td colspan="3">
-	  					<div class="description">
-	  					Learn the basics of Ruby, Rails, and MVC design! We got pizzas!
-	  					</div>
-	  					<div class="seeMore">See more...</div>
-	  				</td>
-	  				<td>
-	  					
-	  				</td>
-	  			</tr>
-
-	  			<tr  class="row3">
-	  				<td>
-	  					
-	  				</td>
-	  				<td colspan="2">
-	  					<div class="location">Wozniak Longue, <br>Soda Hall</div>
-	  				</td>
-	  				<td>
-	  					
-	  				</td>
-	  				<td>
-	  					
-	  				</td>
-	  			</tr>
-
-	  			<tr  class="row4">
-	  				<td></td>
-	  				<td colspan="2"><span class="host">@theodorusib</span></td>
-	  				<td colspan="1">
-	  					<div class="joinButton">
-	  						<div class="join">Join</div>
-	  					</div>
-	  				</td>
-	  				<td>
-	  					<div class="capacityHolder">
-	  						<div class="capacity">9/20</div>
-	  					</div>
-	  				</td>
-	  			</tr>
-	  		</table>
+            </ul>
+        </div>
 
 
-	  	</div>
+        <!--    END SIDE BAR-->
 
-	  </div>
-	</div>
+        <div id="page-content-wrapper">
 
-	
+            <div class="row">
+                <div class="col-md-3">
+
+                </div>
+
+                <div class="col-md-9 group-container">
+                    <div class="card">
+                        <div class="colorBar"></div>
+                        <table>
+                            <tr class="row1">
+                                <td class="userPhotoHolder"> <img class="userPhoto" src="http://nick.mtvnimages.com/nick/properties/spongebob-squarepants/characters/spongebob-about-web-desktop.jpg?quality=0.75">
+                                </td>
+                                <td colspan="2">
+                                    <span class="subject">CS169: </span>
+                                    <span class="title">Ruby night!</span>
+                                </td>
+                                <td colspan="2" align="right" class="dateTimeHolder">
+                                    <div class="date">25 Sept</div>
+                                    <div class="time">01:00 pm</div>
+                                </td>
+                            </tr>
+
+                            <tr class="row2">
+                                <td class="exclamationHolder">
+                                    <div class="exclamation"></div>
+                                </td>
+                                <td colspan="3">
+                                    <div class="description">
+                                        Learn the basics of Ruby, Rails, and MVC design! We got pizzas!
+                                    </div>
+                                    <div class="seeMore">See more...</div>
+                                </td>
+                                <td>
+
+                                </td>
+                            </tr>
+
+                            <tr class="row3">
+                                <td>
+
+                                </td>
+                                <td colspan="2">
+                                    <div class="location">Wozniak Longue,
+                                        <br>Soda Hall</div>
+                                </td>
+                                <td>
+
+                                </td>
+                                <td>
+
+                                </td>
+                            </tr>
+
+                            <tr class="row4">
+                                <td></td>
+                                <td colspan="2"><span class="host">@theodorusib</span>
+                                </td>
+                                <td colspan="1">
+                                    <div class="joinButton">
+                                        <div class="join">Join</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="capacityHolder">
+                                        <div class="capacity">9/20</div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--sidebar hovering script-->
+    <script>
+        $("#menu-toggle").hover(function (e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+
+        $("#sidebar-wrapper").hover(function (e) {
+            e.preventDefault();
+            $("#wrapper").removeClass("toggled");
+        });
+
+        $("#page-content-wrapper").hover(function (e) {
+            e.preventDefault();
+            $("#wrapper").addClass("toggled");
+        });
+    </script>
+
+
 </body>
 
 </html>
