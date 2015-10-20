@@ -61,6 +61,8 @@ var main = (function() {
         newElem.find('.time').text(studyGroup.datetime.slice(11,16));
         newElem.find(".description").text(studyGroup.description);
         newElem.find(".location").text(studyGroup.location);
+        newElem.find(".capacity").text(studyGroup.location);
+
 
 
         // FINISH ME (Task 2): fill-in the rest of the data
