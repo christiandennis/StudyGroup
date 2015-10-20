@@ -1,7 +1,7 @@
 .card {
 	width: 550px;
 	height: 300px;
-	background-color: #E0E0E0;
+	background-color: #FFFFFF;
 	overflow: hidden;
 }
 
@@ -112,4 +112,18 @@ tr {
 	transform: translate(-50%, -50%);	
 	font-size: 18px;
 
+}
+.navbar-default {
+    background-color: #3F51B5;
+    border-color: transparent;
+    color: #FFFFFF
+    border-radius: 0;
+}
+
+.navbar-default .navbar-brand {
+    color: #FFFFFF;
+}
+
+body {
+	background-color: #F3F3F3;
 }
