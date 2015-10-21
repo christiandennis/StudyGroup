@@ -16,15 +16,15 @@
 
     <!-- NAVBAR -->
     <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <a class="navbar-brand" id="menu-toggle">Study Group</a>
-            </div>
-            <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
-              New StudyGroup
-            </button>
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <a class="navbar-brand" id="menu-toggle">Study Group</a>
         </div>
+        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+          New StudyGroup
+        </button>
+      </div>
     </nav>
 
     <!--    wrapper-->
@@ -34,16 +34,21 @@
         <div id="sidebar-wrapper">
       		<ul class="sidebar-nav">
               <li class="sidebar-brand">
-                  <a href="#" class="prof_name">
-                  Hi, Henry Clubbing!
+                <a href="#" class="prof_name">
+                Hi, Henry Clubbing!
               </a>
               </li>
               <li>
-                  <img src="zen_stone.jpg" class="prof_pic"></img>
+                <img src="zen_stone.jpg" class="prof_pic"></img>
               </li>
               <li>
-                  <a id="logout" href="#">Logout</a>
-                  <a id="signup" data-toggle="modal" data-target="#signUp">Sign Up</a>
+                <a id="logout" data-toggle="modal" data-target="#sign-in">Sign In</a>
+              </li>
+              <li>
+                <a id="signup" data-toggle="modal" data-target="#sign-up">Sign Up</a>
+              </li>
+              <li>
+                <a id="logout" href="#">Logout</a>
               </li>
           </ul>
         </div>
@@ -149,7 +154,7 @@
           </div>
         </div>
 
-        <div class="modal fade" id="signUp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal fade" id="sign-up" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
@@ -165,6 +170,27 @@
               </div>
               <div class="modal-footer">
               	<input class="sub btn btn-primary" type="submit" value="Sign Up">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal fade" id="sign-in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Sign In</h4>
+              </div>
+              <div class="modal-body">
+                <form method="get" action="index.html" id = "smileForm">
+                  <input type="text" placeholder="Email" class="title-input" name="email" /> <br>
+                  <input type="text" placeholder="Password" class="title-input" name="password" /> <br>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <input class="sub btn btn-primary" type="submit" value="Sign In">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
               </div>
             </div>
