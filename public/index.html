@@ -32,20 +32,20 @@
 
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
-            <ul class="sidebar-nav">
-                <li class="sidebar-brand">
-                    <a href="#" class="prof_name">
-                    Hi, Henry Clubbing!
-                </a>
-                </li>
-                <li>
-                    <img src="zen_stone.jpg" class="prof_pic"></img>
-                </li>
-                <li>
-                    <a href="#">Logout</a>
-                </li>
-
-            </ul>
+      		<ul class="sidebar-nav">
+              <li class="sidebar-brand">
+                  <a href="#" class="prof_name">
+                  Hi, Henry Clubbing!
+              </a>
+              </li>
+              <li>
+                  <img src="zen_stone.jpg" class="prof_pic"></img>
+              </li>
+              <li>
+                  <a id="logout" href="#">Logout</a>
+                  <a id="signup" data-toggle="modal" data-target="#signUp">Sign Up</a>
+              </li>
+          </ul>
         </div>
 
 
@@ -133,18 +133,38 @@
               </div>
               <div class="modal-body">
                 <form method="get" action="index.html" id = "smileForm">
-    				<input type="text" placeholder="Class" class="title-input" name="class" />
-    				<input type="text" placeholder="Title" class="title-input" name="title" />
-    				<textarea placeholder="Description" rows="4" cols= "50" name="story" form="smileForm" class="story-input"></textarea>
-					<input type="text" placeholder="time" class="title-input" name="time" />
-					<input type="text" placeholder="capacity" class="title-input" name="capacity" />
-					<input type="text" placeholder="location" class="title-input" name="location" />
-
-
-    				<input class="sub btn btn-primary" type="submit" value="Post">
+			    				<input type="text" placeholder="Class" class="title-input" name="class" /> <br>
+			    				<input type="text" placeholder="Title" class="title-input" name="title" /> <br>
+			    				<textarea placeholder="Description" rows="4" cols= "50" name="story" form="smileForm" class="story-input"></textarea> <br>
+									<input type="text" placeholder="time" class="title-input" name="time" /> <br>
+									<input type="text" placeholder="capacity" class="title-input" name="capacity" /> <br>
+									<input type="text" placeholder="location" class="title-input" name="location" /> <br>
                 </form>
               </div>
               <div class="modal-footer">
+              	<input class="sub btn btn-primary" type="submit" value="Post">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal fade" id="signUp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Sign Up</h4>
+              </div>
+              <div class="modal-body">
+                <form method="get" action="index.html" id = "smileForm">
+			    				<input type="text" placeholder="Email" class="title-input" name="email" /> <br>
+			    				<input type="text" placeholder="Password" class="title-input" name="password" /> <br>
+			    				<input type="text" placeholder="Confirm Password" class="title-input" name="confirmPassword" /> <br>
+                </form>
+              </div>
+              <div class="modal-footer">
+              	<input class="sub btn btn-primary" type="submit" value="Sign Up">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
               </div>
             </div>
