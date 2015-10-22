@@ -100,14 +100,14 @@ var main = (function() {
      * @return {None}
      */
     var start = function() {
-        studyGroups = $(".studyGroups");
+        //studyGroups = $(".studyGroups");
         // Grab the first smile, to use as a template
-        studyGroupTemplateHtml = $(".studyGroups .studyGroup")[0].outerHTML;
+        //studyGroupTemplateHtml = $(".studyGroups .studyGroup")[0].outerHTML;
         // console.log(smileTemplateHtml)
         // Delete everything from .smiles
-        studyGroups.html('');
+        //studyGroups.html('');
 
-        displayStudyGroups();
+        //displayStudyGroups();
     };
 
 

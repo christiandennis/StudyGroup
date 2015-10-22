@@ -1,39 +1,192 @@
-<h1>This is our main view</h1>
+<!DOCTYPE html>
+<html>
 
-<%= link_to 'Create a New Group', new_group_path %>
+<head>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="cardStyle.css">
+
+    <!--    this is link for sidebar's style-->
+    <link href="simple-sidebar.css" rel="stylesheet">
+
+    <!--    Jquery-->
+    <script src="jquery.js"></script>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <a class="navbar-brand" id="menu-toggle">Study Group</a>
+            </div>
+            <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+              New StudyGroup
+            </button>
+        </div>
+    </nav>
+
+    <!--    wrapper-->
+    <div id="wrapper" class="toggled">
+
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#" class="prof_name">
+                    Hi, Henry Clubbing!
+                </a>
+                </li>
+                <li>
+                    <img src="zen_stone.jpg" class="prof_pic"></img>
+                </li>
+                <li>
+                    <a href="#">Logout</a>
+                </li>
+
+            </ul>
+        </div>
 
 
-<h1>All Groups!</h1>
-<table>
-  <tr>
-    <th>GroupID</th>
-    <th>Title</th>
-    <th>Subject</th>
-    <th>Description</th>
-    <th>Date</th>
-    <th>Location</th>
-    <th>School</th>
-    <th>Capacity</th>
-    <th>Guest List</th>
-    <th>Comments</th>
-    <th>Privacy</th>
-    <th>Host</th>
-  </tr>
- 
-  <% @groups.each do |group| %>
-    <tr>
-      <td><%= group.id %></td>
-      <td><%= group.title %></td>
-      <td><%= group.subject %></td>
-      <td><%= group.description %></td>
-      <td><%= group.date %></td>
-      <td><%= group.location %></td>
-      <td><%= group.school %></td>
-      <td><%= group.capacity %></td>
-      <td><%= group.guestlist %></td>
-      <td><%= group.comments %></td>
-      <td><%= group.privacy %></td>
-      <td><%= group.host %></td>
-    </tr>
-  <% end %>
-</table>
+        <!--    END SIDE BAR-->
+
+        <div id="page-content-wrapper">
+
+            <!-- GROUP VIEW HERE -->
+            <div class="col-md-9 group-container studyGroups">
+
+            	<% @groups.each do |group| %>
+	                <div class="card studyGroup">
+	                    <div class="colorBar"></div>
+	                    <table>
+	                        <tr class="row1">
+	                            <td class="userPhotoHolder">
+	                                <div class="photoHolder">
+	                                    <div class="circle">
+	                                        <img class="userPhoto" src="http://nick.mtvnimages.com/nick/properties/spongebob-squarepants/characters/spongebob-about-web-desktop.jpg?quality=0.75">
+	                                    </div>
+	                                </div>
+
+	                            </td>
+	                            <td colspan="2">
+	                                <span class="subject"><%= group.subject %>: </span>
+	                                <span class="title"><%= group.title %></span>
+	                            </td>
+
+	                            <td colspan="2" align="right" class="dateTimeHolder">
+	                                <div class="date"><%= group.date %></div>
+	                                <div class="time">01:00 pm</div>
+	                            </td>
+	                        </tr>
+
+	                        <tr class="row2">
+	                            <td class="exclamationHolder">
+	                                <div class="exclamation"></div>
+	                            </td>
+	                            <td colspan="3">
+	                                <div class="description"><%= group.description %></div>
+	                                <div class="seeMore">See more...</div>
+	                            </td>
+	                        </tr>
+
+	                        <tr class="row3">
+	                            <td class="pinHolder">
+	                                <div class="pin"></div>
+	                            </td>
+	                            <td colspan="2">
+	                                <div class="location"><%= group.location %></div>
+	                            </td>
+	                        </tr>
+
+	                        <tr class="row4">
+	                            <td></td>
+	                            <td colspan="2"><span class="host">@<%= group.host %></span>
+	                            </td>
+	                            <td colspan="1">
+	                                <div class="joinButton">
+	                                    <div class="join">Join</div>
+	                                </div>
+	                            </td>
+	                            <td>
+	                                <div class="capacityHolder">
+	                                    <div class="capacity"><%= group.guestlist %>/<%= group.capacity %></div>
+	                                </div>
+	                            </td>
+	                        </tr>
+	                    </table>
+
+
+	                </div>
+	                <br>
+                <% end %>
+
+            </div>
+        </div>
+
+		
+	    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	          <div class="modal-dialog" role="document">
+	            <div class="modal-content">
+	              <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	                <h4 class="modal-title" id="myModalLabel">Create new Group</h4>
+	              </div>
+	              <div class="modal-body">
+	              <%= form_for :group, url: groups_path do |f| %>
+	                <form method="get" action="index.html" id = "smileForm">
+	                	
+		                	<%= f.text_field :subject, :class => "title-input", :name => "subject", :placeholder => "Class" %>
+		                	<%= f.text_field :title, :class => "title-input", :name => "title", :placeholder => "Title" %>
+
+		                	<%= f.text_area :description, :class => "title-input", :name => "description", :placeholder => "Description" %>
+		                	<%= f.text_field :location, :class => "title-input", :name => "location", :placeholder => "Location" %>
+		                	<%= f.text_field :capacity, :class => "title-input", :name => "capacity", :placeholder => "Capacity" %>
+		                	<%= f.text_field :date, :class => "title-input", :name => "date", :placeholder => "Date" %>
+							
+							<!--<input type="text" placeholder="location" class="title-input" name="location" />-->
+
+
+		    				<!--<input class="sub btn btn-primary" type="submit" value="Post">-->
+		    				<%= f.submit 'Post', :class => "sub btn btn-primary" %>
+		    			
+	                </form>
+	                <% end %>
+	              </div>
+	              <div class="modal-footer">
+	                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	              </div>
+	            </div>
+	          </div>
+	        </div>
+	        
+	    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="main.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha256-Sk3nkD6mLTMOF0EOpNtsIry+s1CsaqQC1rVLTAy+0yc= sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        // This is a jQuery convention to say that once all the files
+        // load, the function Smile.start() should run.
+        // This function is defined in the smiles.js
+        $(function () {
+            main.start();
+        });
+        $("#menu-toggle").hover(function (e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+
+        $("#sidebar-wrapper").hover(function (e) {
+            e.preventDefault();
+            $("#wrapper").removeClass("toggled");
+        });
+
+        $("#page-content-wrapper").hover(function (e) {
+            e.preventDefault();
+            $("#wrapper").addClass("toggled");
+        });
+    </script>
+</body>
+
+</html>

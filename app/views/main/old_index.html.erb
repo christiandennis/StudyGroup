@@ -1,0 +1,39 @@
+<h1>This is our main view</h1>
+        	
+			<%= link_to 'Create a New Group', new_group_path %>
+
+
+			<h1>All Groups!</h1>
+			<table>
+			  <tr>
+			    <th>GroupID</th>
+			    <th>Title</th>
+			    <th>Subject</th>
+			    <th>Description</th>
+			    <th>Date</th>
+			    <th>Location</th>
+			    <th>School</th>
+			    <th>Capacity</th>
+			    <th>Guest List</th>
+			    <th>Comments</th>
+			    <th>Privacy</th>
+			    <th>Host</th>
+			  </tr>
+			 
+			  <% @groups.each do |group| %>
+			    <tr>
+			      <td><%= group.id %></td>
+			      <td><%= group.title %></td>
+			      <td><%= group.subject %></td>
+			      <td><%= group.description %></td>
+			      <td><%= group.date %></td>
+			      <td><%= group.location %></td>
+			      <td><%= group.school %></td>
+			      <td><%= group.capacity %></td>
+			      <td><%= group.guestlist %></td>
+			      <td><%= group.comments %></td>
+			      <td><%= group.privacy %></td>
+			      <td><%= group.host %></td>
+			    </tr>
+			  <% end %>
+			</table>

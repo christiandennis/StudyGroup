@@ -11,20 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151017020710) do
+ActiveRecord::Schema.define(version: 20151022023746) do
 
   create_table "groups", force: :cascade do |t|
     t.string   "title"
     t.string   "subject"
     t.text     "description"
-    t.float    "date"
+    t.string   "date"
     t.string   "location"
     t.string   "school"
     t.integer  "capacity"
-    t.text     "guestlist"
+    t.integer  "guestlist"
     t.text     "comments"
     t.integer  "privacy"
-    t.integer  "host"
+    t.string   "host"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
