@@ -147,4 +147,13 @@ body {
 }
 
 .modal.in .modal-dialog {
-	padding-top: 100px}
+	padding-top: 100px
+}
+
+.navbar-default .navbar-nav>li>.new-group {
+	color: #FFFFFF;
+}
+
+body { 
+    padding-top: 65px; 
+}
