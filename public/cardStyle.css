@@ -66,9 +66,6 @@ tr {
 }
 .circle-sidebar img {
     border-radius: 50%;
-    border-width: 4px;
-    border-style: solid;
-    border-color: #FFFFFF;
 }
 
 .subject {
@@ -140,7 +137,7 @@ tr {
     z-index: 100000;
     background-color: #3F51B5;
     border-color: transparent;
-    color: #FFFFFF
+    color: #FFFFFF;
     border-radius: 0;
 }
 
@@ -148,18 +145,30 @@ tr {
     color: #FFFFFF;
 }
 
+.navbar-default .navbar-brand:hover {
+    color: #FFFFFF;
+    background-color: #4d5ec1;
+}
+
 body {
 	background-color: #F3F3F3;
+	padding-top: 65px; 
 }
 
 .modal.in .modal-dialog {
 	padding-top: 100px
 }
 
+.modal-header {
+	background-color: #4d5ec1;
+	color: #FFFFFF;
+}
+
 .navbar-default .navbar-nav>li>.new-group {
 	color: #FFFFFF;
 }
 
-body { 
-    padding-top: 65px; 
+.navbar-default .navbar-nav>li>.new-group:hover {
+	color: #FFFFFF;
+	background-color: #4d5ec1;
 }
