@@ -157,3 +157,14 @@ body {
 body { 
     padding-top: 65px; 
 }
+
+.fa-search {
+    margin-top: 18px;
+    margin-right: 10px;
+    color: white;
+}
+
+.search_input{
+    height: 25px;
+    margin-top: 12px;
+}
