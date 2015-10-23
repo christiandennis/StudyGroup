@@ -164,10 +164,19 @@ body {
 	color: #FFFFFF;
 }
 
+.modal-body {
+	padding-bottom: 5px;
+}
+
+.modal-footer {
+	margin-top: 10px;
+	padding-top: 5px;
+	padding-bottom: 0px;
+}
+
 .navbar-default .navbar-nav>li>.new-group {
 	color: #FFFFFF;
 }
-
 
 .navbar-default .navbar-nav>li>.new-group:hover {
 	color: #FFFFFF;
@@ -185,4 +194,34 @@ body {
     height: 25px;
     margin-top: 12px;
 }
+
+.class-input-wrapper, .title-input-wrapper, .date-input-wrapper, .time-input-wrapper, .capacity-input-wrapper {
+	display: inline-block;
+}
+
+.inner-wrapper {
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+
+.capacity-input {
+	width: 40%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

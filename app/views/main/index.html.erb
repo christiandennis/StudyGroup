@@ -153,23 +153,43 @@
 	              <div class="modal-body">
 	              <%= form_for :group, url: groups_path do |f| %>
 	                <form method="get" action="index.html" id = "smileForm">
-	                	
-		                	<%= f.text_field :subject, :class => "title-input", :name => "subject", :placeholder => "Class" %><br>
-		                	<%= f.text_field :title, :class => "title-input", :name => "title", :placeholder => "Title" %><br>
-
-		                	<%= f.text_area :description, :class => "title-input", :name => "description", :placeholder => "Description" %><br>
-		                	<%= f.text_field :location, :class => "title-input", :name => "location", :placeholder => "Location" %><br>
-		                	<%= f.text_field :capacity, :class => "title-input", :name => "capacity", :placeholder => "Capacity" %><br>
-		                	<%= f.text_field :date, :class => "title-input", :name => "date", :placeholder => "Date" %> 
+	                	<div class="class-input-wrapper">
+		                	Class 
+		                	<%= f.text_field :subject, :class => "class-input form-control", :name => "subject", :placeholder => "CS188" %>
+		                </div>
+		                <div class="title-input-wrapper">
+		                	Title
+		                	<%= f.text_field :title, :class => "title-input form-control", :name => "title", :placeholder => "Ghostbusters" %>
+		                </div>
+		                <div class="inner-wrapper">
+		                	Description
+		                	<%= f.text_area :description, :class => "description-input form-control", :name => "description", :placeholder => "Come and get some help with proejct 3. There will be GSIs" %>
+		                </div>
+		               	<div class="inner-wrapper">
+		                	Location
+		                	<%= f.text_field :location, :class => "location-input form-control", :name => "location", :placeholder => "Wozniak Longue, Soda Hall" %>
+		                </div>
+		                <div class="date-input-wrapper">
+		                	Date
+		                	<%= f.text_field :date, :class => "date-input form-control", :name => "date", :placeholder => "Oct 25, 2015" %>
+		                </div>
+		                <div class="time-input-wrapper">
+							Time
+							<input class="time-input form-control" name="time" placeholder="7:00 pm"> 
+						</div>
+						<div class="capacity-input-wrapper">
+		                	Capacity
+		                	<%= f.text_field :capacity, :class => "capacity-input form-control", :name => "capacity", :placeholder => "40" %>
+		                </div>
 							
 							<!--<input type="text" placeholder="location" class="title-input" name="location" />-->
 
 
 		    				<!--<input class="sub btn btn-primary" type="submit" value="Post">-->
-		    				<div class="modal-footer">
-		    					<%= f.submit 'Post', :class => "sub btn btn-primary" %>
-				                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				            </div>
+	    				<div class="modal-footer">
+	    					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	    					<%= f.submit 'Post', :class => "sub btn btn-primary" %>
+			            </div>
 	                </form>
 	                <% end %>
 	              </div>
