@@ -132,6 +132,10 @@ tr {
 	font-size: 18px;
 
 }
+
+.navbar-brand{
+    font-family: 'Lobster', cursive;
+}
 .navbar-default {
     z-index: 100000;
     background-color: #3F51B5;
