@@ -5,7 +5,7 @@ class UsersController < ApplicationController
 		@user.save
 	end
 
-	def read
+	def show
 		@user = User.find(params[:email])
 	end
 
@@ -20,7 +20,7 @@ class UsersController < ApplicationController
 	def index
 	end
 
-	def show
+	def edit
 	end
 
 	def new
