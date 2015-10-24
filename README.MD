@@ -14,7 +14,7 @@
 - Registration View
 
 #Backend:
-- User API ()
+- User API
 - Group API 
 
 ##Install
