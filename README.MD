@@ -20,3 +20,4 @@
 - clone this repo
 - do bundle install
 - rake s
+- localhost:3000
