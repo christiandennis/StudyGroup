@@ -11,6 +11,7 @@
 - Group View
 - Landing Page
 - Login View
+- Registration View
 
 #Backend:
 - User API ()
