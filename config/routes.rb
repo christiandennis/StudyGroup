@@ -1,13 +1,23 @@
 Rails.application.routes.draw do
-  get 'main/index'
+  get 'landing/index'
+
+  #get 'main/index'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  root 'main#index'
+  root 'landing#index'
 
-  resources :groups, :users
+  get '/feed', to: 'main#index'
+
+  resources :groups, :landing
+
+  resources :users do
+    member do
+      get 'show'
+    end
+  end
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

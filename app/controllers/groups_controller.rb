@@ -9,7 +9,7 @@ class GroupsController < ApplicationController
 		#@group = Group.new(:title=>params[:title], :subject=>params[:subject])
 		@group = Group.new(group_params)
 		@group.save
-		redirect_to('/')
+		redirect_to('/feed')
 	end 
 
 	def index
