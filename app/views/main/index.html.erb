@@ -3,10 +3,11 @@
 
 <head>
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="cardStyle.css">
+
+    <!-- <link rel="stylesheet" type="text/css" href="cardStyle.css"> -->
 
     <!--    this is link for sidebar's style-->
-    <link href="simple-sidebar.css" rel="stylesheet">
+    <!-- <link href="simple-sidebar.css" rel="stylesheet"> -->
     
     <!--    font group-->
  <link href='https://fonts.googleapis.com/css?family=Lobster|Pacifico|Amatic+SC|Quicksand|Sigmar+One|Dancing+Script|Fredoka+One|Cookie|Oleo+Script|Marck+Script' rel='stylesheet' type='text/css'>
@@ -15,7 +16,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
 
     <!--    Jquery-->
-    <script src="jquery.js"></script>
+    <!-- // <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script> -->
+    <%= stylesheet_link_tag :cardStyle %>
+
 </head>
 
 <body>
@@ -57,7 +60,7 @@
                 </li>
                 <li>
                 	<div class="circle-sidebar">
-                		<img src="JohnRambo2008.jpg" class="prof_pic"></img>
+                		<img src="http://vignette4.wikia.nocookie.net/bomberman/images/e/eb/Bomberman_2.jpg/revision/latest?cb=20110207172040" class="prof_pic"></img>
                 	</div>
                 </li>
                 <li>
@@ -201,7 +204,8 @@
 	    </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script src="main.js"></script>
+    <!-- // <script src="main.js"></script> -->
+    <%= javascript_include_tag :main %>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha256-Sk3nkD6mLTMOF0EOpNtsIry+s1CsaqQC1rVLTAy+0yc= sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
     <script type="text/javascript">
         // This is a jQuery convention to say that once all the files
