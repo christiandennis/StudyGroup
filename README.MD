@@ -22,3 +22,7 @@
 - do bundle install
 - rake s
 - localhost:3000
+
+##Note:
+- log in functionality doesnt work for now
+- you have to signup to go to the feed.
