@@ -1,20 +1,57 @@
 class GroupsController < ApplicationController
 	def create
+		status = 1 #intially set status to OK
+		err = [] #List of all errors
 		
-		puts 'Fuck it'
-		puts '-----------------------'
-		puts params
-		puts '-----------------------'
-		#@group.save
-		#@group = Group.new(:title=>params[:title], :subject=>params[:subject])
-		@group = Group.new(group_params)
-		@group.save
-		redirect_to('/feed')
+		title = params[:title]
+		subject = params[:subject]
+		location = params[:location]
+		description = params[:description]
+		date = params[:date]
+		time = params[:time]
+		capacity = params[:capacity]
+
+		if title.nil? || title.length==0
+			status = -1
+			err << "Please enter a title"
+		elsif title.length > 30
+			status = -1
+			error_messages << "Please enter title less than 30 characters" 
+		end
+
+		if subject.nil? || subject.length==0
+			status = -1
+			err << "Please enter a class"
+		elsif subject.length > 10
+			status = -1
+			error_messages << "Please enter a class less than 10 characters" 
+		end
+
+		if description.nil? || description.length==0
+			status = -1
+			err << "Please enter a description"
+		elsif description.length > 256
+			status = -1
+			error_messages << "Pleas enter description less than 256 characters" 
+		end
+
+
+		if status == 1
+			@group = Group.new(group_params)
+			if @group.save
+				render json: {'status': 1, 'group': @group}
+			end
+		else
+			render json: {'status': -1, 'errors': err}
+		end
 	end 
 
 	def index
 		@groups = Group.all
+		render json: {'groups' : @groups}
 	end
+
+
 
 	def 
 
@@ -37,6 +74,10 @@ class GroupsController < ApplicationController
 
 	private
 	  def group_params
-	    params.permit(:title, :subject, :description, :date, :location, :capacity)
+	    params.require(:groups).permit(:title, :subject, :description, :date, :location, :capacity)
+	  end
+
+	  def group_params_nested
+
 	  end
 end

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :endusers
   get 'landing/index'
 
   #get 'main/index'
@@ -18,6 +19,17 @@ Rails.application.routes.draw do
       get 'show'
     end
   end
+
+  devise_scope :enduser do post "/authentication/sign_up" => "registrations#create" end
+
+
+  devise_scope :enduser do post "/authentication/sign_in" => "sessions#create" end
+  devise_scope :enduser do delete "/authentication/sign_out" => "sessions#destroy" end
+
+  #post '/authentication/sign_up', to: 'registrations#create'
+  #Cited from http://blog.andrewray.me/how-to-set-up-devise-ajax-authentication-with-rails-4-0/
+  
+  #devise_for :endusers, :controllers => {sessions: 'sessions', registrations: 'registrations'}    
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
@@ -48,7 +60,7 @@ Rails.application.routes.draw do
 
   # Example resource route with more complex sub-resources:
   #   resources :products do
-  #     resources :comments
+  #     resou/rces :comments
   #     resources :sales do
   #       get 'recent', on: :collection
   #     end

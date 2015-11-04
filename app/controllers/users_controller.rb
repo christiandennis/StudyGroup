@@ -16,9 +16,6 @@ class UsersController < ApplicationController
 
 	def show
 		@user = User.find(params[:email])
-		puts '--------------------------'
-		puts 'In User Show'
-		puts '--------------------------'
 		unless @user.nil?
 			redirect_to('/feed')
 		end
