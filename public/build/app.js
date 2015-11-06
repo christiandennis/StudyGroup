@@ -45293,7 +45293,6 @@ const About = React.createClass({displayName: "About",
 })
 
 React.render((
-
 	React.createElement(Router, null, 
 	    React.createElement(Route, {path: "/", component: App}, 
         React.createElement(Route, {path: "studygroupapp", component: StudyGroupContainer})
@@ -45379,6 +45378,9 @@ const Sticky = require('react-sticky');
 const URL = "http://localhost:3000";
 var axios = require('axios');
 
+
+
+
 var LeftBar = React.createClass({displayName: "LeftBar",
 
 	childContextTypes : {
@@ -45422,6 +45424,7 @@ var LeftBar = React.createClass({displayName: "LeftBar",
 
 var TopBar = React.createClass({displayName: "TopBar",
 	dialogLogin:function() {
+		
 		this.refs.loginDialog.show();
 	},
 
@@ -45498,6 +45501,7 @@ var TopBar = React.createClass({displayName: "TopBar",
 	},
 
 	signUp:function() {
+		
 		var fullname = this.refs.fullNameSignUp.getValue();
 		var email = this.refs.emailSignUp.getValue();
 		var password = this.refs.passwordSignUp.getValue();
@@ -45509,14 +45513,57 @@ var TopBar = React.createClass({displayName: "TopBar",
 			console.log(confirmPassword);
 			console.log("SIGNUP DONE");
 		}
-		axios.post("https://sheetsu.com/apis/72092a94", {
-			"sessionID": password,
-			"id" :email,
-			"name" : fullname
+		var fata = {
+			"enduser": {
+				"email": email,
+				"password": password,
+				"password_confirmation": password
+			}
+		}
+		
+		$.ajax({ url: '/authentication/sign_up',
+		  type: 'POST',
+		  beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+		  data: fata,
+		  success: function(response) {
+		    console.log(response)
+		    $.ajax({ url: '/authentication/sign_out',
+		      type: 'DELETE',
+		      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+		      success: function(response) {
+		        console.log(response)
+		      },
+		      error: function(response) {
+		      	console.log(response)
+		      }
+
+		    });
+		  },
+		  error: function(response) {
+		  	console.log(response)
+		  }
 		});
+		// axios({
+		// 	method: 'post',
+		// 	url: "/authentication/sign_up",
+		// 	data: 
+		// 		{"enduser": 
+		// 			{"email" : email,
+		// 			"password": password,
+		// 			"password_confirmation": password}
+		// 		},
+		// 	headers: {
+		// 		'Content-Type': 'application/json',
+		// 		'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+		// 	},
+		// 	responseType: 'json'
+
+		// })
+		console.log('done');
 	},
 
 	login:function() {
+		
 		console.log("login here");
 		var user = this.refs.email.getValue();
 		var password = this.refs.password.getValue();
@@ -45727,6 +45774,8 @@ module.exports =TopBar;
 },{"../stores/StudyGroupStore":374,"./LandingPage.jsx":371,"alt/AltContainer":1,"axios":17,"material-ui/lib/app-bar":55,"material-ui/lib/avatar":56,"material-ui/lib/checkbox":65,"material-ui/lib/date-picker/date-picker":73,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/left-nav":83,"material-ui/lib/menu/menu-item":85,"material-ui/lib/snackbar":100,"material-ui/lib/styles/raw-themes/light-raw-theme.js":105,"material-ui/lib/styles/raw-themes/sidebar-theme.js":106,"material-ui/lib/styles/theme-manager":109,"material-ui/lib/text-field":120,"material-ui/lib/time-picker/time-picker":129,"react":365,"react-dom":159,"react-router":179,"react-sticky":186}],371:[function(require,module,exports){
 var React = require('react');
 var render = require('react-dom').render;
+var axios = require('axios');
+
 
 var AltContainer = require('alt/AltContainer');
 
@@ -45751,7 +45800,6 @@ var LandingPage = React.createClass({displayName: "LandingPage",
 				      React.createElement("div", {className: "row center"}, 
 				        React.createElement("a", {onClick: this.props.dialogSignUp, id: "signup_button", className: "btn-large waves-effect waves-light blue darken-4"}, "Get Started")
 				      )
-
 				    )
 				  ), 
 				  React.createElement("div", {className: "parallax"}, React.createElement("img", {style: {display:"block"}, src: "campanile-3.jpg", alt: "Unsplashed background img 1"}))
@@ -45800,7 +45848,7 @@ var LandingPage = React.createClass({displayName: "LandingPage",
 
 module.exports = LandingPage;
 
-},{"./AppBar.jsx":370,"alt/AltContainer":1,"react":365,"react-dom":159}],372:[function(require,module,exports){
+},{"./AppBar.jsx":370,"alt/AltContainer":1,"axios":17,"react":365,"react-dom":159}],372:[function(require,module,exports){
 // var button = require('react-materialize').Button;
 var React = require('react');
 var Link = require('react-router').Link;
@@ -46194,20 +46242,27 @@ var StudyGroupSource = {
 		    return new Promise(function (resolve, reject) {
 		      // simulate an asynchronous flow where data is fetched on
 		      // a remote server somewhere.
-		      axios.get(userURL)
-			  	  .then(function (response) {
-			  	  	//data = response from server
-			  	  	console.log("PASSING VALUE");
-			  	  	//PASSED VALUE FROM COMPONENT
-			  	  	console.log(email);
-			  	  	console.log(password);
-			  	  	var data = response.data;
-			  	    resolve (data.result);
-			  	  })
-			  	  .catch(function (response) {
-			  	    console.log(response);
-			  	    reject ("GADAPET USER TOT");
-		  	  });
+		      var fata = {
+		      	"enduser": {
+		      		"email": email,
+		      		"password": password,
+		      		"password_confirmation": password
+		      	}
+		      }
+		      $.ajax({ url: '/authentication/sign_in',
+		        type: 'POST',
+		        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+		        data: fata,
+		        success: function(response) {
+		          console.log(response);
+		          resolve(response);
+		        },
+		        error: function(response) {
+		        	console.log(response);
+		        	reject (response);
+		        }
+
+		      })
 		      
 		    });
 		  },
@@ -46267,10 +46322,11 @@ var UserActions = require('../actions/UserActions');
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleUpdateUser",{writable:true,configurable:true,value:function(user){"use strict";
-		this.user = user[0].name;
-		this.sessionID = user[0].sessionID;
+		this.user = user.email;
+		this.sessionID = user.id;
 		this.errorMessage = null;
 		console.log("BIJIK");
+		console.log(user);
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleFetchUser",{writable:true,configurable:true,value:function() {"use strict";

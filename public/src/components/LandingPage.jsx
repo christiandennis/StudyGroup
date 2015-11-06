@@ -1,5 +1,7 @@
 var React = require('react');
 var render = require('react-dom').render;
+var axios = require('axios');
+
 
 var AltContainer = require('alt/AltContainer');
 
@@ -24,7 +26,6 @@ var LandingPage = React.createClass({
 				      <div className="row center">
 				        <a onClick={this.props.dialogSignUp} id="signup_button" className="btn-large waves-effect waves-light blue darken-4">Get Started</a>
 				      </div>
-
 				    </div>
 				  </div>
 				  <div className="parallax"><img style={{display:"block"}} src="campanile-3.jpg" alt="Unsplashed background img 1" /></div>

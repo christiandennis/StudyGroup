@@ -27,6 +27,9 @@ const Sticky = require('react-sticky');
 const URL = "http://localhost:3000";
 var axios = require('axios');
 
+
+
+
 var LeftBar = React.createClass({
 
 	childContextTypes : {
@@ -70,6 +73,7 @@ var LeftBar = React.createClass({
 
 var TopBar = React.createClass({
 	dialogLogin() {
+		
 		this.refs.loginDialog.show();
 	},
 
@@ -146,6 +150,7 @@ var TopBar = React.createClass({
 	},
 
 	signUp() {
+		
 		var fullname = this.refs.fullNameSignUp.getValue();
 		var email = this.refs.emailSignUp.getValue();
 		var password = this.refs.passwordSignUp.getValue();
@@ -157,14 +162,57 @@ var TopBar = React.createClass({
 			console.log(confirmPassword);
 			console.log("SIGNUP DONE");
 		}
-		axios.post("https://sheetsu.com/apis/72092a94", {
-			"sessionID": password,
-			"id" :email,
-			"name" : fullname
+		var fata = {
+			"enduser": {
+				"email": email,
+				"password": password,
+				"password_confirmation": password
+			}
+		}
+		
+		$.ajax({ url: '/authentication/sign_up',
+		  type: 'POST',
+		  beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+		  data: fata,
+		  success: function(response) {
+		    console.log(response)
+		    $.ajax({ url: '/authentication/sign_out',
+		      type: 'DELETE',
+		      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+		      success: function(response) {
+		        console.log(response)
+		      },
+		      error: function(response) {
+		      	console.log(response)
+		      }
+
+		    });
+		  },
+		  error: function(response) {
+		  	console.log(response)
+		  }
 		});
+		// axios({
+		// 	method: 'post',
+		// 	url: "/authentication/sign_up",
+		// 	data: 
+		// 		{"enduser": 
+		// 			{"email" : email,
+		// 			"password": password,
+		// 			"password_confirmation": password}
+		// 		},
+		// 	headers: {
+		// 		'Content-Type': 'application/json',
+		// 		'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+		// 	},
+		// 	responseType: 'json'
+
+		// })
+		console.log('done');
 	},
 
 	login() {
+		
 		console.log("login here");
 		var user = this.refs.email.getValue();
 		var password = this.refs.password.getValue();
