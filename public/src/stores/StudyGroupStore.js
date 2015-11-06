@@ -7,9 +7,8 @@ class StudyGroupStore {
 	constructor() {
 		this.user = null;
 		this.errorMessageUser = null;
-		this.sessionID = null;
-		this.studyGroups = [];
-		this.errorMessage = null;
+
+
 		this.bindListeners({
 			handleUpdateStudyGroups: StudyGroupActions.UPDATE_STUDY_GROUPS,
 			handleFetchStudyGroups: StudyGroupActions.FETCH_STUDY_GROUPS,
@@ -38,15 +37,17 @@ class StudyGroupStore {
 	}
 
 	handleUpdateUser(user){
-		this.user = user.email;
-		this.sessionID = user.id;
-		this.errorMessage = null;
-		console.log("BIJIK");
-		console.log(user);
+		this.user = user;
+		this.errorMessageUser = null;
 	}
 
 	handleFetchUser() {
 		this.user = null;
+		this.username = null;
+		this.email = null;
+		this.id = null;
+		this.name = null;
+		this.school = null;
 	}
 	
 	handleStudyUser(errorMessage) {

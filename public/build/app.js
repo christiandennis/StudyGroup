@@ -45424,8 +45424,8 @@ var LeftBar = React.createClass({displayName: "LeftBar",
 	render:function() {
 		return(
 			React.createElement(SideBar, {ref: "leftNav", docked: false}, 
-				React.createElement(MenuItem, {index: 0, style: {textAlign:"center"}}, "Hi, ", this.props.user, "!"), 
-				React.createElement(MenuItem, {index: 1, style: {textAlign:"center", marginBottom:"20px"} }, React.createElement("span", {onClick: this.myProfile}, React.createElement(Avatar, {size: "120"}, " ", this.props.user.slice(0,1), " "))), 
+				React.createElement(MenuItem, {index: 0, style: {textAlign:"center"}}, "Hi, ", this.props.user.name, "!"), 
+				React.createElement(MenuItem, {index: 1, style: {textAlign:"center", marginBottom:"20px"} }, React.createElement("span", {onClick: this.myProfile}, React.createElement(Avatar, {size: "120"}, " ", this.props.user.name.slice(0,1), " "))), 
 				React.createElement("span", {onClick: this.myGroups}, "  ", React.createElement(MenuItem, {index: 2}, "My Groups"), " "), 
   				React.createElement("span", {onClick: this.editProfile}, " ", React.createElement(MenuItem, {index: 3}, "Edit Profile"), " "), 
   				React.createElement("span", {onClick: this.logout}, "  ", React.createElement(MenuItem, {index: 4}, "Log Out"), "  ")
@@ -45568,10 +45568,13 @@ var TopBar = React.createClass({displayName: "TopBar",
 	submitSignUp:function() {
 		
 		var fullname = this.refs.fullNameSignUp;
+		var fullnameSignUp = this.refs.fullNameSignUp;
 		var email = this.refs.emailSignUp;
 		var password = this.refs.passwordSignUp;
 		var confirmPassword = this.refs.confirmPasswordSignUp;
 		var signUpDialog = this.refs.signUpDialog;
+		var schoolSignUp =  this.refs.schoolSignUp;
+		var usernameSignUp =  this.refs.usernameSignUp;
 		if(false) {
 			console.log(fullname);
 			console.log(email);
@@ -45595,17 +45598,40 @@ var TopBar = React.createClass({displayName: "TopBar",
 				  beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
 				  data: fata,
 				  success: function(response) {
-				    console.log(response)
+				    console.log(response);
+				    console.log("USER ID");
+				    console.log(response.id);
+				    var updateData = {
+			    		"id": response.id,
+			    		"school": schoolSignUp.getValue(),
+			    		"name": fullnameSignUp.getValue(),
+			    		"username": usernameSignUp.getValue()
+				    }
+				    
+				    $.ajax({ url: '/endusers/update',
+				      type: 'POST',
+				      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+				      data: updateData,
+				      success: function(response) {
+				      	console.log("user update success");
+				        console.log(response);
+				      },
+				      error: function(response) {
+				      	console.log("user update failed");
+				      	console.log(response);
+				      }
+				    });
+
 				    $.ajax({ url: '/authentication/sign_out',
 				      type: 'DELETE',
 				      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
 				      success: function(response) {
-				      	console.log("login success");
+				      	console.log("signout success");
 				        console.log(response);
 						signUpDialog.dismiss();
 				      },
 				      error: function(response) {
-				      	console.log("login failed");
+				      	console.log("signout failed");
 				      	console.log(response);
 				      }
 
@@ -45636,9 +45662,28 @@ var TopBar = React.createClass({displayName: "TopBar",
 		}
 	},
 
+	updateUser:function(){
+
+	},
+
 	login:function() {
 		
 		console.log("login here");
+
+	    $.ajax({ url: '/authentication/sign_out',
+	      type: 'DELETE',
+	      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+	      success: function(response) {
+	      	console.log("signout success");
+	        console.log(response);
+	      },
+	      error: function(response) {
+	      	console.log("signout failed");
+	      	console.log(response);
+	      }
+
+	    });
+
 		var user = this.refs.email.getValue();
 		var password = this.refs.password.getValue();
 		StudyGroupStore.fetchUser( user, password);
@@ -45820,6 +45865,16 @@ var TopBar = React.createClass({displayName: "TopBar",
 				    	  hintText: "Christian Dennis", 
 				    	  onChange: this.validateFullName, 
 				    	  floatingLabelText: "Full Name"}), React.createElement("br", null), 
+				    	React.createElement(TextField, {
+				    	  ref: "usernameSignUp", 
+				    	  hintText: "christiandennis", 
+				    	  onChange: this.validateFullName, 
+				    	  floatingLabelText: "Username"}), React.createElement("br", null), 
+				    	React.createElement(TextField, {
+				    	  ref: "schoolSignUp", 
+				    	  hintText: "UC Berkeley", 
+				    	  onChange: this.validateFullName, 
+				    	  floatingLabelText: "School"}), React.createElement("br", null), 
 				    	React.createElement(TextField, {
 				    	  ref: "emailSignUp", 
 				    	  hintText: "christiandennis@studygroup.com", 
@@ -46369,9 +46424,8 @@ var UserActions = require('../actions/UserActions');
 	function StudyGroupStore() {"use strict";
 		this.user = null;
 		this.errorMessageUser = null;
-		this.sessionID = null;
-		this.studyGroups = [];
-		this.errorMessage = null;
+
+
 		this.bindListeners({
 			handleUpdateStudyGroups: StudyGroupActions.UPDATE_STUDY_GROUPS,
 			handleFetchStudyGroups: StudyGroupActions.FETCH_STUDY_GROUPS,
@@ -46400,15 +46454,17 @@ var UserActions = require('../actions/UserActions');
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleUpdateUser",{writable:true,configurable:true,value:function(user){"use strict";
-		this.user = user.email;
-		this.sessionID = user.id;
-		this.errorMessage = null;
-		console.log("BIJIK");
-		console.log(user);
+		this.user = user;
+		this.errorMessageUser = null;
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleFetchUser",{writable:true,configurable:true,value:function() {"use strict";
 		this.user = null;
+		this.username = null;
+		this.email = null;
+		this.id = null;
+		this.name = null;
+		this.school = null;
 	}});
 	
 	Object.defineProperty(StudyGroupStore.prototype,"handleStudyUser",{writable:true,configurable:true,value:function(errorMessage) {"use strict";

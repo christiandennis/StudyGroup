@@ -73,8 +73,8 @@ var LeftBar = React.createClass({
 	render() {
 		return(
 			<SideBar ref="leftNav" docked={false}  >
-				<MenuItem index={0} style={{textAlign:"center"}}>Hi, {this.props.user}!</MenuItem>
-				<MenuItem index={1} style={{textAlign:"center", marginBottom:"20px"} }><span onClick={this.myProfile}><Avatar size="120"> {this.props.user.slice(0,1)} </Avatar></span></MenuItem>
+				<MenuItem index={0} style={{textAlign:"center"}}>Hi, {this.props.user.name}!</MenuItem>
+				<MenuItem index={1} style={{textAlign:"center", marginBottom:"20px"} }><span onClick={this.myProfile}><Avatar size="120"> {this.props.user.name.slice(0,1)} </Avatar></span></MenuItem>
 				<span onClick={this.myGroups}>		<MenuItem index={2}>My Groups</MenuItem>	</span>
   				<span onClick={this.editProfile}>	<MenuItem index={3}>Edit Profile</MenuItem>	</span>
   				<span onClick={this.logout}>		<MenuItem index={4}>Log Out</MenuItem>		</span>
@@ -217,10 +217,13 @@ var TopBar = React.createClass({
 	submitSignUp() {
 		
 		var fullname = this.refs.fullNameSignUp;
+		var fullnameSignUp = this.refs.fullNameSignUp;
 		var email = this.refs.emailSignUp;
 		var password = this.refs.passwordSignUp;
 		var confirmPassword = this.refs.confirmPasswordSignUp;
 		var signUpDialog = this.refs.signUpDialog;
+		var schoolSignUp =  this.refs.schoolSignUp;
+		var usernameSignUp =  this.refs.usernameSignUp;
 		if(false) {
 			console.log(fullname);
 			console.log(email);
@@ -244,17 +247,40 @@ var TopBar = React.createClass({
 				  beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
 				  data: fata,
 				  success: function(response) {
-				    console.log(response)
+				    console.log(response);
+				    console.log("USER ID");
+				    console.log(response.id);
+				    var updateData = {
+			    		"id": response.id,
+			    		"school": schoolSignUp.getValue(),
+			    		"name": fullnameSignUp.getValue(),
+			    		"username": usernameSignUp.getValue()
+				    }
+				    
+				    $.ajax({ url: '/endusers/update',
+				      type: 'POST',
+				      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+				      data: updateData,
+				      success: function(response) {
+				      	console.log("user update success");
+				        console.log(response);
+				      },
+				      error: function(response) {
+				      	console.log("user update failed");
+				      	console.log(response);
+				      }
+				    });
+
 				    $.ajax({ url: '/authentication/sign_out',
 				      type: 'DELETE',
 				      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
 				      success: function(response) {
-				      	console.log("login success");
+				      	console.log("signout success");
 				        console.log(response);
 						signUpDialog.dismiss();
 				      },
 				      error: function(response) {
-				      	console.log("login failed");
+				      	console.log("signout failed");
 				      	console.log(response);
 				      }
 
@@ -285,9 +311,28 @@ var TopBar = React.createClass({
 		}
 	},
 
+	updateUser(){
+
+	},
+
 	login() {
 		
 		console.log("login here");
+
+	    $.ajax({ url: '/authentication/sign_out',
+	      type: 'DELETE',
+	      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+	      success: function(response) {
+	      	console.log("signout success");
+	        console.log(response);
+	      },
+	      error: function(response) {
+	      	console.log("signout failed");
+	      	console.log(response);
+	      }
+
+	    });
+
 		var user = this.refs.email.getValue();
 		var password = this.refs.password.getValue();
 		StudyGroupStore.fetchUser( user, password);
@@ -469,6 +514,16 @@ var TopBar = React.createClass({
 				    	  hintText="Christian Dennis"
 				    	  onChange={this.validateFullName}
 				    	  floatingLabelText="Full Name" /><br />
+				    	<TextField
+				    	  ref="usernameSignUp"
+				    	  hintText="christiandennis"
+				    	  onChange={this.validateFullName}
+				    	  floatingLabelText="Username" /><br />
+				    	<TextField
+				    	  ref="schoolSignUp"
+				    	  hintText="UC Berkeley"
+				    	  onChange={this.validateFullName}
+				    	  floatingLabelText="School" /><br />
 				    	<TextField
 				    	  ref="emailSignUp"
 				    	  hintText="christiandennis@studygroup.com"
