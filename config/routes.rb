@@ -12,6 +12,18 @@ Rails.application.routes.draw do
 
   get '/feed', to: 'main#index'
 
+  #groups
+  get '/groups/user/index', to: 'groups#userindex'
+
+  get '/groups/user', to: 'groups#usergroups'
+
+  post '/groups/user/update', to: 'groups#addremoveuser'
+
+  post '/endusers/update', to: 'endusers#update'
+
+
+  #users
+
   resources :groups, :landing
 
   resources :users do
@@ -19,6 +31,8 @@ Rails.application.routes.draw do
       get 'show'
     end
   end
+
+
 
   devise_scope :enduser do post "/authentication/sign_up" => "registrations#create" end
 
