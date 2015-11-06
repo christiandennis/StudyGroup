@@ -44,7 +44,6 @@ const About = React.createClass({
 })
 
 React.render((
-
 	<Router>
 	    <Route path="/" component={App}>
         <Route path="studygroupapp" component={StudyGroupContainer}/>

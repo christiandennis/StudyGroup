@@ -38,10 +38,11 @@ class StudyGroupStore {
 	}
 
 	handleUpdateUser(user){
-		this.user = user[0].name;
-		this.sessionID = user[0].sessionID;
+		this.user = user.email;
+		this.sessionID = user.id;
 		this.errorMessage = null;
 		console.log("BIJIK");
+		console.log(user);
 	}
 
 	handleFetchUser() {

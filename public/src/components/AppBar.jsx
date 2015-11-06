@@ -28,6 +28,9 @@ const Sticky = require('react-sticky');
 const URL = "http://localhost:3000";
 var axios = require('axios');
 
+
+
+
 var LeftBar = React.createClass({
 
 	childContextTypes : {
@@ -53,6 +56,18 @@ var LeftBar = React.createClass({
 	},
 
 	logout() {
+		$.ajax({ url: '/authentication/sign_out',
+		      type: 'DELETE',
+		      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+		      success: function(response) {
+		        console.log(response);
+		        document.location="localhost:3000";
+		      },
+		      error: function(response) {
+		      	console.log(response)
+		      }
+
+		    });
 		console.log("user logout here");
 	},
 
@@ -72,6 +87,7 @@ var LeftBar = React.createClass({
 
 var TopBar = React.createClass({
 	dialogLogin() {
+		
 		this.refs.loginDialog.show();
 	},
 
@@ -114,7 +130,7 @@ var TopBar = React.createClass({
 		var capacity = 	this.refs.createGroupCapacity.getValue();
 		var host = this.props.user;
 
-		if (true) {
+		if (false) {
 			console.log(title);
 			console.log(subject);
 			console.log(description);
@@ -138,45 +154,86 @@ var TopBar = React.createClass({
 			"host": host
 		}).then(function(response) {
 			console.log("post new group SUCCEED");
-			console.log(response);
 			StudyGroupStore.fetchStudyGroups();	
 			successSnackbar.show();
 			newGroupDialog.dismiss();
 		}).catch(function(response) {
 			failedSnackbar.show();
 			console.log("post new group FAILED");
-			console.log(response);
 		});
 	},
 
 	signUp() {
+		
 		var fullname = this.refs.fullNameSignUp.getValue();
 		var email = this.refs.emailSignUp.getValue();
 		var password = this.refs.passwordSignUp.getValue();
 		var confirmPassword = this.refs.confirmPasswordSignUp.getValue();
-		console.log(fullname);
-		console.log(email);
-		console.log(password);
-		console.log(confirmPassword);
-		console.log("SIGNUP DONE");
-		axios.post("https://sheetsu.com/apis/72092a94", {
-			"sessionID": password,
-			"id" :email,
-			"name" : fullname
+		if(false) {
+			console.log(fullname);
+			console.log(email);
+			console.log(password);
+			console.log(confirmPassword);
+			console.log("SIGNUP DONE");
+		}
+		var fata = {
+			"enduser": {
+				"email": email,
+				"password": password,
+				"password_confirmation": password
+			}
+		}
+		
+		$.ajax({ url: '/authentication/sign_up',
+		  type: 'POST',
+		  beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+		  data: fata,
+		  success: function(response) {
+		    console.log(response)
+		    $.ajax({ url: '/authentication/sign_out',
+		      type: 'DELETE',
+		      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+		      success: function(response) {
+		        console.log(response)
+		      },
+		      error: function(response) {
+		      	console.log(response)
+		      }
+
+		    });
+		  },
+		  error: function(response) {
+		  	console.log(response)
+		  }
 		});
+		// axios({
+		// 	method: 'post',
+		// 	url: "/authentication/sign_up",
+		// 	data: 
+		// 		{"enduser": 
+		// 			{"email" : email,
+		// 			"password": password,
+		// 			"password_confirmation": password}
+		// 		},
+		// 	headers: {
+		// 		'Content-Type': 'application/json',
+		// 		'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+		// 	},
+		// 	responseType: 'json'
+
+		// })
+		console.log('done');
 	},
 
 	login() {
-		console.log("user before");
+		
+		console.log("login here");
 		var user = this.refs.email.getValue();
 		var password = this.refs.password.getValue();
-		console.log(user);
-		console.log(password);
 		StudyGroupStore.fetchUser( user, password);
 		},
     
     openLeft() {
-        console.log("SIDEBAR OPEN")
         this.refs.leftBar.refs.leftNav.toggle();
     },
     
@@ -201,7 +258,6 @@ var TopBar = React.createClass({
 // END THEME
 
 	render() {
-		console.log("render appbar");
 		if (this.props.user) {
 			return (
                 

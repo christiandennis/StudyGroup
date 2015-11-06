@@ -45295,7 +45295,6 @@ const About = React.createClass({displayName: "About",
 })
 
 React.render((
-
 	React.createElement(Router, null, 
 	    React.createElement(Route, {path: "/", component: App}, 
         React.createElement(Route, {path: "studygroupapp", component: StudyGroupContainer})
@@ -45382,6 +45381,9 @@ const Sticky = require('react-sticky');
 const URL = "http://localhost:3000";
 var axios = require('axios');
 
+
+
+
 var LeftBar = React.createClass({displayName: "LeftBar",
 
 	childContextTypes : {
@@ -45407,6 +45409,18 @@ var LeftBar = React.createClass({displayName: "LeftBar",
 	},
 
 	logout:function() {
+		$.ajax({ url: '/authentication/sign_out',
+		      type: 'DELETE',
+		      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+		      success: function(response) {
+		        console.log(response);
+		        document.location="localhost:3000";
+		      },
+		      error: function(response) {
+		      	console.log(response)
+		      }
+
+		    });
 		console.log("user logout here");
 	},
 
@@ -45426,6 +45440,7 @@ var LeftBar = React.createClass({displayName: "LeftBar",
 
 var TopBar = React.createClass({displayName: "TopBar",
 	dialogLogin:function() {
+		
 		this.refs.loginDialog.show();
 	},
 
@@ -45468,7 +45483,7 @@ var TopBar = React.createClass({displayName: "TopBar",
 		var capacity = 	this.refs.createGroupCapacity.getValue();
 		var host = this.props.user;
 
-		if (true) {
+		if (false) {
 			console.log(title);
 			console.log(subject);
 			console.log(description);
@@ -45492,45 +45507,86 @@ var TopBar = React.createClass({displayName: "TopBar",
 			"host": host
 		}).then(function(response) {
 			console.log("post new group SUCCEED");
-			console.log(response);
 			StudyGroupStore.fetchStudyGroups();	
 			successSnackbar.show();
 			newGroupDialog.dismiss();
 		}).catch(function(response) {
 			failedSnackbar.show();
 			console.log("post new group FAILED");
-			console.log(response);
 		});
 	},
 
 	signUp:function() {
+		
 		var fullname = this.refs.fullNameSignUp.getValue();
 		var email = this.refs.emailSignUp.getValue();
 		var password = this.refs.passwordSignUp.getValue();
 		var confirmPassword = this.refs.confirmPasswordSignUp.getValue();
-		console.log(fullname);
-		console.log(email);
-		console.log(password);
-		console.log(confirmPassword);
-		console.log("SIGNUP DONE");
-		axios.post("https://sheetsu.com/apis/72092a94", {
-			"sessionID": password,
-			"id" :email,
-			"name" : fullname
+		if(false) {
+			console.log(fullname);
+			console.log(email);
+			console.log(password);
+			console.log(confirmPassword);
+			console.log("SIGNUP DONE");
+		}
+		var fata = {
+			"enduser": {
+				"email": email,
+				"password": password,
+				"password_confirmation": password
+			}
+		}
+		
+		$.ajax({ url: '/authentication/sign_up',
+		  type: 'POST',
+		  beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+		  data: fata,
+		  success: function(response) {
+		    console.log(response)
+		    $.ajax({ url: '/authentication/sign_out',
+		      type: 'DELETE',
+		      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+		      success: function(response) {
+		        console.log(response)
+		      },
+		      error: function(response) {
+		      	console.log(response)
+		      }
+
+		    });
+		  },
+		  error: function(response) {
+		  	console.log(response)
+		  }
 		});
+		// axios({
+		// 	method: 'post',
+		// 	url: "/authentication/sign_up",
+		// 	data: 
+		// 		{"enduser": 
+		// 			{"email" : email,
+		// 			"password": password,
+		// 			"password_confirmation": password}
+		// 		},
+		// 	headers: {
+		// 		'Content-Type': 'application/json',
+		// 		'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+		// 	},
+		// 	responseType: 'json'
+
+		// })
+		console.log('done');
 	},
 
 	login:function() {
-		console.log("user before");
+		
+		console.log("login here");
 		var user = this.refs.email.getValue();
 		var password = this.refs.password.getValue();
-		console.log(user);
-		console.log(password);
 		StudyGroupStore.fetchUser( user, password);
 		},
     
     openLeft:function() {
-        console.log("SIDEBAR OPEN")
         this.refs.leftBar.refs.leftNav.toggle();
     },
     
@@ -45555,7 +45611,6 @@ var TopBar = React.createClass({displayName: "TopBar",
 // END THEME
 
 	render:function() {
-		console.log("render appbar");
 		if (this.props.user) {
 			return (
                 
@@ -45735,6 +45790,8 @@ module.exports =TopBar;
 },{"../stores/StudyGroupStore":375,"./LandingPage.jsx":372,"alt/AltContainer":1,"axios":17,"material-ui/lib/app-bar":55,"material-ui/lib/avatar":56,"material-ui/lib/checkbox":65,"material-ui/lib/date-picker/date-picker":73,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/left-nav":83,"material-ui/lib/menu/menu-item":85,"material-ui/lib/snackbar":100,"material-ui/lib/styles/raw-themes/light-raw-theme.js":105,"material-ui/lib/styles/raw-themes/sidebar-theme.js":106,"material-ui/lib/styles/theme-manager":109,"material-ui/lib/text-field":120,"material-ui/lib/time-picker/time-picker":129,"react":366,"react-addons-test-utils":157,"react-dom":160,"react-router":180,"react-sticky":187}],372:[function(require,module,exports){
 var React = require('react');
 var render = require('react-dom').render;
+var axios = require('axios');
+
 
 var AltContainer = require('alt/AltContainer');
 
@@ -45759,7 +45816,6 @@ var LandingPage = React.createClass({displayName: "LandingPage",
 				      React.createElement("div", {className: "row center"}, 
 				        React.createElement("a", {onClick: this.props.dialogSignUp, id: "signup_button", className: "btn-large waves-effect waves-light blue darken-4"}, "Get Started")
 				      )
-
 				    )
 				  ), 
 				  React.createElement("div", {className: "parallax"}, React.createElement("img", {style: {display:"block"}, src: "campanile-3.jpg", alt: "Unsplashed background img 1"}))
@@ -45808,9 +45864,10 @@ var LandingPage = React.createClass({displayName: "LandingPage",
 
 module.exports = LandingPage;
 
-},{"./AppBar.jsx":371,"alt/AltContainer":1,"react":366,"react-dom":160}],373:[function(require,module,exports){
+},{"./AppBar.jsx":371,"alt/AltContainer":1,"axios":17,"react":366,"react-dom":160}],373:[function(require,module,exports){
 // var button = require('react-materialize').Button;
 var React = require('react');
+var Link = require('react-router').Link;
 var render = require('react-dom').render;
 
 var AltContainer = require('alt/AltContainer');
@@ -45828,7 +45885,8 @@ const Dialog = require('material-ui/lib/dialog');
 const RefreshIndicator = require('material-ui/lib/refresh-indicator');
 const FlatButton = require('material-ui/lib/flat-button');
 const TextField = require('material-ui/lib/text-field');
-
+const DatePicker = require('material-ui/lib/date-picker/date-picker');
+const TimePicker = require('material-ui/lib/time-picker/time-picker');
 const Card = require('material-ui/lib/card/card');
 const CardHeader = require('material-ui/lib/card/card-header');
 const CardTitle = require('material-ui/lib/card/card-title');
@@ -45837,12 +45895,100 @@ const CardText = require('material-ui/lib/card/card-text');
 
 const moment = require('moment');
 
+const URL = "http://localhost:3000";
+var axios = require('axios');
+
+var tmpStudyGroup = null;
+
 
 var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 	// this method should fetch the group detail and comments
 	// parameter : groupId
-	viewGroupDetail:function() {
+	viewGroupDetail:function(param) {
+		console.log("open group detail");
+		tmpStudyGroup = param;
 		this.refs.groupDetailDialog.show();
+	},
+
+	viewGroupDetailOnShow:function() {
+		this.refs.groupdetailClass.innerHTML = tmpStudyGroup.subject;
+		this.refs.groupdetailTitle.innerHTML = tmpStudyGroup.title;
+		this.refs.groupdetailHost.innerHTML = "@" + tmpStudyGroup.host;
+		var date = moment(tmpStudyGroup.datetime).format("ddd, MMM D").toString();
+		var time = moment(tmpStudyGroup.datetime).format("h:mm a").toString();
+		this.refs.groupdetailTime.innerHTML = time;
+		this.refs.groupdetailDate.innerHTML = date;
+		this.refs.groupdetailLocation.innerHTML = tmpStudyGroup.location;
+		this.refs.groupdetailDescription.innerHTML = tmpStudyGroup.description;
+	},
+
+	editGroupDetail:function(){
+		this.refs.groupDetailDialog.dismiss();
+		this.refs.editGroupDialog.show();
+	},
+
+	editGroupDetailOnShow:function(){
+		this.refs.editGroupTitle.setValue(tmpStudyGroup.title);
+		this.refs.editGroupSubject.setValue(tmpStudyGroup.subject);
+		this.refs.editGroupLocation.setValue(tmpStudyGroup.location);
+		this.refs.editGroupDescription.setValue(tmpStudyGroup.description);
+		this.refs.editGroupCapacity.setValue(tmpStudyGroup.capacity);
+		var datetime = moment(tmpStudyGroup.datetime).toDate();
+		this.refs.editGroupTime.setTime(datetime);
+		this.refs.editGroupDate.setDate(datetime);
+
+	},
+
+	cancelEditGroupDetail:function() {
+		console.log("closing editgroup dialog");
+		this.refs.editGroupDialog.dismiss();
+	},
+
+	submitEditGroupDetail:function() {
+		var title = this.refs.editGroupTitle.getValue();
+		var subject = this.refs.editGroupSubject.getValue();
+		var description =  this.refs.editGroupDescription.getValue();
+		var date = this.refs.editGroupDate.getDate();
+		var location = this.refs.editGroupLocation.getValue();
+		var capacity = 	this.refs.editGroupCapacity.getValue();
+		var host = this.props.user;
+
+		if (false) {
+			console.log(title);
+			console.log(subject);
+			console.log(description);
+			console.log(date);
+			console.log(location);
+			console.log(capacity);
+			console.log(host);
+		}
+
+		var newGroupDialog = this.refs.newGroupDialog;
+		var failedSnackbar = this.refs.createGroupFailedSnackbar;
+		var successSnackbar = this.refs.createGroupSuccessSnackbar;
+
+		axios.post(URL + "/groups/edit", {
+			"title": title,
+			"subject": subject,
+			"description": description,
+			"date": date,
+			"location": location,
+			"capacity": capacity,
+			"host": host
+		}).then(function(response) {
+			console.log("post new group SUCCEED");
+			StudyGroupStore.fetchStudyGroups();	
+			successSnackbar.show();
+			newGroupDialog.dismiss();
+		}).catch(function(response) {
+			failedSnackbar.show();
+			console.log("post new group FAILED");
+		});
+
+	},
+
+	joinGroup:function() {
+		console.log("Join group here");
 	},
 
 	render:function() {
@@ -45854,7 +46000,6 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 		if (StudyGroupStore.isLoading()) {
 			var left = window.document.documentElement.clientWidth/2 - 25;
 			var top = window.document.documentElement.clientHeight/2 - 25;
-			console.log(left);
 			return(
 				React.createElement("div", null, 
 					React.createElement(RefreshIndicator, {size: 50, left: left, top: top, status: "loading"})
@@ -45862,113 +46007,165 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 			);
 		}
 
-		console.log("test user in SG")
-		console.log(this.props.user)
 		if (this.props.user){
 			return (
 				React.createElement("div", null, 
-					React.createElement("ul", null, 
-					  this.props.studyGroups.map(function(studyGroup, i)  {
-					  	var date = moment(studyGroup.datetime).format("ddd, MMM D").toString();
-					  	var time = moment(studyGroup.datetime).format("h:mm a").toString();
-					  	console.log(time);
-					    return (
-					      React.createElement(Paper, {zDepth: 3, key: i, className: "card-container"}, 
-					        React.createElement("div", {className: "card studyGroup"}, 
-					            React.createElement("div", {className: "colorBar"}), 
-					            React.createElement("table", null, 
-					                React.createElement("tr", {className: "row1"}, 
-					                    React.createElement("td", {className: "userPhotoHolder"}, 
-					                        React.createElement("div", {className: "photoHolder"}, 
-					                            React.createElement("div", {className: "circle"}, 
-					                                React.createElement("img", {className: "userPhoto", src: "http://nick.mtvnimages.com/nick/properties/spongebob-squarepants/characters/spongebob-about-web-desktop.jpg?quality=0.75"})
-					                            )
-					                        )
-
-					                    ), 
-					                    React.createElement("td", {colSpan: "2"}, 
-					                        React.createElement("span", {className: "subject"}, studyGroup.subject), 
-					                        React.createElement("span", {className: "title"}, studyGroup.title)
-					                    ), 
-
-					                    React.createElement("td", {colSpan: "2", align: "right", className: "dateTimeHolder"}, 
-					                        React.createElement("div", {className: "date"}, date), 
-					                        React.createElement("div", {className: "time"}, time)
-					                    )
-					                ), 
-
-					                React.createElement("tr", {className: "row2"}, 
-					                    React.createElement("td", {className: "exclamationHolder"}, 
-					                        React.createElement("div", {className: "exclamation"})
-					                    ), 
-					                    React.createElement("td", {colSpan: "3"}, 
-					                        React.createElement("div", {className: "description"}, studyGroup.description), 
-					                        React.createElement("div", {className: "seeMore", onClick: this.viewGroupDetail}, "See more...")
-					                    )
-					                ), 
-
-					                React.createElement("tr", {className: "row3"}, 
-					                    React.createElement("td", {className: "pinHolder"}, 
-					                        React.createElement("div", {className: "pin"})
-					                    ), 
-					                    React.createElement("td", {colSpan: "2"}, 
-					                        React.createElement("div", {className: "location"}, studyGroup.location)
-					                    )
-					                ), 
-
-					                React.createElement("tr", {className: "row4"}, 
-					                    React.createElement("td", null), 
-					                    React.createElement("td", {colSpan: "1"}, React.createElement("span", {className: "host"}, "@", studyGroup.host)
-					                    ), 
-					                    React.createElement("td", {colSpan: "2"}, 
-					                        React.createElement("div", {style: {textAlign:"right"}, className: "joinButtonContainer"}, 
-					                            React.createElement(RaisedButton, {label: "Join"})
-					                        )
-					                    ), 
-					                    React.createElement("td", null, 
-					                        React.createElement("div", {className: "capacityHolder"}, 
-					                            React.createElement("div", {className: "capacity"}, studyGroup.guestlist, "/", studyGroup.capacity)
-					                        )
-					                    )
-					                )
-					            )
-					        )
-					      )
-					    );
-					  }.bind(this))
-					), 
 					React.createElement(Dialog, {ref: "groupDetailDialog", 
 							title: "StudyGroup Detail", 
 							actions: [], 
+							onShow: this.viewGroupDetailOnShow, 
 					  		autoDetectWindowHeight: true, 
 					  		autoScrollBodyContent: true}, 
 					    React.createElement("div", null, 
 					    	React.createElement("div", {className: "groupdesc-title"}, "Class"), 
-					    	React.createElement("div", {className: "groupdesc-subtitle"}, "CS188"), 
+					    	React.createElement("div", {ref: "groupdetailClass", className: "groupdesc-subtitle"}), 
 
 					    	React.createElement("div", {className: "groupdesc-title"}, "Title"), 
-					    	React.createElement("div", {className: "groupdesc-subtitle"}, "I Love Pacman"), 
+					    	React.createElement("div", {ref: "groupdetailTitle", className: "groupdesc-subtitle"}), 
 
 					    	React.createElement("div", {className: "groupdesc-title"}, "Host"), 
-					    	React.createElement("div", {className: "groupdesc-subtitle"}, "@cdennis"), 
+					    	React.createElement("div", {ref: "groupdetailHost", className: "groupdesc-subtitle"}), 
 
 					    	React.createElement("div", {className: "groupdesc-title"}, "Time"), 
-					    	React.createElement("div", {className: "groupdesc-subtitle"}, "9:31 pm"), 
+					    	React.createElement("div", {ref: "groupdetailTime", className: "groupdesc-subtitle"}), 
 
 					    	React.createElement("div", {className: "groupdesc-title"}, "Date"), 
-					    	React.createElement("div", {className: "groupdesc-subtitle"}, "Fri, Oct 16"), 
+					    	React.createElement("div", {ref: "groupdetailDate", className: "groupdesc-subtitle"}), 
 
 					    	React.createElement("div", {className: "groupdesc-title"}, "Location"), 
-					    	React.createElement("div", {className: "groupdesc-subtitle"}, "Kresge Engineering Library 110MA"), 
+					    	React.createElement("div", {ref: "groupdetailLocation", className: "groupdesc-subtitle"}), 
 
-					    	React.createElement(CardTitle, {
-					    	  subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit." + ' ' +
-					    	  "Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi." + ' ' +
-					    	  "Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque." + ' ' +
-					    	  "Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio."})
+					    	React.createElement("div", {className: "groupdesc-title"}, "Description"), 
+					    	React.createElement("div", {ref: "groupdetailDescription", className: "groupdesc-subtitle"}), 
+
+					    	React.createElement(FlatButton, {label: "Edit", onClick: this.editGroupDetail})
 
 					    )
+					), 
+
+			        React.createElement(Dialog, {ref: "editGroupDialog", 
+			        	title: "Edit StudyGroup", 
+			        	onShow: this.editGroupDetailOnShow, 
+			        	modal: true, 
+			        	actions: [
+			        		  React.createElement(FlatButton, {
+			        		    label: "Cancel", 
+			        		    secondary: true, 
+			        		    onTouchTap: this.cancelEditGroupDetail}),
+			        		  React.createElement(FlatButton, {
+			        		    label: "Submit", 
+			        		    primary: true, 
+			        		    onTouchTap: this.submitEditGroupDetail})], 
+			        		autoDetectWindowHeight: true, 
+			        		autoScrollBodyContent: true}, 
+			          	React.createElement("div", null, 
+				         	React.createElement(TextField, {
+				         		ref: "editGroupSubject", 
+				         	  	hintText: "CS169", 
+				         	  	floatingLabelText: "Class"}), 
+				         	React.createElement(TextField, {
+				         		ref: "editGroupTitle", 
+				         	  	hintText: "Learn React together", 
+				         	  	floatingLabelText: "Title"}), 
+				         	React.createElement(TextField, {
+				         		ref: "editGroupDescription", 
+				         	  	hintText: "Come and learn the basic (and some advanced) React together! REACT IS THE FUTURE!!!", 
+				         	  	floatingLabelText: "Description", 
+				         	  	fullWidth: true, 
+				         	  	multiLine: true}), 
+				         	React.createElement(DatePicker, {
+				         		ref: "editGroupDate", 
+				         	  	hintText: "Nov 22, 2015", 
+				         	  	floatingLabelText: "Date"}), 
+				         	React.createElement(TimePicker, {
+				         		ref: "editGroupTime", 
+				         	  	hintText: "9:00 pm", 
+				         	  	floatingLabelText: "Time"}), 
+				         	React.createElement(TextField, {
+				         		ref: "editGroupLocation", 
+				         	  	hintText: "Wozniak Longue, Soda Hall", 
+				         	  	floatingLabelText: "Location"}), 
+				         	React.createElement(TextField, {
+				         		ref: "editGroupCapacity", 
+				         	  	hintText: "20", 
+				         	  	floatingLabelText: "Capacity"})
+			        	)
+			        ), 
+
+					React.createElement("ul", null, 
+					  this.props.studyGroups.map(function(studyGroup, i)  {
+					  	var date = moment(studyGroup.datetime).format("ddd, MMM D").toString();
+					  	var time = moment(studyGroup.datetime).format("h:mm a").toString();
+					  	var studygroupID = studyGroup.id;
+					    return (
+					    	React.createElement("div", {key: studyGroup.id}, 
+			    		        React.createElement(Paper, {zDepth: 1, className: "card-container"}, 
+			    			        React.createElement("div", {className: "card studyGroup"}, 
+			    			            React.createElement("div", {className: "colorBar"}), 
+			    			            React.createElement("table", null, 
+			    			                React.createElement("tr", {className: "row1"}, 
+			    			                    React.createElement("td", {className: "userPhotoHolder"}, 
+			    			                        React.createElement("div", {className: "photoHolder"}, 
+			    			                            React.createElement("div", {className: "circle"}, 
+			    			                                React.createElement("img", {className: "userPhoto", src: "http://nick.mtvnimages.com/nick/properties/spongebob-squarepants/characters/spongebob-about-web-desktop.jpg?quality=0.75"})
+			    			                            )
+			    			                        )
+
+			    			                    ), 
+			    			                    React.createElement("td", {colSpan: "2"}, 
+			    			                        React.createElement("span", {className: "subject"}, studyGroup.subject), 
+			    			                        React.createElement("span", {className: "title"}, studyGroup.title)
+			    			                    ), 
+
+			    			                    React.createElement("td", {colSpan: "2", align: "right", className: "dateTimeHolder"}, 
+			    			                        React.createElement("div", {className: "date"}, date), 
+			    			                        React.createElement("div", {className: "time"}, time)
+			    			                    )
+			    			                ), 
+
+			    			                React.createElement("tr", {className: "row2"}, 
+			    			                    React.createElement("td", {className: "exclamationHolder"}, 
+			    			                        React.createElement("div", {className: "exclamation"})
+			    			                    ), 
+			    			                    React.createElement("td", {colSpan: "3"}, 
+			    			                        React.createElement("div", {className: "description"}, studyGroup.description), 
+			    			                        React.createElement("div", {className: "seeMore", onClick: this.viewGroupDetail.bind(this, studyGroup)}, "See more...")
+			    			                    )
+			    			                ), 
+
+			    			                React.createElement("tr", {className: "row3"}, 
+			    			                    React.createElement("td", {className: "pinHolder"}, 
+			    			                        React.createElement("div", {className: "pin"})
+			    			                    ), 
+			    			                    React.createElement("td", {colSpan: "2"}, 
+			    			                        React.createElement("div", {className: "location"}, studyGroup.location)
+			    			                    )
+			    			                ), 
+
+			    			                React.createElement("tr", {className: "row4"}, 
+			    			                    React.createElement("td", null), 
+			    			                    React.createElement("td", {colSpan: "1"}, React.createElement("span", {className: "host"}, "@", studyGroup.host)
+			    			                    ), 
+			    			                    React.createElement("td", {colSpan: "2"}, 
+			    			                        React.createElement("div", {style: {textAlign:"right"}, className: "joinButtonContainer"}, 
+			    			                            React.createElement(RaisedButton, {onClick: this.joinGroup.bind(this, studyGroup), label: "Join"})
+			    			                        )
+			    			                    ), 
+			    			                    React.createElement("td", null, 
+			    			                        React.createElement("div", {className: "capacityHolder"}, 
+			    			                            React.createElement("div", {className: "capacity"}, studyGroup.guestlist, "/", studyGroup.capacity)
+			    			                        )
+			    			                    )
+			    			                )
+			    			            )
+			    			        )
+			    		        )
+					    	)
+					    );
+					  }.bind(this))
 					)
+
+					
 				)
 			);
 		}
@@ -45980,7 +46177,6 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 var StudyGroups = React.createClass ({displayName: "StudyGroups",
 	componentDidMount:function() {
 		var state = StudyGroupStore.getState();
-		console.log(state);
 		StudyGroupStore.fetchStudyGroups();	
 		
 	},
@@ -45989,8 +46185,6 @@ var StudyGroups = React.createClass ({displayName: "StudyGroups",
 
 	render:function(){
 		if (this.props.user!=null) {
-			console.log("TIDAK NULL");
-			console.log(this.props);
 			return (
 				React.createElement("div", null, 
 					React.createElement(AltContainer, {store: StudyGroupStore}, 
@@ -46011,7 +46205,7 @@ var StudyGroups = React.createClass ({displayName: "StudyGroups",
 
 module.exports = StudyGroups;
 
-},{"../actions/StudyGroupActions":368,"../stores/StudyGroupStore":375,"alt/AltContainer":1,"material-ui/lib/avatar":56,"material-ui/lib/card/card":64,"material-ui/lib/card/card-actions":59,"material-ui/lib/card/card-header":61,"material-ui/lib/card/card-text":62,"material-ui/lib/card/card-title":63,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/paper":94,"material-ui/lib/raised-button":95,"material-ui/lib/refresh-indicator":96,"material-ui/lib/text-field":120,"moment":154,"react":366,"react-addons-test-utils":157,"react-dom":160,"react-tap-event-plugin":191}],374:[function(require,module,exports){
+},{"../actions/StudyGroupActions":368,"../stores/StudyGroupStore":375,"alt/AltContainer":1,"axios":17,"material-ui/lib/avatar":56,"material-ui/lib/card/card":64,"material-ui/lib/card/card-actions":59,"material-ui/lib/card/card-header":61,"material-ui/lib/card/card-text":62,"material-ui/lib/card/card-title":63,"material-ui/lib/date-picker/date-picker":73,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/paper":94,"material-ui/lib/raised-button":95,"material-ui/lib/refresh-indicator":96,"material-ui/lib/text-field":120,"material-ui/lib/time-picker/time-picker":129,"moment":154,"react":366,"react-addons-test-utils":157,"react-dom":160,"react-router":180,"react-tap-event-plugin":191}],374:[function(require,module,exports){
 var StudyGroupActions = require('../actions/StudyGroupActions');
 var UserActions = require('../actions/UserActions');
 
@@ -46067,20 +46261,27 @@ var StudyGroupSource = {
 		    return new Promise(function (resolve, reject) {
 		      // simulate an asynchronous flow where data is fetched on
 		      // a remote server somewhere.
-		      axios.get(userURL)
-			  	  .then(function (response) {
-			  	  	//data = response from server
-			  	  	console.log("PASSING VALUE");
-			  	  	//PASSED VALUE FROM COMPONENT
-			  	  	console.log(email);
-			  	  	console.log(password);
-			  	  	var data = response.data;
-			  	    resolve (data.result);
-			  	  })
-			  	  .catch(function (response) {
-			  	    console.log(response);
-			  	    reject ("GADAPET USER TOT");
-		  	  });
+		      var fata = {
+		      	"enduser": {
+		      		"email": email,
+		      		"password": password,
+		      		"password_confirmation": password
+		      	}
+		      }
+		      $.ajax({ url: '/authentication/sign_in',
+		        type: 'POST',
+		        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+		        data: fata,
+		        success: function(response) {
+		          console.log(response);
+		          resolve(response);
+		        },
+		        error: function(response) {
+		        	console.log(response);
+		        	reject (response);
+		        }
+
+		      })
 		      
 		    });
 		  },
@@ -46140,10 +46341,11 @@ var UserActions = require('../actions/UserActions');
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleUpdateUser",{writable:true,configurable:true,value:function(user){"use strict";
-		this.user = user[0].name;
-		this.sessionID = user[0].sessionID;
+		this.user = user.email;
+		this.sessionID = user.id;
 		this.errorMessage = null;
 		console.log("BIJIK");
+		console.log(user);
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleFetchUser",{writable:true,configurable:true,value:function() {"use strict";

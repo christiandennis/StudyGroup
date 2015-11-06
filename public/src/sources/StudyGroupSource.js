@@ -53,20 +53,27 @@ var StudyGroupSource = {
 		    return new Promise(function (resolve, reject) {
 		      // simulate an asynchronous flow where data is fetched on
 		      // a remote server somewhere.
-		      axios.get(userURL)
-			  	  .then(function (response) {
-			  	  	//data = response from server
-			  	  	console.log("PASSING VALUE");
-			  	  	//PASSED VALUE FROM COMPONENT
-			  	  	console.log(email);
-			  	  	console.log(password);
-			  	  	var data = response.data;
-			  	    resolve (data.result);
-			  	  })
-			  	  .catch(function (response) {
-			  	    console.log(response);
-			  	    reject ("GADAPET USER TOT");
-		  	  });
+		      var fata = {
+		      	"enduser": {
+		      		"email": email,
+		      		"password": password,
+		      		"password_confirmation": password
+		      	}
+		      }
+		      $.ajax({ url: '/authentication/sign_in',
+		        type: 'POST',
+		        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+		        data: fata,
+		        success: function(response) {
+		          console.log(response);
+		          resolve(response);
+		        },
+		        error: function(response) {
+		        	console.log(response);
+		        	reject (response);
+		        }
+
+		      })
 		      
 		    });
 		  },
