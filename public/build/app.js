@@ -45398,6 +45398,19 @@ var LeftBar = React.createClass({displayName: "LeftBar",
 
 	myProfile:function() {
 		console.log("view my profile here");
+		this.refs.profileDialog.show();
+	},
+
+	cancelProfile:function() {
+		console.log("dismiss profile");
+		this.refs.profileDialog.dismiss();
+	},
+
+	viewProfileShow:function() {
+		console.log("render profile");
+		// this.refs.profileName.innerHTML = ;
+		// this.refs.profileID.innerHTML = ;
+		// this.refs.profileEmail.innerHTML = ;
 	},
 
 	myGroups:function() {
@@ -45426,13 +45439,33 @@ var LeftBar = React.createClass({displayName: "LeftBar",
 
 	render:function() {
 		return(
-			React.createElement(SideBar, {ref: "leftNav", docked: false}, 
-				React.createElement(MenuItem, {index: 0, style: {textAlign:"center"}}, "Hi, ", this.props.user.name, "!"), 
-				React.createElement(MenuItem, {index: 1, style: {textAlign:"center", marginBottom:"20px"} }, React.createElement("span", {onClick: this.myProfile}, React.createElement(Avatar, {size: "120"}, " ", this.props.user.name.slice(0,1), " "))), 
-				React.createElement("span", {onClick: this.myGroups}, "  ", React.createElement(MenuItem, {index: 2}, "My Groups"), " "), 
-  				React.createElement("span", {onClick: this.editProfile}, " ", React.createElement(MenuItem, {index: 3}, "Edit Profile"), " "), 
-  				React.createElement("span", {onClick: this.logout}, "  ", React.createElement(MenuItem, {index: 4}, "Log Out"), "  ")
-  			)
+			React.createElement("div", null, 
+				React.createElement(SideBar, {ref: "leftNav", docked: false}, 
+					React.createElement(MenuItem, {index: 0, style: {textAlign:"center"}}, "Hi, ", this.props.user.name, "!"), 
+					React.createElement(MenuItem, {index: 1, style: {textAlign:"center", marginBottom:"20px"} }, React.createElement("span", {onClick: this.myProfile}, React.createElement(Avatar, {size: "120"}, " ", this.props.user.name.slice(0,1), " "))), 
+					React.createElement("span", {onClick: this.myGroups}, "  ", React.createElement(MenuItem, {index: 2}, "My Groups"), " "), 
+	  				React.createElement("span", {onClick: this.editProfile}, " ", React.createElement(MenuItem, {index: 3}, "Edit Profile"), " "), 
+	  				React.createElement("span", {onClick: this.logout}, "  ", React.createElement(MenuItem, {index: 4}, "Log Out"), "  ")
+	  			), 
+
+	  			React.createElement(Dialog, {ref: "profileDialog", 
+							title: "My Profile", 
+							actions: [
+								  React.createElement(FlatButton, {
+								    label: "Dismiss", 
+								    secondary: true, 
+								    onTouchTap: this.cancelProfile}),
+								  ], 
+							onShow: this.viewProfileShow, 
+					  		autoDetectWindowHeight: true, 
+					  		autoScrollBodyContent: true}, 
+					    React.createElement("div", null, 
+					    	React.createElement("div", {ref: "profileName", className: "prof-name"}), 
+					    	React.createElement("div", {ref: "profileID", className: "prof-id"}), 
+					    	React.createElement("div", {ref: "profileEmail", className: "prof-email"})
+					    )
+					)
+			)
 		)
 	}
 })
@@ -46268,7 +46301,7 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 					  	var studygroupID = studyGroup.id;
 					    return (
 					    	React.createElement("div", {key: studyGroup.id}, 
-			    		        React.createElement(Paper, {zDepth: 1, className: "card-container"}, 
+			    		        React.createElement(Paper, {zDepth: 3, className: "card-container"}, 
 			    			        React.createElement("div", {className: "card studyGroup"}, 
 			    			            React.createElement("div", {className: "colorBar"}), 
 			    			            React.createElement("table", null, 

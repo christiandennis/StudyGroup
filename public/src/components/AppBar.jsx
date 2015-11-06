@@ -45,6 +45,19 @@ var LeftBar = React.createClass({
 
 	myProfile() {
 		console.log("view my profile here");
+		this.refs.profileDialog.show();
+	},
+
+	cancelProfile() {
+		console.log("dismiss profile");
+		this.refs.profileDialog.dismiss();
+	},
+
+	viewProfileShow() {
+		console.log("render profile");
+		// this.refs.profileName.innerHTML = ;
+		// this.refs.profileID.innerHTML = ;
+		// this.refs.profileEmail.innerHTML = ;
 	},
 
 	myGroups() {
@@ -73,13 +86,33 @@ var LeftBar = React.createClass({
 
 	render() {
 		return(
-			<SideBar ref="leftNav" docked={false}  >
-				<MenuItem index={0} style={{textAlign:"center"}}>Hi, {this.props.user.name}!</MenuItem>
-				<MenuItem index={1} style={{textAlign:"center", marginBottom:"20px"} }><span onClick={this.myProfile}><Avatar size="120"> {this.props.user.name.slice(0,1)} </Avatar></span></MenuItem>
-				<span onClick={this.myGroups}>		<MenuItem index={2}>My Groups</MenuItem>	</span>
-  				<span onClick={this.editProfile}>	<MenuItem index={3}>Edit Profile</MenuItem>	</span>
-  				<span onClick={this.logout}>		<MenuItem index={4}>Log Out</MenuItem>		</span>
-  			</SideBar>
+			<div>
+				<SideBar ref="leftNav" docked={false}  >
+					<MenuItem index={0} style={{textAlign:"center"}}>Hi, {this.props.user.name}!</MenuItem>
+					<MenuItem index={1} style={{textAlign:"center", marginBottom:"20px"} }><span onClick={this.myProfile}><Avatar size="120"> {this.props.user.name.slice(0,1)} </Avatar></span></MenuItem>
+					<span onClick={this.myGroups}>		<MenuItem index={2}>My Groups</MenuItem>	</span>
+	  				<span onClick={this.editProfile}>	<MenuItem index={3}>Edit Profile</MenuItem>	</span>
+	  				<span onClick={this.logout}>		<MenuItem index={4}>Log Out</MenuItem>		</span>
+	  			</SideBar>
+
+	  			<Dialog ref="profileDialog" 
+							title="My Profile" 
+							actions={[
+								  <FlatButton
+								    label="Dismiss"
+								    secondary={true}
+								    onTouchTap={this.cancelProfile} />,
+								  ]}
+							onShow={this.viewProfileShow}
+					  		autoDetectWindowHeight={true} 
+					  		autoScrollBodyContent={true}>
+					    <div>
+					    	<div ref="profileName" className="prof-name"></div>
+					    	<div ref="profileID" className="prof-id"></div>
+					    	<div ref="profileEmail" className="prof-email"></div>
+					    </div>
+					</Dialog>
+			</div>
 		)
 	}
 })
