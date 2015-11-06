@@ -45868,7 +45868,7 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 					  	var time = moment(studyGroup.datetime).format("h:mm a").toString();
 					  	console.log(time);
 					    return (
-					      React.createElement(Paper, {zDepth: 1, key: i, className: "card-container"}, 
+					      React.createElement(Paper, {zDepth: 3, key: i, className: "card-container"}, 
 					        React.createElement("div", {className: "card studyGroup"}, 
 					            React.createElement("div", {className: "colorBar"}), 
 					            React.createElement("table", null, 

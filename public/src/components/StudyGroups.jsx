@@ -61,7 +61,7 @@ var AllStudyGroups = React.createClass({
 					  	var time = moment(studyGroup.datetime).format("h:mm a").toString();
 					  	console.log(time);
 					    return (
-					      <Paper zDepth={1} key={i} className="card-container">
+					      <Paper zDepth={3} key={i} className="card-container">
 					        <div className="card studyGroup">
 					            <div className="colorBar"></div>
 					            <table>
