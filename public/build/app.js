@@ -45807,6 +45807,7 @@ module.exports = LandingPage;
 },{"./AppBar.jsx":370,"alt/AltContainer":1,"react":365,"react-dom":159}],372:[function(require,module,exports){
 // var button = require('react-materialize').Button;
 var React = require('react');
+var Link = require('react-router').Link;
 var render = require('react-dom').render;
 
 var AltContainer = require('alt/AltContainer');
@@ -45823,7 +45824,8 @@ const Dialog = require('material-ui/lib/dialog');
 const RefreshIndicator = require('material-ui/lib/refresh-indicator');
 const FlatButton = require('material-ui/lib/flat-button');
 const TextField = require('material-ui/lib/text-field');
-
+const DatePicker = require('material-ui/lib/date-picker/date-picker');
+const TimePicker = require('material-ui/lib/time-picker/time-picker');
 const Card = require('material-ui/lib/card/card');
 const CardHeader = require('material-ui/lib/card/card-header');
 const CardTitle = require('material-ui/lib/card/card-title');
@@ -45836,8 +45838,14 @@ const moment = require('moment');
 var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 	// this method should fetch the group detail and comments
 	// parameter : groupId
-	viewGroupDetail:function() {
-		this.refs.groupDetailDialog.show();
+	viewGroupDetail:function(id) {
+		console.log("open group detail");
+		var ngok = "groupDetailDialog" + "1";
+		this.refs.ngok.show();
+	},
+
+	editGroup:function() {
+		console.log("edit group");
 	},
 
 	render:function() {
@@ -45866,103 +45874,151 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 					  this.props.studyGroups.map(function(studyGroup, i)  {
 					  	var date = moment(studyGroup.datetime).format("ddd, MMM D").toString();
 					  	var time = moment(studyGroup.datetime).format("h:mm a").toString();
-					  	console.log(time);
+					  	var studygroupID = studyGroup.id;
 					    return (
-					      React.createElement(Paper, {zDepth: 1, key: i, className: "card-container"}, 
-					        React.createElement("div", {className: "card studyGroup"}, 
-					            React.createElement("div", {className: "colorBar"}), 
-					            React.createElement("table", null, 
-					                React.createElement("tr", {className: "row1"}, 
-					                    React.createElement("td", {className: "userPhotoHolder"}, 
-					                        React.createElement("div", {className: "photoHolder"}, 
-					                            React.createElement("div", {className: "circle"}, 
-					                                React.createElement("img", {className: "userPhoto", src: "http://nick.mtvnimages.com/nick/properties/spongebob-squarepants/characters/spongebob-about-web-desktop.jpg?quality=0.75"})
-					                            )
-					                        )
+					    	React.createElement("div", {key: studyGroup.id}, 
+			    		        React.createElement(Paper, {zDepth: 1, className: "card-container"}, 
+			    			        React.createElement("div", {className: "card studyGroup"}, 
+			    			            React.createElement("div", {className: "colorBar"}), 
+			    			            React.createElement("table", null, 
+			    			                React.createElement("tr", {className: "row1"}, 
+			    			                    React.createElement("td", {className: "userPhotoHolder"}, 
+			    			                        React.createElement("div", {className: "photoHolder"}, 
+			    			                            React.createElement("div", {className: "circle"}, 
+			    			                                React.createElement("img", {className: "userPhoto", src: "http://nick.mtvnimages.com/nick/properties/spongebob-squarepants/characters/spongebob-about-web-desktop.jpg?quality=0.75"})
+			    			                            )
+			    			                        )
 
-					                    ), 
-					                    React.createElement("td", {colSpan: "2"}, 
-					                        React.createElement("span", {className: "subject"}, studyGroup.subject), 
-					                        React.createElement("span", {className: "title"}, studyGroup.title)
-					                    ), 
+			    			                    ), 
+			    			                    React.createElement("td", {colSpan: "2"}, 
+			    			                        React.createElement("span", {className: "subject"}, studyGroup.subject), 
+			    			                        React.createElement("span", {className: "title"}, studyGroup.title)
+			    			                    ), 
 
-					                    React.createElement("td", {colSpan: "2", align: "right", className: "dateTimeHolder"}, 
-					                        React.createElement("div", {className: "date"}, date), 
-					                        React.createElement("div", {className: "time"}, time)
-					                    )
-					                ), 
+			    			                    React.createElement("td", {colSpan: "2", align: "right", className: "dateTimeHolder"}, 
+			    			                        React.createElement("div", {className: "date"}, date), 
+			    			                        React.createElement("div", {className: "time"}, time)
+			    			                    )
+			    			                ), 
 
-					                React.createElement("tr", {className: "row2"}, 
-					                    React.createElement("td", {className: "exclamationHolder"}, 
-					                        React.createElement("div", {className: "exclamation"})
-					                    ), 
-					                    React.createElement("td", {colSpan: "3"}, 
-					                        React.createElement("div", {className: "description"}, studyGroup.description), 
-					                        React.createElement("div", {className: "seeMore", onClick: this.viewGroupDetail}, "See more...")
-					                    )
-					                ), 
+			    			                React.createElement("tr", {className: "row2"}, 
+			    			                    React.createElement("td", {className: "exclamationHolder"}, 
+			    			                        React.createElement("div", {className: "exclamation"})
+			    			                    ), 
+			    			                    React.createElement("td", {colSpan: "3"}, 
+			    			                        React.createElement("div", {className: "description"}, studyGroup.description), 
+			    			                        React.createElement("div", {className: "seeMore", onClick: this.viewGroupDetail}, "See more...")
+			    			                    )
+			    			                ), 
 
-					                React.createElement("tr", {className: "row3"}, 
-					                    React.createElement("td", {className: "pinHolder"}, 
-					                        React.createElement("div", {className: "pin"})
-					                    ), 
-					                    React.createElement("td", {colSpan: "2"}, 
-					                        React.createElement("div", {className: "location"}, studyGroup.location)
-					                    )
-					                ), 
+			    			                React.createElement("tr", {className: "row3"}, 
+			    			                    React.createElement("td", {className: "pinHolder"}, 
+			    			                        React.createElement("div", {className: "pin"})
+			    			                    ), 
+			    			                    React.createElement("td", {colSpan: "2"}, 
+			    			                        React.createElement("div", {className: "location"}, studyGroup.location)
+			    			                    )
+			    			                ), 
 
-					                React.createElement("tr", {className: "row4"}, 
-					                    React.createElement("td", null), 
-					                    React.createElement("td", {colSpan: "1"}, React.createElement("span", {className: "host"}, "@", studyGroup.host)
-					                    ), 
-					                    React.createElement("td", {colSpan: "2"}, 
-					                        React.createElement("div", {style: {textAlign:"right"}, className: "joinButtonContainer"}, 
-					                            React.createElement(RaisedButton, {label: "Join"})
-					                        )
-					                    ), 
-					                    React.createElement("td", null, 
-					                        React.createElement("div", {className: "capacityHolder"}, 
-					                            React.createElement("div", {className: "capacity"}, studyGroup.guestlist, "/", studyGroup.capacity)
-					                        )
-					                    )
-					                )
-					            )
-					        )
-					      )
+			    			                React.createElement("tr", {className: "row4"}, 
+			    			                    React.createElement("td", null), 
+			    			                    React.createElement("td", {colSpan: "1"}, React.createElement("span", {className: "host"}, "@", studyGroup.host)
+			    			                    ), 
+			    			                    React.createElement("td", {colSpan: "2"}, 
+			    			                        React.createElement("div", {style: {textAlign:"right"}, className: "joinButtonContainer"}, 
+			    			                            React.createElement(RaisedButton, {label: "Join", "data-id": studyGroup.id})
+			    			                        )
+			    			                    ), 
+			    			                    React.createElement("td", null, 
+			    			                        React.createElement("div", {className: "capacityHolder"}, 
+			    			                            React.createElement("div", {className: "capacity"}, studyGroup.guestlist, "/", studyGroup.capacity)
+			    			                        )
+			    			                    )
+			    			                )
+			    			            )
+			    			        )
+			    		        ), 
+
+			    		        React.createElement(Dialog, {ref: "groupDetailDialog" + studygroupID, 
+			    		        		title: "StudyGroup Detail", 
+			    		        		actions: [], 
+			    		          		autoDetectWindowHeight: true, 
+			    		          		autoScrollBodyContent: true}, 
+			    		            React.createElement("div", null, 
+			    		            	React.createElement("div", {className: "groupdesc-title"}, "Class"), 
+			    		            	React.createElement("div", {className: "groupdesc-subtitle"}, studyGroup.subject), 
+
+			    		            	React.createElement("div", {className: "groupdesc-title"}, "Title"), 
+			    		            	React.createElement("div", {className: "groupdesc-subtitle"}, studyGroup.title), 
+
+			    		            	React.createElement("div", {className: "groupdesc-title"}, "Host"), 
+			    		            	React.createElement("div", {className: "groupdesc-subtitle"}, "@", studyGroup.host), 
+
+			    		            	React.createElement("div", {className: "groupdesc-title"}, "Time"), 
+			    		            	React.createElement("div", {className: "groupdesc-subtitle"}, "time"), 
+
+			    		            	React.createElement("div", {className: "groupdesc-title"}, "Date"), 
+			    		            	React.createElement("div", {className: "groupdesc-subtitle"}, "date"), 
+
+			    		            	React.createElement("div", {className: "groupdesc-title"}, "Location"), 
+			    		            	React.createElement("div", {className: "groupdesc-subtitle"}, studyGroup.location), 
+
+			    		            	React.createElement(CardTitle, {
+			    		            	  subtitle: studyGroup.description})
+
+			    		            )
+			    		        ), 
+
+	    		                React.createElement(Dialog, {ref: "editGroupDialog" + studygroupID, 
+	    		                	title: "Create a New StudyGroup", 
+	    		                	modal: true, 
+	    		                	actions: [
+	    		                		  React.createElement(FlatButton, {
+	    		                		    label: "Cancel", 
+	    		                		    secondary: true, 
+	    		                		    onTouchTap: this.cancelNewGroup}),
+	    		                		  React.createElement(Link, {to: "/studygroupapp"}, React.createElement(FlatButton, {
+	    		                		    label: "Submit", 
+	    		                		    primary: true, 
+	    		                		    onTouchTap: this.submitNewGroup}))], 
+	    		                		autoDetectWindowHeight: true, 
+	    		                		autoScrollBodyContent: true}, 
+	    		                  	React.createElement("div", null, 
+	    		        	         	React.createElement(TextField, {
+	    		        	         		ref: "editGroupSubject", 
+	    		        	         	  	hintText: "CS169", 
+	    		        	         	  	floatingLabelText: "Class"}), 
+	    		        	         	React.createElement(TextField, {
+	    		        	         		ref: "editGroupTitle", 
+	    		        	         	  	hintText: "Learn React together", 
+	    		        	         	  	floatingLabelText: "Title"}), 
+	    		        	         	React.createElement(TextField, {
+	    		        	         		ref: "editGroupDescription", 
+	    		        	         	  	hintText: "Come and learn the basic (and some advanced) React together! REACT IS THE FUTURE!!!", 
+	    		        	         	  	floatingLabelText: "Description", 
+	    		        	         	  	fullWidth: true, 
+	    		        	         	  	multiLine: true}), 
+	    		        	         	React.createElement(DatePicker, {
+	    		        	         		ref: "editGroupDate", 
+	    		        	         	  	hintText: "Nov 22, 2015", 
+	    		        	         	  	floatingLabelText: "Date"}), 
+	    		        	         	React.createElement(TimePicker, {
+	    		        	         		ref: "editGroupTime", 
+	    		        	         	  	hintText: "9:00 pm", 
+	    		        	         	  	floatingLabelText: "Time"}), 
+	    		        	         	React.createElement(TextField, {
+	    		        	         		ref: "editGroupLocation", 
+	    		        	         	  	hintText: "Wozniak Longue, Soda Hall", 
+	    		        	         	  	floatingLabelText: "Location"}), 
+	    		        	         	React.createElement(TextField, {
+	    		        	         		ref: "editGroupCapacity", 
+	    		        	         	  	hintText: "20", 
+	    		        	         	  	floatingLabelText: "Capacity"})
+	    		                	)
+	    		                )
+					    	)
 					    );
 					  }.bind(this))
-					), 
-					React.createElement(Dialog, {ref: "groupDetailDialog", 
-							title: "StudyGroup Detail", 
-							actions: [], 
-					  		autoDetectWindowHeight: true, 
-					  		autoScrollBodyContent: true}, 
-					    React.createElement("div", null, 
-					    	React.createElement("div", {className: "groupdesc-title"}, "Class"), 
-					    	React.createElement("div", {className: "groupdesc-subtitle"}, "CS188"), 
-
-					    	React.createElement("div", {className: "groupdesc-title"}, "Title"), 
-					    	React.createElement("div", {className: "groupdesc-subtitle"}, "I Love Pacman"), 
-
-					    	React.createElement("div", {className: "groupdesc-title"}, "Host"), 
-					    	React.createElement("div", {className: "groupdesc-subtitle"}, "@cdennis"), 
-
-					    	React.createElement("div", {className: "groupdesc-title"}, "Time"), 
-					    	React.createElement("div", {className: "groupdesc-subtitle"}, "9:31 pm"), 
-
-					    	React.createElement("div", {className: "groupdesc-title"}, "Date"), 
-					    	React.createElement("div", {className: "groupdesc-subtitle"}, "Fri, Oct 16"), 
-
-					    	React.createElement("div", {className: "groupdesc-title"}, "Location"), 
-					    	React.createElement("div", {className: "groupdesc-subtitle"}, "Kresge Engineering Library 110MA"), 
-
-					    	React.createElement(CardTitle, {
-					    	  subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit." + ' ' +
-					    	  "Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi." + ' ' +
-					    	  "Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque." + ' ' +
-					    	  "Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio."})
-
-					    )
 					)
 				)
 			);
@@ -46004,7 +46060,7 @@ var StudyGroups = React.createClass ({displayName: "StudyGroups",
 
 module.exports = StudyGroups;
 
-},{"../actions/StudyGroupActions":367,"../stores/StudyGroupStore":374,"alt/AltContainer":1,"material-ui/lib/avatar":56,"material-ui/lib/card/card":64,"material-ui/lib/card/card-actions":59,"material-ui/lib/card/card-header":61,"material-ui/lib/card/card-text":62,"material-ui/lib/card/card-title":63,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/paper":94,"material-ui/lib/raised-button":95,"material-ui/lib/refresh-indicator":96,"material-ui/lib/text-field":120,"moment":154,"react":365,"react-dom":159,"react-tap-event-plugin":190}],373:[function(require,module,exports){
+},{"../actions/StudyGroupActions":367,"../stores/StudyGroupStore":374,"alt/AltContainer":1,"material-ui/lib/avatar":56,"material-ui/lib/card/card":64,"material-ui/lib/card/card-actions":59,"material-ui/lib/card/card-header":61,"material-ui/lib/card/card-text":62,"material-ui/lib/card/card-title":63,"material-ui/lib/date-picker/date-picker":73,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/paper":94,"material-ui/lib/raised-button":95,"material-ui/lib/refresh-indicator":96,"material-ui/lib/text-field":120,"material-ui/lib/time-picker/time-picker":129,"moment":154,"react":365,"react-dom":159,"react-router":179,"react-tap-event-plugin":190}],373:[function(require,module,exports){
 var StudyGroupActions = require('../actions/StudyGroupActions');
 var UserActions = require('../actions/UserActions');
 
