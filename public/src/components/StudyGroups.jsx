@@ -85,7 +85,7 @@ var AllStudyGroups = React.createClass({
 		var capacity = 	this.refs.editGroupCapacity.getValue();
 		var host = this.props.user;
 
-		if (true) {
+		if (false) {
 			console.log(title);
 			console.log(subject);
 			console.log(description);
@@ -109,16 +109,18 @@ var AllStudyGroups = React.createClass({
 			"host": host
 		}).then(function(response) {
 			console.log("post new group SUCCEED");
-			console.log(response);
 			StudyGroupStore.fetchStudyGroups();	
 			successSnackbar.show();
 			newGroupDialog.dismiss();
 		}).catch(function(response) {
 			failedSnackbar.show();
 			console.log("post new group FAILED");
-			console.log(response);
 		});
 
+	},
+
+	joinGroup() {
+		console.log("Join group here");
 	},
 
 	render() {
@@ -130,7 +132,6 @@ var AllStudyGroups = React.createClass({
 		if (StudyGroupStore.isLoading()) {
 			var left = window.document.documentElement.clientWidth/2 - 25;
 			var top = window.document.documentElement.clientHeight/2 - 25;
-			console.log(left);
 			return(
 				<div>
 					<RefreshIndicator size={50} left={left} top={top} status="loading" /> 
@@ -138,12 +139,9 @@ var AllStudyGroups = React.createClass({
 			);
 		}
 
-		console.log("test user in SG")
-		console.log(this.props.user)
 		if (this.props.user){
 			return (
 				<div>
-					<Paper ref="ngentot1"></Paper>
 					<Dialog ref="groupDetailDialog"
 							title="StudyGroup Detail" 
 							actions={[]}
@@ -151,7 +149,6 @@ var AllStudyGroups = React.createClass({
 					  		autoDetectWindowHeight={true} 
 					  		autoScrollBodyContent={true}>
 					    <div>
-					    	<Paper ref="ngentot2"></Paper>
 					    	<div className="groupdesc-title">Class</div>
 					    	<div ref="groupdetailClass" className="groupdesc-subtitle"></div>
 
@@ -283,7 +280,7 @@ var AllStudyGroups = React.createClass({
 			    			                    </td>
 			    			                    <td colSpan="2">
 			    			                        <div style={{textAlign:"right"}} className="joinButtonContainer">
-			    			                            <RaisedButton onClick={this.viewGroupDetail.bind(this, studyGroup)} label="Join"/>
+			    			                            <RaisedButton onClick={this.joinGroup.bind(this, studyGroup)} label="Join"/>
 			    			                        </div>
 			    			                    </td>
 			    			                    <td>
@@ -310,7 +307,6 @@ var AllStudyGroups = React.createClass({
 var StudyGroups = React.createClass ({
 	componentDidMount() {
 		var state = StudyGroupStore.getState();
-		console.log(state);
 		StudyGroupStore.fetchStudyGroups();	
 		
 	},
@@ -319,8 +315,6 @@ var StudyGroups = React.createClass ({
 
 	render(){
 		if (this.props.user!=null) {
-			console.log("TIDAK NULL");
-			console.log(this.props);
 			return (
 				<div>
 					<AltContainer store = {StudyGroupStore}>
