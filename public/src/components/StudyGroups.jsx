@@ -27,18 +27,84 @@ const CardText = require('material-ui/lib/card/card-text');
 
 const moment = require('moment');
 
+const URL = "http://localhost:3000";
+var axios = require('axios');
+
+var tmpStudyGroup = null;
+
 
 var AllStudyGroups = React.createClass({
 	// this method should fetch the group detail and comments
 	// parameter : groupId
-	viewGroupDetail(id) {
+	viewGroupDetail(param) {
 		console.log("open group detail");
-		var ngok = "groupDetailDialog" + "1";
-		this.refs.ngok.show();
+		tmpStudyGroup = param;
+		this.refs.groupDetailDialog.show();
 	},
 
-	editGroup() {
-		console.log("edit group");
+	viewGroupDetailOnShow() {
+		this.refs.groupdetailClass.innerHTML = tmpStudyGroup.subject;
+		this.refs.groupdetailTitle.innerHTML = tmpStudyGroup.title;
+		this.refs.groupdetailHost.innerHTML = "@" + tmpStudyGroup.host;
+		this.refs.groupdetailTime.innerHTML = tmpStudyGroup.time;
+		this.refs.groupdetailDate.innerHTML = tmpStudyGroup.date;
+		this.refs.groupdetailLocation.innerHTML = tmpStudyGroup.location;
+		this.refs.groupdetailDescription.innerHTML = tmpStudyGroup.description;
+	},
+
+	editGroupDetail(){
+		this.refs.groupDetailDialog.dismiss();
+		this.refs.editGroupDialog.show();
+	},
+
+	cancelEditGroupDetail() {
+		console.log("closing editgroup dialog");
+		this.refs.editGroupDialog.dismiss();
+	},
+
+	submitEditGroupDetail() {
+		var title = this.refs.editGroupTitle.getValue();
+		var subject = this.refs.editGroupSubject.getValue();
+		var description =  this.refs.editGroupDescription.getValue();
+		var date = this.refs.editGroupDate.getDate();
+		var location = this.refs.editGroupLocation.getValue();
+		var capacity = 	this.refs.editGroupCapacity.getValue();
+		var host = this.props.user;
+
+		if (true) {
+			console.log(title);
+			console.log(subject);
+			console.log(description);
+			console.log(date);
+			console.log(location);
+			console.log(capacity);
+			console.log(host);
+		}
+
+		var newGroupDialog = this.refs.newGroupDialog;
+		var failedSnackbar = this.refs.createGroupFailedSnackbar;
+		var successSnackbar = this.refs.createGroupSuccessSnackbar;
+
+		axios.post(URL + "/groups", {
+			"title": title,
+			"subject": subject,
+			"description": description,
+			"date": date,
+			"location": location,
+			"capacity": capacity,
+			"host": host
+		}).then(function(response) {
+			console.log("post new group SUCCEED");
+			console.log(response);
+			StudyGroupStore.fetchStudyGroups();	
+			successSnackbar.show();
+			newGroupDialog.dismiss();
+		}).catch(function(response) {
+			failedSnackbar.show();
+			console.log("post new group FAILED");
+			console.log(response);
+		});
+
 	},
 
 	render() {
@@ -63,6 +129,89 @@ var AllStudyGroups = React.createClass({
 		if (this.props.user){
 			return (
 				<div>
+					<Paper ref="ngentot1"></Paper>
+					<Dialog ref="groupDetailDialog"
+							title="StudyGroup Detail" 
+							actions={[]}
+							onShow={this.viewGroupDetailOnShow}
+					  		autoDetectWindowHeight={true} 
+					  		autoScrollBodyContent={true}>
+					    <div>
+					    	<Paper ref="ngentot2"></Paper>
+					    	<div className="groupdesc-title">Class</div>
+					    	<div ref="groupdetailClass" className="groupdesc-subtitle"></div>
+
+					    	<div className="groupdesc-title">Title</div>
+					    	<div ref="groupdetailTitle" className="groupdesc-subtitle"></div>
+
+					    	<div className="groupdesc-title">Host</div>
+					    	<div ref="groupdetailHost" className="groupdesc-subtitle"></div>
+
+					    	<div className="groupdesc-title">Time</div>
+					    	<div ref="groupdetailTime" className="groupdesc-subtitle"></div>
+
+					    	<div className="groupdesc-title">Date</div>
+					    	<div ref="groupdetailDate" className="groupdesc-subtitle"></div>
+
+					    	<div className="groupdesc-title">Location</div>
+					    	<div ref="groupdetailLocation" className="groupdesc-subtitle"></div>
+
+					    	<div className="groupdesc-title">Description</div>
+					    	<div ref="groupdetailDescription" className="groupdesc-subtitle"></div>
+
+					    	<FlatButton label="Edit" onClick={this.editGroupDetail}/>
+
+					    </div>
+					</Dialog>
+
+			        <Dialog ref="editGroupDialog"
+			        	title="Edit StudyGroup" 
+			        	modal={true}
+			        	actions={[
+			        		  <FlatButton
+			        		    label="Cancel"
+			        		    secondary={true}
+			        		    onTouchTap={this.cancelEditGroupDetail} />,
+			        		  <FlatButton
+			        		    label="Submit"
+			        		    primary={true}
+			        		    onTouchTap={this.submitEditGroupDetail} />]}
+			        		autoDetectWindowHeight={true} 
+			        		autoScrollBodyContent={true}>
+			          	<div>
+				         	<TextField
+				         		ref = "editGroupSubject"
+				         	  	hintText="CS169"
+				         	  	floatingLabelText="Class" />
+				         	<TextField
+				         		ref = "editGroupTitle"
+				         	  	hintText="Learn React together"
+				         	  	floatingLabelText="Title" />
+				         	<TextField
+				         		ref = "editGroupDescription"
+				         	  	hintText="Come and learn the basic (and some advanced) React together! REACT IS THE FUTURE!!!"
+				         	  	floatingLabelText="Description"
+				         	  	fullWidth={true}
+				         	  	multiLine={true}/>
+				         	<DatePicker
+				         		ref = "editGroupDate"
+				         	  	hintText="Nov 22, 2015"
+				         	  	floatingLabelText="Date"/>
+				         	<TimePicker
+				         		ref = "editGroupTime"
+				         	  	hintText="9:00 pm"
+				         	  	floatingLabelText="Time"/>
+				         	<TextField
+				         		ref = "editGroupLocation"
+				         	  	hintText="Wozniak Longue, Soda Hall"
+				         	  	floatingLabelText="Location"/>
+				         	<TextField
+				         		ref = "editGroupCapacity"
+				         	  	hintText="20"
+				         	  	floatingLabelText="Capacity"/>
+			        	</div>
+			        </Dialog>
+
 					<ul>
 					  {this.props.studyGroups.map((studyGroup, i) => {
 					  	var date = moment(studyGroup.datetime).format("ddd, MMM D").toString();
@@ -100,7 +249,7 @@ var AllStudyGroups = React.createClass({
 			    			                    </td>
 			    			                    <td colSpan="3">
 			    			                        <div className="description">{studyGroup.description}</div>
-			    			                        <div className="seeMore" onClick={this.viewGroupDetail}>See more...</div>
+			    			                        <div className="seeMore" onClick={this.viewGroupDetail.bind(this, studyGroup)}>See more...</div>
 			    			                    </td>
 			    			                </tr>
 
@@ -119,7 +268,7 @@ var AllStudyGroups = React.createClass({
 			    			                    </td>
 			    			                    <td colSpan="2">
 			    			                        <div style={{textAlign:"right"}} className="joinButtonContainer">
-			    			                            <RaisedButton label="Join" data-id={studyGroup.id}/>
+			    			                            <RaisedButton onClick={this.viewGroupDetail.bind(this, studyGroup)} label="Join"/>
 			    			                        </div>
 			    			                    </td>
 			    			                    <td>
@@ -131,88 +280,12 @@ var AllStudyGroups = React.createClass({
 			    			            </table>
 			    			        </div>
 			    		        </Paper>
-
-			    		        <Dialog ref={"groupDetailDialog" + studygroupID}
-			    		        		title="StudyGroup Detail" 
-			    		        		actions={[]}
-			    		          		autoDetectWindowHeight={true} 
-			    		          		autoScrollBodyContent={true}>
-			    		            <div>
-			    		            	<div className="groupdesc-title">Class</div>
-			    		            	<div className="groupdesc-subtitle">{studyGroup.subject}</div>
-
-			    		            	<div className="groupdesc-title">Title</div>
-			    		            	<div className="groupdesc-subtitle">{studyGroup.title}</div>
-
-			    		            	<div className="groupdesc-title">Host</div>
-			    		            	<div className="groupdesc-subtitle">@{studyGroup.host}</div>
-
-			    		            	<div className="groupdesc-title">Time</div>
-			    		            	<div className="groupdesc-subtitle">time</div>
-
-			    		            	<div className="groupdesc-title">Date</div>
-			    		            	<div className="groupdesc-subtitle">date</div>
-
-			    		            	<div className="groupdesc-title">Location</div>
-			    		            	<div className="groupdesc-subtitle">{studyGroup.location}</div>
-
-			    		            	<CardTitle
-			    		            	  subtitle={studyGroup.description}/>
-
-			    		            </div>
-			    		        </Dialog>
-
-	    		                <Dialog ref={"editGroupDialog" + studygroupID}
-	    		                	title="Create a New StudyGroup" 
-	    		                	modal={true}
-	    		                	actions={[
-	    		                		  <FlatButton
-	    		                		    label="Cancel"
-	    		                		    secondary={true}
-	    		                		    onTouchTap={this.cancelNewGroup} />,
-	    		                		  <Link to="/studygroupapp"><FlatButton
-	    		                		    label="Submit"
-	    		                		    primary={true}
-	    		                		    onTouchTap={this.submitNewGroup} /></Link>]}
-	    		                		autoDetectWindowHeight={true} 
-	    		                		autoScrollBodyContent={true}>
-	    		                  	<div>
-	    		        	         	<TextField
-	    		        	         		ref = "editGroupSubject"
-	    		        	         	  	hintText="CS169"
-	    		        	         	  	floatingLabelText="Class" />
-	    		        	         	<TextField
-	    		        	         		ref = "editGroupTitle"
-	    		        	         	  	hintText="Learn React together"
-	    		        	         	  	floatingLabelText="Title" />
-	    		        	         	<TextField
-	    		        	         		ref = "editGroupDescription"
-	    		        	         	  	hintText="Come and learn the basic (and some advanced) React together! REACT IS THE FUTURE!!!"
-	    		        	         	  	floatingLabelText="Description"
-	    		        	         	  	fullWidth={true}
-	    		        	         	  	multiLine={true}/>
-	    		        	         	<DatePicker
-	    		        	         		ref = "editGroupDate"
-	    		        	         	  	hintText="Nov 22, 2015"
-	    		        	         	  	floatingLabelText="Date"/>
-	    		        	         	<TimePicker
-	    		        	         		ref = "editGroupTime"
-	    		        	         	  	hintText="9:00 pm"
-	    		        	         	  	floatingLabelText="Time"/>
-	    		        	         	<TextField
-	    		        	         		ref = "editGroupLocation"
-	    		        	         	  	hintText="Wozniak Longue, Soda Hall"
-	    		        	         	  	floatingLabelText="Location"/>
-	    		        	         	<TextField
-	    		        	         		ref = "editGroupCapacity"
-	    		        	         	  	hintText="20"
-	    		        	         	  	floatingLabelText="Capacity"/>
-	    		                	</div>
-	    		                </Dialog>
 					    	</div>
 					    );
 					  })}
 					</ul>
+
+					
 				</div>
 			);
 		}
