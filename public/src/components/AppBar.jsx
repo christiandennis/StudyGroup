@@ -6,6 +6,7 @@ var StudyGroupStore = require('../stores/StudyGroupStore');
 var AltContainer = require('alt/AltContainer');
 
 var LandingPage = require('./LandingPage.jsx');
+var ReactTestUtils = require('react-addons-test-utils');
 
 const AppBar = require('material-ui/lib/app-bar');
 const Dialog = require('material-ui/lib/dialog');
@@ -67,6 +68,7 @@ var LeftBar = React.createClass({
 		)
 	}
 })
+
 
 var TopBar = React.createClass({
 	dialogLogin() {

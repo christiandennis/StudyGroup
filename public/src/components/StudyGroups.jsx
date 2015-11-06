@@ -5,6 +5,7 @@ var render = require('react-dom').render;
 var AltContainer = require('alt/AltContainer');
 var StudyGroupStore = require('../stores/StudyGroupStore');
 var StudyGroupActions = require('../actions/StudyGroupActions');
+var ReactTestUtils = require('react-addons-test-utils');
 
 var injectTapEventPlugin = require("react-tap-event-plugin");
 injectTapEventPlugin();
@@ -162,6 +163,8 @@ var AllStudyGroups = React.createClass({
 		}
 	}
 });
+
+// TESTING
 
 var StudyGroups = React.createClass ({
 	componentDidMount() {
