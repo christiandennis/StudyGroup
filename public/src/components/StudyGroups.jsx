@@ -46,8 +46,10 @@ var AllStudyGroups = React.createClass({
 		this.refs.groupdetailClass.innerHTML = tmpStudyGroup.subject;
 		this.refs.groupdetailTitle.innerHTML = tmpStudyGroup.title;
 		this.refs.groupdetailHost.innerHTML = "@" + tmpStudyGroup.host;
-		this.refs.groupdetailTime.innerHTML = tmpStudyGroup.time;
-		this.refs.groupdetailDate.innerHTML = tmpStudyGroup.date;
+		var date = moment(tmpStudyGroup.datetime).format("ddd, MMM D").toString();
+		var time = moment(tmpStudyGroup.datetime).format("h:mm a").toString();
+		this.refs.groupdetailTime.innerHTML = time;
+		this.refs.groupdetailDate.innerHTML = date;
 		this.refs.groupdetailLocation.innerHTML = tmpStudyGroup.location;
 		this.refs.groupdetailDescription.innerHTML = tmpStudyGroup.description;
 	},
@@ -55,6 +57,18 @@ var AllStudyGroups = React.createClass({
 	editGroupDetail(){
 		this.refs.groupDetailDialog.dismiss();
 		this.refs.editGroupDialog.show();
+	},
+
+	editGroupDetailOnShow(){
+		this.refs.editGroupTitle.setValue(tmpStudyGroup.title);
+		this.refs.editGroupSubject.setValue(tmpStudyGroup.subject);
+		this.refs.editGroupLocation.setValue(tmpStudyGroup.location);
+		this.refs.editGroupDescription.setValue(tmpStudyGroup.description);
+		this.refs.editGroupCapacity.setValue(tmpStudyGroup.capacity);
+		var datetime = moment(tmpStudyGroup.datetime).toDate();
+		this.refs.editGroupTime.setTime(datetime);
+		this.refs.editGroupDate.setDate(datetime);
+
 	},
 
 	cancelEditGroupDetail() {
@@ -85,7 +99,7 @@ var AllStudyGroups = React.createClass({
 		var failedSnackbar = this.refs.createGroupFailedSnackbar;
 		var successSnackbar = this.refs.createGroupSuccessSnackbar;
 
-		axios.post(URL + "/groups", {
+		axios.post(URL + "/groups/edit", {
 			"title": title,
 			"subject": subject,
 			"description": description,
@@ -166,6 +180,7 @@ var AllStudyGroups = React.createClass({
 
 			        <Dialog ref="editGroupDialog"
 			        	title="Edit StudyGroup" 
+			        	onShow={this.editGroupDetailOnShow}
 			        	modal={true}
 			        	actions={[
 			        		  <FlatButton
