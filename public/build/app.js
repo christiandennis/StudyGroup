@@ -45406,6 +45406,18 @@ var LeftBar = React.createClass({displayName: "LeftBar",
 	},
 
 	logout:function() {
+		$.ajax({ url: '/authentication/sign_out',
+		      type: 'DELETE',
+		      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+		      success: function(response) {
+		        console.log(response);
+		        document.location="localhost:3000";
+		      },
+		      error: function(response) {
+		      	console.log(response)
+		      }
+
+		    });
 		console.log("user logout here");
 	},
 
