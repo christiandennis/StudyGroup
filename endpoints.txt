@@ -6,6 +6,7 @@ POST:
 	password_confirmation:
 }
 
+
 SignIn: /authentication/sign_in:
 POST: 
 {
@@ -30,6 +31,14 @@ MyGroup: /groups/user/
 GET:
 {
 	userID:
+}
+
+DELETE USER GROUP: /groups/user/update
+GET:
+{
+	userID:
+	groupID:
+	action: "add/remove"
 }
 
 ALLGroup: /groups
