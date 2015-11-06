@@ -45464,7 +45464,7 @@ var TopBar = React.createClass({displayName: "TopBar",
 		var capacity = 	this.refs.createGroupCapacity.getValue();
 		var host = this.props.user;
 
-		if (true) {
+		if (false) {
 			console.log(title);
 			console.log(subject);
 			console.log(description);
@@ -45488,14 +45488,12 @@ var TopBar = React.createClass({displayName: "TopBar",
 			"host": host
 		}).then(function(response) {
 			console.log("post new group SUCCEED");
-			console.log(response);
 			StudyGroupStore.fetchStudyGroups();	
 			successSnackbar.show();
 			newGroupDialog.dismiss();
 		}).catch(function(response) {
 			failedSnackbar.show();
 			console.log("post new group FAILED");
-			console.log(response);
 		});
 	},
 
@@ -45504,11 +45502,13 @@ var TopBar = React.createClass({displayName: "TopBar",
 		var email = this.refs.emailSignUp.getValue();
 		var password = this.refs.passwordSignUp.getValue();
 		var confirmPassword = this.refs.confirmPasswordSignUp.getValue();
-		console.log(fullname);
-		console.log(email);
-		console.log(password);
-		console.log(confirmPassword);
-		console.log("SIGNUP DONE");
+		if(false) {
+			console.log(fullname);
+			console.log(email);
+			console.log(password);
+			console.log(confirmPassword);
+			console.log("SIGNUP DONE");
+		}
 		axios.post("https://sheetsu.com/apis/72092a94", {
 			"sessionID": password,
 			"id" :email,
@@ -45517,16 +45517,13 @@ var TopBar = React.createClass({displayName: "TopBar",
 	},
 
 	login:function() {
-		console.log("user before");
+		console.log("login here");
 		var user = this.refs.email.getValue();
 		var password = this.refs.password.getValue();
-		console.log(user);
-		console.log(password);
 		StudyGroupStore.fetchUser( user, password);
 		},
     
     openLeft:function() {
-        console.log("SIDEBAR OPEN")
         this.refs.leftBar.refs.leftNav.toggle();
     },
     
@@ -45551,7 +45548,6 @@ var TopBar = React.createClass({displayName: "TopBar",
 // END THEME
 
 	render:function() {
-		console.log("render appbar");
 		if (this.props.user) {
 			return (
                 
@@ -45892,7 +45888,7 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 		var capacity = 	this.refs.editGroupCapacity.getValue();
 		var host = this.props.user;
 
-		if (true) {
+		if (false) {
 			console.log(title);
 			console.log(subject);
 			console.log(description);
@@ -45916,16 +45912,18 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 			"host": host
 		}).then(function(response) {
 			console.log("post new group SUCCEED");
-			console.log(response);
 			StudyGroupStore.fetchStudyGroups();	
 			successSnackbar.show();
 			newGroupDialog.dismiss();
 		}).catch(function(response) {
 			failedSnackbar.show();
 			console.log("post new group FAILED");
-			console.log(response);
 		});
 
+	},
+
+	joinGroup:function() {
+		console.log("Join group here");
 	},
 
 	render:function() {
@@ -45937,7 +45935,6 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 		if (StudyGroupStore.isLoading()) {
 			var left = window.document.documentElement.clientWidth/2 - 25;
 			var top = window.document.documentElement.clientHeight/2 - 25;
-			console.log(left);
 			return(
 				React.createElement("div", null, 
 					React.createElement(RefreshIndicator, {size: 50, left: left, top: top, status: "loading"})
@@ -45945,12 +45942,9 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 			);
 		}
 
-		console.log("test user in SG")
-		console.log(this.props.user)
 		if (this.props.user){
 			return (
 				React.createElement("div", null, 
-					React.createElement(Paper, {ref: "ngentot1"}), 
 					React.createElement(Dialog, {ref: "groupDetailDialog", 
 							title: "StudyGroup Detail", 
 							actions: [], 
@@ -45958,7 +45952,6 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 					  		autoDetectWindowHeight: true, 
 					  		autoScrollBodyContent: true}, 
 					    React.createElement("div", null, 
-					    	React.createElement(Paper, {ref: "ngentot2"}), 
 					    	React.createElement("div", {className: "groupdesc-title"}, "Class"), 
 					    	React.createElement("div", {ref: "groupdetailClass", className: "groupdesc-subtitle"}), 
 
@@ -46090,7 +46083,7 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 			    			                    ), 
 			    			                    React.createElement("td", {colSpan: "2"}, 
 			    			                        React.createElement("div", {style: {textAlign:"right"}, className: "joinButtonContainer"}, 
-			    			                            React.createElement(RaisedButton, {onClick: this.viewGroupDetail.bind(this, studyGroup), label: "Join"})
+			    			                            React.createElement(RaisedButton, {onClick: this.joinGroup.bind(this, studyGroup), label: "Join"})
 			    			                        )
 			    			                    ), 
 			    			                    React.createElement("td", null, 
@@ -46117,7 +46110,6 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 var StudyGroups = React.createClass ({displayName: "StudyGroups",
 	componentDidMount:function() {
 		var state = StudyGroupStore.getState();
-		console.log(state);
 		StudyGroupStore.fetchStudyGroups();	
 		
 	},
@@ -46126,8 +46118,6 @@ var StudyGroups = React.createClass ({displayName: "StudyGroups",
 
 	render:function(){
 		if (this.props.user!=null) {
-			console.log("TIDAK NULL");
-			console.log(this.props);
 			return (
 				React.createElement("div", null, 
 					React.createElement(AltContainer, {store: StudyGroupStore}, 
