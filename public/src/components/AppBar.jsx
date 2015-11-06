@@ -85,6 +85,10 @@ var LeftBar = React.createClass({
 	},
 
 	render() {
+
+		console.log("TETE");
+		console.log(this.props.user.name);
+
 		return(
 			<div>
 				<SideBar ref="leftNav" docked={false}  >
@@ -107,9 +111,9 @@ var LeftBar = React.createClass({
 					  		autoDetectWindowHeight={true} 
 					  		autoScrollBodyContent={true}>
 					    <div>
-					    	<div ref="profileName" className="prof-name"></div>
-					    	<div ref="profileID" className="prof-id"></div>
-					    	<div ref="profileEmail" className="prof-email"></div>
+					    	<div ref="profileName" style={{fontSize:"30px", paddingBottom:"20px"}}>{this.props.user.name}</div>
+					    	<div ref="profileEmail" className="prof-email">{this.props.user.email}</div>
+					    	<div ref="profileClass" className="prof-class">{this.props.user.school}</div>
 					    </div>
 					</Dialog>
 			</div>
