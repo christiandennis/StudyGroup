@@ -6,6 +6,7 @@ var StudyGroupStore = require('../stores/StudyGroupStore');
 var AltContainer = require('alt/AltContainer');
 
 var LandingPage = require('./LandingPage.jsx');
+var ReactTestUtils = require('react-addons-test-utils');
 
 const AppBar = require('material-ui/lib/app-bar');
 const Dialog = require('material-ui/lib/dialog');
@@ -83,6 +84,7 @@ var LeftBar = React.createClass({
 	}
 })
 
+
 var TopBar = React.createClass({
 	dialogLogin() {
 		
@@ -115,21 +117,21 @@ var TopBar = React.createClass({
 	},
 
 	submitNewGroup() {
-		var title = this.refs.createGroupTitle.getValue();
-		var subject = this.refs.createGroupSubject.getValue();
-		var description =  this.refs.createGroupDescription.getValue();
-		var date = this.refs.createGroupDate.getDate();
-		var location = this.refs.createGroupLocation.getValue();
-		var capacity = 	this.refs.createGroupCapacity.getValue();
+		var title = this.refs.createGroupTitle;
+		var subject = this.refs.createGroupSubject;
+		var description =  this.refs.createGroupDescription;
+		var date = this.refs.createGroupDate;
+		var location = this.refs.createGroupLocation;
+		var capacity = 	this.refs.createGroupCapacity;
 		var host = this.props.user;
 
 		if (false) {
-			console.log(title);
-			console.log(subject);
-			console.log(description);
+			console.log(title.getValue());
+			console.log(subject.getValue());
+			console.log(description.getValue());
 			console.log(date);
-			console.log(location);
-			console.log(capacity);
+			console.log(location.getValue());
+			console.log(capacity.getValue());
 			console.log(host);
 		}
 
@@ -137,23 +139,66 @@ var TopBar = React.createClass({
 		var failedSnackbar = this.refs.createGroupFailedSnackbar;
 		var successSnackbar = this.refs.createGroupSuccessSnackbar;
 
-		axios.post(URL + "/groups", {
-			"title": title,
-			"subject": subject,
-			"description": description,
-			"date": date,
-			"location": location,
-			"capacity": capacity,
-			"host": host
-		}).then(function(response) {
-			console.log("post new group SUCCEED");
-			StudyGroupStore.fetchStudyGroups();	
-			successSnackbar.show();
-			newGroupDialog.dismiss();
-		}).catch(function(response) {
-			failedSnackbar.show();
-			console.log("post new group FAILED");
-		});
+		if (title.getValue() && subject.getValue() && description.getValue() && location.getValue() && capacity.getValue() && date.getDate()) {
+
+			axios.post(URL + "/groups", {
+				"title": title.getValue(),
+				"subject": subject.getValue(),
+				"description": description.getValue(),
+				"date": date.getDate(),
+				"location": location.getValue(),
+				"capacity": capacity.getValue(),
+				"host": host
+			}).then(function(response) {
+				console.log("post new group SUCCEED");
+				StudyGroupStore.fetchStudyGroups();	
+				successSnackbar.show();
+				newGroupDialog.dismiss();
+			}).catch(function(response) {
+				failedSnackbar.show();
+				console.log("post new group FAILED");
+			});
+
+		} else {
+
+			if (!title.getValue()){
+
+				title.setErrorText("This field is required");
+				console.log("ABUMBAWE")
+			}
+
+			if (!subject.getValue()){
+				subject.setErrorText("This field is required");
+			}
+
+			if (!description.getValue()){
+				description.setErrorText("This field is required");
+			}
+
+			if (!location.getValue()){
+				location.setErrorText("This field is required");
+			}
+
+			if (!capacity.getValue()){
+				capacity.setErrorText("This field is required");
+			}
+
+			if (!date.getDate()){
+				date.setErrorText("This field is required");
+			}
+
+		}
+	},
+
+	validateGroupSubject() {
+		var subject = this.refs.createGroupSubject;
+		if (subject.getValue()) {
+			subject.setErrorText("");
+			return true;
+		} else {
+			subject.setErrorText("This field is required grrr");
+			return false;
+		}
 	},
 
 	validateFullName() {
@@ -399,13 +444,16 @@ var TopBar = React.createClass({
                        <div>
                        	<TextField
                        		ref = "createGroupSubject"
+                       		onChange={this.validateGroupSubject}
                        	  hintText="CS169"
                        	  floatingLabelText="Class" />
                        	<TextField
                        		ref = "createGroupTitle"
+                       		onChange={this.validateGroupTitle}
                        	  hintText="Learn React together"
                        	  floatingLabelText="Title" />
                        	<TextField
+                       		onChange={this.validateGroupDescription}
                        		ref = "createGroupDescription"
                        	  hintText="Come and learn the basic (and some advanced) React together! REACT IS THE FUTURE!!!"
                        	  floatingLabelText="Description"
@@ -420,10 +468,12 @@ var TopBar = React.createClass({
                        	  hintText="9:00 pm"
                        	  floatingLabelText="Time"/>
                        	<TextField
+                       		onChange={this.validateGroupLocation}
                        		ref = "createGroupLocation"
                        	  hintText="Wozniak Longue, Soda Hall"
                        	  floatingLabelText="Location"/>
                        	<TextField
+                       		onChange={this.validateGroupCapacity}
                        		ref = "createGroupCapacity"
                        	  hintText="20"
                        	  floatingLabelText="Capacity"/>
