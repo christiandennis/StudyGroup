@@ -1,4 +1,8 @@
 class GroupsController < ApplicationController
+	skip_before_filter :verify_authenticity_token
+  	clear_respond_to
+  	respond_to :json
+
 	def create
 		status = 1 #intially set status to OK
 		err = [] #List of all errors
@@ -32,23 +36,23 @@ class GroupsController < ApplicationController
 			err << "Please enter a description"
 		elsif description.length > 256
 			status = -1
-			error_messages << "Pleas enter description less than 256 characters" 
+			error_messages << "Please enter description less than 256 characters" 
 		end
 
 
 		if status == 1
 			@group = Group.new(group_params)
 			if @group.save
-				render json: {'status': 1, 'group': @group}
+				render json: {'status' => 1, 'group' => @group}
 			end
 		else
-			render json: {'status': -1, 'errors': err}
+			render json: {'status'=> -1, 'errors' => err}
 		end
 	end 
 
 	def index
 		@groups = Group.all
-		render json: {'groups' : @groups}
+		render json: {'groups' => @groups}
 	end
 
 
@@ -74,7 +78,7 @@ class GroupsController < ApplicationController
 
 	private
 	  def group_params
-	    params.require(:groups).permit(:title, :subject, :description, :date, :location, :capacity)
+	    params.permit(:title, :subject, :description, :date, :school, :capacity,:host)
 	  end
 
 	  def group_params_nested
