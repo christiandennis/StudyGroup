@@ -45411,7 +45411,7 @@ var LeftBar = React.createClass({displayName: "LeftBar",
 		      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
 		      success: function(response) {
 		        console.log(response);
-		        document.location="localhost:3000";
+		        window.location.href = URL;
 		      },
 		      error: function(response) {
 		      	console.log(response)
@@ -45455,11 +45455,6 @@ var TopBar = React.createClass({displayName: "TopBar",
 
 	cancelSignUp:function() {
 		this.refs.signUpDialog.dismiss();
-	},
-
-	submitSignUp:function() {
-		this.refs.signUpDialog.dismiss();
-		this.signUp();
 	},
 
 	dialogNewGroup:function() {
@@ -45512,12 +45507,71 @@ var TopBar = React.createClass({displayName: "TopBar",
 		});
 	},
 
-	signUp:function() {
+	validateFullName:function() {
+		var fullname = this.refs.fullNameSignUp;
+		if (fullname.getValue()){
+			fullname.setErrorText("");
+			return true;
+		} else {
+			fullname.setErrorText("This field is required");
+			return false;
+		}
+	},
+
+	validateEmail:function() {
+		var email = this.refs.emailSignUp;
+		if (email.getValue()){
+			var at = email.getValue().search("@");
+			if (at!=-1) {
+				var dot = email.getValue().slice(at).search(".");
+				if (dot!=-1){
+					email.setErrorText("");
+					return true;
+				} else {
+					email.setErrorText("Invalid email");
+				}
+			} else {
+				email.setErrorText("Invalid email");
+				return false;
+			}
+		} else {
+			email.setErrorText("Invalid email");
+			return false;
+		}
+	},
+
+	validatePasswordMatch:function() {
+		var password = this.refs.passwordSignUp;
+		var confirmPassword = this.refs.confirmPasswordSignUp;
+		if (password.getValue()===confirmPassword.getValue()) {
+			password.setErrorText("");
+			confirmPassword.setErrorText("");
+			if(password.getValue().length < 8){
+				password.setErrorText("Password must be at least 8 characters");
+				confirmPassword.setErrorText("Password must be at least 8 characters");
+				return false;
+			}
+			return true;
+		} else {
+			if(password.getValue().length < 8){
+				password.setErrorText("Password must be at least 8 characters");
+				confirmPassword.setErrorText("Password must be at least 8 characters");
+				return false;
+			} else {
+				password.setErrorText("Password must match");
+				confirmPassword.setErrorText("Password must match");
+				return false;
+			}
+		}
+	},
+
+	submitSignUp:function() {
 		
-		var fullname = this.refs.fullNameSignUp.getValue();
-		var email = this.refs.emailSignUp.getValue();
-		var password = this.refs.passwordSignUp.getValue();
-		var confirmPassword = this.refs.confirmPasswordSignUp.getValue();
+		var fullname = this.refs.fullNameSignUp;
+		var email = this.refs.emailSignUp;
+		var password = this.refs.passwordSignUp;
+		var confirmPassword = this.refs.confirmPasswordSignUp;
+		var signUpDialog = this.refs.signUpDialog;
 		if(false) {
 			console.log(fullname);
 			console.log(email);
@@ -45525,53 +45579,61 @@ var TopBar = React.createClass({displayName: "TopBar",
 			console.log(confirmPassword);
 			console.log("SIGNUP DONE");
 		}
-		var fata = {
-			"enduser": {
-				"email": email,
-				"password": password,
-				"password_confirmation": password
+
+		if (email.getValue() && password.getValue() && confirmPassword.getValue() && fullname.getValue()){
+			if (confirmPassword.getValue() === password.getValue()){
+				var fata = {
+					"enduser": {
+						"email": email.getValue(),
+						"password": password.getValue(),
+						"password_confirmation": password.getValue()
+					}
+				}
+				
+				$.ajax({ url: '/authentication/sign_up',
+				  type: 'POST',
+				  beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+				  data: fata,
+				  success: function(response) {
+				    console.log(response)
+				    $.ajax({ url: '/authentication/sign_out',
+				      type: 'DELETE',
+				      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+				      success: function(response) {
+				      	console.log("login success");
+				        console.log(response);
+						signUpDialog.dismiss();
+				      },
+				      error: function(response) {
+				      	console.log("login failed");
+				      	console.log(response);
+				      }
+
+				    });
+				  },
+				  error: function(response) {
+				  	console.log("login failed");
+				  	console.log(response)
+				  }
+				});
+			}
+		} else {
+			if (!email.getValue()){
+				email.setErrorText("This field is required");
+			} else if (email.getValue().search("@")==-1){
+				email.setErrorText("Invalid email");
+			}
+
+			if (!password.getValue()) {
+				password.setErrorText("This field is required");
+			}
+			if(!confirmPassword.getValue()){
+				confirmPassword.setErrorText("This field is required");
+			}
+			if (!fullname.getValue()){
+				fullname.setErrorText("This field is required");
 			}
 		}
-		
-		$.ajax({ url: '/authentication/sign_up',
-		  type: 'POST',
-		  beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-		  data: fata,
-		  success: function(response) {
-		    console.log(response)
-		    $.ajax({ url: '/authentication/sign_out',
-		      type: 'DELETE',
-		      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-		      success: function(response) {
-		        console.log(response)
-		      },
-		      error: function(response) {
-		      	console.log(response)
-		      }
-
-		    });
-		  },
-		  error: function(response) {
-		  	console.log(response)
-		  }
-		});
-		// axios({
-		// 	method: 'post',
-		// 	url: "/authentication/sign_up",
-		// 	data: 
-		// 		{"enduser": 
-		// 			{"email" : email,
-		// 			"password": password,
-		// 			"password_confirmation": password}
-		// 		},
-		// 	headers: {
-		// 		'Content-Type': 'application/json',
-		// 		'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-		// 	},
-		// 	responseType: 'json'
-
-		// })
-		console.log('done');
 	},
 
 	login:function() {
@@ -45756,19 +45818,23 @@ var TopBar = React.createClass({displayName: "TopBar",
 				    	React.createElement(TextField, {
 				    	  ref: "fullNameSignUp", 
 				    	  hintText: "Christian Dennis", 
+				    	  onChange: this.validateFullName, 
 				    	  floatingLabelText: "Full Name"}), React.createElement("br", null), 
 				    	React.createElement(TextField, {
 				    	  ref: "emailSignUp", 
 				    	  hintText: "christiandennis@studygroup.com", 
+				    	  onChange: this.validateEmail, 
 				    	  floatingLabelText: "Email"}), React.createElement("br", null), 
 				    	React.createElement(TextField, {
 				    	  ref: "passwordSignUp", 
 				    	  hintText: "Password", 
+				    	  onChange: this.validatePasswordMatch, 
 				    	  floatingLabelText: "Password", 
 				    	  type: "password"}), React.createElement("br", null), 
 				    	React.createElement(TextField, {
 				    	  ref: "confirmPasswordSignUp", 
 				    	  hintText: "must be hard!", 
+				    	  onChange: this.validatePasswordMatch, 
 				    	  floatingLabelText: "Confirm Password", 
 				    	  type: "password"})
 				    )
