@@ -1,0 +1,62 @@
+SignUp: /authentication/sign_up
+POST:
+{
+	email:
+	password:
+	password_confirmation:
+}
+
+SignIn: /authentication/sign_in:
+POST: 
+{
+	email:
+	password:
+	password_confirmation:	
+}
+
+SignOut: /authentication/sign_out:
+DELETE:
+{
+	
+}
+
+GroupView: /groups/user/index
+GET:
+{
+	userID:
+}
+
+MyGroup: /groups/user/
+GET:
+{
+	userID:
+}
+
+ALLGroup: /groups
+GET:
+
+PostGroup: /groups
+POST:
+{
+	title:
+	subject:
+	description:
+	date: (epoch)
+	location: (String)
+	capacity:
+	host:
+}
+
+EditGroup: /groups/edit
+POST
+{
+	id:
+	title:
+	subject:
+	description:
+	date: (epoch)
+	location: (String)
+	capacity:
+	host:
+
+}
