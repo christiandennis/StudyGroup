@@ -1,0 +1,24 @@
+body {
+	margin: 0 0;
+}
+
+
+.logo-title {
+    font-family: 'Lobster', cursive;
+    background-color: #FF9800;
+}
+
+.parallax img {
+	display: block;
+}
+
+
+.groupdesc-title {
+	color: grey;
+	font-size: 12px;
+}
+
+.groupdesc-subtitle {
+	color: black;
+	font-size: 18px;
+}
