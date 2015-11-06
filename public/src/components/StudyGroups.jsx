@@ -232,7 +232,7 @@ var AllStudyGroups = React.createClass({
 					  	var studygroupID = studyGroup.id;
 					    return (
 					    	<div key={studyGroup.id}>
-			    		        <Paper zDepth={1} className="card-container">
+			    		        <Paper zDepth={3} className="card-container">
 			    			        <div className="card studyGroup">
 			    			            <div className="colorBar"></div>
 			    			            <table>

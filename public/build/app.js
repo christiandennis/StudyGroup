@@ -46247,7 +46247,7 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 					  	var studygroupID = studyGroup.id;
 					    return (
 					    	React.createElement("div", {key: studyGroup.id}, 
-			    		        React.createElement(Paper, {zDepth: 1, className: "card-container"}, 
+			    		        React.createElement(Paper, {zDepth: 3, className: "card-container"}, 
 			    			        React.createElement("div", {className: "card studyGroup"}, 
 			    			            React.createElement("div", {className: "colorBar"}), 
 			    			            React.createElement("table", null, 
