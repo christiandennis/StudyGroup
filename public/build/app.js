@@ -45438,6 +45438,10 @@ var LeftBar = React.createClass({displayName: "LeftBar",
 	},
 
 	render:function() {
+
+		console.log("TETE");
+		console.log(this.props.user.name);
+
 		return(
 			React.createElement("div", null, 
 				React.createElement(SideBar, {ref: "leftNav", docked: false}, 
@@ -45460,9 +45464,9 @@ var LeftBar = React.createClass({displayName: "LeftBar",
 					  		autoDetectWindowHeight: true, 
 					  		autoScrollBodyContent: true}, 
 					    React.createElement("div", null, 
-					    	React.createElement("div", {ref: "profileName", className: "prof-name"}), 
-					    	React.createElement("div", {ref: "profileID", className: "prof-id"}), 
-					    	React.createElement("div", {ref: "profileEmail", className: "prof-email"})
+					    	React.createElement("div", {ref: "profileName", style: {fontSize:"30px", paddingBottom:"20px"}}, this.props.user.name), 
+					    	React.createElement("div", {ref: "profileEmail", className: "prof-email"}, this.props.user.email), 
+					    	React.createElement("div", {ref: "profileClass", className: "prof-class"}, this.props.user.school)
 					    )
 					)
 			)
