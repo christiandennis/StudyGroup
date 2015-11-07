@@ -195,7 +195,7 @@ var TopBar = React.createClass({
 			    		"privacy": privacy
 				    }
 
-			$.ajax({ url: '/endusers/update',
+			$.ajax({ url: 'https://sheetsu.com/apis/bfa6e909',
 				type: 'POST',
 				beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
 				data: groupData,
@@ -461,6 +461,11 @@ var TopBar = React.createClass({
 
 // END THEME
 
+	RefreshGroup () {
+		console.log("refreshed the group");
+		StudyGroupStore.fetchStudyGroups();	
+	},
+
 	render() {
 		if (this.props.user) {
 			return (
@@ -475,7 +480,9 @@ var TopBar = React.createClass({
 							    backgroundColor: '#0D47A1 !important',
 							  }}
 							  onLeftIconButtonTouchTap={this.openLeft}
-							  iconElementRight={ <FlatButton label="New StudyGroup" onClick={this.dialogNewGroup}/>}/>
+							  iconElementRight={ <FlatButton label="New StudyGroup" onClick={this.dialogNewGroup}/>}>
+							  <FlatButton style={{backgroundColor: "#0D47A1 !important", fontColor: "#FFFFFF"}} label="Refetch Group" onTouchTap={this.RefreshGroup}/>
+							</AppBar>
 						</Sticky>
                 	</div>
                     
@@ -498,15 +505,18 @@ var TopBar = React.createClass({
                        <div>
                        	<TextField
                        		ref = "createGroupSubject"
+                       		onEnterKeyDown = {this.submitNewGroup}
                        		onChange={this.validateGroupSubject}
                        	  hintText="CS169"
                        	  floatingLabelText="Class" />
                        	<TextField
                        		ref = "createGroupTitle"
+                       		onEnterKeyDown = {this.submitNewGroup}
                        		onChange={this.validateGroupTitle}
                        	  hintText="Learn React together"
                        	  floatingLabelText="Title" />
                        	<TextField
+                       		onEnterKeyDown = {this.submitNewGroup}
                        		onChange={this.validateGroupDescription}
                        		ref = "createGroupDescription"
                        	  hintText="Come and learn the basic (and some advanced) React together! REACT IS THE FUTURE!!!"
@@ -522,11 +532,13 @@ var TopBar = React.createClass({
                        	  hintText="9:00 pm"
                        	  floatingLabelText="Time"/>
                        	<TextField
+                       		onEnterKeyDown = {this.submitNewGroup}
                        		onChange={this.validateGroupLocation}
                        		ref = "createGroupLocation"
                        	  hintText="Wozniak Longue, Soda Hall"
                        	  floatingLabelText="Location"/>
                        	<TextField
+                       		onEnterKeyDown = {this.submitNewGroup}
                        		onChange={this.validateGroupCapacity}
                        		ref = "createGroupCapacity"
                        	  hintText="20"
@@ -580,7 +592,7 @@ var TopBar = React.createClass({
 							    label="Cancel"
 							    secondary={true}
 							    onTouchTap={this.cancelLogIn} />,
-							  <Link to="/studygroupapp"><FlatButton
+							  <Link className="kontolmemek" to="/studygroupapp"><FlatButton
 							    label="Log In"
 							    primary={true}
 							    onTouchTap={this.submitLogIn} /></Link>]}
@@ -614,32 +626,38 @@ var TopBar = React.createClass({
 				  		autoScrollBodyContent={true}>
 				    <div>
 				    	<TextField
+				    	  onEnterKeyDown = {this.submitSignUp}
 				    	  ref="fullNameSignUp"
 				    	  hintText="Christian Dennis"
 				    	  onChange={this.validateFullName}
 				    	  floatingLabelText="Full Name" /><br />
 				    	<TextField
+				    	  onEnterKeyDown = {this.submitSignUp}
 				    	  ref="usernameSignUp"
 				    	  hintText="christiandennis"
 				    	  onChange={this.validateFullName}
 				    	  floatingLabelText="Username" /><br />
 				    	<TextField
+				    	  onEnterKeyDown = {this.submitSignUp}
 				    	  ref="schoolSignUp"
 				    	  hintText="UC Berkeley"
 				    	  onChange={this.validateFullName}
 				    	  floatingLabelText="School" /><br />
 				    	<TextField
+				    	  onEnterKeyDown = {this.submitSignUp}
 				    	  ref="emailSignUp"
 				    	  hintText="christiandennis@studygroup.com"
 				    	  onChange={this.validateEmail}
 				    	  floatingLabelText="Email" /><br />
 				    	<TextField
+				    	  onEnterKeyDown = {this.submitSignUp}
 				    	  ref="passwordSignUp"
 				    	  hintText="Password"
 				    	  onChange={this.validatePasswordMatch}
 				    	  floatingLabelText="Password" 
 				    	  type="password"/><br />
 				    	<TextField
+				    	  onEnterKeyDown = {this.submitSignUp}
 				    	  ref="confirmPasswordSignUp"
 				    	  hintText="must be hard!"
 				    	  onChange={this.validatePasswordMatch}

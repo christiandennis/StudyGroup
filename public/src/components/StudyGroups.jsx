@@ -251,8 +251,8 @@ var AllStudyGroups = React.createClass({
 			    			                    </td>
 
 			    			                    <td colSpan="2" align="right" className="dateTimeHolder">
-			    			                        <div className="date">{date}</div>
-			    			                        <div className="time">{time}</div>
+			    			                        <div className="date">{moment(studyGroup.datetime).format("ddd, MMM D").toString()}</div>
+			    			                        <div className="time">{moment(studyGroup.datetime).format("h:mm a").toString()}</div>
 			    			                    </td>
 			    			                </tr>
 

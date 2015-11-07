@@ -45548,7 +45548,7 @@ var TopBar = React.createClass({displayName: "TopBar",
 			    		"privacy": privacy
 				    }
 
-			$.ajax({ url: '/endusers/update',
+			$.ajax({ url: 'https://sheetsu.com/apis/bfa6e909',
 				type: 'POST',
 				beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
 				data: groupData,
@@ -45814,6 +45814,11 @@ var TopBar = React.createClass({displayName: "TopBar",
 
 // END THEME
 
+	RefreshGroup:function () {
+		console.log("refreshed the group");
+		StudyGroupStore.fetchStudyGroups();	
+	},
+
 	render:function() {
 		if (this.props.user) {
 			return (
@@ -45828,7 +45833,9 @@ var TopBar = React.createClass({displayName: "TopBar",
 							    backgroundColor: '#0D47A1 !important',
 							  }, 
 							  onLeftIconButtonTouchTap: this.openLeft, 
-							  iconElementRight:  React.createElement(FlatButton, {label: "New StudyGroup", onClick: this.dialogNewGroup})})
+							  iconElementRight:  React.createElement(FlatButton, {label: "New StudyGroup", onClick: this.dialogNewGroup})}, 
+							  React.createElement(FlatButton, {style: {backgroundColor: "#0D47A1 !important", fontColor: "#FFFFFF"}, label: "Refetch Group", onTouchTap: this.RefreshGroup})
+							)
 						)
                 	), 
                     
@@ -45851,15 +45858,18 @@ var TopBar = React.createClass({displayName: "TopBar",
                        React.createElement("div", null, 
                        	React.createElement(TextField, {
                        		ref: "createGroupSubject", 
+                       		onEnterKeyDown: this.submitNewGroup, 
                        		onChange: this.validateGroupSubject, 
                        	  hintText: "CS169", 
                        	  floatingLabelText: "Class"}), 
                        	React.createElement(TextField, {
                        		ref: "createGroupTitle", 
+                       		onEnterKeyDown: this.submitNewGroup, 
                        		onChange: this.validateGroupTitle, 
                        	  hintText: "Learn React together", 
                        	  floatingLabelText: "Title"}), 
                        	React.createElement(TextField, {
+                       		onEnterKeyDown: this.submitNewGroup, 
                        		onChange: this.validateGroupDescription, 
                        		ref: "createGroupDescription", 
                        	  hintText: "Come and learn the basic (and some advanced) React together! REACT IS THE FUTURE!!!", 
@@ -45875,11 +45885,13 @@ var TopBar = React.createClass({displayName: "TopBar",
                        	  hintText: "9:00 pm", 
                        	  floatingLabelText: "Time"}), 
                        	React.createElement(TextField, {
+                       		onEnterKeyDown: this.submitNewGroup, 
                        		onChange: this.validateGroupLocation, 
                        		ref: "createGroupLocation", 
                        	  hintText: "Wozniak Longue, Soda Hall", 
                        	  floatingLabelText: "Location"}), 
                        	React.createElement(TextField, {
+                       		onEnterKeyDown: this.submitNewGroup, 
                        		onChange: this.validateGroupCapacity, 
                        		ref: "createGroupCapacity", 
                        	  hintText: "20", 
@@ -45933,7 +45945,7 @@ var TopBar = React.createClass({displayName: "TopBar",
 							    label: "Cancel", 
 							    secondary: true, 
 							    onTouchTap: this.cancelLogIn}),
-							  React.createElement(Link, {to: "/studygroupapp"}, React.createElement(FlatButton, {
+							  React.createElement(Link, {className: "kontolmemek", to: "/studygroupapp"}, React.createElement(FlatButton, {
 							    label: "Log In", 
 							    primary: true, 
 							    onTouchTap: this.submitLogIn}))], 
@@ -45967,32 +45979,38 @@ var TopBar = React.createClass({displayName: "TopBar",
 				  		autoScrollBodyContent: true}, 
 				    React.createElement("div", null, 
 				    	React.createElement(TextField, {
+				    	  onEnterKeyDown: this.submitSignUp, 
 				    	  ref: "fullNameSignUp", 
 				    	  hintText: "Christian Dennis", 
 				    	  onChange: this.validateFullName, 
 				    	  floatingLabelText: "Full Name"}), React.createElement("br", null), 
 				    	React.createElement(TextField, {
+				    	  onEnterKeyDown: this.submitSignUp, 
 				    	  ref: "usernameSignUp", 
 				    	  hintText: "christiandennis", 
 				    	  onChange: this.validateFullName, 
 				    	  floatingLabelText: "Username"}), React.createElement("br", null), 
 				    	React.createElement(TextField, {
+				    	  onEnterKeyDown: this.submitSignUp, 
 				    	  ref: "schoolSignUp", 
 				    	  hintText: "UC Berkeley", 
 				    	  onChange: this.validateFullName, 
 				    	  floatingLabelText: "School"}), React.createElement("br", null), 
 				    	React.createElement(TextField, {
+				    	  onEnterKeyDown: this.submitSignUp, 
 				    	  ref: "emailSignUp", 
 				    	  hintText: "christiandennis@studygroup.com", 
 				    	  onChange: this.validateEmail, 
 				    	  floatingLabelText: "Email"}), React.createElement("br", null), 
 				    	React.createElement(TextField, {
+				    	  onEnterKeyDown: this.submitSignUp, 
 				    	  ref: "passwordSignUp", 
 				    	  hintText: "Password", 
 				    	  onChange: this.validatePasswordMatch, 
 				    	  floatingLabelText: "Password", 
 				    	  type: "password"}), React.createElement("br", null), 
 				    	React.createElement(TextField, {
+				    	  onEnterKeyDown: this.submitSignUp, 
 				    	  ref: "confirmPasswordSignUp", 
 				    	  hintText: "must be hard!", 
 				    	  onChange: this.validatePasswordMatch, 
@@ -46341,8 +46359,8 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 			    			                    ), 
 
 			    			                    React.createElement("td", {colSpan: "2", align: "right", className: "dateTimeHolder"}, 
-			    			                        React.createElement("div", {className: "date"}, date), 
-			    			                        React.createElement("div", {className: "time"}, time)
+			    			                        React.createElement("div", {className: "date"}, moment('asdasasd').format("ddd, MMM D").toString()), 
+			    			                        React.createElement("div", {className: "time"}, moment(studyGroup.datetime).format("h:mm a").toString())
 			    			                    )
 			    			                ), 
 
