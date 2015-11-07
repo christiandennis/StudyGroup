@@ -480,16 +480,19 @@ var TopBar = React.createClass({
                      		autoScrollBodyContent={true}>
                        <div>
                        	<TextField
+                       		onEnterKeyDown = {this.submitNewGroup}
                        		ref = "createGroupSubject"
                        		onChange={this.validateGroupSubject}
                        	  hintText="CS169"
                        	  floatingLabelText="Class" />
                        	<TextField
+                       		onEnterKeyDown = {this.submitNewGroup}
                        		ref = "createGroupTitle"
                        		onChange={this.validateGroupTitle}
                        	  hintText="Learn React together"
                        	  floatingLabelText="Title" />
                        	<TextField
+                       		onEnterKeyDown = {this.submitNewGroup}
                        		onChange={this.validateGroupDescription}
                        		ref = "createGroupDescription"
                        	  hintText="Come and learn the basic (and some advanced) React together! REACT IS THE FUTURE!!!"
@@ -505,11 +508,13 @@ var TopBar = React.createClass({
                        	  hintText="9:00 pm"
                        	  floatingLabelText="Time"/>
                        	<TextField
+                       		onEnterKeyDown = {this.submitNewGroup}
                        		onChange={this.validateGroupLocation}
                        		ref = "createGroupLocation"
                        	  hintText="Wozniak Longue, Soda Hall"
                        	  floatingLabelText="Location"/>
                        	<TextField
+                       		onEnterKeyDown = {this.submitNewGroup}
                        		onChange={this.validateGroupCapacity}
                        		ref = "createGroupCapacity"
                        	  hintText="20"
@@ -571,10 +576,12 @@ var TopBar = React.createClass({
 				  		autoScrollBodyContent={true}>
 				    <div>
 				    	<TextField
+				    	  onEnterKeyDown = {this.submitLogIn}
 				    	  ref= "email"
 				    	  hintText="christiandennis@studygroup.com"
 				    	  floatingLabelText="Email" /><br />
 				    	<TextField
+				    	  onEnterKeyDown = {this.submitLogIn}
 				    	  ref= "password"
 				    	  hintText="Password"
 				    	  floatingLabelText="Password" 
@@ -597,32 +604,38 @@ var TopBar = React.createClass({
 				  		autoScrollBodyContent={true}>
 				    <div>
 				    	<TextField
+				    	  onEnterKeyDown = {this.submitSignUp}
 				    	  ref="fullNameSignUp"
 				    	  hintText="Christian Dennis"
 				    	  onChange={this.validateFullName}
 				    	  floatingLabelText="Full Name" /><br />
 				    	<TextField
+				    	  onEnterKeyDown = {this.submitSignUp}
 				    	  ref="usernameSignUp"
 				    	  hintText="christiandennis"
 				    	  onChange={this.validateFullName}
 				    	  floatingLabelText="Username" /><br />
 				    	<TextField
+				    	  onEnterKeyDown = {this.submitSignUp}
 				    	  ref="schoolSignUp"
 				    	  hintText="UC Berkeley"
 				    	  onChange={this.validateFullName}
 				    	  floatingLabelText="School" /><br />
 				    	<TextField
+				    	  onEnterKeyDown = {this.submitSignUp}
 				    	  ref="emailSignUp"
 				    	  hintText="christiandennis@studygroup.com"
 				    	  onChange={this.validateEmail}
 				    	  floatingLabelText="Email" /><br />
 				    	<TextField
+				    	  onEnterKeyDown = {this.submitSignUp}
 				    	  ref="passwordSignUp"
 				    	  hintText="Password"
 				    	  onChange={this.validatePasswordMatch}
 				    	  floatingLabelText="Password" 
 				    	  type="password"/><br />
 				    	<TextField
+				    	  onEnterKeyDown = {this.submitSignUp}
 				    	  ref="confirmPasswordSignUp"
 				    	  hintText="must be hard!"
 				    	  onChange={this.validatePasswordMatch}
