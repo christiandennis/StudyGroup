@@ -161,6 +161,10 @@ var TopBar = React.createClass({
 		var location = this.refs.createGroupLocation;
 		var capacity = 	this.refs.createGroupCapacity;
 		var host = this.props.user;
+		var privacy = 0;
+		if (this.refs.createGroupPrivacy.isChecked()){
+			privacy = 1;
+		}
 
 		if (false) {
 			console.log(title.getValue());
@@ -176,24 +180,37 @@ var TopBar = React.createClass({
 		var failedSnackbar = this.refs.createGroupFailedSnackbar;
 		var successSnackbar = this.refs.createGroupSuccessSnackbar;
 
-		if (title.getValue() && subject.getValue() && description.getValue() && location.getValue() && capacity.getValue() && date.getDate()) {
+		console.log("USER ID");
+		console.log(this.props.user.id);
 
-			axios.post(URL + "/groups", {
-				"title": title.getValue(),
-				"subject": subject.getValue(),
-				"description": description.getValue(),
-				"date": date.getDate(),
-				"location": location.getValue(),
-				"capacity": capacity.getValue(),
-				"host": host
-			}).then(function(response) {
-				console.log("post new group SUCCEED");
-				StudyGroupStore.fetchStudyGroups();	
-				successSnackbar.show();
-				newGroupDialog.dismiss();
-			}).catch(function(response) {
-				failedSnackbar.show();
-				console.log("post new group FAILED");
+		if (title.getValue() && subject.getValue() && description.getValue() && location.getValue() && capacity.getValue() && date.getDate()) {
+			var groupData = {
+			    		"title": title.getValue(),
+			    		"subject": subject.getValue(),
+			    		"description": description.getValue(),
+			    		"date": date.getDate(),
+			    		"location": location.getValue(),
+			    		"capacity": capacity.getValue(),
+			    		"host": this.props.user.id,
+			    		"privacy": privacy
+				    }
+
+			$.ajax({ url: '/endusers/update',
+				type: 'POST',
+				beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+				data: groupData,
+				success: function(response) {
+				 	console.log("post group success");
+				  	console.log(response);
+				  	StudyGroupStore.fetchStudyGroups();	
+				  	successSnackbar.show();
+				  	newGroupDialog.dismiss();
+				},
+				error: function(response) {
+				 	console.log("post group failed");
+				 	console.log(response);
+				 	failedSnackbar.show();
+				}
 			});
 
 		} else {
