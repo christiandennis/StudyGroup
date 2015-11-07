@@ -45730,6 +45730,7 @@ var TopBar = React.createClass({displayName: "TopBar",
 				      	console.log("signout success");
 				        console.log(response);
 						signUpDialog.dismiss();
+
 				      },
 				      error: function(response) {
 				      	console.log("signout failed");
@@ -45741,6 +45742,10 @@ var TopBar = React.createClass({displayName: "TopBar",
 				  error: function(response) {
 				  	console.log("login failed");
 				  	console.log(response)
+				  	if (response.responseText != null) {
+				  		console.log("TITITBABI");
+				  		email.setErrorText("Email has already been used.")
+				  	}
 				  }
 				});
 			}
