@@ -36,7 +36,8 @@
 ##Bugs:
 - Sign up has a similar behavior as sign in. That is why we have to tinker this on the frontend (each time we sign up, we log out first when closing the dialog)
 - We cant figure out how the cookie authentication work. So if we log in, and forgot to log out, we cant log in again.
-- Group API has a mismatch data type every time we try to do a push (working fine with postman) we tried adding header and everything but it still not working. We use sheetsu as a replacement
+- Group API has a mismatch data type every time we try to do a push (working fine with postman) we tried adding header and everything but it still not working. We use sheetsu as a temporary replacement
+- post group bug. sheetsu cant generate id. react won't allow dynamic children without unique key. but the post works fine to sheetsu. https://sheetsu.com/apis/bfa6e909
 
 #INSTRUCTION:
 - rails s
