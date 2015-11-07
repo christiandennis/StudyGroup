@@ -46436,8 +46436,8 @@ var axios = require('axios');
 
 const URL = "http://localhost:3000"
 const userURL = 'https://sheetsu.com/apis/72092a94';
-// const groupURL = 'https://sheetsu.com/apis/5964fc68';
-const groupURL = URL + "/groups";
+const groupURL = 'https://sheetsu.com/apis/bfa6e909';
+// const groupURL = URL + "/groups";
 
 
 var mockData = [
@@ -46457,7 +46457,7 @@ var StudyGroupSource = {
 			  	  .then(function (response) {
 			  	  	//data = response from server
 			  	  	var data = response.data;
-			  	    resolve (data.groups);
+			  	    resolve (data.result);
 			  	  })
 			  	  .catch(function (response) {
 			  	    console.log(response);
