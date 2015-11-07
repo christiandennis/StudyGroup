@@ -45730,6 +45730,7 @@ var TopBar = React.createClass({displayName: "TopBar",
 				      	console.log("signout success");
 				        console.log(response);
 						signUpDialog.dismiss();
+
 				      },
 				      error: function(response) {
 				      	console.log("signout failed");
@@ -45741,6 +45742,10 @@ var TopBar = React.createClass({displayName: "TopBar",
 				  error: function(response) {
 				  	console.log("login failed");
 				  	console.log(response)
+				  	if (response.responseText != null) {
+				  		console.log("TITITBABI");
+				  		email.setErrorText("Email has already been used.")
+				  	}
 				  }
 				});
 			}
@@ -45857,12 +45862,14 @@ var TopBar = React.createClass({displayName: "TopBar",
                      		autoScrollBodyContent: true}, 
                        React.createElement("div", null, 
                        	React.createElement(TextField, {
+                       		onEnterKeyDown: this.submitNewGroup, 
                        		ref: "createGroupSubject", 
                        		onEnterKeyDown: this.submitNewGroup, 
                        		onChange: this.validateGroupSubject, 
                        	  hintText: "CS169", 
                        	  floatingLabelText: "Class"}), 
                        	React.createElement(TextField, {
+                       		onEnterKeyDown: this.submitNewGroup, 
                        		ref: "createGroupTitle", 
                        		onEnterKeyDown: this.submitNewGroup, 
                        		onChange: this.validateGroupTitle, 
@@ -45953,10 +45960,12 @@ var TopBar = React.createClass({displayName: "TopBar",
 				  		autoScrollBodyContent: true}, 
 				    React.createElement("div", null, 
 				    	React.createElement(TextField, {
+				    	  onEnterKeyDown: this.submitLogIn, 
 				    	  ref: "email", 
 				    	  hintText: "christiandennis@studygroup.com", 
 				    	  floatingLabelText: "Email"}), React.createElement("br", null), 
 				    	React.createElement(TextField, {
+				    	  onEnterKeyDown: this.submitLogIn, 
 				    	  ref: "password", 
 				    	  hintText: "Password", 
 				    	  floatingLabelText: "Password", 
@@ -46301,14 +46310,17 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 			        		autoScrollBodyContent: true}, 
 			          	React.createElement("div", null, 
 				         	React.createElement(TextField, {
+				         		onEnterKeyDown: this.submitEditGroupDetail, 
 				         		ref: "editGroupSubject", 
 				         	  	hintText: "CS169", 
 				         	  	floatingLabelText: "Class"}), 
 				         	React.createElement(TextField, {
+				         		onEnterKeyDown: this.submitEditGroupDetail, 
 				         		ref: "editGroupTitle", 
 				         	  	hintText: "Learn React together", 
 				         	  	floatingLabelText: "Title"}), 
 				         	React.createElement(TextField, {
+				         		onEnterKeyDown: this.submitEditGroupDetail, 
 				         		ref: "editGroupDescription", 
 				         	  	hintText: "Come and learn the basic (and some advanced) React together! REACT IS THE FUTURE!!!", 
 				         	  	floatingLabelText: "Description", 
@@ -46323,10 +46335,12 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 				         	  	hintText: "9:00 pm", 
 				         	  	floatingLabelText: "Time"}), 
 				         	React.createElement(TextField, {
+				         		onEnterKeyDown: this.submitEditGroupDetail, 
 				         		ref: "editGroupLocation", 
 				         	  	hintText: "Wozniak Longue, Soda Hall", 
 				         	  	floatingLabelText: "Location"}), 
 				         	React.createElement(TextField, {
+				         		onEnterKeyDown: this.submitEditGroupDetail, 
 				         		ref: "editGroupCapacity", 
 				         	  	hintText: "20", 
 				         	  	floatingLabelText: "Capacity"})

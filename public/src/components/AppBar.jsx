@@ -377,6 +377,7 @@ var TopBar = React.createClass({
 				      	console.log("signout success");
 				        console.log(response);
 						signUpDialog.dismiss();
+
 				      },
 				      error: function(response) {
 				      	console.log("signout failed");
@@ -388,6 +389,10 @@ var TopBar = React.createClass({
 				  error: function(response) {
 				  	console.log("login failed");
 				  	console.log(response)
+				  	if (response.responseText != null) {
+				  		console.log("TITITBABI");
+				  		email.setErrorText("Email has already been used.")
+				  	}
 				  }
 				});
 			}
@@ -504,12 +509,14 @@ var TopBar = React.createClass({
                      		autoScrollBodyContent={true}>
                        <div>
                        	<TextField
+                       		onEnterKeyDown = {this.submitNewGroup}
                        		ref = "createGroupSubject"
                        		onEnterKeyDown = {this.submitNewGroup}
                        		onChange={this.validateGroupSubject}
                        	  hintText="CS169"
                        	  floatingLabelText="Class" />
                        	<TextField
+                       		onEnterKeyDown = {this.submitNewGroup}
                        		ref = "createGroupTitle"
                        		onEnterKeyDown = {this.submitNewGroup}
                        		onChange={this.validateGroupTitle}
@@ -600,10 +607,12 @@ var TopBar = React.createClass({
 				  		autoScrollBodyContent={true}>
 				    <div>
 				    	<TextField
+				    	  onEnterKeyDown = {this.submitLogIn}
 				    	  ref= "email"
 				    	  hintText="christiandennis@studygroup.com"
 				    	  floatingLabelText="Email" /><br />
 				    	<TextField
+				    	  onEnterKeyDown = {this.submitLogIn}
 				    	  ref= "password"
 				    	  hintText="Password"
 				    	  floatingLabelText="Password" 

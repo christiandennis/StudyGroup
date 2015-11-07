@@ -193,14 +193,17 @@ var AllStudyGroups = React.createClass({
 			        		autoScrollBodyContent={true}>
 			          	<div>
 				         	<TextField
+				         		onEnterKeyDown = {this.submitEditGroupDetail}
 				         		ref = "editGroupSubject"
 				         	  	hintText="CS169"
 				         	  	floatingLabelText="Class" />
 				         	<TextField
+				         		onEnterKeyDown = {this.submitEditGroupDetail}
 				         		ref = "editGroupTitle"
 				         	  	hintText="Learn React together"
 				         	  	floatingLabelText="Title" />
 				         	<TextField
+				         		onEnterKeyDown = {this.submitEditGroupDetail}
 				         		ref = "editGroupDescription"
 				         	  	hintText="Come and learn the basic (and some advanced) React together! REACT IS THE FUTURE!!!"
 				         	  	floatingLabelText="Description"
@@ -215,10 +218,12 @@ var AllStudyGroups = React.createClass({
 				         	  	hintText="9:00 pm"
 				         	  	floatingLabelText="Time"/>
 				         	<TextField
+				         		onEnterKeyDown = {this.submitEditGroupDetail}
 				         		ref = "editGroupLocation"
 				         	  	hintText="Wozniak Longue, Soda Hall"
 				         	  	floatingLabelText="Location"/>
 				         	<TextField
+				         		onEnterKeyDown = {this.submitEditGroupDetail}
 				         		ref = "editGroupCapacity"
 				         	  	hintText="20"
 				         	  	floatingLabelText="Capacity"/>
