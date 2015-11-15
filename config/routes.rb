@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :endusers
+  mount_devise_token_auth_for 'User', at: 'auth'
   get 'landing/index'
 
   #get 'main/index'
@@ -19,31 +19,9 @@ Rails.application.routes.draw do
 
   post '/groups/user/update', to: 'groups#addremoveuser'
 
-  post '/endusers/update', to: 'endusers#update'
 
-
-  #users
 
   resources :groups, :landing
-
-  resources :users do
-    member do
-      get 'show'
-    end
-  end
-
-
-
-  devise_scope :enduser do post "/authentication/sign_up" => "registrations#create" end
-
-
-  devise_scope :enduser do post "/authentication/sign_in" => "sessions#create" end
-  devise_scope :enduser do delete "/authentication/sign_out" => "sessions#destroy" end
-
-  #post '/authentication/sign_up', to: 'registrations#create'
-  #Cited from http://blog.andrewray.me/how-to-set-up-devise-ajax-authentication-with-rails-4-0/
-  
-  #devise_for :endusers, :controllers => {sessions: 'sessions', registrations: 'registrations'}    
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
