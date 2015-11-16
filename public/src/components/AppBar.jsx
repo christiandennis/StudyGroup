@@ -56,9 +56,6 @@ var LeftBar = React.createClass({
 
 	viewProfileShow() {
 		console.log("render profile");
-		// this.refs.profileName.innerHTML = ;
-		// this.refs.profileID.innerHTML = ;
-		// this.refs.profileEmail.innerHTML = ;
 	},
 
 	myGroups() {
@@ -168,36 +165,7 @@ var TopBar = React.createClass({
 
 		if (email.getValue() && password.getValue() && confirmPassword.getValue() && fullname.getValue()){
 			if (confirmPassword.getValue() === password.getValue()){
-				var fata = {
-					"email": email.getValue(),
-					"password": password.getValue(),
-					"password_confirmation": password.getValue()
-				}
-				
-				// $.ajax({ url: '/auth',
-				//   type: 'POST',
-				//   beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-				//   data: fata,
-				//   success: function(response) {
-				//     console.log(response);
-				//     console.log("USER ID");
-				//     console.log(response.id);
-				//     var updateData = {
-			 //    		"id": response.id,
-			 //    		"school": schoolSignUp.getValue(),
-			 //    		"name": fullnameSignUp.getValue(),
-			 //    		"username": usernameSignUp.getValue()
-				//     }
-				// },
-				//   error: function(response) {
-				//   	console.log("login failed");
-				//   	console.log(response)
-				//   	if (response.responseText != null) {
-				//   		console.log("TITITBABI");
-				//   		email.setErrorText("Email has already been used.")
-				//   	}
-				//   }
-				// });
+				StudyGroupStore.signUp(fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog);
 			}
 		} else {
 			if (!email.getValue()){
@@ -538,10 +506,10 @@ var TopBar = React.createClass({
 							    label="Cancel"
 							    secondary={true}
 							    onTouchTap={this.cancelLogIn} />,
-							  <Link to="/studygroupapp"><FlatButton
+							  <FlatButton
 							    label="Log In"
 							    primary={true}
-							    onTouchTap={this.submitLogIn} /></Link>]}
+							    onTouchTap={this.submitLogIn} />]}
 				  		autoDetectWindowHeight={true} 
 				  		autoScrollBodyContent={true}>
 				    <div>

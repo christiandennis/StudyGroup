@@ -28,6 +28,10 @@ class StudyGroupStore {
 		this.exportAsync(StudyGroupSource);
 	}
 
+	handleSignUp() {
+		
+	}
+
 	handleUpdateStudyGroups(studyGroups){
 		this.studyGroups = studyGroups;
 		this.errorMessage = null;

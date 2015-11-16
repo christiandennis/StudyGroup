@@ -45420,6 +45420,10 @@ function UserActions(){"use strict";}
 		this.dispatch(errorMessage);
 	}});
 
+	Object.defineProperty(UserActions.prototype,"signUp",{writable:true,configurable:true,value:function() {"use strict";
+		this.dispatch();
+	}});
+
 
 
 module.exports = alt.createActions(UserActions);
@@ -45489,9 +45493,6 @@ var LeftBar = React.createClass({displayName: "LeftBar",
 
 	viewProfileShow:function() {
 		console.log("render profile");
-		// this.refs.profileName.innerHTML = ;
-		// this.refs.profileID.innerHTML = ;
-		// this.refs.profileEmail.innerHTML = ;
 	},
 
 	myGroups:function() {
@@ -45601,68 +45602,7 @@ var TopBar = React.createClass({displayName: "TopBar",
 
 		if (email.getValue() && password.getValue() && confirmPassword.getValue() && fullname.getValue()){
 			if (confirmPassword.getValue() === password.getValue()){
-				var fata = {
-					"enduser": {
-						"email": email.getValue(),
-						"password": password.getValue(),
-						"password_confirmation": password.getValue()
-					}
-				}
-				
-				$.ajax({ url: '/auth',
-				  type: 'POST',
-				  beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-				  data: fata,
-				  success: function(response) {
-				    console.log(response);
-				    console.log("USER ID");
-				    console.log(response.id);
-				    var updateData = {
-			    		"id": response.id,
-			    		"school": schoolSignUp.getValue(),
-			    		"name": fullnameSignUp.getValue(),
-			    		"username": usernameSignUp.getValue()
-				    }
-				    
-				  //   $.ajax({ url: '/endusers/update',
-				  //     type: 'POST',
-				  //     beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-				  //     data: updateData,
-				  //     success: function(response) {
-				  //     	console.log("user update success");
-				  //       console.log(response);
-				  //     },
-				  //     error: function(response) {
-				  //     	console.log("user update failed");
-				  //     	console.log(response);
-				  //     }
-				  //   });
-
-				  //   $.ajax({ url: '/authentication/sign_out',
-				  //     type: 'DELETE',
-				  //     beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-				  //     success: function(response) {
-				  //     	console.log("signout success");
-				  //       console.log(response);
-						// signUpDialog.dismiss();
-
-				  //     },
-				  //     error: function(response) {
-				  //     	console.log("signout failed");
-				  //     	console.log(response);
-				  //     }
-
-				  //   });
-				  },
-				  error: function(response) {
-				  	console.log("login failed");
-				  	console.log(response)
-				  	if (response.responseText != null) {
-				  		console.log("TITITBABI");
-				  		email.setErrorText("Email has already been used.")
-				  	}
-				  }
-				});
+				StudyGroupStore.signUp(fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog);
 			}
 		} else {
 			if (!email.getValue()){
@@ -46003,10 +45943,10 @@ var TopBar = React.createClass({displayName: "TopBar",
 							    label: "Cancel", 
 							    secondary: true, 
 							    onTouchTap: this.cancelLogIn}),
-							  React.createElement(Link, {to: "/studygroupapp"}, React.createElement(FlatButton, {
+							  React.createElement(FlatButton, {
 							    label: "Log In", 
 							    primary: true, 
-							    onTouchTap: this.submitLogIn}))], 
+							    onTouchTap: this.submitLogIn})], 
 				  		autoDetectWindowHeight: true, 
 				  		autoScrollBodyContent: true}, 
 				    React.createElement("div", null, 
@@ -46530,6 +46470,53 @@ var mockData = [
 ];
 
 var StudyGroupSource = {
+	signUp:function() {
+		return {
+		  remote:function(state, fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog) { 
+		    return new Promise(function (resolve, reject) {
+		      // simulate an asynchronous flow where data is fetched on
+		      // a remote server somewhere.
+		      	var fata = {
+		      		"email": email.getValue(),
+		      		"password": password.getValue(),
+		      		"password_confirmation": confirmPassword.getValue(),
+		      		"school": schoolSignUp.getValue(),
+          		"name": fullnameSignUp.getValue(),
+          		"username": usernameSignUp.getValue()
+		      	}
+		      	
+		      	$.ajax({ url: '/auth',
+		      	  type: 'POST',
+		      	  beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+		      	  data: fata,
+		      	  success: function(response) {
+	      	  		console.log('-----------signup SUCCESS-----------');
+	      	  	  console.log('response:' ,response);
+	      	  	  signUpDialog.dismiss();
+	      	  	  console.log('---------------------------------');
+		      		},
+		      	  error: function(response) {
+		      	  	console.log('-----------signup FAILED-----------');
+	      	  	  console.log('response:' ,response);
+	      	  	  console.log('---------------------------------');
+		      	  }
+
+		      })
+		      
+		    });
+		  },
+
+		  local:function() {
+		    // Never check locally, always fetch remotely.
+		    return null;
+		  },
+
+		  success: UserActions.updateUser,
+		  error: UserActions.userFailed,
+		  loading: UserActions.fetchUser
+		}
+	},
+
 	fetchStudyGroups:function() {
 		return {
 		  remote:function(state) { 
@@ -46627,9 +46614,12 @@ var UserActions = require('../actions/UserActions');
 			handleUpdateStudyGroups: StudyGroupActions.UPDATE_STUDY_GROUPS,
 			handleFetchStudyGroups: StudyGroupActions.FETCH_STUDY_GROUPS,
 			handleStudyGroupFailed: StudyGroupActions.STUDY_GROUPS_FAILED,
+
 			handleUpdateUser: UserActions.UPDATE_USER,
 			handleFetchUser: UserActions.FETCH_USER,
-			handleStudyUser: UserActions.USER_FAILED
+			handleStudyUser: UserActions.USER_FAILED,
+
+			handleSignUp: UserActions.SIGN_UP
 		});
 
 
@@ -46638,6 +46628,10 @@ var UserActions = require('../actions/UserActions');
 		});
 		this.exportAsync(StudyGroupSource);
 	}
+
+	Object.defineProperty(StudyGroupStore.prototype,"handleSignUp",{writable:true,configurable:true,value:function() {"use strict";
+		
+	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleUpdateStudyGroups",{writable:true,configurable:true,value:function(studyGroups){"use strict";
 		this.studyGroups = studyGroups;

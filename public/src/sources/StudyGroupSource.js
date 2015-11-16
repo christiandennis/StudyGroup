@@ -18,12 +18,35 @@ var mockData = [
 var StudyGroupSource = {
 	signUp() {
 		return {
-		  remote(state) { 
+		  remote(state, fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog) { 
 		    return new Promise(function (resolve, reject) {
 		      // simulate an asynchronous flow where data is fetched on
 		      // a remote server somewhere.
-		      console.log('signUp HERE');
-		      
+		      	var fata = {
+		      		"email": email.getValue(),
+		      		"password": password.getValue(),
+		      		"password_confirmation": confirmPassword.getValue(),
+		      		"school": schoolSignUp.getValue(),
+          		"name": fullnameSignUp.getValue(),
+          		"username": usernameSignUp.getValue()
+		      	}
+		      	
+		      	$.ajax({ url: '/auth',
+		      	  type: 'POST',
+		      	  beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+		      	  data: fata,
+		      	  success: function(response) {
+	      	  		console.log('-----------signup SUCCESS-----------');
+	      	  	  console.log('response:' ,response);
+	      	  	  signUpDialog.dismiss();
+	      	  	  console.log('---------------------------------');
+		      		},
+		      	  error: function(response) {
+		      	  	console.log('-----------signup FAILED-----------');
+	      	  	  console.log('response:' ,response);
+	      	  	  console.log('---------------------------------');
+		      	  }
+		      })  
 		    });
 		  },
 
