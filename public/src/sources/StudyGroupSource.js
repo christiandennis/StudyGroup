@@ -16,6 +16,49 @@ var mockData = [
 ];
 
 var StudyGroupSource = {
+	signOut() {
+		return {
+		  remote(state, uid, accesstoken, client, history) { 
+		    return new Promise(function (resolve, reject) {
+		      // simulate an asynchronous flow where data is fetched on
+		      // a remote server somewhere.
+		      	var fata = {
+		      		"uid": uid,
+		      		"access-token": accesstoken,
+		      		"client": client
+		      	}
+		      	
+		      	$.ajax({ url: '/auth/sign_out',
+      	      type: 'DELETE',
+      	      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+      	      data: fata,
+      	      success: function(response) {
+      	      	console.log('-----------signout SUCCESS-----------');
+	      	  	  console.log('response:' ,response);
+      	        window.location.href = URL;
+      	        // history.pushState(null, '/');
+      	        console.log('---------------------------------');
+      	      },
+      	      error: function(response) {
+      	      	console.log('-----------signout FAILED-----------');
+      	      	// User was not found or was not logged in.
+	      	  	  console.log('response:' ,response.responseJSON);
+	      	  	  if (response.responseJSON.errors[0] === 'User was not found or was not logged in.') {
+	      	  	  	window.location.href = URL;
+	      	  	  }
+      	        console.log('---------------------------------');
+      	      }
+      	    }); 
+		    });
+		  },
+
+		  local() {
+		    // Never check locally, always fetch remotely.
+		    return null;
+		  },
+		}
+	},
+
 	signUp() {
 		return {
 		  remote(state, fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog) { 
@@ -54,10 +97,6 @@ var StudyGroupSource = {
 		    // Never check locally, always fetch remotely.
 		    return null;
 		  },
-
-		  success: UserActions.updateUser,
-		  error: UserActions.userFailed,
-		  loading: UserActions.fetchUser
 		}
 	},
 
@@ -107,11 +146,13 @@ var StudyGroupSource = {
 		        type: 'POST',
 		        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
 		        data: fata,
-		        success: function(response) {
+		        success: function(data, status, xhr) {
 		        	console.log('-----------login SUCCESS-----------');
-		          console.log('response:' ,response);
-		          console.log('loginDialog', loginDialog);
-	          	resolve(response);
+		        	data.client = xhr.getResponseHeader('client');
+		        	data.accesstoken = xhr.getResponseHeader('access-token');
+		        	data.uid = xhr.getResponseHeader('uid');
+		          console.log('data:' ,data);
+	          	resolve(data);
 	          	history.pushState(null, '/studygroupapp');
 	          	loginDialog.dismiss();
 	          	console.log('---------------------------------');

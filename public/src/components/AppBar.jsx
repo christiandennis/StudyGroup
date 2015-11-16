@@ -29,10 +29,11 @@ const URL = "http://localhost:3000";
 var axios = require('axios');
 
 var Router = require('react-router');
-var Navigation = Router.History;
+var History = Router.History;
 
 
 var LeftBar = React.createClass({
+	mixins: [History],
 
 	childContextTypes : {
 	    muiTheme: React.PropTypes.object
@@ -67,25 +68,25 @@ var LeftBar = React.createClass({
 	},
 
 	logout() {
-		$.ajax({ url: '/authentication/sign_out',
-		      type: 'DELETE',
-		      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-		      success: function(response) {
-		        console.log(response);
-		        window.location.href = URL;
-		      },
-		      error: function(response) {
-		      	console.log(response)
-		      }
+		StudyGroupStore.signOut(this.props.user.uid, this.props.user.accesstoken, this.props.user.client, this.history);
+		// $.ajax({ url: '/authentication/sign_out',
+		//       type: 'DELETE',
+		//       beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+		//       success: function(response) {
+		//         console.log(response);
+		//         window.location.href = URL;
+		//       },
+		//       error: function(response) {
+		//       	console.log(response)
+		//       }
 
-		    });
-		console.log("user logout here");
+		//     });
+		// console.log("user logout here");
 	},
 
 	render() {
 
-		console.log("TETE");
-		console.log(this.props.user.name);
+		this.props.user.name = "Anthony";
 
 		return(
 			<div>
@@ -121,7 +122,7 @@ var LeftBar = React.createClass({
 
 
 var TopBar = React.createClass({
-	mixins: [Navigation],
+	mixins: [History],
 
 	dialogLogin() {
 		this.refs.loginDialog.show();

@@ -18,7 +18,8 @@ class StudyGroupStore {
 			handleFetchUser: UserActions.FETCH_USER,
 			handleStudyUser: UserActions.USER_FAILED,
 
-			handleSignUp: UserActions.SIGN_UP
+			handleSignUp: UserActions.SIGN_UP,
+			handleSignOut: UserActions.SIGN_OUT
 		});
 
 
@@ -30,6 +31,10 @@ class StudyGroupStore {
 
 	handleSignUp() {
 		
+	}
+
+	handleSignOut() {
+		this.user = null;
 	}
 
 	handleUpdateStudyGroups(studyGroups){

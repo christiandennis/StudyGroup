@@ -17,6 +17,9 @@ class UserActions {
 		this.dispatch();
 	}
 
+	signOut() {
+		this.dispatch();
+	}
 }
 
 module.exports = alt.createActions(UserActions);

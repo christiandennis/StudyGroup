@@ -45424,6 +45424,9 @@ function UserActions(){"use strict";}
 		this.dispatch();
 	}});
 
+	Object.defineProperty(UserActions.prototype,"signOut",{writable:true,configurable:true,value:function() {"use strict";
+		this.dispatch();
+	}});
 
 
 module.exports = alt.createActions(UserActions);
@@ -45466,10 +45469,11 @@ const URL = "http://localhost:3000";
 var axios = require('axios');
 
 var Router = require('react-router');
-var Navigation = Router.History;
+var History = Router.History;
 
 
 var LeftBar = React.createClass({displayName: "LeftBar",
+	mixins: [History],
 
 	childContextTypes : {
 	    muiTheme: React.PropTypes.object
@@ -45504,25 +45508,25 @@ var LeftBar = React.createClass({displayName: "LeftBar",
 	},
 
 	logout:function() {
-		$.ajax({ url: '/authentication/sign_out',
-		      type: 'DELETE',
-		      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-		      success: function(response) {
-		        console.log(response);
-		        window.location.href = URL;
-		      },
-		      error: function(response) {
-		      	console.log(response)
-		      }
+		StudyGroupStore.signOut(this.props.user.uid, this.props.user.accesstoken, this.props.user.client, this.history);
+		// $.ajax({ url: '/authentication/sign_out',
+		//       type: 'DELETE',
+		//       beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+		//       success: function(response) {
+		//         console.log(response);
+		//         window.location.href = URL;
+		//       },
+		//       error: function(response) {
+		//       	console.log(response)
+		//       }
 
-		    });
-		console.log("user logout here");
+		//     });
+		// console.log("user logout here");
 	},
 
 	render:function() {
 
-		console.log("TETE");
-		console.log(this.props.user.name);
+		this.props.user.name = "Anthony";
 
 		return(
 			React.createElement("div", null, 
@@ -45558,7 +45562,7 @@ var LeftBar = React.createClass({displayName: "LeftBar",
 
 
 var TopBar = React.createClass({displayName: "TopBar",
-	mixins: [Navigation],
+	mixins: [History],
 
 	dialogLogin:function() {
 		this.refs.loginDialog.show();
@@ -46470,6 +46474,49 @@ var mockData = [
 ];
 
 var StudyGroupSource = {
+	signOut:function() {
+		return {
+		  remote:function(state, uid, accesstoken, client, history) { 
+		    return new Promise(function (resolve, reject) {
+		      // simulate an asynchronous flow where data is fetched on
+		      // a remote server somewhere.
+		      	var fata = {
+		      		"uid": uid,
+		      		"access-token": accesstoken,
+		      		"client": client
+		      	}
+		      	
+		      	$.ajax({ url: '/auth/sign_out',
+      	      type: 'DELETE',
+      	      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+      	      data: fata,
+      	      success: function(response) {
+      	      	console.log('-----------signout SUCCESS-----------');
+	      	  	  console.log('response:' ,response);
+      	        window.location.href = URL;
+      	        // history.pushState(null, '/');
+      	        console.log('---------------------------------');
+      	      },
+      	      error: function(response) {
+      	      	console.log('-----------signout FAILED-----------');
+      	      	// User was not found or was not logged in.
+	      	  	  console.log('response:' ,response.responseJSON);
+	      	  	  if (response.responseJSON.errors[0] === 'User was not found or was not logged in.') {
+	      	  	  	window.location.href = URL;
+	      	  	  }
+      	        console.log('---------------------------------');
+      	      }
+      	    }); 
+		    });
+		  },
+
+		  local:function() {
+		    // Never check locally, always fetch remotely.
+		    return null;
+		  },
+		}
+	},
+
 	signUp:function() {
 		return {
 		  remote:function(state, fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog) { 
@@ -46500,9 +46547,7 @@ var StudyGroupSource = {
 	      	  	  console.log('response:' ,response);
 	      	  	  console.log('---------------------------------');
 		      	  }
-
-		      })
-		      
+		      })  
 		    });
 		  },
 
@@ -46510,10 +46555,6 @@ var StudyGroupSource = {
 		    // Never check locally, always fetch remotely.
 		    return null;
 		  },
-
-		  success: UserActions.updateUser,
-		  error: UserActions.userFailed,
-		  loading: UserActions.fetchUser
 		}
 	},
 
@@ -46563,11 +46604,13 @@ var StudyGroupSource = {
 		        type: 'POST',
 		        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
 		        data: fata,
-		        success: function(response) {
+		        success: function(data, status, xhr) {
 		        	console.log('-----------login SUCCESS-----------');
-		          console.log('response:' ,response);
-		          console.log('loginDialog', loginDialog);
-	          	resolve(response);
+		        	data.client = xhr.getResponseHeader('client');
+		        	data.accesstoken = xhr.getResponseHeader('access-token');
+		        	data.uid = xhr.getResponseHeader('uid');
+		          console.log('data:' ,data);
+	          	resolve(data);
 	          	history.pushState(null, '/studygroupapp');
 	          	loginDialog.dismiss();
 	          	console.log('---------------------------------');
@@ -46619,7 +46662,8 @@ var UserActions = require('../actions/UserActions');
 			handleFetchUser: UserActions.FETCH_USER,
 			handleStudyUser: UserActions.USER_FAILED,
 
-			handleSignUp: UserActions.SIGN_UP
+			handleSignUp: UserActions.SIGN_UP,
+			handleSignOut: UserActions.SIGN_OUT
 		});
 
 
@@ -46631,6 +46675,10 @@ var UserActions = require('../actions/UserActions');
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleSignUp",{writable:true,configurable:true,value:function() {"use strict";
 		
+	}});
+
+	Object.defineProperty(StudyGroupStore.prototype,"handleSignOut",{writable:true,configurable:true,value:function() {"use strict";
+		this.user = null;
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleUpdateStudyGroups",{writable:true,configurable:true,value:function(studyGroups){"use strict";
