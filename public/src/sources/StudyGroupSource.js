@@ -49,7 +49,7 @@ var StudyGroupSource = {
 
 	fetchUser() {
 		return {
-		  remote(state,email,password, history) { 
+		  remote(state,email,password, history, loginDialog) { 
 		    return new Promise(function (resolve, reject) {
 		      // simulate an asynchronous flow where data is fetched on
 		      // a remote server somewhere.
@@ -63,13 +63,19 @@ var StudyGroupSource = {
 		        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
 		        data: fata,
 		        success: function(response) {
-		          console.log(response);
-		          resolve(response);
-		          history.pushState(null, '/studygroupapp');
+		        	console.log('-----------login SUCCESS-----------');
+		          console.log('response:' ,response);
+		          console.log('loginDialog', loginDialog);
+	          	resolve(response);
+	          	history.pushState(null, '/studygroupapp');
+	          	loginDialog.dismiss();
+	          	console.log('---------------------------------');
 		        },
 		        error: function(response) {
-		        	console.log(response);
-		        	reject (response);
+		        	console.log('-----------login FAILED-----------');
+		          console.log('response:' ,response);
+		          reject('login FAILED');
+		          console.log('---------------------------------');
 		        }
 
 		      })

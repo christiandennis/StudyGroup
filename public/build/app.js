@@ -45568,16 +45568,10 @@ var TopBar = React.createClass({displayName: "TopBar",
 	},
 
 	submitLogIn:function() {
-		this.refs.loginDialog.dismiss();
-		this.login();
-	},
-
-	login:function() {
 		console.log("login here");
 		var user = this.refs.email.getValue();
 		var password = this.refs.password.getValue();
-		StudyGroupStore.fetchUser( user, password, this.history);
-		// this.history.pushState(null, '/studygroupapp');
+		StudyGroupStore.fetchUser( user, password, this.history, this.refs.loginDialog);
 	},
 
 	dialogSignUp:function() {
@@ -46569,7 +46563,7 @@ var StudyGroupSource = {
 
 	fetchUser:function() {
 		return {
-		  remote:function(state,email,password, history) { 
+		  remote:function(state,email,password, history, loginDialog) { 
 		    return new Promise(function (resolve, reject) {
 		      // simulate an asynchronous flow where data is fetched on
 		      // a remote server somewhere.
@@ -46583,13 +46577,19 @@ var StudyGroupSource = {
 		        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
 		        data: fata,
 		        success: function(response) {
-		          console.log(response);
-		          resolve(response);
-		          history.pushState(null, '/studygroupapp');
+		        	console.log('-----------login SUCCESS-----------');
+		          console.log('response:' ,response);
+		          console.log('loginDialog', loginDialog);
+	          	resolve(response);
+	          	history.pushState(null, '/studygroupapp');
+	          	loginDialog.dismiss();
+	          	console.log('---------------------------------');
 		        },
 		        error: function(response) {
-		        	console.log(response);
-		        	reject (response);
+		        	console.log('-----------login FAILED-----------');
+		          console.log('response:' ,response);
+		          reject('login FAILED');
+		          console.log('---------------------------------');
 		        }
 
 		      })

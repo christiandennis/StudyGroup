@@ -135,16 +135,10 @@ var TopBar = React.createClass({
 	},
 
 	submitLogIn() {
-		this.refs.loginDialog.dismiss();
-		this.login();
-	},
-
-	login() {
 		console.log("login here");
 		var user = this.refs.email.getValue();
 		var password = this.refs.password.getValue();
-		StudyGroupStore.fetchUser( user, password, this.history);
-		// this.history.pushState(null, '/studygroupapp');
+		StudyGroupStore.fetchUser( user, password, this.history, this.refs.loginDialog);
 	},
 
 	dialogSignUp() {
