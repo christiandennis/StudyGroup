@@ -1,4 +1,8 @@
-SignUp: /authentication/sign_up
+---------------------------------------------
+USERS
+---------------------------------------------
+
+SignUp: /auth/
 POST:
 {
 	email:
@@ -7,42 +11,53 @@ POST:
 }
 
 
-SignIn: /authentication/sign_in:
+SignIn: /auth/sign_in:
 POST: 
 {
 	email:
 	password:
-	password_confirmation:	
 }
 
-SignOut: /authentication/sign_out:
+SignOut: /auth/sign_out:
 DELETE:
 {
-	
+	email:
 }
 
+----------------------------------------------
+GROUPS
+----------------------------------------------
+
+
 GroupView: /groups/user/index
+# Returns all the groups that should display on a users feed
 GET:
 {
-	userID:
+	uid:
 }
 
 MyGroup: /groups/user/
+# Returns all groups that the user is a part of
 GET:
 {
-	userID:
+	uid:
 }
 
 DELETE USER GROUP: /groups/user/update
+# Add or remove user from a group
+# command = 'add' or 'remove'
 GET:
 {
-	userID:
-	groupID:
-	action: "add/remove"
+	userid:
+	groupid:
+	command:
 }
 
 ALLGroup: /groups
 GET:
+{
+	
+}
 
 PostGroup: /groups
 POST:
@@ -65,7 +80,9 @@ POST
 	description:
 	date: (epoch)
 	location: (String)
+	time:
 	capacity:
-	host:
+	uid:
+	privacy:
 
 }
