@@ -28,7 +28,8 @@ const Sticky = require('react-sticky');
 const URL = "http://localhost:3000";
 var axios = require('axios');
 
-
+var Router = require('react-router');
+var Navigation = Router.History;
 
 
 var LeftBar = React.createClass({
@@ -123,8 +124,9 @@ var LeftBar = React.createClass({
 
 
 var TopBar = React.createClass({
+	mixins: [Navigation],
+
 	dialogLogin() {
-		
 		this.refs.loginDialog.show();
 	},
 
@@ -141,7 +143,8 @@ var TopBar = React.createClass({
 		console.log("login here");
 		var user = this.refs.email.getValue();
 		var password = this.refs.password.getValue();
-		StudyGroupStore.fetchUser( user, password);
+		StudyGroupStore.fetchUser( user, password, this.history);
+		// this.history.pushState(null, '/studygroupapp');
 	},
 
 	dialogSignUp() {

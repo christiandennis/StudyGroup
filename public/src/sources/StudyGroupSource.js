@@ -49,7 +49,7 @@ var StudyGroupSource = {
 
 	fetchUser() {
 		return {
-		  remote(state,email,password) { 
+		  remote(state,email,password, history) { 
 		    return new Promise(function (resolve, reject) {
 		      // simulate an asynchronous flow where data is fetched on
 		      // a remote server somewhere.
@@ -65,6 +65,7 @@ var StudyGroupSource = {
 		        success: function(response) {
 		          console.log(response);
 		          resolve(response);
+		          history.pushState(null, '/studygroupapp');
 		        },
 		        error: function(response) {
 		        	console.log(response);
