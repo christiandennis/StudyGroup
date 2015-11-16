@@ -45490,12 +45490,120 @@ var TopBar = React.createClass({displayName: "TopBar",
 		this.login();
 	},
 
+	login:function() {
+		console.log("login here");
+		var user = this.refs.email.getValue();
+		var password = this.refs.password.getValue();
+		StudyGroupStore.fetchUser( user, password);
+	},
+
 	dialogSignUp:function() {
 		this.refs.signUpDialog.show();
 	},
 
 	cancelSignUp:function() {
 		this.refs.signUpDialog.dismiss();
+	},
+
+	submitSignUp:function() {
+		var fullname = this.refs.fullNameSignUp;
+		var fullnameSignUp = this.refs.fullNameSignUp;
+		var email = this.refs.emailSignUp;
+		var password = this.refs.passwordSignUp;
+		var confirmPassword = this.refs.confirmPasswordSignUp;
+		var signUpDialog = this.refs.signUpDialog;
+		var schoolSignUp =  this.refs.schoolSignUp;
+		var usernameSignUp =  this.refs.usernameSignUp;
+		if(false) {
+			console.log(fullname);
+			console.log(email);
+			console.log(password);
+			console.log(confirmPassword);
+			console.log("SIGNUP DONE");
+		}
+
+		if (email.getValue() && password.getValue() && confirmPassword.getValue() && fullname.getValue()){
+			if (confirmPassword.getValue() === password.getValue()){
+				var fata = {
+					"enduser": {
+						"email": email.getValue(),
+						"password": password.getValue(),
+						"password_confirmation": password.getValue()
+					}
+				}
+				
+				$.ajax({ url: '/auth',
+				  type: 'POST',
+				  beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+				  data: fata,
+				  success: function(response) {
+				    console.log(response);
+				    console.log("USER ID");
+				    console.log(response.id);
+				    var updateData = {
+			    		"id": response.id,
+			    		"school": schoolSignUp.getValue(),
+			    		"name": fullnameSignUp.getValue(),
+			    		"username": usernameSignUp.getValue()
+				    }
+				    
+				  //   $.ajax({ url: '/endusers/update',
+				  //     type: 'POST',
+				  //     beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+				  //     data: updateData,
+				  //     success: function(response) {
+				  //     	console.log("user update success");
+				  //       console.log(response);
+				  //     },
+				  //     error: function(response) {
+				  //     	console.log("user update failed");
+				  //     	console.log(response);
+				  //     }
+				  //   });
+
+				  //   $.ajax({ url: '/authentication/sign_out',
+				  //     type: 'DELETE',
+				  //     beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+				  //     success: function(response) {
+				  //     	console.log("signout success");
+				  //       console.log(response);
+						// signUpDialog.dismiss();
+
+				  //     },
+				  //     error: function(response) {
+				  //     	console.log("signout failed");
+				  //     	console.log(response);
+				  //     }
+
+				  //   });
+				  },
+				  error: function(response) {
+				  	console.log("login failed");
+				  	console.log(response)
+				  	if (response.responseText != null) {
+				  		console.log("TITITBABI");
+				  		email.setErrorText("Email has already been used.")
+				  	}
+				  }
+				});
+			}
+		} else {
+			if (!email.getValue()){
+				email.setErrorText("This field is required");
+			} else if (email.getValue().search("@")==-1){
+				email.setErrorText("Invalid email");
+			}
+
+			if (!password.getValue()) {
+				password.setErrorText("This field is required");
+			}
+			if(!confirmPassword.getValue()){
+				confirmPassword.setErrorText("This field is required");
+			}
+			if (!fullname.getValue()){
+				fullname.setErrorText("This field is required");
+			}
+		}
 	},
 
 	dialogNewGroup:function() {
@@ -45666,134 +45774,9 @@ var TopBar = React.createClass({displayName: "TopBar",
 		}
 	},
 
-	submitSignUp:function() {
-		
-		var fullname = this.refs.fullNameSignUp;
-		var fullnameSignUp = this.refs.fullNameSignUp;
-		var email = this.refs.emailSignUp;
-		var password = this.refs.passwordSignUp;
-		var confirmPassword = this.refs.confirmPasswordSignUp;
-		var signUpDialog = this.refs.signUpDialog;
-		var schoolSignUp =  this.refs.schoolSignUp;
-		var usernameSignUp =  this.refs.usernameSignUp;
-		if(false) {
-			console.log(fullname);
-			console.log(email);
-			console.log(password);
-			console.log(confirmPassword);
-			console.log("SIGNUP DONE");
-		}
-
-		if (email.getValue() && password.getValue() && confirmPassword.getValue() && fullname.getValue()){
-			if (confirmPassword.getValue() === password.getValue()){
-				var fata = {
-					"enduser": {
-						"email": email.getValue(),
-						"password": password.getValue(),
-						"password_confirmation": password.getValue()
-					}
-				}
-				
-				$.ajax({ url: '/authentication/sign_up',
-				  type: 'POST',
-				  beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-				  data: fata,
-				  success: function(response) {
-				    console.log(response);
-				    console.log("USER ID");
-				    console.log(response.id);
-				    var updateData = {
-			    		"id": response.id,
-			    		"school": schoolSignUp.getValue(),
-			    		"name": fullnameSignUp.getValue(),
-			    		"username": usernameSignUp.getValue()
-				    }
-				    
-				    $.ajax({ url: '/endusers/update',
-				      type: 'POST',
-				      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-				      data: updateData,
-				      success: function(response) {
-				      	console.log("user update success");
-				        console.log(response);
-				      },
-				      error: function(response) {
-				      	console.log("user update failed");
-				      	console.log(response);
-				      }
-				    });
-
-				    $.ajax({ url: '/authentication/sign_out',
-				      type: 'DELETE',
-				      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-				      success: function(response) {
-				      	console.log("signout success");
-				        console.log(response);
-						signUpDialog.dismiss();
-
-				      },
-				      error: function(response) {
-				      	console.log("signout failed");
-				      	console.log(response);
-				      }
-
-				    });
-				  },
-				  error: function(response) {
-				  	console.log("login failed");
-				  	console.log(response)
-				  	if (response.responseText != null) {
-				  		console.log("TITITBABI");
-				  		email.setErrorText("Email has already been used.")
-				  	}
-				  }
-				});
-			}
-		} else {
-			if (!email.getValue()){
-				email.setErrorText("This field is required");
-			} else if (email.getValue().search("@")==-1){
-				email.setErrorText("Invalid email");
-			}
-
-			if (!password.getValue()) {
-				password.setErrorText("This field is required");
-			}
-			if(!confirmPassword.getValue()){
-				confirmPassword.setErrorText("This field is required");
-			}
-			if (!fullname.getValue()){
-				fullname.setErrorText("This field is required");
-			}
-		}
-	},
-
 	updateUser:function(){
 
 	},
-
-	login:function() {
-		
-		console.log("login here");
-
-	    $.ajax({ url: '/authentication/sign_out',
-	      type: 'DELETE',
-	      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-	      success: function(response) {
-	      	console.log("signout success");
-	        console.log(response);
-	      },
-	      error: function(response) {
-	      	console.log("signout failed");
-	      	console.log(response);
-	      }
-
-	    });
-
-		var user = this.refs.email.getValue();
-		var password = this.refs.password.getValue();
-		StudyGroupStore.fetchUser( user, password);
-		},
     
     openLeft:function() {
         this.refs.leftBar.refs.leftNav.toggle();
@@ -46508,13 +46491,11 @@ var StudyGroupSource = {
 		      // simulate an asynchronous flow where data is fetched on
 		      // a remote server somewhere.
 		      var fata = {
-		      	"enduser": {
 		      		"email": email,
 		      		"password": password,
 		      		"password_confirmation": password
-		      	}
 		      }
-		      $.ajax({ url: '/authentication/sign_in',
+		      $.ajax({ url: '/auth/sign_in',
 		        type: 'POST',
 		        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
 		        data: fata,

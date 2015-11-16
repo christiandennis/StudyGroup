@@ -54,13 +54,11 @@ var StudyGroupSource = {
 		      // simulate an asynchronous flow where data is fetched on
 		      // a remote server somewhere.
 		      var fata = {
-		      	"enduser": {
 		      		"email": email,
 		      		"password": password,
 		      		"password_confirmation": password
-		      	}
 		      }
-		      $.ajax({ url: '/authentication/sign_in',
+		      $.ajax({ url: '/auth/sign_in',
 		        type: 'POST',
 		        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
 		        data: fata,
