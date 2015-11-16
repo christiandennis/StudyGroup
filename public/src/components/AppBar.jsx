@@ -169,67 +169,35 @@ var TopBar = React.createClass({
 		if (email.getValue() && password.getValue() && confirmPassword.getValue() && fullname.getValue()){
 			if (confirmPassword.getValue() === password.getValue()){
 				var fata = {
-					"enduser": {
-						"email": email.getValue(),
-						"password": password.getValue(),
-						"password_confirmation": password.getValue()
-					}
+					"email": email.getValue(),
+					"password": password.getValue(),
+					"password_confirmation": password.getValue()
 				}
 				
-				$.ajax({ url: '/auth',
-				  type: 'POST',
-				  beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-				  data: fata,
-				  success: function(response) {
-				    console.log(response);
-				    console.log("USER ID");
-				    console.log(response.id);
-				    var updateData = {
-			    		"id": response.id,
-			    		"school": schoolSignUp.getValue(),
-			    		"name": fullnameSignUp.getValue(),
-			    		"username": usernameSignUp.getValue()
-				    }
-				    
-				  //   $.ajax({ url: '/endusers/update',
-				  //     type: 'POST',
-				  //     beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-				  //     data: updateData,
-				  //     success: function(response) {
-				  //     	console.log("user update success");
-				  //       console.log(response);
-				  //     },
-				  //     error: function(response) {
-				  //     	console.log("user update failed");
-				  //     	console.log(response);
-				  //     }
-				  //   });
-
-				  //   $.ajax({ url: '/authentication/sign_out',
-				  //     type: 'DELETE',
-				  //     beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-				  //     success: function(response) {
-				  //     	console.log("signout success");
-				  //       console.log(response);
-						// signUpDialog.dismiss();
-
-				  //     },
-				  //     error: function(response) {
-				  //     	console.log("signout failed");
-				  //     	console.log(response);
-				  //     }
-
-				  //   });
-				  },
-				  error: function(response) {
-				  	console.log("login failed");
-				  	console.log(response)
-				  	if (response.responseText != null) {
-				  		console.log("TITITBABI");
-				  		email.setErrorText("Email has already been used.")
-				  	}
-				  }
-				});
+				// $.ajax({ url: '/auth',
+				//   type: 'POST',
+				//   beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+				//   data: fata,
+				//   success: function(response) {
+				//     console.log(response);
+				//     console.log("USER ID");
+				//     console.log(response.id);
+				//     var updateData = {
+			 //    		"id": response.id,
+			 //    		"school": schoolSignUp.getValue(),
+			 //    		"name": fullnameSignUp.getValue(),
+			 //    		"username": usernameSignUp.getValue()
+				//     }
+				// },
+				//   error: function(response) {
+				//   	console.log("login failed");
+				//   	console.log(response)
+				//   	if (response.responseText != null) {
+				//   		console.log("TITITBABI");
+				//   		email.setErrorText("Email has already been used.")
+				//   	}
+				//   }
+				// });
 			}
 		} else {
 			if (!email.getValue()){

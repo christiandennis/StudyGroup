@@ -16,6 +16,28 @@ var mockData = [
 ];
 
 var StudyGroupSource = {
+	signUp() {
+		return {
+		  remote(state) { 
+		    return new Promise(function (resolve, reject) {
+		      // simulate an asynchronous flow where data is fetched on
+		      // a remote server somewhere.
+		      console.log('signUp HERE');
+		      
+		    });
+		  },
+
+		  local() {
+		    // Never check locally, always fetch remotely.
+		    return null;
+		  },
+
+		  success: UserActions.updateUser,
+		  error: UserActions.userFailed,
+		  loading: UserActions.fetchUser
+		}
+	},
+
 	fetchStudyGroups() {
 		return {
 		  remote(state) { 

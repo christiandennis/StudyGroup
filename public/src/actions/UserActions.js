@@ -13,6 +13,10 @@ class UserActions {
 		this.dispatch(errorMessage);
 	}
 
+	signUp() {
+		this.dispatch();
+	}
+
 }
 
 module.exports = alt.createActions(UserActions);

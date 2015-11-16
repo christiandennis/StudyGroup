@@ -13,9 +13,12 @@ class StudyGroupStore {
 			handleUpdateStudyGroups: StudyGroupActions.UPDATE_STUDY_GROUPS,
 			handleFetchStudyGroups: StudyGroupActions.FETCH_STUDY_GROUPS,
 			handleStudyGroupFailed: StudyGroupActions.STUDY_GROUPS_FAILED,
+
 			handleUpdateUser: UserActions.UPDATE_USER,
 			handleFetchUser: UserActions.FETCH_USER,
-			handleStudyUser: UserActions.USER_FAILED
+			handleStudyUser: UserActions.USER_FAILED,
+
+			handleSignUp: UserActions.SIGN_UP
 		});
 
 
