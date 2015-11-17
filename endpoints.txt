@@ -1,3 +1,5 @@
+Pass in access-token, uid, client in header
+
 ---------------------------------------------
 USERS
 ---------------------------------------------
@@ -42,14 +44,14 @@ GroupView: /groups/user/index
 # Returns all the groups that should display on a users feed
 GET:
 {
-	uid:
+
 }
 
 MyGroup: /groups/user/
 # Returns all groups that the user is a part of
 GET:
 {
-	uid:
+
 }
 
 DELETE USER GROUP: /groups/user/update
@@ -57,7 +59,6 @@ DELETE USER GROUP: /groups/user/update
 # command = 'add' or 'remove'
 PUT:
 {
-	userid:
 	groupid:
 	command:
 }
@@ -83,7 +84,6 @@ POST:
 	date: (epoch)
 	location: (String)
 	capacity:
-	host:(same as uid)
 }
 
 EditGroup: /groups/:id
@@ -98,7 +98,6 @@ PUT
 	location: (String)
 	time:
 	capacity:
-	host: (same as uid)
 	privacy:
 
 }
