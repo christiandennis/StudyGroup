@@ -46,19 +46,18 @@ class StudyGroupStore {
 	}
 
 	handleUpdateStudyGroups(studyGroups){
-		console.log('-------------update study group-------------');
-		this.studyGroups = studyGroups;
+		this.studyGroups = studyGroups.reverse();
 		this.errorMessage = null;
 	}
 	handleFetchStudyGroups() {
-
+		this.studyGroups = [];
 	}
 	handleStudyGroupFailed(errorMessage) {
 		this.errorMessage = errorMessage;
 	}
 
 	handleRefreshGroups(studyGroup){
-		this.studyGroups.push(studyGroup);
+		this.studyGroups.unshift(studyGroup);
 		this.errorMessage = null;
 	}
 

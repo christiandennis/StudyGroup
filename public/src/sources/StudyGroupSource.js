@@ -66,8 +66,7 @@ var StudyGroupSource = {
 		  },
 		  
 		  success: StudyGroupActions.refreshGroups,
-		  error: StudyGroupActions.studyGroupsFailed,
-		  loading: StudyGroupActions.fetchStudyGroups
+		  error: StudyGroupActions.studyGroupsFailed
 		}
 	},
 

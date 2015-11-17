@@ -46479,8 +46479,7 @@ var StudyGroupSource = {
 		  },
 		  
 		  success: StudyGroupActions.refreshGroups,
-		  error: StudyGroupActions.studyGroupsFailed,
-		  loading: StudyGroupActions.fetchStudyGroups
+		  error: StudyGroupActions.studyGroupsFailed
 		}
 	},
 
@@ -46784,24 +46783,19 @@ var UserActions = require('../actions/UserActions');
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleUpdateStudyGroups",{writable:true,configurable:true,value:function(studyGroups){"use strict";
-		console.log('-------------update study group-------------');
-		this.studyGroups = studyGroups;
+		this.studyGroups = studyGroups.reverse();
 		this.errorMessage = null;
 	}});
 	Object.defineProperty(StudyGroupStore.prototype,"handleFetchStudyGroups",{writable:true,configurable:true,value:function() {"use strict";
-
+		this.studyGroups = [];
 	}});
 	Object.defineProperty(StudyGroupStore.prototype,"handleStudyGroupFailed",{writable:true,configurable:true,value:function(errorMessage) {"use strict";
 		this.errorMessage = errorMessage;
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleRefreshGroups",{writable:true,configurable:true,value:function(studyGroup){"use strict";
-		console.log('-------------refresh group-------------');
-		console.log('before: ', this.studyGroups);
-		this.studyGroups.push(studyGroup);
+		this.studyGroups.unshift(studyGroup);
 		this.errorMessage = null;
-		console.log('after: ', this.studyGroups);
-		console.log('---------------------------------------');
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleUpdateUser",{writable:true,configurable:true,value:function(user){"use strict";
