@@ -10,6 +10,15 @@ POST:
 	password_confirmation:
 }
 
+Edit user fields: /auth/set_user_fields
+PUT
+{
+	uid:
+	name:
+	nickname:
+	school:
+}
+
 
 SignIn: /auth/sign_in:
 POST: 
@@ -72,7 +81,7 @@ POST:
 }
 
 EditGroup: /groups/edit
-POST
+PUT
 {
 	id:
 	title:

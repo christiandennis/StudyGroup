@@ -19,6 +19,8 @@ Rails.application.routes.draw do
 
   post '/groups/user/update', to: 'groups#addremoveuser'
 
+  put '/auth/set_user_fields', to: 'authorization#set_user_fields'
+
 
 
   resources :groups, :landing

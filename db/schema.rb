@@ -50,6 +50,7 @@ ActiveRecord::Schema.define(version: 20151115191452) do
     t.string   "nickname"
     t.string   "image"
     t.string   "email"
+    t.string   "school"
     t.text     "tokens"
     t.datetime "created_at"
     t.datetime "updated_at"
