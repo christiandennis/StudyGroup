@@ -7,6 +7,7 @@ class StudyGroupStore {
 	constructor() {
 		this.user = null;
 		this.errorMessageUser = null;
+		this.studyGroups = null;
 
 
 		this.bindListeners({
@@ -19,7 +20,10 @@ class StudyGroupStore {
 			handleStudyUser: UserActions.USER_FAILED,
 
 			handleSignUp: UserActions.SIGN_UP,
-			handleSignOut: UserActions.SIGN_OUT
+			handleSignOut: UserActions.SIGN_OUT,
+
+			handlePostNewGroup: StudyGroupActions.POST_NEW_GROUP,
+			handleRefreshGroups: StudyGroupActions.REFRESH_GROUPS
 		});
 
 
@@ -27,6 +31,10 @@ class StudyGroupStore {
 			getStudyGroup: this.getStudyGroup
 		});
 		this.exportAsync(StudyGroupSource);
+	}
+
+	handlePostNewGroup() {
+		
 	}
 
 	handleSignUp() {
@@ -38,14 +46,20 @@ class StudyGroupStore {
 	}
 
 	handleUpdateStudyGroups(studyGroups){
+		console.log('-------------update study group-------------');
 		this.studyGroups = studyGroups;
 		this.errorMessage = null;
 	}
 	handleFetchStudyGroups() {
-		this.studyGroups = [];
+
 	}
 	handleStudyGroupFailed(errorMessage) {
 		this.errorMessage = errorMessage;
+	}
+
+	handleRefreshGroups(studyGroup){
+		this.studyGroups.push(studyGroup);
+		this.errorMessage = null;
 	}
 
 	handleUpdateUser(user){

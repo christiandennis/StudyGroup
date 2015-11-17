@@ -13,6 +13,13 @@ class StudyGroupActions {
 		this.dispatch(errorMessage);
 	}
 
+	postNewGroup() {
+		this.dispatch();
+	}
+
+	refreshGroups(studyGroups) {
+		this.dispatch(studyGroups);
+	}
 }
 
 module.exports = alt.createActions(StudyGroupActions);

@@ -45400,6 +45400,13 @@ function StudyGroupActions(){"use strict";}
 		this.dispatch(errorMessage);
 	}});
 
+	Object.defineProperty(StudyGroupActions.prototype,"postNewGroup",{writable:true,configurable:true,value:function() {"use strict";
+		this.dispatch();
+	}});
+
+	Object.defineProperty(StudyGroupActions.prototype,"refreshGroups",{writable:true,configurable:true,value:function(studyGroups) {"use strict";
+		this.dispatch(studyGroups);
+	}});
 
 
 module.exports = alt.createActions(StudyGroupActions);
@@ -45515,7 +45522,7 @@ var LeftBar = React.createClass({displayName: "LeftBar",
 		return(
 			React.createElement("div", null, 
 				React.createElement(SideBar, {ref: "leftNav", docked: false}, 
-					React.createElement(MenuItem, {index: 0, style: {textAlign:"center"}}, "Hi, ", this.props.user.name, "!"), 
+					React.createElement(MenuItem, {index: 0, style: {textAlign:"center"}}, "Hi, ", this.props.user.data.name, "!"), 
 					React.createElement(MenuItem, {index: 1, style: {textAlign:"center", marginBottom:"20px"} }, React.createElement("span", {onClick: this.myProfile}, React.createElement(Avatar, {size: "120"}, " ", this.props.user.data.name.slice(0,1), " "))), 
 					React.createElement("span", {onClick: this.myGroups}, "  ", React.createElement(MenuItem, {index: 2}, "My Groups"), " "), 
 	  				React.createElement("span", {onClick: this.editProfile}, " ", React.createElement(MenuItem, {index: 3}, "Edit Profile"), " "), 
@@ -45646,63 +45653,25 @@ var TopBar = React.createClass({displayName: "TopBar",
 		var failedSnackbar = this.refs.createGroupFailedSnackbar;
 		var successSnackbar = this.refs.createGroupSuccessSnackbar;
 
-		console.log("USER ID");
-		console.log(this.props.user.id);
-
 		if (title.getValue() && subject.getValue() && description.getValue() && location.getValue() && capacity.getValue() && date.getDate()) {
-			var groupData = {
-			    		"title": title.getValue(),
-			    		"subject": subject.getValue(),
-			    		"description": description.getValue(),
-			    		"date": date.getDate(),
-			    		"location": location.getValue(),
-			    		"capacity": capacity.getValue(),
-			    		"host": this.props.user.id,
-			    		"privacy": privacy
-				    }
-
-			$.ajax({ url: '/endusers/update',
-				type: 'POST',
-				beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-				data: groupData,
-				success: function(response) {
-				 	console.log("post group success");
-				  	console.log(response);
-				  	StudyGroupStore.fetchStudyGroups();	
-				  	successSnackbar.show();
-				  	newGroupDialog.dismiss();
-				},
-				error: function(response) {
-				 	console.log("post group failed");
-				 	console.log(response);
-				 	failedSnackbar.show();
-				}
-			});
-
+			StudyGroupStore.postNewGroup(title, subject, description, date, location, capacity, host, this.props.user.data.school, privacy, this.props.user.uid, this.props.user.accesstoken, this.props.user.client, this.history, newGroupDialog);
 		} else {
 
 			if (!title.getValue()){
-
 				title.setErrorText("This field is required");
-				console.log("ABUMBAWE")
 			}
-
 			if (!subject.getValue()){
 				subject.setErrorText("This field is required");
 			}
-
 			if (!description.getValue()){
 				description.setErrorText("This field is required");
 			}
-
 			if (!location.getValue()){
 				location.setErrorText("This field is required");
 			}
-
 			if (!capacity.getValue()){
 				capacity.setErrorText("This field is required");
 			}
-
 			if (!date.getDate()){
 				date.setErrorText("This field is required");
 			}
@@ -45835,10 +45804,10 @@ var TopBar = React.createClass({displayName: "TopBar",
                    			    label: "Cancel", 
                    			    secondary: true, 
                    			    onTouchTap: this.cancelNewGroup}),
-                   			  React.createElement(Link, {to: "/studygroupapp"}, React.createElement(FlatButton, {
+                   			  React.createElement(FlatButton, {
                    			    label: "Submit", 
                    			    primary: true, 
-                   			    onTouchTap: this.submitNewGroup}))], 
+                   			    onTouchTap: this.submitNewGroup})], 
                      		autoDetectWindowHeight: true, 
                      		autoScrollBodyContent: true}, 
                        React.createElement("div", null, 
@@ -46196,23 +46165,25 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 		var failedSnackbar = this.refs.createGroupFailedSnackbar;
 		var successSnackbar = this.refs.createGroupSuccessSnackbar;
 
-		axios.post(URL + "/groups/edit", {
-			"title": title,
-			"subject": subject,
-			"description": description,
-			"date": date,
-			"location": location,
-			"capacity": capacity,
-			"host": host
-		}).then(function(response) {
-			console.log("post new group SUCCEED");
-			StudyGroupStore.fetchStudyGroups();	
-			successSnackbar.show();
-			newGroupDialog.dismiss();
-		}).catch(function(response) {
-			failedSnackbar.show();
-			console.log("post new group FAILED");
-		});
+		StudyGroupStore.postNewGroup();
+
+		// axios.post(URL + "/groups/edit", {
+		// 	"title": title,
+		// 	"subject": subject,
+		// 	"description": description,
+		// 	"date": date,
+		// 	"location": location,
+		// 	"capacity": capacity,
+		// 	"host": host
+		// }).then(function(response) {
+		// 	console.log("post new group SUCCEED");
+		// 	StudyGroupStore.fetchStudyGroups();	
+		// 	successSnackbar.show();
+		// 	newGroupDialog.dismiss();
+		// }).catch(function(response) {
+		// 	failedSnackbar.show();
+		// 	console.log("post new group FAILED");
+		// });
 
 	},
 
@@ -46458,6 +46429,61 @@ var mockData = [
 ];
 
 var StudyGroupSource = {
+	postNewGroup:function() {
+		console.log("postNewGroup here");
+		return {
+		  remote:function(state, title, subject, description, date, location, capacity, host, school, privacy, uid, accesstoken, client, history, newGroupDialog) { 
+		    return new Promise(function (resolve, reject) {
+		      // simulate an asynchronous flow where data is fetched on
+		      // a remote server somewhere.
+		      	var groupData = {
+		      		"uid": uid,
+		      		"access-token": accesstoken,
+		      		"client": client,
+		      		"title": title.getValue(),
+	      			"subject": subject.getValue(),
+	      			"description": description.getValue(),
+	      			"date": date.getDate(), 
+	      			"location": location.getValue(),
+	      			"capacity": capacity.getValue(),
+	      			"host": host,
+	      			"school": school,
+	      			"privacy": privacy
+		      	}
+		      	
+		      	$.ajax({ url: '/groups',
+      	      type: 'POST',
+      	      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+      	      data: groupData,
+      	      success: function(response) {
+      	      	console.log('-----------post new group SUCCESS-----------');
+	      	  	  console.log('response:' ,response);
+	      	  	  // history.pushState(null, '/studygroupapp');
+	      	  	  resolve(response.group);
+	      	  	  newGroupDialog.dismiss();
+      	        console.log('---------------------------------');
+      	      },
+      	      error: function(response) {
+      	      	console.log('-----------post new group FAILED-----------');
+      	      	// User was not found or was not logged in.
+	      	  	  console.log('response:' ,response.responseJSON);
+      	        console.log('---------------------------------');
+      	      }
+      	    }); 
+		    });
+		  },
+
+		  local:function() {
+		    // Never check locally, always fetch remotely.
+		    return null;
+		  },
+		  
+		  success: StudyGroupActions.refreshGroups,
+		  error: StudyGroupActions.studyGroupsFailed,
+		  loading: StudyGroupActions.fetchStudyGroups
+		}
+	},
+
 	signOut:function() {
 		return {
 		  remote:function(state, uid, accesstoken, client, history) { 
@@ -46719,6 +46745,7 @@ var UserActions = require('../actions/UserActions');
 	function StudyGroupStore() {"use strict";
 		this.user = null;
 		this.errorMessageUser = null;
+		this.studyGroups = null;
 
 
 		this.bindListeners({
@@ -46731,7 +46758,10 @@ var UserActions = require('../actions/UserActions');
 			handleStudyUser: UserActions.USER_FAILED,
 
 			handleSignUp: UserActions.SIGN_UP,
-			handleSignOut: UserActions.SIGN_OUT
+			handleSignOut: UserActions.SIGN_OUT,
+
+			handlePostNewGroup: StudyGroupActions.POST_NEW_GROUP,
+			handleRefreshGroups: StudyGroupActions.REFRESH_GROUPS
 		});
 
 
@@ -46740,6 +46770,10 @@ var UserActions = require('../actions/UserActions');
 		});
 		this.exportAsync(StudyGroupSource);
 	}
+
+	Object.defineProperty(StudyGroupStore.prototype,"handlePostNewGroup",{writable:true,configurable:true,value:function() {"use strict";
+		
+	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleSignUp",{writable:true,configurable:true,value:function() {"use strict";
 		
@@ -46750,14 +46784,24 @@ var UserActions = require('../actions/UserActions');
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleUpdateStudyGroups",{writable:true,configurable:true,value:function(studyGroups){"use strict";
+		console.log('-------------update study group-------------');
 		this.studyGroups = studyGroups;
 		this.errorMessage = null;
 	}});
 	Object.defineProperty(StudyGroupStore.prototype,"handleFetchStudyGroups",{writable:true,configurable:true,value:function() {"use strict";
-		this.studyGroups = [];
+
 	}});
 	Object.defineProperty(StudyGroupStore.prototype,"handleStudyGroupFailed",{writable:true,configurable:true,value:function(errorMessage) {"use strict";
 		this.errorMessage = errorMessage;
+	}});
+
+	Object.defineProperty(StudyGroupStore.prototype,"handleRefreshGroups",{writable:true,configurable:true,value:function(studyGroup){"use strict";
+		console.log('-------------refresh group-------------');
+		console.log('before: ', this.studyGroups);
+		this.studyGroups.push(studyGroup);
+		this.errorMessage = null;
+		console.log('after: ', this.studyGroups);
+		console.log('---------------------------------------');
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleUpdateUser",{writable:true,configurable:true,value:function(user){"use strict";

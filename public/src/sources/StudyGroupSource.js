@@ -16,6 +16,61 @@ var mockData = [
 ];
 
 var StudyGroupSource = {
+	postNewGroup() {
+		console.log("postNewGroup here");
+		return {
+		  remote(state, title, subject, description, date, location, capacity, host, school, privacy, uid, accesstoken, client, history, newGroupDialog) { 
+		    return new Promise(function (resolve, reject) {
+		      // simulate an asynchronous flow where data is fetched on
+		      // a remote server somewhere.
+		      	var groupData = {
+		      		"uid": uid,
+		      		"access-token": accesstoken,
+		      		"client": client,
+		      		"title": title.getValue(),
+	      			"subject": subject.getValue(),
+	      			"description": description.getValue(),
+	      			"date": date.getDate(), 
+	      			"location": location.getValue(),
+	      			"capacity": capacity.getValue(),
+	      			"host": host,
+	      			"school": school,
+	      			"privacy": privacy
+		      	}
+		      	
+		      	$.ajax({ url: '/groups',
+      	      type: 'POST',
+      	      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+      	      data: groupData,
+      	      success: function(response) {
+      	      	console.log('-----------post new group SUCCESS-----------');
+	      	  	  console.log('response:' ,response);
+	      	  	  // history.pushState(null, '/studygroupapp');
+	      	  	  resolve(response.group);
+	      	  	  newGroupDialog.dismiss();
+      	        console.log('---------------------------------');
+      	      },
+      	      error: function(response) {
+      	      	console.log('-----------post new group FAILED-----------');
+      	      	// User was not found or was not logged in.
+	      	  	  console.log('response:' ,response.responseJSON);
+      	        console.log('---------------------------------');
+      	      }
+      	    }); 
+		    });
+		  },
+
+		  local() {
+		    // Never check locally, always fetch remotely.
+		    return null;
+		  },
+		  
+		  success: StudyGroupActions.refreshGroups,
+		  error: StudyGroupActions.studyGroupsFailed,
+		  loading: StudyGroupActions.fetchStudyGroups
+		}
+	},
+
 	signOut() {
 		return {
 		  remote(state, uid, accesstoken, client, history) { 

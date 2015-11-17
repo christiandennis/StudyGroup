@@ -206,63 +206,25 @@ var TopBar = React.createClass({
 		var failedSnackbar = this.refs.createGroupFailedSnackbar;
 		var successSnackbar = this.refs.createGroupSuccessSnackbar;
 
-		console.log("USER ID");
-		console.log(this.props.user.id);
-
 		if (title.getValue() && subject.getValue() && description.getValue() && location.getValue() && capacity.getValue() && date.getDate()) {
-			var groupData = {
-			    		"title": title.getValue(),
-			    		"subject": subject.getValue(),
-			    		"description": description.getValue(),
-			    		"date": date.getDate(),
-			    		"location": location.getValue(),
-			    		"capacity": capacity.getValue(),
-			    		"host": this.props.user.id,
-			    		"privacy": privacy
-				    }
-
-			$.ajax({ url: '/endusers/update',
-				type: 'POST',
-				beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-				data: groupData,
-				success: function(response) {
-				 	console.log("post group success");
-				  	console.log(response);
-				  	StudyGroupStore.fetchStudyGroups();	
-				  	successSnackbar.show();
-				  	newGroupDialog.dismiss();
-				},
-				error: function(response) {
-				 	console.log("post group failed");
-				 	console.log(response);
-				 	failedSnackbar.show();
-				}
-			});
-
+			StudyGroupStore.postNewGroup(title, subject, description, date, location, capacity, host, this.props.user.data.school, privacy, this.props.user.uid, this.props.user.accesstoken, this.props.user.client, this.history, newGroupDialog);
 		} else {
 
 			if (!title.getValue()){
-
 				title.setErrorText("This field is required");
-				console.log("ABUMBAWE")
 			}
-
 			if (!subject.getValue()){
 				subject.setErrorText("This field is required");
 			}
-
 			if (!description.getValue()){
 				description.setErrorText("This field is required");
 			}
-
 			if (!location.getValue()){
 				location.setErrorText("This field is required");
 			}
-
 			if (!capacity.getValue()){
 				capacity.setErrorText("This field is required");
 			}
-
 			if (!date.getDate()){
 				date.setErrorText("This field is required");
 			}
@@ -395,10 +357,10 @@ var TopBar = React.createClass({
                    			    label="Cancel"
                    			    secondary={true}
                    			    onTouchTap={this.cancelNewGroup} />,
-                   			  <Link to="/studygroupapp"><FlatButton
+                   			  <FlatButton
                    			    label="Submit"
                    			    primary={true}
-                   			    onTouchTap={this.submitNewGroup} /></Link>]}
+                   			    onTouchTap={this.submitNewGroup} />]}
                      		autoDetectWindowHeight={true} 
                      		autoScrollBodyContent={true}>
                        <div>
