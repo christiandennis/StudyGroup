@@ -12,6 +12,7 @@ Rails.application.routes.draw do
 
   get '/feed', to: 'main#index'
 
+
   #groups
   get '/groups/user/index', to: 'groups#userindex'
 

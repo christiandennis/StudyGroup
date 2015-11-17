@@ -1,5 +1,6 @@
 class GroupsController < ApplicationController
 	skip_before_filter :verify_authenticity_token
+	before_action :authenticate_user!
   	clear_respond_to
   	respond_to :json
   	#before_action :authenticate_user!
