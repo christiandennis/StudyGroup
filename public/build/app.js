@@ -45509,30 +45509,14 @@ var LeftBar = React.createClass({displayName: "LeftBar",
 
 	logout:function() {
 		StudyGroupStore.signOut(this.props.user.uid, this.props.user.accesstoken, this.props.user.client, this.history);
-		// $.ajax({ url: '/authentication/sign_out',
-		//       type: 'DELETE',
-		//       beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-		//       success: function(response) {
-		//         console.log(response);
-		//         window.location.href = URL;
-		//       },
-		//       error: function(response) {
-		//       	console.log(response)
-		//       }
-
-		//     });
-		// console.log("user logout here");
 	},
 
 	render:function() {
-
-		this.props.user.name = "Anthony";
-
 		return(
 			React.createElement("div", null, 
 				React.createElement(SideBar, {ref: "leftNav", docked: false}, 
 					React.createElement(MenuItem, {index: 0, style: {textAlign:"center"}}, "Hi, ", this.props.user.name, "!"), 
-					React.createElement(MenuItem, {index: 1, style: {textAlign:"center", marginBottom:"20px"} }, React.createElement("span", {onClick: this.myProfile}, React.createElement(Avatar, {size: "120"}, " ", this.props.user.name.slice(0,1), " "))), 
+					React.createElement(MenuItem, {index: 1, style: {textAlign:"center", marginBottom:"20px"} }, React.createElement("span", {onClick: this.myProfile}, React.createElement(Avatar, {size: "120"}, " ", this.props.user.data.name.slice(0,1), " "))), 
 					React.createElement("span", {onClick: this.myGroups}, "  ", React.createElement(MenuItem, {index: 2}, "My Groups"), " "), 
 	  				React.createElement("span", {onClick: this.editProfile}, " ", React.createElement(MenuItem, {index: 3}, "Edit Profile"), " "), 
 	  				React.createElement("span", {onClick: this.logout}, "  ", React.createElement(MenuItem, {index: 4}, "Log Out"), "  ")
@@ -45550,7 +45534,7 @@ var LeftBar = React.createClass({displayName: "LeftBar",
 					  		autoDetectWindowHeight: true, 
 					  		autoScrollBodyContent: true}, 
 					    React.createElement("div", null, 
-					    	React.createElement("div", {ref: "profileName", style: {fontSize:"30px", paddingBottom:"20px"}}, this.props.user.name), 
+					    	React.createElement("div", {ref: "profileName", style: {fontSize:"30px", paddingBottom:"20px"}}, this.props.user.data.name), 
 					    	React.createElement("div", {ref: "profileEmail", className: "prof-email"}, this.props.user.email), 
 					    	React.createElement("div", {ref: "profileClass", className: "prof-class"}, this.props.user.school)
 					    )
@@ -46581,17 +46565,11 @@ var StudyGroupSource = {
           	      	      success: function(response) {
           	      	      	console.log('-----------signout SUCCESS-----------');
           		      	  	  console.log('response:' ,response);
-          	      	        window.location.href = URL;
-          	      	        // history.pushState(null, '/');
           	      	        console.log('---------------------------------');
           	      	      },
           	      	      error: function(response) {
           	      	      	console.log('-----------signout FAILED-----------');
-          	      	      	// User was not found or was not logged in.
           		      	  	  console.log('response:' ,response.responseJSON);
-          		      	  	  if (response.responseJSON.errors[0] === 'User was not found or was not logged in.') {
-          		      	  	  	window.location.href = URL;
-          		      	  	  }
           	      	        console.log('---------------------------------');
           	      	      }
           	      	    }); 
@@ -46611,7 +46589,6 @@ var StudyGroupSource = {
           	      	      },
           	      	      error: function(response) {
           	      	      	console.log('-----------signout FAILED-----------');
-          	      	      	// User was not found or was not logged in.
           		      	  	  console.log('response:' ,response.responseJSON);
           	      	        console.log('---------------------------------');
           	      	      }
