@@ -55,7 +55,7 @@ GET:
 DELETE USER GROUP: /groups/user/update
 # Add or remove user from a group
 # command = 'add' or 'remove'
-GET:
+PUT:
 {
 	userid:
 	groupid:
@@ -77,13 +77,14 @@ POST:
 	date: (epoch)
 	location: (String)
 	capacity:
-	host:
+	host:(same as uid)
 }
 
-EditGroup: /groups/edit
+EditGroup: /groups/:id
 PUT
 {
 	id:
+	(Rest all optional)
 	title:
 	subject:
 	description:
@@ -91,7 +92,7 @@ PUT
 	location: (String)
 	time:
 	capacity:
-	uid:
+	host: (same as uid)
 	privacy:
 
 }

@@ -197,7 +197,73 @@ class GroupsController < ApplicationController
 	end
 
 	def update
-		
+		id = params[:id]
+		@group = nil
+		if id.nil?
+			render json: {'status'=>-1,'errors:'=>['Please pass in a valid group id']}
+			return
+		else
+			@group = Group.find(params[:id])
+			if @group.nil?
+				render json: {'status'=>-1,'errors:'=>['Could not find group with id']}
+				return
+			end
+		end
+
+		title = params[:title]
+		subject = params[:subject]
+		description = params[:description]
+		date = params[:date]
+		location = params[:location]
+		time = params[:time]
+		capacity = params[:capacity]
+		host = params[:host]
+		privacy = params[:privacy]
+		school = params[:school]
+
+		if not title.nil?
+			@group.title = title
+		end
+		if not subject.nil?
+			@group.subject = subject
+		end
+		if not description.nil?
+			@group.description = description
+		end
+		if not date.nil?
+			@group.date = date
+		end
+		if not location.nil?
+			@group.location = location
+		end
+		if not time.nil?
+			@group.time = time
+		end
+		if not capacity.nil?
+			@group.capacity = capacity
+		end
+		if not host.nil?
+			@user = User.find_by_uid(host)
+			if @user.nil?
+				render json: {'status'=>-1, 'errors'=>['Could not find passed in host']}
+				return
+			end
+			@group.host = host
+		end
+		if not privacy.nil?
+			@group.privacy = privacy
+		end
+		if not school.nil?
+			@group.school = school
+		end
+
+		@group.save
+
+		render json: {'status'=>1,'group'=>@group}
+
+
+
+
 	end
 
 	def show
