@@ -10,17 +10,10 @@ POST:
 	email:
 	password:
 	password_confirmation:
-}
-
-Edit user fields: /auth/set_user_fields
-PUT
-{
-	uid:
+	school:
 	name:
 	nickname:
-	school:
 }
-
 
 SignIn: /auth/sign_in:
 POST: 
