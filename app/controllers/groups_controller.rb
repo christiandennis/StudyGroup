@@ -268,6 +268,11 @@ class GroupsController < ApplicationController
 
 	def show
 		@group = Group.find(params[:id])
+		if not @group.nil?
+			render json: {'status'=>1, 'group'=>@group}
+		else
+			render json: {'status'=>-1,'errors'=>['Could not find group with id']}
+		end
 	end
 
 	private

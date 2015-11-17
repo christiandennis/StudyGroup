@@ -68,6 +68,12 @@ GET:
 	
 }
 
+Get single group: /groups/:id
+GET:
+{
+	
+}
+
 PostGroup: /groups
 POST:
 {
@@ -96,3 +102,36 @@ PUT
 	privacy:
 
 }
+
+
+--------------------------------------------
+COMMENT
+--------------------------------------------
+
+Get all Comments: /comment
+GET
+{
+	
+}
+
+
+Get one comment: /comment/:id
+GET
+{
+	
+}
+
+
+Create comment: /comment
+POST
+{
+	userid (same as uid)
+	groupid
+	title
+	content
+}
+
+
+
+
+

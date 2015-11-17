@@ -23,7 +23,7 @@ Rails.application.routes.draw do
 
 
 
-  resources :groups, :landing
+  resources :groups, :landing, :comment
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
