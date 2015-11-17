@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  mount_devise_token_auth_for 'User', at: 'auth'
+  mount_devise_token_auth_for 'User', at: 'auth', controllers: {
+                    registrations: 'user/registrations'
+                   }
   get 'landing/index'
 
   #get 'main/index'
