@@ -13,7 +13,7 @@ before_filter :configure_sign_up_params, only: [:create]
     error_messages = [] #List of all errors
     email = params[:email]
     password = params[:password]
-    password = params[:password_confirmation]
+    password_confirmation = params[:password_confirmation]
     school = params[:school]
     name = params[:name]
     nickname = params[:nickname]
@@ -22,24 +22,40 @@ before_filter :configure_sign_up_params, only: [:create]
       status = -1
       error_messages << 'Please enter an email'
     end
-    if school.nil?
+
+    if password.nil? || password.length==0
+      status = -1
+      error_messages << 'Please enter a password'
+    end
+
+    if password_confirmation.nil? || password_confirmation.length==0
+      status = -1
+      error_messages << 'Please enter a password confirmation'
+    end
+
+    if password !=  password_confirmation
+      status = -1
+      error_messages << 'password and password_confirmation does not match'
+    end
+
+    if school.nil? || school.length==0
       status = -1
       error_messages << 'Please enter a school'
     end
 
-    if name.nil?
+    if name.nil? || name.length ==0
       status = -1
       error_messages << 'Please enter name'
     end
 
-    if nickname.nil?
+    if nickname.nil? || nickname.length == 0
       status = -1
       error_messages << 'Please enter a nickname'
     end
 
 
     if status == -1
-      render json: {'status'=>-1, 'errors'=>error_messages}
+      render json: {'status'=>-1, 'errors'=>error_messages}, status:400
     else
       super
     end
