@@ -3,14 +3,10 @@ class GroupsController < ApplicationController
 	before_action :authenticate_user!
   	clear_respond_to
   	respond_to :json
-  	#before_action :authenticate_user!
 
 	def create
 		status = 1 #intially set status to OK
 		error_messages = [] #List of all errors
-
-		
-		
 		title = params[:title]
 		subject = params[:subject]
 		location = params[:location]
@@ -18,9 +14,9 @@ class GroupsController < ApplicationController
 		date = params[:date]
 		time = params[:time]
 		capacity = params[:capacity]
-		#host = params[:host]
 		privacy = params[:privacy]
-		uid = params[:uid]
+		host = current_user.uid
+		@name = current_user.uid
 
 		if title.nil? || title.length==0
 			status = -1
@@ -46,35 +42,32 @@ class GroupsController < ApplicationController
 			error_messages << "Please enter description less than 256 characters" 
 		end
 
-		# if host.nil?
-		# 	status=-1
-		# 	error_messages << "Please pass in a host id"
-		# end
+		if location.nil? || location.length==0
+			status = -1
+			error_messages << "Please enter a location"
+		elsif location.length > 30
+			status = -1
+			error_messages << "Please enter location less than 30 characters" 
+		end
 
-		@user = nil
+		if capacity.nil? || capacity.length==0
+			status = -1
+			error_messages << "Please enter capacity"
+		elsif capacity.to_i > 99
+			status = -1
+			error_messages << "Please enter capacity less than 100" 
+		end
 
 		if privacy != '0' and privacy != '1'
 			status=-1
 			error_messages << "Please set privacy of 0 or 1"
 		end
 
-		if uid.nil?
-			status = -1
-			error_messages << "Please pass in a uid"
-		else
-			@user = User.find_by_uid(uid)
-			if @user.nil?
-				status = -1
-				error_messages << "Couldn't find user with given uid"
-			end
-
-			params[:host] = uid
-		end
 
 		if status == 1
 			@group = Group.new(group_params)
 			@group.guestlist+=1
-			@group.going = @group.going + ','+@user.id.to_s + ','
+			@group.going = @group.going + ','+@name.to_s + ','
 			if @group.save
 				render json: {'status' => 1, 'group' => @group}
 			end
@@ -278,7 +271,7 @@ class GroupsController < ApplicationController
 
 	private
 	  def group_params
-	    params.permit(:title, :subject, :description, :date, :location, :capacity,:host, :privacy)
+	    params.permit(:title, :subject, :description, :date, :location, :capacity,:host, :privacy, :location, :school, :host)
 	  end
 
 	  def group_params_nested
