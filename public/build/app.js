@@ -45558,7 +45558,9 @@ var TopBar = React.createClass({displayName: "TopBar",
 	mixins: [History],
 
 	dialogLogin:function() {
-		this.refs.loginDialog.show();
+		// this.refs.loginDialog.show();
+		// BYPASS LOGIN FOR TESTING
+		StudyGroupStore.fetchUser( 'papa@gmail.com', 'iopiopiop', this.history, this.refs.loginDialog);
 	},
 
 	cancelLogIn:function() {
@@ -45656,7 +45658,7 @@ var TopBar = React.createClass({displayName: "TopBar",
 		var successSnackbar = this.refs.createGroupSuccessSnackbar;
 
 		if (title.getValue() && subject.getValue() && description.getValue() && location.getValue() && capacity.getValue() && date.getDate()) {
-			StudyGroupStore.postNewGroup(title, subject, description, date, location, capacity, host, this.props.user.data.school, privacy, this.props.user.uid, this.props.user.accesstoken, this.props.user.client, this.history, newGroupDialog);
+			StudyGroupStore.postNewGroup(title, subject, description, date, location, capacity, host, this.props.user.school, privacy, this.history, newGroupDialog);
 		} else {
 
 			if (!title.getValue()){
@@ -46209,7 +46211,7 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 			);
 		}
 
-		if (this.props.user){
+		if (this.props.studyGroups){
 			return (
 				React.createElement("div", null, 
 					React.createElement(Dialog, {ref: "groupDetailDialog", 
@@ -46386,7 +46388,7 @@ var StudyGroups = React.createClass ({displayName: "StudyGroups",
 		var state = StudyGroupStore.getState();
 		console.log('----------strudygroup componentDidMount------------');
 		console.log('state: ', state);
-		// StudyGroupStore.fetchStudyGroups();	
+		StudyGroupStore.fetchStudyGroups();	
 		console.log('---------------------------------------------------');	
 		
 	},
@@ -46395,7 +46397,7 @@ var StudyGroups = React.createClass ({displayName: "StudyGroups",
 		var state = StudyGroupStore.getState();
 		console.log('----------strudygroup componentWillReceiveProps------------');
 		console.log('state: ', state);
-		StudyGroupStore.fetchStudyGroups(state.user.accesstoken, state.user.client, state.user.uid);
+		// StudyGroupStore.fetchStudyGroups(state.user.accesstoken, state.user.client, state.user.uid);
 		console.log('-----------------------------------------------------------');	
 	},
 
@@ -46445,14 +46447,12 @@ var StudyGroupSource = {
 	postNewGroup:function() {
 		console.log("postNewGroup here");
 		return {
-		  remote:function(state, title, subject, description, date, location, capacity, host, school, privacy, uid, accesstoken, client, history, newGroupDialog) { 
+		  remote:function(state, title, subject, description, date, location, capacity, host, school, privacy, history, newGroupDialog) { 
 		    return new Promise(function (resolve, reject) {
 		      // simulate an asynchronous flow where data is fetched on
 		      // a remote server somewhere.
+		      	console.log("postnewgroupstate", state);
 		      	var groupData = {
-		      		"uid": uid,
-		      		"access-token": accesstoken,
-		      		"client": client,
 		      		"title": title.getValue(),
 	      			"subject": subject.getValue(),
 	      			"description": description.getValue(),
@@ -46467,6 +46467,11 @@ var StudyGroupSource = {
 		      	$.ajax({ url: '/groups',
       	      type: 'POST',
       	      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+      	      headers: 	{
+      	      				"access-token": state.user.accesstoken,
+      	      				"client": state.user.client,
+      	      				"uid": state.user.uid
+      	      			},
       	      data: groupData,
       	      success: function(response) {
       	      	console.log('-----------post new group SUCCESS-----------');
@@ -46492,7 +46497,8 @@ var StudyGroupSource = {
 		  },
 		  
 		  success: StudyGroupActions.refreshGroups,
-		  error: StudyGroupActions.studyGroupsFailed2
+		  error: StudyGroupActions.studyGroupsFailed2,
+		  loading: StudyGroupActions.fetchStudyGroups
 		}
 	},
 
@@ -46503,18 +46509,14 @@ var StudyGroupSource = {
 		return {
 		  remote:function(state, uid, accesstoken, client, history) { 
 		    return new Promise(function (resolve, reject) {
-		      // simulate an asynchronous flow where data is fetched on
-		      // a remote server somewhere.
-		      	var fata = {
-		      		"uid": uid,
-		      		"access-token": accesstoken,
-		      		"client": client
-		      	}
-		      	
 		      	$.ajax({ url: '/auth/sign_out',
       	      type: 'DELETE',
       	      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-      	      data: fata,
+      	      headers: 	{
+		      	      				"access-token": state.user.accesstoken,
+		      	      				"client": state.user.client,
+		      	      				"uid": state.user.uid
+      	      					},
       	      success: function(response) {
       	      	console.log('-----------signout SUCCESS-----------');
 	      	  	  console.log('response:' ,response);
@@ -46591,20 +46593,28 @@ var StudyGroupSource = {
 	//		- Type: which data 
 	fetchStudyGroups:function() {
 		return {
-		  remote:function(state, accesstoken, client, uid) { 
+		  // remote(state, accesstoken, client, uid) { 
+		  remote:function(state) { 
+		  	console.log('---------fetch group START----------');
+		  	console.log('state: ', state);
+		  	console.log('------------------------------------')
 		    return new Promise(function (resolve, reject) {
 		      $.ajax({ url: '/groups',
 		        type: 'GET',
 		        headers: 	{
-		        						"access-token": accesstoken,
-		        						"client": client,
-		        						"uid": uid
-		        					},
+        						// "access-token": accesstoken,
+        						// "client": client,
+        						// "uid": uid
+        						"access-token": "qYO3pGwd1rbybYS6ebbAqA",
+        						"client": "NV2CbKG_ZiijqfsqsrGqRw",
+        						"uid": "papa@gmail.com"
+        					},
 		        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
 		        success: function(data, status, xhr) {
 		        	console.log('-----------fetch group SUCCESS-----------');
-		          console.log('data:' ,data.data);
-	          	console.log('---------------------------------');
+			         console.log('groups:' ,data.groups);
+			         resolve(data.groups);
+		          	console.log('---------------------------------');
 		        },
 		        error: function(response) {
 		        	console.log('-----------fetch group FAILED-----------');
@@ -46734,8 +46744,8 @@ var UserActions = require('../actions/UserActions');
 		this.errorMessage = null;
 	}});
 	Object.defineProperty(StudyGroupStore.prototype,"handleFetchStudyGroups",{writable:true,configurable:true,value:function() {"use strict";
-		this.studyGroups = [];
 	}});
+
 	Object.defineProperty(StudyGroupStore.prototype,"handleStudyGroupFailed",{writable:true,configurable:true,value:function(errorMessage) {"use strict";
 		this.errorMessage = errorMessage;
 	}});
@@ -46752,11 +46762,6 @@ var UserActions = require('../actions/UserActions');
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleFetchUser",{writable:true,configurable:true,value:function() {"use strict";
 		this.user = null;
-		this.username = null;
-		this.email = null;
-		this.id = null;
-		this.name = null;
-		this.school = null;
 	}});
 	
 	Object.defineProperty(StudyGroupStore.prototype,"handleStudyUser",{writable:true,configurable:true,value:function(errorMessage) {"use strict";

@@ -142,7 +142,7 @@ var AllStudyGroups = React.createClass({
 			);
 		}
 
-		if (this.props.user){
+		if (this.props.studyGroups){
 			return (
 				<div>
 					<Dialog ref="groupDetailDialog"
@@ -319,7 +319,7 @@ var StudyGroups = React.createClass ({
 		var state = StudyGroupStore.getState();
 		console.log('----------strudygroup componentDidMount------------');
 		console.log('state: ', state);
-		// StudyGroupStore.fetchStudyGroups();	
+		StudyGroupStore.fetchStudyGroups();	
 		console.log('---------------------------------------------------');	
 		
 	},
@@ -328,7 +328,7 @@ var StudyGroups = React.createClass ({
 		var state = StudyGroupStore.getState();
 		console.log('----------strudygroup componentWillReceiveProps------------');
 		console.log('state: ', state);
-		StudyGroupStore.fetchStudyGroups(state.user.accesstoken, state.user.client, state.user.uid);
+		// StudyGroupStore.fetchStudyGroups(state.user.accesstoken, state.user.client, state.user.uid);
 		console.log('-----------------------------------------------------------');	
 	},
 

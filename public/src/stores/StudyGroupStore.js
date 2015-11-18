@@ -50,8 +50,8 @@ class StudyGroupStore {
 		this.errorMessage = null;
 	}
 	handleFetchStudyGroups() {
-		this.studyGroups = [];
 	}
+
 	handleStudyGroupFailed(errorMessage) {
 		this.errorMessage = errorMessage;
 	}
@@ -68,11 +68,6 @@ class StudyGroupStore {
 
 	handleFetchUser() {
 		this.user = null;
-		this.username = null;
-		this.email = null;
-		this.id = null;
-		this.name = null;
-		this.school = null;
 	}
 	
 	handleStudyUser(errorMessage) {

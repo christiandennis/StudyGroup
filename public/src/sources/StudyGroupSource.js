@@ -21,14 +21,12 @@ var StudyGroupSource = {
 	postNewGroup() {
 		console.log("postNewGroup here");
 		return {
-		  remote(state, title, subject, description, date, location, capacity, host, school, privacy, uid, accesstoken, client, history, newGroupDialog) { 
+		  remote(state, title, subject, description, date, location, capacity, host, school, privacy, history, newGroupDialog) { 
 		    return new Promise(function (resolve, reject) {
 		      // simulate an asynchronous flow where data is fetched on
 		      // a remote server somewhere.
+		      	console.log("postnewgroupstate", state);
 		      	var groupData = {
-		      		"uid": uid,
-		      		"access-token": accesstoken,
-		      		"client": client,
 		      		"title": title.getValue(),
 	      			"subject": subject.getValue(),
 	      			"description": description.getValue(),
@@ -43,6 +41,11 @@ var StudyGroupSource = {
 		      	$.ajax({ url: '/groups',
       	      type: 'POST',
       	      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+      	      headers: 	{
+      	      				"access-token": state.user.accesstoken,
+      	      				"client": state.user.client,
+      	      				"uid": state.user.uid
+      	      			},
       	      data: groupData,
       	      success: function(response) {
       	      	console.log('-----------post new group SUCCESS-----------');
@@ -68,7 +71,8 @@ var StudyGroupSource = {
 		  },
 		  
 		  success: StudyGroupActions.refreshGroups,
-		  error: StudyGroupActions.studyGroupsFailed2
+		  error: StudyGroupActions.studyGroupsFailed2,
+		  loading: StudyGroupActions.fetchStudyGroups
 		}
 	},
 
@@ -79,18 +83,14 @@ var StudyGroupSource = {
 		return {
 		  remote(state, uid, accesstoken, client, history) { 
 		    return new Promise(function (resolve, reject) {
-		      // simulate an asynchronous flow where data is fetched on
-		      // a remote server somewhere.
-		      	var fata = {
-		      		"uid": uid,
-		      		"access-token": accesstoken,
-		      		"client": client
-		      	}
-		      	
 		      	$.ajax({ url: '/auth/sign_out',
       	      type: 'DELETE',
       	      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-      	      data: fata,
+      	      headers: 	{
+		      	      				"access-token": state.user.accesstoken,
+		      	      				"client": state.user.client,
+		      	      				"uid": state.user.uid
+      	      					},
       	      success: function(response) {
       	      	console.log('-----------signout SUCCESS-----------');
 	      	  	  console.log('response:' ,response);
@@ -167,20 +167,28 @@ var StudyGroupSource = {
 	//		- Type: which data 
 	fetchStudyGroups() {
 		return {
-		  remote(state, accesstoken, client, uid) { 
+		  // remote(state, accesstoken, client, uid) { 
+		  remote(state) { 
+		  	console.log('---------fetch group START----------');
+		  	console.log('state: ', state);
+		  	console.log('------------------------------------')
 		    return new Promise(function (resolve, reject) {
 		      $.ajax({ url: '/groups',
 		        type: 'GET',
 		        headers: 	{
-		        						"access-token": accesstoken,
-		        						"client": client,
-		        						"uid": uid
-		        					},
+        						// "access-token": accesstoken,
+        						// "client": client,
+        						// "uid": uid
+        						"access-token": "qYO3pGwd1rbybYS6ebbAqA",
+        						"client": "NV2CbKG_ZiijqfsqsrGqRw",
+        						"uid": "papa@gmail.com"
+        					},
 		        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
 		        success: function(data, status, xhr) {
 		        	console.log('-----------fetch group SUCCESS-----------');
-		          console.log('data:' ,data.data);
-	          	console.log('---------------------------------');
+			         console.log('groups:' ,data.groups);
+			         resolve(data.groups);
+		          	console.log('---------------------------------');
 		        },
 		        error: function(response) {
 		        	console.log('-----------fetch group FAILED-----------');

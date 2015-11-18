@@ -109,7 +109,9 @@ var TopBar = React.createClass({
 	mixins: [History],
 
 	dialogLogin() {
-		this.refs.loginDialog.show();
+		// this.refs.loginDialog.show();
+		// BYPASS LOGIN FOR TESTING
+		StudyGroupStore.fetchUser( 'papa@gmail.com', 'iopiopiop', this.history, this.refs.loginDialog);
 	},
 
 	cancelLogIn() {
@@ -207,7 +209,7 @@ var TopBar = React.createClass({
 		var successSnackbar = this.refs.createGroupSuccessSnackbar;
 
 		if (title.getValue() && subject.getValue() && description.getValue() && location.getValue() && capacity.getValue() && date.getDate()) {
-			StudyGroupStore.postNewGroup(title, subject, description, date, location, capacity, host, this.props.user.data.school, privacy, this.props.user.uid, this.props.user.accesstoken, this.props.user.client, this.history, newGroupDialog);
+			StudyGroupStore.postNewGroup(title, subject, description, date, location, capacity, host, this.props.user.school, privacy, this.history, newGroupDialog);
 		} else {
 
 			if (!title.getValue()){
