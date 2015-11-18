@@ -46197,6 +46197,7 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 
 	render:function() {
 		if (this.props.errorMessage) {
+			console.log('1');
 			return (
 				React.createElement("div", null, this.props.errorMessage)
 			);
@@ -46204,6 +46205,7 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 		if (StudyGroupStore.isLoading()) {
 			var left = window.document.documentElement.clientWidth/2 - 25;
 			var top = window.document.documentElement.clientHeight/2 - 25;
+			console.log('2');
 			return(
 				React.createElement("div", null, 
 					React.createElement(RefreshIndicator, {size: 50, left: left, top: top, status: "loading"})
@@ -46212,6 +46214,7 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 		}
 
 		if (this.props.studyGroups){
+			console.log('3');
 			return (
 				React.createElement("div", null, 
 					React.createElement(Dialog, {ref: "groupDetailDialog", 
@@ -46402,7 +46405,8 @@ var StudyGroups = React.createClass ({displayName: "StudyGroups",
 	},
 
 	render:function(){
-		if (this.props.user!=null) {
+		if (this.props.studyGroups!=null) {
+			console.log('hey');
 			return (
 				React.createElement("div", null, 
 					React.createElement(AltContainer, {store: StudyGroupStore}, 
@@ -46412,10 +46416,7 @@ var StudyGroups = React.createClass ({displayName: "StudyGroups",
 			);
 		}
 		return (
-			React.createElement("div", null, 
-				React.createElement(AltContainer, {store: StudyGroupStore}, 
-					React.createElement(AllStudyGroups, null)
-				)
+			React.createElement("div", null
 			)
 		);
 	}
@@ -46449,8 +46450,7 @@ var StudyGroupSource = {
 		return {
 		  remote:function(state, title, subject, description, date, location, capacity, host, school, privacy, history, newGroupDialog) { 
 		    return new Promise(function (resolve, reject) {
-		      // simulate an asynchronous flow where data is fetched on
-		      // a remote server somewhere.
+		      	console.log('--------------POST NEW GROUP--------------');
 		      	console.log("postnewgroupstate", state);
 		      	var groupData = {
 		      		"title": title.getValue(),
@@ -46474,18 +46474,18 @@ var StudyGroupSource = {
       	      			},
       	      data: groupData,
       	      success: function(response) {
-      	      	console.log('-----------post new group SUCCESS-----------');
+      	      	console.log('__SUCCESS__');
 	      	  	  console.log('response:' ,response);
 	      	  	  // history.pushState(null, '/studygroupapp');
 	      	  	  resolve(response.group);
 	      	  	  newGroupDialog.dismiss();
-      	        console.log('---------------------------------');
+	      	  	  console.log('**************END POST NEW GROUP**************');
       	      },
       	      error: function(response) {
-      	      	console.log('-----------post new group FAILED-----------');
+      	      	console.log('__FAILED__');
       	      	// User was not found or was not logged in.
 	      	  	  console.log('response:' ,response.responseJSON);
-      	        console.log('---------------------------------');
+	      	  	  console.log('**************END POST NEW GROUP**************');
       	      }
       	    }); 
 		    });
@@ -46509,6 +46509,7 @@ var StudyGroupSource = {
 		return {
 		  remote:function(state, uid, accesstoken, client, history) { 
 		    return new Promise(function (resolve, reject) {
+		    		console.log('--------------SIGN OUT--------------');
 		      	$.ajax({ url: '/auth/sign_out',
       	      type: 'DELETE',
       	      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
@@ -46518,22 +46519,22 @@ var StudyGroupSource = {
 		      	      				"uid": state.user.uid
       	      					},
       	      success: function(response) {
-      	      	console.log('-----------signout SUCCESS-----------');
+      	      	console.log('__SUCCESS__');
 	      	  	  console.log('response:' ,response);
       	        window.location.href = URL;
       	        // history.pushState(null, '/');
-      	        console.log('---------------------------------');
+      	        console.log('**************END SIGN OUT**************');
       	      },
       	      error: function(response) {
-      	      	console.log('-----------signout FAILED-----------');
+      	      	console.log('__FAILED__');
       	      	// User was not found or was not logged in.
 	      	  	  console.log('response:' ,response.responseJSON);
 	      	  	  if (response.responseJSON.errors[0] === 'User was not found or was not logged in.') {
 	      	  	  	window.location.href = URL;
 	      	  	  }
-      	        console.log('---------------------------------');
+	      	  	  console.log('**************END SIGN OUT**************');
       	      }
-      	    }); 
+      	    });
 		    });
 		  },
 
@@ -46541,42 +46542,42 @@ var StudyGroupSource = {
 		    // Never check locally, always fetch remotely.
 		    return null;
 		  },
+		  success: UserActions.signOut,
+		  error: UserActions.signOut,
+		  loading: UserActions.signOut
 		}
 	},
 
 	// This function handles signup
-	// The complete process is as follow
-	// signUp => signIn => updateUser => logOut
 	signUp:function() {
 		return {
 		  remote:function(state, fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog) { 
 		    return new Promise(function (resolve, reject) {
-		      // simulate an asynchronous flow where data is fetched on
-		      // a remote server somewhere.
+		      	console.log('--------------SIGN UP--------------');
 		      	var signUpData = {
 		      		"email": email.getValue(),
 		      		"password": password.getValue(),
 		      		"password_confirmation": confirmPassword.getValue(),
 		      		"school": schoolSignUp.getValue(),
-	          		"name": fullnameSignUp.getValue(),
-	          		"nickname": usernameSignUp.getValue()
+          		"name": fullnameSignUp.getValue(),
+          		"nickname": usernameSignUp.getValue()
 		      	} 	
 		      	$.ajax({ url: '/auth',
 		      	  type: 'POST',
 		      	  beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
 		      	  data: signUpData,
 		      	  success: function(response) {
-	      	  		console.log('-----------signup SUCCESS-----------');
+	      	  		console.log('__SUCCESS--');
 	      	  	  console.log('response:' ,response);
 	      	  	  signUpDialog.dismiss();
-	      	  	  console.log('---------------------------------');
+	      	  	  console.log('**************END SIGN UP**************');
 		      		},
 		      	  error: function(response) {
-		      	  	console.log('-----------signup FAILED-----------');
+		      	  	console.log('__FAILED__');
 	      	  	  console.log('response:' ,response);
-	      	  	  console.log('---------------------------------');
+	      	  	  console.log('**************END SIGN UP**************');
 		      	  }
-		      })  
+		      })
 		    });
 		  },
 
@@ -46594,37 +46595,43 @@ var StudyGroupSource = {
 	fetchStudyGroups:function() {
 		return {
 		  // remote(state, accesstoken, client, uid) { 
-		  remote:function(state) { 
-		  	console.log('---------fetch group START----------');
-		  	console.log('state: ', state);
-		  	console.log('------------------------------------')
+		  remote:function(state, type) { 
+		  	var header = null;
+		  	var url = null;
+		  	if(type === 'user-feed') {
+		  		url = '/groups/user/index'
+		  		header = 	{
+	        						"access-token": "qYO3pGwd1rbybYS6ebbAqA",
+	        						"client": "NV2CbKG_ZiijqfsqsrGqRw",
+	        						"uid": "papa@gmail.com"
+        						}
+		  	} else if(type === 'user-part-of') {
+		  		url = '/groups/user'
+		  		header = 	{
+		  								"access-token": state.user.accesstoken,
+      	      				"client": state.user.client,
+      	      				"uid": state.user.uid
+		  							}
+		  	}
 		    return new Promise(function (resolve, reject) {
+		    	console.log('--------------FETCH GROUP--------------');
 		      $.ajax({ url: '/groups',
 		        type: 'GET',
-		        headers: 	{
-        						// "access-token": accesstoken,
-        						// "client": client,
-        						// "uid": uid
-        						"access-token": "qYO3pGwd1rbybYS6ebbAqA",
-        						"client": "NV2CbKG_ZiijqfsqsrGqRw",
-        						"uid": "papa@gmail.com"
-        					},
+		        headers: header,
 		        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
 		        success: function(data, status, xhr) {
-		        	console.log('-----------fetch group SUCCESS-----------');
-			         console.log('groups:' ,data.groups);
-			         resolve(data.groups);
-		          	console.log('---------------------------------');
+		        	console.log('__SUCCESS__');
+			        console.log('groups' ,data.groups);
+			        resolve(data.groups);
+			        console.log('**************END FETCH GROUP**************');
 		        },
 		        error: function(response) {
-		        	console.log('-----------fetch group FAILED-----------');
-		          console.log('response:' ,response);
+		        	console.log('__FAILED__');
+		          console.log('response' ,response);
 		          reject('fetch group FAILED');
-		          console.log('---------------------------------');
+		          console.log('**************END FETCH GROUP**************');
 		        }
-
 		      })
-		      
 		    });
 		  },
 
@@ -46643,8 +46650,7 @@ var StudyGroupSource = {
 		return {
 		  remote:function(state,email,password, history, loginDialog) { 
 		    return new Promise(function (resolve, reject) {
-		      // simulate an asynchronous flow where data is fetched on
-		      // a remote server somewhere.
+		      console.log('--------------LOGIN--------------');
 		      var fata = {
 		      		"email": email,
 		      		"password": password,
@@ -46655,25 +46661,24 @@ var StudyGroupSource = {
 		        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
 		        data: fata,
 		        success: function(data, status, xhr) {
-		        	console.log('-----------login SUCCESS-----------');
+		        	console.log('__SUCCESS__');
 		        	data.data.client = xhr.getResponseHeader('client');
 		        	data.data.accesstoken = xhr.getResponseHeader('access-token');
 		        	data.data.uid = xhr.getResponseHeader('uid');
-		          console.log('data:' ,data.data);
+		          console.log('data' ,data.data);
 	          	resolve(data.data);
-	          	history.pushState(null, '/studygroupapp');
+	          	// history.pushState(null, '/studygroupapp');
+	          	setTimeout(function() {history.pushState(null, '/studygroupapp');}, 10);
 	          	loginDialog.dismiss();
-	          	console.log('---------------------------------');
+	          	console.log('**************END LOGIN**************');
 		        },
 		        error: function(response) {
-		        	console.log('-----------login FAILED-----------');
-		          console.log('response:' ,response);
+		        	console.log('__FAILED__');
+		          console.log('response' ,response);
 		          reject('login FAILED');
-		          console.log('---------------------------------');
+		          console.log('**************END LOGIN**************');
 		        }
-
-		      })
-		      
+		      });
 		    });
 		  },
 
@@ -46737,6 +46742,8 @@ var UserActions = require('../actions/UserActions');
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleSignOut",{writable:true,configurable:true,value:function() {"use strict";
 		this.user = null;
+		this.studyGroups = null;
+		this.errorMessage = null;
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleUpdateStudyGroups",{writable:true,configurable:true,value:function(studyGroups){"use strict";

@@ -128,6 +128,7 @@ var AllStudyGroups = React.createClass({
 
 	render() {
 		if (this.props.errorMessage) {
+			console.log('1');
 			return (
 				<div>{this.props.errorMessage}</div>
 			);
@@ -135,6 +136,7 @@ var AllStudyGroups = React.createClass({
 		if (StudyGroupStore.isLoading()) {
 			var left = window.document.documentElement.clientWidth/2 - 25;
 			var top = window.document.documentElement.clientHeight/2 - 25;
+			console.log('2');
 			return(
 				<div>
 					<RefreshIndicator size={50} left={left} top={top} status="loading" /> 
@@ -143,6 +145,7 @@ var AllStudyGroups = React.createClass({
 		}
 
 		if (this.props.studyGroups){
+			console.log('3');
 			return (
 				<div>
 					<Dialog ref="groupDetailDialog"
@@ -333,7 +336,8 @@ var StudyGroups = React.createClass ({
 	},
 
 	render(){
-		if (this.props.user!=null) {
+		if (this.props.studyGroups!=null) {
+			console.log('hey');
 			return (
 				<div>
 					<AltContainer store = {StudyGroupStore}>
@@ -344,9 +348,6 @@ var StudyGroups = React.createClass ({
 		}
 		return (
 			<div>
-				<AltContainer store = {StudyGroupStore}>
-					<AllStudyGroups/>
-				</AltContainer>
 			</div>
 		);
 	}

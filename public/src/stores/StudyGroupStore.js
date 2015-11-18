@@ -43,6 +43,8 @@ class StudyGroupStore {
 
 	handleSignOut() {
 		this.user = null;
+		this.studyGroups = null;
+		this.errorMessage = null;
 	}
 
 	handleUpdateStudyGroups(studyGroups){
