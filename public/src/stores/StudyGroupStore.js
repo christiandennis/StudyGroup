@@ -23,7 +23,8 @@ class StudyGroupStore {
 			handleSignOut: UserActions.SIGN_OUT,
 
 			handlePostNewGroup: StudyGroupActions.POST_NEW_GROUP,
-			handleRefreshGroups: StudyGroupActions.REFRESH_GROUPS
+			handleRefreshGroups: StudyGroupActions.REFRESH_GROUPS,
+			handleFetchHomeGroups: StudyGroupActions.FETCH_HOME_GROUPS
 		});
 
 

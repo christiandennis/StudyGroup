@@ -16,6 +16,8 @@ var mockData = [
 ];
 
 var StudyGroupSource = {
+	// This function handles posting new groups
+	// Takes in title, subject, description, date, location, capacity, host, school, privacy, uid, accesstoken, client, history, newGroupDialog
 	postNewGroup() {
 		console.log("postNewGroup here");
 		return {
@@ -66,10 +68,13 @@ var StudyGroupSource = {
 		  },
 		  
 		  success: StudyGroupActions.refreshGroups,
-		  error: StudyGroupActions.studyGroupsFailed
+		  error: StudyGroupActions.studyGroupsFailed2
 		}
 	},
 
+	// This function handles sign out
+	// It makes a sign out request to the server
+	// and redirect to homepage
 	signOut() {
 		return {
 		  remote(state, uid, accesstoken, client, history) { 
@@ -113,6 +118,9 @@ var StudyGroupSource = {
 		}
 	},
 
+	// This function handles signup
+	// The complete process is as follow
+	// signUp => signIn => updateUser => logOut
 	signUp() {
 		return {
 		  remote(state, fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog) { 
@@ -238,6 +246,10 @@ var StudyGroupSource = {
 		}
 	},
 
+	// This function fetches the studygroups
+	// The resulting studygroups depend on the passed parameter!
+	// Parameter:
+	//		- Type: which data 
 	fetchStudyGroups() {
 		return {
 		  remote(state) { 
