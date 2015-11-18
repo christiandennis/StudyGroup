@@ -46429,6 +46429,8 @@ var mockData = [
 ];
 
 var StudyGroupSource = {
+	// This function handles posting new groups
+	// Takes in title, subject, description, date, location, capacity, host, school, privacy, uid, accesstoken, client, history, newGroupDialog
 	postNewGroup:function() {
 		console.log("postNewGroup here");
 		return {
@@ -46479,10 +46481,13 @@ var StudyGroupSource = {
 		  },
 		  
 		  success: StudyGroupActions.refreshGroups,
-		  error: StudyGroupActions.studyGroupsFailed
+		  error: StudyGroupActions.studyGroupsFailed2
 		}
 	},
 
+	// This function handles sign out
+	// It makes a sign out request to the server
+	// and redirect to homepage
 	signOut:function() {
 		return {
 		  remote:function(state, uid, accesstoken, client, history) { 
@@ -46526,114 +46531,32 @@ var StudyGroupSource = {
 		}
 	},
 
+	// This function handles signup
+	// The complete process is as follow
+	// signUp => signIn => updateUser => logOut
 	signUp:function() {
 		return {
 		  remote:function(state, fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog) { 
 		    return new Promise(function (resolve, reject) {
 		      // simulate an asynchronous flow where data is fetched on
 		      // a remote server somewhere.
-		      	var fata = {
+		      	var signUpData = {
 		      		"email": email.getValue(),
 		      		"password": password.getValue(),
 		      		"password_confirmation": confirmPassword.getValue(),
 		      		"school": schoolSignUp.getValue(),
-          		"name": fullnameSignUp.getValue(),
-          		"username": usernameSignUp.getValue()
+	          		"name": fullnameSignUp.getValue(),
+	          		"nickname": usernameSignUp.getValue()
 		      	} 	
 		      	$.ajax({ url: '/auth',
 		      	  type: 'POST',
 		      	  beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-		      	  data: fata,
+		      	  data: signUpData,
 		      	  success: function(response) {
 	      	  		console.log('-----------signup SUCCESS-----------');
 	      	  	  console.log('response:' ,response);
 	      	  	  signUpDialog.dismiss();
 	      	  	  console.log('---------------------------------');
-
-					      var signInData = {
-					      		"email": email.getValue(),
-					      		"password": password.getValue()
-					      }
-					      $.ajax({ url: '/auth/sign_in',
-					        type: 'POST',
-					        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-					        data: signInData,
-					        success: function(data, status, xhr) {
-					        	console.log('-----------login SUCCESS-----------');
-					        	data.client = xhr.getResponseHeader('client');
-					        	data.accesstoken = xhr.getResponseHeader('access-token');
-					        	data.uid = xhr.getResponseHeader('uid');
-					          console.log('data:' ,data);
-					          console.log('---------------------------------');
-
-	          	      var updateData = {
-	          	      		"uid": xhr.getResponseHeader('uid'),
-	          	      		"access-token": xhr.getResponseHeader('access-token'),
-	          	      		"client": xhr.getResponseHeader('client'),
-	          	      		"name": fullnameSignUp.getValue(),
-	          	      		"nickname": usernameSignUp.getValue(),
-	          	      		"school": schoolSignUp.getValue()
-	          	      }
-	          	      $.ajax({ url: '/auth/set_user_fields',
-	          	        type: 'PUT',
-	          	        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-	          	        data: updateData,
-	          	        success: function(data, status, xhr) {
-	          	        	console.log('-----------updateUser SUCCESS-----------');
-	          	          console.log('data:' ,data);
-	                    	console.log('---------------------------------');
-          			      	
-          			      	$.ajax({ url: '/auth/sign_out',
-          	      	      type: 'DELETE',
-          	      	      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-          	      	      data: updateData,
-          	      	      success: function(response) {
-          	      	      	console.log('-----------signout SUCCESS-----------');
-          		      	  	  console.log('response:' ,response);
-          	      	        console.log('---------------------------------');
-          	      	      },
-          	      	      error: function(response) {
-          	      	      	console.log('-----------signout FAILED-----------');
-          		      	  	  console.log('response:' ,response.responseJSON);
-          	      	        console.log('---------------------------------');
-          	      	      }
-          	      	    }); 
-	          	        },
-	          	        error: function(response) {
-	          	        	console.log('-----------updateUser FAILED-----------');
-	          	          console.log('response:' ,response);
-	          	          console.log('---------------------------------');
-	          	          $.ajax({ url: '/auth/sign_out',
-          	      	      type: 'DELETE',
-          	      	      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-          	      	      data: updateData,
-          	      	      success: function(response) {
-          	      	      	console.log('-----------signout SUCCESS-----------');
-          		      	  	  console.log('response:' ,response);
-          	      	        console.log('---------------------------------');
-          	      	      },
-          	      	      error: function(response) {
-          	      	      	console.log('-----------signout FAILED-----------');
-          		      	  	  console.log('response:' ,response.responseJSON);
-          	      	        console.log('---------------------------------');
-          	      	      }
-          	      	    });
-	          	        }
-
-	          	      })  
-
-
-					        },
-					        error: function(response) {
-					        	console.log('-----------login FAILED-----------');
-					          console.log('response:' ,response);
-					          reject('login FAILED');
-					          console.log('---------------------------------');
-					        }
-
-					      })  	  
-					      console.log("kuda");	      	
-
 		      		},
 		      	  error: function(response) {
 		      	  	console.log('-----------signup FAILED-----------');
@@ -46651,6 +46574,10 @@ var StudyGroupSource = {
 		}
 	},
 
+	// This function fetches the studygroups
+	// The resulting studygroups depend on the passed parameter!
+	// Parameter:
+	//		- Type: which data 
 	fetchStudyGroups:function() {
 		return {
 		  remote:function(state) { 
