@@ -75,8 +75,8 @@ var LeftBar = React.createClass({
 		return(
 			<div>
 				<SideBar ref="leftNav" docked={false}  >
-					<MenuItem index={0} style={{textAlign:"center"}}>Hi, {this.props.user.data.name}!</MenuItem>
-					<MenuItem index={1} style={{textAlign:"center", marginBottom:"20px"} }><span onClick={this.myProfile}><Avatar size="120"> {this.props.user.data.name.slice(0,1)} </Avatar></span></MenuItem>
+					<MenuItem index={0} style={{textAlign:"center"}}>Hi, {this.props.user.name}!</MenuItem>
+					<MenuItem index={1} style={{textAlign:"center", marginBottom:"20px"} }><span onClick={this.myProfile}><Avatar size="120"> {this.props.user.name.slice(0,1)} </Avatar></span></MenuItem>
 					<span onClick={this.myGroups}>		<MenuItem index={2}>My Groups</MenuItem>	</span>
 	  				<span onClick={this.editProfile}>	<MenuItem index={3}>Edit Profile</MenuItem>	</span>
 	  				<span onClick={this.logout}>		<MenuItem index={4}>Log Out</MenuItem>		</span>
@@ -94,7 +94,7 @@ var LeftBar = React.createClass({
 					  		autoDetectWindowHeight={true} 
 					  		autoScrollBodyContent={true}>
 					    <div>
-					    	<div ref="profileName" style={{fontSize:"30px", paddingBottom:"20px"}}>{this.props.user.data.name}</div>
+					    	<div ref="profileName" style={{fontSize:"30px", paddingBottom:"20px"}}>{this.props.user.name}</div>
 					    	<div ref="profileEmail" className="prof-email">{this.props.user.email}</div>
 					    	<div ref="profileClass" className="prof-class">{this.props.user.school}</div>
 					    </div>

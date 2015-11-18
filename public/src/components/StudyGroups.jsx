@@ -317,10 +317,19 @@ var AllStudyGroups = React.createClass({
 var StudyGroups = React.createClass ({
 	componentDidMount() {
 		var state = StudyGroupStore.getState();
-		StudyGroupStore.fetchStudyGroups();	
+		console.log('----------strudygroup componentDidMount------------');
+		console.log('state: ', state);
+		// StudyGroupStore.fetchStudyGroups();	
+		console.log('---------------------------------------------------');	
 		
 	},
-	componentWillReceiveProps() {
+
+	componentWillUpdate() {
+		var state = StudyGroupStore.getState();
+		console.log('----------strudygroup componentWillReceiveProps------------');
+		console.log('state: ', state);
+		StudyGroupStore.fetchStudyGroups(state.user.accesstoken, state.user.client, state.user.uid);
+		console.log('-----------------------------------------------------------');	
 	},
 
 	render(){

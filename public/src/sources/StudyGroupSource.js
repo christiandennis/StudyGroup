@@ -167,20 +167,29 @@ var StudyGroupSource = {
 	//		- Type: which data 
 	fetchStudyGroups() {
 		return {
-		  remote(state) { 
+		  remote(state, accesstoken, client, uid) { 
 		    return new Promise(function (resolve, reject) {
-		      // simulate an asynchronous flow where data is fetched on
-		      // a remote server somewhere.
-		      axios.get(groupURL)
-			  	  .then(function (response) {
-			  	  	//data = response from server
-			  	  	var data = response.data;
-			  	    resolve (data.groups);
-			  	  })
-			  	  .catch(function (response) {
-			  	    console.log(response);
-			  	    reject ("StudyGroup API failed");
-		  	  });
+		      $.ajax({ url: '/groups',
+		        type: 'GET',
+		        headers: 	{
+		        						"access-token": accesstoken,
+		        						"client": client,
+		        						"uid": uid
+		        					},
+		        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+		        success: function(data, status, xhr) {
+		        	console.log('-----------fetch group SUCCESS-----------');
+		          console.log('data:' ,data.data);
+	          	console.log('---------------------------------');
+		        },
+		        error: function(response) {
+		        	console.log('-----------fetch group FAILED-----------');
+		          console.log('response:' ,response);
+		          reject('fetch group FAILED');
+		          console.log('---------------------------------');
+		        }
+
+		      })
 		      
 		    });
 		  },
@@ -213,11 +222,11 @@ var StudyGroupSource = {
 		        data: fata,
 		        success: function(data, status, xhr) {
 		        	console.log('-----------login SUCCESS-----------');
-		        	data.client = xhr.getResponseHeader('client');
-		        	data.accesstoken = xhr.getResponseHeader('access-token');
-		        	data.uid = xhr.getResponseHeader('uid');
-		          console.log('data:' ,data);
-	          	resolve(data);
+		        	data.data.client = xhr.getResponseHeader('client');
+		        	data.data.accesstoken = xhr.getResponseHeader('access-token');
+		        	data.data.uid = xhr.getResponseHeader('uid');
+		          console.log('data:' ,data.data);
+	          	resolve(data.data);
 	          	history.pushState(null, '/studygroupapp');
 	          	loginDialog.dismiss();
 	          	console.log('---------------------------------');

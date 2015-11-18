@@ -45349,7 +45349,9 @@ const App = React.createClass({displayName: "App",
         React.createElement(AltContainer, {store: StudyGroupStore}, 
           React.createElement(AppBar, null)
         ), 
-        this.props.children
+        React.createElement(AltContainer, {store: StudyGroupStore}, 
+          this.props.children
+        )
       )
     )
   }
@@ -45522,8 +45524,8 @@ var LeftBar = React.createClass({displayName: "LeftBar",
 		return(
 			React.createElement("div", null, 
 				React.createElement(SideBar, {ref: "leftNav", docked: false}, 
-					React.createElement(MenuItem, {index: 0, style: {textAlign:"center"}}, "Hi, ", this.props.user.data.name, "!"), 
-					React.createElement(MenuItem, {index: 1, style: {textAlign:"center", marginBottom:"20px"} }, React.createElement("span", {onClick: this.myProfile}, React.createElement(Avatar, {size: "120"}, " ", this.props.user.data.name.slice(0,1), " "))), 
+					React.createElement(MenuItem, {index: 0, style: {textAlign:"center"}}, "Hi, ", this.props.user.name, "!"), 
+					React.createElement(MenuItem, {index: 1, style: {textAlign:"center", marginBottom:"20px"} }, React.createElement("span", {onClick: this.myProfile}, React.createElement(Avatar, {size: "120"}, " ", this.props.user.name.slice(0,1), " "))), 
 					React.createElement("span", {onClick: this.myGroups}, "  ", React.createElement(MenuItem, {index: 2}, "My Groups"), " "), 
 	  				React.createElement("span", {onClick: this.editProfile}, " ", React.createElement(MenuItem, {index: 3}, "Edit Profile"), " "), 
 	  				React.createElement("span", {onClick: this.logout}, "  ", React.createElement(MenuItem, {index: 4}, "Log Out"), "  ")
@@ -45541,7 +45543,7 @@ var LeftBar = React.createClass({displayName: "LeftBar",
 					  		autoDetectWindowHeight: true, 
 					  		autoScrollBodyContent: true}, 
 					    React.createElement("div", null, 
-					    	React.createElement("div", {ref: "profileName", style: {fontSize:"30px", paddingBottom:"20px"}}, this.props.user.data.name), 
+					    	React.createElement("div", {ref: "profileName", style: {fontSize:"30px", paddingBottom:"20px"}}, this.props.user.name), 
 					    	React.createElement("div", {ref: "profileEmail", className: "prof-email"}, this.props.user.email), 
 					    	React.createElement("div", {ref: "profileClass", className: "prof-class"}, this.props.user.school)
 					    )
@@ -46382,10 +46384,19 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 var StudyGroups = React.createClass ({displayName: "StudyGroups",
 	componentDidMount:function() {
 		var state = StudyGroupStore.getState();
-		StudyGroupStore.fetchStudyGroups();	
+		console.log('----------strudygroup componentDidMount------------');
+		console.log('state: ', state);
+		// StudyGroupStore.fetchStudyGroups();	
+		console.log('---------------------------------------------------');	
 		
 	},
-	componentWillReceiveProps:function() {
+
+	componentWillUpdate:function() {
+		var state = StudyGroupStore.getState();
+		console.log('----------strudygroup componentWillReceiveProps------------');
+		console.log('state: ', state);
+		StudyGroupStore.fetchStudyGroups(state.user.accesstoken, state.user.client, state.user.uid);
+		console.log('-----------------------------------------------------------');	
 	},
 
 	render:function(){
@@ -46580,20 +46591,29 @@ var StudyGroupSource = {
 	//		- Type: which data 
 	fetchStudyGroups:function() {
 		return {
-		  remote:function(state) { 
+		  remote:function(state, accesstoken, client, uid) { 
 		    return new Promise(function (resolve, reject) {
-		      // simulate an asynchronous flow where data is fetched on
-		      // a remote server somewhere.
-		      axios.get(groupURL)
-			  	  .then(function (response) {
-			  	  	//data = response from server
-			  	  	var data = response.data;
-			  	    resolve (data.groups);
-			  	  })
-			  	  .catch(function (response) {
-			  	    console.log(response);
-			  	    reject ("StudyGroup API failed");
-		  	  });
+		      $.ajax({ url: '/groups',
+		        type: 'GET',
+		        headers: 	{
+		        						"access-token": accesstoken,
+		        						"client": client,
+		        						"uid": uid
+		        					},
+		        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+		        success: function(data, status, xhr) {
+		        	console.log('-----------fetch group SUCCESS-----------');
+		          console.log('data:' ,data.data);
+	          	console.log('---------------------------------');
+		        },
+		        error: function(response) {
+		        	console.log('-----------fetch group FAILED-----------');
+		          console.log('response:' ,response);
+		          reject('fetch group FAILED');
+		          console.log('---------------------------------');
+		        }
+
+		      })
 		      
 		    });
 		  },
@@ -46626,11 +46646,11 @@ var StudyGroupSource = {
 		        data: fata,
 		        success: function(data, status, xhr) {
 		        	console.log('-----------login SUCCESS-----------');
-		        	data.client = xhr.getResponseHeader('client');
-		        	data.accesstoken = xhr.getResponseHeader('access-token');
-		        	data.uid = xhr.getResponseHeader('uid');
-		          console.log('data:' ,data);
-	          	resolve(data);
+		        	data.data.client = xhr.getResponseHeader('client');
+		        	data.data.accesstoken = xhr.getResponseHeader('access-token');
+		        	data.data.uid = xhr.getResponseHeader('uid');
+		          console.log('data:' ,data.data);
+	          	resolve(data.data);
 	          	history.pushState(null, '/studygroupapp');
 	          	loginDialog.dismiss();
 	          	console.log('---------------------------------');
