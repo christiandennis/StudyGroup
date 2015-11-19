@@ -43,7 +43,8 @@ class CommentController < ApplicationController
 			@comment = Comment.new(comment_params)
 			
 			if @comment.save
-				@group.comments << @comment.id
+				@group.comments.append(@comment.id)
+				@group.save
 				render json: {'status' => 1, 'comment' => @comment}
 				return
 			end
