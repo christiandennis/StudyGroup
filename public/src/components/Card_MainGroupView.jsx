@@ -41,11 +41,11 @@ var MainGroupViewCard = React.createClass({
 
 	joinLeaveGroup(joinOrLeave) {
 		// some logic to determine whether to join or to leave
-		if (joinOrLeave === 'Dismiss') {
+		if (joinOrLeave.joinText === 'Dismiss') {
 			console.log('TO DO: delete group');
-		} else if (joinOrLeave === 'Leave') {
+		} else if (joinOrLeave.joinText === 'Leave') {
 			StudyGroupStore.joinOrLeaveGroup(this.props.studyGroup.id, 'remove');
-		} else {
+		} else if (joinOrLeave.joinText === 'Join'){
 			StudyGroupStore.joinOrLeaveGroup(this.props.studyGroup.id, 'add');
 		}
 	},
@@ -61,11 +61,15 @@ var MainGroupViewCard = React.createClass({
 		
 		// determine if user is host, can join, or can leave		
 		var joinText = 'Join';
-		// if (studyGroup.host === user.nickname) {
-		// 	joinText = 'Dismiss';
-		// } else if(user.nickname in studyGroup.going) {
+		if (studyGroup.host === user.nickname) {
+			joinText = 'Dismiss';
+		} 
+		//else if(user.nickname in studyGroup.going) {
 		// 	joinText = 'Leave';
 		// }
+		else if (studyGroup.guestlist === studyGroup.capacity) {
+			joinText = 'Full';
+		}
 
 		return (
 			<div key={studyGroup.id}>
@@ -120,7 +124,7 @@ var MainGroupViewCard = React.createClass({
 			                    </td>
 			                    <td colSpan="2">
 			                        <div style={{textAlign:"right"}} className="joinButtonContainer">
-			                            <RaisedButton onClick={this.joinLeaveGroup} label={joinText}/>
+			                            <RaisedButton onClick={this.joinLeaveGroup.bind(this, {joinText})} label={joinText}/>
 			                        </div>
 			                    </td>
 			                    <td>

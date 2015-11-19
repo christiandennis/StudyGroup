@@ -45695,13 +45695,15 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 
 	joinLeaveGroup:function(joinOrLeave) {
 		// some logic to determine whether to join or to leave
-		if (joinOrLeave === 'Dismiss') {
+		if (joinOrLeave.joinText === 'Dismiss') {
 			console.log('TO DO: delete group');
-		} else if (joinOrLeave === 'Leave') {
+		} else if (joinOrLeave.joinText === 'Leave') {
 			StudyGroupStore.joinOrLeaveGroup(this.props.studyGroup.id, 'remove');
-		} else {
+		} else if (joinOrLeave.joinText === 'Join'){
+			console.log('join');
 			StudyGroupStore.joinOrLeaveGroup(this.props.studyGroup.id, 'add');
 		}
+		console.log('join or leave', joinOrLeave);
 	},
 
 	render:function() {
@@ -45715,11 +45717,15 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 		
 		// determine if user is host, can join, or can leave		
 		var joinText = 'Join';
-		// if (studyGroup.host === user.nickname) {
-		// 	joinText = 'Dismiss';
-		// } else if(user.nickname in studyGroup.going) {
+		if (studyGroup.host === user.nickname) {
+			joinText = 'Dismiss';
+		} 
+		//else if(user.nickname in studyGroup.going) {
 		// 	joinText = 'Leave';
 		// }
+		else if (studyGroup.guestlist === studyGroup.capacity) {
+			joinText = 'Full';
+		}
 
 		return (
 			React.createElement("div", {key: studyGroup.id}, 
@@ -45774,7 +45780,7 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 			                    ), 
 			                    React.createElement("td", {colSpan: "2"}, 
 			                        React.createElement("div", {style: {textAlign:"right"}, className: "joinButtonContainer"}, 
-			                            React.createElement(RaisedButton, {onClick: this.joinLeaveGroup, label: joinText})
+			                            React.createElement(RaisedButton, {onClick: this.joinLeaveGroup.bind(this, {joinText:joinText}), label: joinText})
 			                        )
 			                    ), 
 			                    React.createElement("td", null, 
