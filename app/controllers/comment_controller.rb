@@ -66,6 +66,17 @@ class CommentController < ApplicationController
 		render json: {'status'=>1, 'errors'=>['Could not find comment with id']}
 	end
 
+	def commentsInGroup
+		@group = Group.where(:id => params[:id])
+		if @group.nil? || @group.length == 0
+			render json: {'status'=>-1,'errors'=>['Could not find group with given groupid']}, status:4000
+			return
+		end
+		@comment = Comment.where(:groupid => params[:id])
+		
+		render json: {'status'=>1 , 'comments'=> @comment}
+	end
+
 
 	private
 	  def comment_params
