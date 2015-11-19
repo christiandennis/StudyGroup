@@ -63,8 +63,8 @@ before_filter :configure_sign_up_params, only: [:create]
         error_messages << "Username is taken."
         render json: {'status'=>-1, 'errors'=>error_messages}, status:400
       else
-        # super
-        render json: {'a': User.find_by_nickname(nickname)}
+        super
+        # render json: {'a': User.find_by_nickname(nickname)}
       end
     end
 
