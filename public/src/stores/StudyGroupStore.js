@@ -40,9 +40,18 @@ class StudyGroupStore {
 		});
 		this.exportAsync(StudyGroupSource);
 	}
+	
+	compare(a,b) {
+		if (Number(a.date) < Number(b.date))
+		    return -1;
+		if (Number(a.date) > Number(b.date))
+		    return 1;
+		return 0;
+	}
 
 	handleFetchMyGroups(myGroups) {
 		this.myGroups = myGroups;
+		this.myGroups.sort(this.compare);
 	}
 
 	handleJoinOrLeaveGroup(myGroup) {
@@ -74,6 +83,8 @@ class StudyGroupStore {
 	        	break;
 	     	}
 	   	}
+
+	   	this.myGroups.sort(this.compare);
 	}
 
 	handleEditGroup(studyGroup) {
@@ -84,20 +95,17 @@ class StudyGroupStore {
 	     	}
 	   	}
 
-	   	function compare(a,b) {
-		  if (Number(a.date) < Number(b.date))
-		    return -1;
-		  if (Number(a.date) > Number(b.date))
-		    return 1;
-		  return 0;
-		}
-
-
-		this.studyGroups.sort(compare);
+		this.studyGroups.sort(this.compare);
 	}
 
-	handlePostNewGroup() {
-		
+	handlePostNewGroup(studyGroup) {
+		this.studyGroups.unshift(studyGroup);
+		this.studyGroups.sort(this.compare);
+
+		this.myGroups.unshift(studyGroup);
+		this.myGroups.sort(this.compare);
+
+		this.errorMessage = null;
 	}
 
 	handleSignUp() {
@@ -112,8 +120,10 @@ class StudyGroupStore {
 
 	handleUpdateStudyGroups(studyGroups){
 		this.studyGroups = studyGroups;
+		this.studyGroups.sort(this.compare);
 		this.errorMessage = null;
 	}
+
 	handleFetchStudyGroups() {
 	}
 
@@ -122,20 +132,6 @@ class StudyGroupStore {
 	}
 
 	handleRefreshGroups(studyGroup){
-
-		this.studyGroups.unshift(studyGroup);
-
-		function compare(a,b) {
-		  if (Number(a.date) < Number(b.date))
-		    return -1;
-		  if (Number(a.date) > Number(b.date))
-		    return 1;
-		  return 0;
-		}
-
-
-		this.studyGroups.sort(compare);
-		this.errorMessage = null;
 	}
 
 	handleUpdateUser(user){

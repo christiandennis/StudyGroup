@@ -13,8 +13,8 @@ class StudyGroupActions {
 		this.dispatch(errorMessage);
 	}
 
-	postNewGroup() {
-		this.dispatch();
+	postNewGroup(studyGroups) {
+		this.dispatch(studyGroups);
 	}
 
 	refreshGroups(studyGroups) {

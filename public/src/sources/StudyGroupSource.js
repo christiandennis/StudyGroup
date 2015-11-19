@@ -232,7 +232,7 @@ var StudyGroupSource = {
 		    return null;
 		  },
 		  
-		  success: StudyGroupActions.refreshGroups,
+		  success: StudyGroupActions.postNewGroup,
 		  error: StudyGroupActions.studyGroupsFailed
 		}
 	},

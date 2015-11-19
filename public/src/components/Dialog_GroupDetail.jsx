@@ -25,15 +25,55 @@ var GroupDetailDialog = React.createClass({
 
 	render() {
 		var studyGroup = this.props.studyGroup;
+		var user = this.props.user;
 		var d = new Date(0);
 		d.setUTCSeconds(Number(studyGroup.date));
 
 		var date = moment(d).format("ddd, MMM D").toString();
 		var time = moment(d).format("h:mm a").toString();
-		return (
-			<div>
-				<Dialog_EditGroup ref='editGroupDialog' studyGroup={studyGroup}/>
 
+		if (user.nickname === studyGroup.host) {
+			return (
+				<div>
+					<Dialog_EditGroup ref='editGroupDialog' studyGroup={studyGroup}/>
+
+					<Dialog ref="groupDetailDialog"
+							title="StudyGroup Detail"
+							style = {{textAlign:"center", color:"#0D47A1 !important"}} 
+							actions={[]}
+					  		autoDetectWindowHeight={true} 
+					  		autoScrollBodyContent={true}>
+					    <Paper zDepth={2}
+					    style = {{paddingTop:"20px"}}>
+					    	<div className="groupdesc-title">Class</div>
+					    	<div ref="groupdetailClass" className="groupdesc-subtitle">{studyGroup.subject}</div>
+
+					    	<div className="groupdesc-title">Title</div>
+					    	<div ref="groupdetailTitle" className="groupdesc-subtitle">{studyGroup.title}</div>
+
+					    	<div className="groupdesc-title">Host</div>
+					    	<div ref="groupdetailHost" className="groupdesc-subtitle">{studyGroup.host}</div>
+
+					    	<div className="groupdesc-title">Date</div>
+					    	<div ref="groupdetailDate" className="groupdesc-subtitle">{date}</div>
+
+					    	<div className="groupdesc-title">Time</div>
+					    	<div ref="groupdetailTime" className="groupdesc-subtitle">{time}</div>
+
+					    	<div className="groupdesc-title">Location</div>
+					    	<div ref="groupdetailLocation" className="groupdesc-subtitle">{studyGroup.location}</div>
+
+					    	<div className="groupdesc-title">Description</div>
+					    	<div ref="groupdetailDescription" className="groupdesc-subtitle">{studyGroup.description}</div>
+
+					    	<FlatButton label="Edit" onClick={this.openEditGroupDialog}/>
+
+					    </Paper>
+					</Dialog>
+				</div>
+			);
+		} else {
+			return (
 				<Dialog ref="groupDetailDialog"
 						title="StudyGroup Detail"
 						style = {{textAlign:"center", color:"#0D47A1 !important"}} 
@@ -62,13 +102,10 @@ var GroupDetailDialog = React.createClass({
 
 				    	<div className="groupdesc-title">Description</div>
 				    	<div ref="groupdetailDescription" className="groupdesc-subtitle">{studyGroup.description}</div>
-
-				    	<FlatButton label="Edit" onClick={this.openEditGroupDialog}/>
-
 				    </Paper>
-				</Dialog>
-			</div>
-		)
+				</Dialog>);
+		}
+		
 	}
 })
 

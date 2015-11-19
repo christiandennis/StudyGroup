@@ -45417,8 +45417,8 @@ function StudyGroupActions(){"use strict";}
 		this.dispatch(errorMessage);
 	}});
 
-	Object.defineProperty(StudyGroupActions.prototype,"postNewGroup",{writable:true,configurable:true,value:function() {"use strict";
-		this.dispatch();
+	Object.defineProperty(StudyGroupActions.prototype,"postNewGroup",{writable:true,configurable:true,value:function(studyGroups) {"use strict";
+		this.dispatch(studyGroups);
 	}});
 
 	Object.defineProperty(StudyGroupActions.prototype,"refreshGroups",{writable:true,configurable:true,value:function(studyGroups) {"use strict";
@@ -45552,9 +45552,9 @@ var TopBar = React.createClass({displayName: "TopBar",
 	mixins: [History],
 
 	dialogLogin:function() {
-		// this.refs.loginDialog.refs.loginDialog.show();
+		this.refs.loginDialog.refs.loginDialog.show();
 		// BYPASS LOGIN FOR TESTING
-		StudyGroupStore.fetchUser( 'papa@gmail.com', 'iopiopiop', this.history, this.refs.loginDialog);
+		// StudyGroupStore.fetchUser( 'papa@gmail.com', 'iopiopiop', this.history, this.refs.loginDialog);
 	},
 
 	dialogSignUp:function() {
@@ -45723,7 +45723,7 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 
 		return (
 			React.createElement("div", {key: studyGroup.id}, 
-				React.createElement(Dialog_GroupDetail, {ref: "groupDetailDialog", studyGroup: studyGroup}), 
+				React.createElement(Dialog_GroupDetail, {ref: "groupDetailDialog", studyGroup: studyGroup, user: user}), 
 
 		        React.createElement(Paper, {zDepth: 3, className: "card-container"}, 
 			        React.createElement("div", {className: "card studyGroup"}, 
@@ -46032,15 +46032,55 @@ var GroupDetailDialog = React.createClass({displayName: "GroupDetailDialog",
 
 	render:function() {
 		var studyGroup = this.props.studyGroup;
+		var user = this.props.user;
 		var d = new Date(0);
 		d.setUTCSeconds(Number(studyGroup.date));
 
 		var date = moment(d).format("ddd, MMM D").toString();
 		var time = moment(d).format("h:mm a").toString();
-		return (
-			React.createElement("div", null, 
-				React.createElement(Dialog_EditGroup, {ref: "editGroupDialog", studyGroup: studyGroup}), 
 
+		if (user.nickname === studyGroup.host) {
+			return (
+				React.createElement("div", null, 
+					React.createElement(Dialog_EditGroup, {ref: "editGroupDialog", studyGroup: studyGroup}), 
+
+					React.createElement(Dialog, {ref: "groupDetailDialog", 
+							title: "StudyGroup Detail", 
+							style: {textAlign:"center", color:"#0D47A1 !important"}, 
+							actions: [], 
+					  		autoDetectWindowHeight: true, 
+					  		autoScrollBodyContent: true}, 
+					    React.createElement(Paper, {zDepth: 2, 
+					    style: {paddingTop:"20px"}}, 
+					    	React.createElement("div", {className: "groupdesc-title"}, "Class"), 
+					    	React.createElement("div", {ref: "groupdetailClass", className: "groupdesc-subtitle"}, studyGroup.subject), 
+
+					    	React.createElement("div", {className: "groupdesc-title"}, "Title"), 
+					    	React.createElement("div", {ref: "groupdetailTitle", className: "groupdesc-subtitle"}, studyGroup.title), 
+
+					    	React.createElement("div", {className: "groupdesc-title"}, "Host"), 
+					    	React.createElement("div", {ref: "groupdetailHost", className: "groupdesc-subtitle"}, studyGroup.host), 
+
+					    	React.createElement("div", {className: "groupdesc-title"}, "Date"), 
+					    	React.createElement("div", {ref: "groupdetailDate", className: "groupdesc-subtitle"}, date), 
+
+					    	React.createElement("div", {className: "groupdesc-title"}, "Time"), 
+					    	React.createElement("div", {ref: "groupdetailTime", className: "groupdesc-subtitle"}, time), 
+
+					    	React.createElement("div", {className: "groupdesc-title"}, "Location"), 
+					    	React.createElement("div", {ref: "groupdetailLocation", className: "groupdesc-subtitle"}, studyGroup.location), 
+
+					    	React.createElement("div", {className: "groupdesc-title"}, "Description"), 
+					    	React.createElement("div", {ref: "groupdetailDescription", className: "groupdesc-subtitle"}, studyGroup.description), 
+
+					    	React.createElement(FlatButton, {label: "Edit", onClick: this.openEditGroupDialog})
+
+					    )
+					)
+				)
+			);
+		} else {
+			return (
 				React.createElement(Dialog, {ref: "groupDetailDialog", 
 						title: "StudyGroup Detail", 
 						style: {textAlign:"center", color:"#0D47A1 !important"}, 
@@ -46068,14 +46108,11 @@ var GroupDetailDialog = React.createClass({displayName: "GroupDetailDialog",
 				    	React.createElement("div", {ref: "groupdetailLocation", className: "groupdesc-subtitle"}, studyGroup.location), 
 
 				    	React.createElement("div", {className: "groupdesc-title"}, "Description"), 
-				    	React.createElement("div", {ref: "groupdetailDescription", className: "groupdesc-subtitle"}, studyGroup.description), 
-
-				    	React.createElement(FlatButton, {label: "Edit", onClick: this.openEditGroupDialog})
-
+				    	React.createElement("div", {ref: "groupdetailDescription", className: "groupdesc-subtitle"}, studyGroup.description)
 				    )
-				)
-			)
-		)
+				));
+		}
+		
 	}
 })
 
@@ -47152,7 +47189,7 @@ var StudyGroupSource = {
 		    return null;
 		  },
 		  
-		  success: StudyGroupActions.refreshGroups,
+		  success: StudyGroupActions.postNewGroup,
 		  error: StudyGroupActions.studyGroupsFailed
 		}
 	},
@@ -47400,9 +47437,18 @@ const moment = require('moment');
 		});
 		this.exportAsync(StudyGroupSource);
 	}
+	
+	Object.defineProperty(StudyGroupStore.prototype,"compare",{writable:true,configurable:true,value:function(a,b) {"use strict";
+		if (Number(a.date) < Number(b.date))
+		    return -1;
+		if (Number(a.date) > Number(b.date))
+		    return 1;
+		return 0;
+	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleFetchMyGroups",{writable:true,configurable:true,value:function(myGroups) {"use strict";
 		this.myGroups = myGroups;
+		this.myGroups.sort(this.compare);
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleJoinOrLeaveGroup",{writable:true,configurable:true,value:function(myGroup) {"use strict";
@@ -47434,6 +47480,8 @@ const moment = require('moment');
 	        	break;
 	     	}
 	   	}
+
+	   	this.myGroups.sort(this.compare);
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleEditGroup",{writable:true,configurable:true,value:function(studyGroup) {"use strict";
@@ -47444,20 +47492,17 @@ const moment = require('moment');
 	     	}
 	   	}
 
-	   	function compare(a,b) {
-		  if (Number(a.date) < Number(b.date))
-		    return -1;
-		  if (Number(a.date) > Number(b.date))
-		    return 1;
-		  return 0;
-		}
-
-
-		this.studyGroups.sort(compare);
+		this.studyGroups.sort(this.compare);
 	}});
 
-	Object.defineProperty(StudyGroupStore.prototype,"handlePostNewGroup",{writable:true,configurable:true,value:function() {"use strict";
-		
+	Object.defineProperty(StudyGroupStore.prototype,"handlePostNewGroup",{writable:true,configurable:true,value:function(studyGroup) {"use strict";
+		this.studyGroups.unshift(studyGroup);
+		this.studyGroups.sort(this.compare);
+
+		this.myGroups.unshift(studyGroup);
+		this.myGroups.sort(this.compare);
+
+		this.errorMessage = null;
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleSignUp",{writable:true,configurable:true,value:function() {"use strict";
@@ -47472,8 +47517,10 @@ const moment = require('moment');
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleUpdateStudyGroups",{writable:true,configurable:true,value:function(studyGroups){"use strict";
 		this.studyGroups = studyGroups;
+		this.studyGroups.sort(this.compare);
 		this.errorMessage = null;
 	}});
+
 	Object.defineProperty(StudyGroupStore.prototype,"handleFetchStudyGroups",{writable:true,configurable:true,value:function() {"use strict";
 	}});
 
@@ -47482,20 +47529,6 @@ const moment = require('moment');
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleRefreshGroups",{writable:true,configurable:true,value:function(studyGroup){"use strict";
-
-		this.studyGroups.unshift(studyGroup);
-
-		function compare(a,b) {
-		  if (Number(a.date) < Number(b.date))
-		    return -1;
-		  if (Number(a.date) > Number(b.date))
-		    return 1;
-		  return 0;
-		}
-
-
-		this.studyGroups.sort(compare);
-		this.errorMessage = null;
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleUpdateUser",{writable:true,configurable:true,value:function(user){"use strict";

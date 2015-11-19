@@ -69,7 +69,7 @@ var MainGroupViewCard = React.createClass({
 
 		return (
 			<div key={studyGroup.id}>
-				<Dialog_GroupDetail ref='groupDetailDialog' studyGroup={studyGroup}/>
+				<Dialog_GroupDetail ref='groupDetailDialog' studyGroup={studyGroup} user={user}/>
 
 		        <Paper zDepth={3} className="card-container">
 			        <div className="card studyGroup">
