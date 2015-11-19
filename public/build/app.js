@@ -45522,7 +45522,7 @@ var LeftBar = React.createClass({displayName: "LeftBar",
 
 	myGroups:function() {
 		console.log("trigger my-group-view here");
-		this.refs.myGroups.show();
+		this.refs.myGroupsDialog.show();
 	},
 
 	editProfile:function() {
@@ -45531,6 +45531,10 @@ var LeftBar = React.createClass({displayName: "LeftBar",
 
 	logout:function() {
 		StudyGroupStore.signOut(this.props.user.uid, this.props.user.accesstoken, this.props.user.client, this.history);
+	},
+
+	closeMygroupsDialog:function() {
+		this.refs.myGroupsDialog.dismiss();
 	},
 
 	render:function() {
@@ -45562,10 +45566,16 @@ var LeftBar = React.createClass({displayName: "LeftBar",
 				    )
 				), 
 
-				React.createElement(Dialog, {ref: "myGroups", 
+				React.createElement(Dialog, {ref: "myGroupsDialog", 
 						autoDetectWindowHeight: true, 
   						autoScrollBodyContent: true, 
-  						modal: true}, 
+  						modal: true, 
+  						actions: [
+								  React.createElement(FlatButton, {
+								    label: "Dismiss", 
+								    secondary: true, 
+								    onTouchTap: this.closeMygroupsDialog}),
+							  	]}, 
 					React.createElement(MyGroups, null)
 				)
 			)
@@ -46111,31 +46121,31 @@ var AllSimpleGroup = React.createClass({displayName: "AllSimpleGroup",
 	render:function() {
 			return 	(
 					React.createElement("div", null, 
-						  	this.props.myGroups.map(function(myGroup, i)  {
-								  	var date = moment(myGroup.date).format("ddd, MMM D").toString();
-								  	var time = moment(myGroup.date).format("h:mm a").toString();
-								    return (
-								    	React.createElement("div", {key: myGroup.id}, 
-						    		        React.createElement(Paper, null, 
-						    		        	React.createElement("div", {className: "groupdesc-title"}, "Class"), 
-						    		        	React.createElement("div", {className: "groupdesc-subtitle"}, myGroup.subject), 
+					  	this.props.myGroups.map(function(myGroup, i)  {
+							  	var date = moment(myGroup.date).format("ddd, MMM D").toString();
+							  	var time = moment(myGroup.date).format("h:mm a").toString();
+							    return (
+							    	React.createElement("div", {key: myGroup.id}, 
+					    		        React.createElement(Paper, null, 
+					    		        	React.createElement("div", {className: "groupdesc-title"}, "Class"), 
+					    		        	React.createElement("div", {className: "groupdesc-subtitle"}, myGroup.subject), 
 
-						    		        	React.createElement("div", {className: "groupdesc-title"}, "Title"), 
-						    		        	React.createElement("div", {className: "groupdesc-subtitle"}, myGroup.title), 
+					    		        	React.createElement("div", {className: "groupdesc-title"}, "Title"), 
+					    		        	React.createElement("div", {className: "groupdesc-subtitle"}, myGroup.title), 
 
-						    		        	React.createElement("div", {className: "groupdesc-title"}, "Time"), 
-						    		        	React.createElement("div", {className: "groupdesc-subtitle"}, time), 
+					    		        	React.createElement("div", {className: "groupdesc-title"}, "Time"), 
+					    		        	React.createElement("div", {className: "groupdesc-subtitle"}, time), 
 
-						    		        	React.createElement("div", {className: "groupdesc-title"}, "Date"), 
-						    		        	React.createElement("div", {className: "groupdesc-subtitle"}, date), 
+					    		        	React.createElement("div", {className: "groupdesc-title"}, "Date"), 
+					    		        	React.createElement("div", {className: "groupdesc-subtitle"}, date), 
 
-						    		        	React.createElement("div", {className: "groupdesc-title"}, "Location"), 
-						    		        	React.createElement("div", {className: "groupdesc-subtitle"}, myGroup.location)
-						    		        )
-								    	)
-								    );
-							  	})
-						  	
+					    		        	React.createElement("div", {className: "groupdesc-title"}, "Location"), 
+					    		        	React.createElement("div", {className: "groupdesc-subtitle"}, myGroup.location)
+					    		        )
+							    	)
+							    );
+						  	})
+					  	
 					)
 					)
 	}

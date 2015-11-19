@@ -62,7 +62,7 @@ var LeftBar = React.createClass({
 
 	myGroups() {
 		console.log("trigger my-group-view here");
-		this.refs.myGroups.show();
+		this.refs.myGroupsDialog.show();
 	},
 
 	editProfile() {
@@ -71,6 +71,10 @@ var LeftBar = React.createClass({
 
 	logout() {
 		StudyGroupStore.signOut(this.props.user.uid, this.props.user.accesstoken, this.props.user.client, this.history);
+	},
+
+	closeMygroupsDialog() {
+		this.refs.myGroupsDialog.dismiss();
 	},
 
 	render() {
@@ -102,10 +106,16 @@ var LeftBar = React.createClass({
 				    </div>
 				</Dialog>
 
-				<Dialog ref="myGroups"
+				<Dialog ref="myGroupsDialog"
 						autoDetectWindowHeight={true}
   						autoScrollBodyContent={true}
-  						modal={true}>
+  						modal={true}
+  						actions={[
+								  <FlatButton
+								    label="Dismiss"
+								    secondary={true}
+								    onTouchTap={this.closeMygroupsDialog} />,
+							  	]}>
 					<MyGroups/>
 				</Dialog>
 			</div>
