@@ -40,9 +40,6 @@ var NewGroupDialog = React.createClass({
 		date_str = date_str.slice(0,15);
 		date_str = date_str + time_str;
 
-		console.log("THIS IS DATE_STR")
-		console.log(date_str)
-
 		if (this.refs.createGroupPrivacy.isChecked()){
 			privacy = 1;
 		}
