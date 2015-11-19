@@ -43,7 +43,7 @@ var LoginDialog = React.createClass({
 		var successSnackbar = this.refs.editGroupSuccessSnackbar;
 
 		if (title.getValue() && subject.getValue() && description.getValue() && location.getValue() && capacity.getValue() && date.getDate() && time.getTime()) {
-			StudyGroupStore.editGroup(id, title, subject, description, date_str, location, capacity, editGroupDialog, failedSnackbar, successSnackbar);
+			StudyGroupStore.editGroup(id, title, subject, description, moment(date_str).unix(), location, capacity, editGroupDialog, failedSnackbar, successSnackbar);
 		} else {
 			if (!title.getValue()){
 				title.setErrorText("This field is required");

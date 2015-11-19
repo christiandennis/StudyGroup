@@ -25,8 +25,11 @@ var GroupDetailDialog = React.createClass({
 
 	render() {
 		var studyGroup = this.props.studyGroup;
-		var date = moment(studyGroup.date).format("ddd, MMM D").toString();
-		var time = moment(studyGroup.date).format("h:mm a").toString();
+		var d = new Date(0);
+		d.setUTCSeconds(Number(studyGroup.date));
+
+		var date = moment(d).format("ddd, MMM D").toString();
+		var time = moment(d).format("h:mm a").toString();
 		return (
 			<div>
 				<Dialog_EditGroup ref='editGroupDialog' studyGroup={studyGroup}/>

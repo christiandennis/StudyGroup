@@ -45814,7 +45814,7 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 		var successSnackbar = this.refs.editGroupSuccessSnackbar;
 
 		if (title.getValue() && subject.getValue() && description.getValue() && location.getValue() && capacity.getValue() && date.getDate() && time.getTime()) {
-			StudyGroupStore.editGroup(id, title, subject, description, date_str, location, capacity, editGroupDialog, failedSnackbar, successSnackbar);
+			StudyGroupStore.editGroup(id, title, subject, description, moment(date_str).unix(), location, capacity, editGroupDialog, failedSnackbar, successSnackbar);
 		} else {
 			if (!title.getValue()){
 				title.setErrorText("This field is required");
@@ -46004,8 +46004,11 @@ var GroupDetailDialog = React.createClass({displayName: "GroupDetailDialog",
 
 	render:function() {
 		var studyGroup = this.props.studyGroup;
-		var date = moment(studyGroup.date).format("ddd, MMM D").toString();
-		var time = moment(studyGroup.date).format("h:mm a").toString();
+		var d = new Date(0);
+		d.setUTCSeconds(Number(studyGroup.date));
+
+		var date = moment(d).format("ddd, MMM D").toString();
+		var time = moment(d).format("h:mm a").toString();
 		return (
 			React.createElement("div", null, 
 				React.createElement(Dialog_EditGroup, {ref: "editGroupDialog", studyGroup: studyGroup}), 
@@ -47367,11 +47370,6 @@ const moment = require('moment');
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleRefreshGroups",{writable:true,configurable:true,value:function(studyGroup){"use strict";
-		// this.studyGroups.unshift(studyGroup);
-		// console.log("THIS IS DATE IN EPOCH")
-		// var time = studyGroup.date.toString();
-		// time = moment(time).unix();
-		// console.log(time);
 
 		this.studyGroups.unshift(studyGroup);
 
