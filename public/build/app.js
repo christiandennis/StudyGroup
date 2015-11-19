@@ -45548,9 +45548,9 @@ var TopBar = React.createClass({displayName: "TopBar",
 	mixins: [History],
 
 	dialogLogin:function() {
-		this.refs.loginDialog.refs.loginDialog.show();
+		// this.refs.loginDialog.refs.loginDialog.show();
 		// BYPASS LOGIN FOR TESTING
-		// StudyGroupStore.fetchUser( 'papa@gmail.com', 'iopiopiop', this.history, this.refs.loginDialog);
+		StudyGroupStore.fetchUser( 'papa@gmail.com', 'iopiopiop', this.history, this.refs.loginDialog);
 	},
 
 	dialogSignUp:function() {
@@ -45675,7 +45675,7 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 	},
 
 	calculateTimeColor:function(card_date) {
-		var card_epoch = moment(card_date).unix();
+		var card_epoch = Number(card_date);
 		var curr_time = new Date().toString();
 		var curr_epoch = moment(curr_time).unix();
 		var time_diff = card_epoch - curr_epoch;
@@ -45691,8 +45691,10 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 
 	render:function() {
 		var studyGroup = this.props.studyGroup;
-		var date = moment(studyGroup.date).format("ddd, MMM D").toString();
-		var time = moment(studyGroup.date).format("h:mm a").toString();
+		var d = new Date(0);
+		d.setUTCSeconds(Number(studyGroup.date));
+		var date = moment(d).format("ddd, MMM D").toString();
+		var time = moment(d).format("h:mm a").toString();
 		var color = this.calculateTimeColor(studyGroup.date);
 		return (
 			React.createElement("div", {key: studyGroup.id}, 
@@ -46240,6 +46242,8 @@ const DatePicker = require('material-ui/lib/date-picker/date-picker');
 const TimePicker = require('material-ui/lib/time-picker/time-picker');
 const Checkbox = require('material-ui/lib/checkbox');
 const Snackbar = require('material-ui/lib/snackbar');
+const moment = require('moment');
+
 
 var NewGroupDialog = React.createClass({displayName: "NewGroupDialog",
 	mixins: [History],
@@ -46276,7 +46280,7 @@ var NewGroupDialog = React.createClass({displayName: "NewGroupDialog",
 		var successSnackbar = this.refs.createGroupSuccessSnackbar;
 
 		if (title.getValue() && subject.getValue() && description.getValue() && location.getValue() && capacity.getValue() && date.getDate()) {
-			StudyGroupStore.postNewGroup(title, subject, description, date_str, location, capacity, privacy, newGroupDialog, failedSnackbar, successSnackbar);
+			StudyGroupStore.postNewGroup(title, subject, description, moment(date_str).unix(), location, capacity, privacy, newGroupDialog, failedSnackbar, successSnackbar);
 		} else {
 
 			if (!title.getValue()){
@@ -46438,7 +46442,7 @@ var NewGroupDialog = React.createClass({displayName: "NewGroupDialog",
 
 module.exports = NewGroupDialog;
 
-},{"../stores/StudyGroupStore":385,"material-ui/lib/checkbox":66,"material-ui/lib/date-picker/date-picker":74,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/snackbar":101,"material-ui/lib/text-field":121,"material-ui/lib/time-picker/time-picker":130,"react":367,"react-dom":161,"react-router":181}],380:[function(require,module,exports){
+},{"../stores/StudyGroupStore":385,"material-ui/lib/checkbox":66,"material-ui/lib/date-picker/date-picker":74,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/snackbar":101,"material-ui/lib/text-field":121,"material-ui/lib/time-picker/time-picker":130,"moment":155,"react":367,"react-dom":161,"react-router":181}],380:[function(require,module,exports){
 // React, react-reouter, alt
 var React = require('react');
 var render = require('react-dom').render;
@@ -47288,6 +47292,8 @@ var MyGroupsActions = require('../actions/MyGroupsActions');
 var StudyGroupSource = require('../sources/StudyGroupSource');
 var UserActions = require('../actions/UserActions');
 
+const moment = require('moment');
+
 
 	function StudyGroupStore() {"use strict";
 		this.user = null;
@@ -47350,7 +47356,7 @@ var UserActions = require('../actions/UserActions');
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleUpdateStudyGroups",{writable:true,configurable:true,value:function(studyGroups){"use strict";
-		this.studyGroups = studyGroups.reverse();
+		this.studyGroups = studyGroups;
 		this.errorMessage = null;
 	}});
 	Object.defineProperty(StudyGroupStore.prototype,"handleFetchStudyGroups",{writable:true,configurable:true,value:function() {"use strict";
@@ -47361,7 +47367,24 @@ var UserActions = require('../actions/UserActions');
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleRefreshGroups",{writable:true,configurable:true,value:function(studyGroup){"use strict";
+		// this.studyGroups.unshift(studyGroup);
+		// console.log("THIS IS DATE IN EPOCH")
+		// var time = studyGroup.date.toString();
+		// time = moment(time).unix();
+		// console.log(time);
+
 		this.studyGroups.unshift(studyGroup);
+
+		function compare(a,b) {
+		  if (Number(a.date) < Number(b.date))
+		    return -1;
+		  if (Number(a.date) > Number(b.date))
+		    return 1;
+		  return 0;
+		}
+
+
+		this.studyGroups.sort(compare);
 		this.errorMessage = null;
 	}});
 
@@ -47393,4 +47416,4 @@ var UserActions = require('../actions/UserActions');
 
 module.exports = alt.createStore(StudyGroupStore, 'StudyGroupStore');
 
-},{"../actions/MyGroupsActions":369,"../actions/StudyGroupActions":370,"../actions/UserActions":371,"../alt":372,"../sources/StudyGroupSource":384}]},{},[368]);
+},{"../actions/MyGroupsActions":369,"../actions/StudyGroupActions":370,"../actions/UserActions":371,"../alt":372,"../sources/StudyGroupSource":384,"moment":155}]},{},[368]);
