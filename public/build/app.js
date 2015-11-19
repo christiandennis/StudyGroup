@@ -46810,15 +46810,6 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 				React.createElement("div", null, this.props.errorMessage)
 			);
 		}
-		if (StudyGroupStore.isLoading()) {
-			var left = window.document.documentElement.clientWidth/2 - 25;
-			var top = window.document.documentElement.clientHeight/2 - 25;
-			return(
-				React.createElement("div", null, 
-					React.createElement(RefreshIndicator, {size: 50, left: left, top: top, status: "loading"})
-				)
-			);
-		}
 
 		if (this.props.studyGroups){
 			return (
