@@ -44,7 +44,7 @@ class CommentController < ApplicationController
 			
 			if @comment.save
 				@group.comments << @comment.id
-				render json: {'status' => 1, 'comment' => @comment, 'group' => @group}
+				render json: {'status' => 1, 'comment' => @comment}
 				return
 			end
 			render json: {'status'=> -1, 'errors' => error_messages}, status: 400
