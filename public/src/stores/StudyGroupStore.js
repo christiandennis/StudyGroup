@@ -79,11 +79,6 @@ class StudyGroupStore {
 	}
 
 	handleRefreshGroups(studyGroup){
-		// this.studyGroups.unshift(studyGroup);
-		// console.log("THIS IS DATE IN EPOCH")
-		// var time = studyGroup.date.toString();
-		// time = moment(time).unix();
-		// console.log(time);
 
 		this.studyGroups.unshift(studyGroup);
 
