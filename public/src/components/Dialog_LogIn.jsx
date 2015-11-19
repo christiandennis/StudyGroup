@@ -9,6 +9,7 @@ var StudyGroupStore = require('../stores/StudyGroupStore');
 const TextField = require('material-ui/lib/text-field');
 const Dialog = require('material-ui/lib/dialog');
 const FlatButton = require('material-ui/lib/flat-button');
+const Snackbar = require('material-ui/lib/snackbar');
 
 var LoginDialog = React.createClass({
 	mixins: [History],
@@ -18,7 +19,7 @@ var LoginDialog = React.createClass({
 		console.log("this.props", this.props);
 		var user = this.refs.email.getValue();
 		var password = this.refs.password.getValue();
-		StudyGroupStore.fetchUser( user, password, this.history, this.refs.loginDialog);
+		StudyGroupStore.fetchUser( user, password, this.history, this.refs.loginDialog, this.refs.loginFailedSnackbar);
 	},
 
 	cancelLogIn() {
@@ -27,33 +28,39 @@ var LoginDialog = React.createClass({
 
 	render() {
 		return (
-			<Dialog ref="loginDialog" 
-					title="Log In" 
-					actions={[
-						  <FlatButton
-						    label="Cancel"
-						    secondary={true}
-						    onTouchTap={this.cancelLogIn} />,
-						  <FlatButton
-						    label="Log In"
-						    primary={true}
-						    onTouchTap={this.submitLogIn} />]}
-			  		autoDetectWindowHeight={true} 
-			  		autoScrollBodyContent={true}>
+			<div>
+				<Dialog ref="loginDialog" 
+						title="Log In" 
+						actions={[
+							  <FlatButton
+							    label="Cancel"
+							    secondary={true}
+							    onTouchTap={this.cancelLogIn} />,
+							  <FlatButton
+							    label="Log In"
+							    primary={true}
+							    onTouchTap={this.submitLogIn} />]}
+				  		autoDetectWindowHeight={true} 
+				  		autoScrollBodyContent={true}>
 
-			    <TextField
-			      onEnterKeyDown = {this.submitLogIn}
-			      ref= "email"
-			      hintText="christiandennis@studygroup.com"
-			      floatingLabelText="Email" /><br />
-			    <TextField
-			      onEnterKeyDown = {this.submitLogIn}
-			      ref= "password"
-			      hintText="Password"
-			      floatingLabelText="Password" 
-			      type="password"/><br />
+				    <TextField
+				      onEnterKeyDown = {this.submitLogIn}
+				      ref= "email"
+				      hintText="christiandennis@studygroup.com"
+				      floatingLabelText="Email" /><br />
+				    <TextField
+				      onEnterKeyDown = {this.submitLogIn}
+				      ref= "password"
+				      hintText="Password"
+				      floatingLabelText="Password" 
+				      type="password"/><br />
+				</Dialog>
 
-			</Dialog>
+	    		<Snackbar
+	           		ref = "loginFailedSnackbar"
+	             	message="Invalid login credentials"
+	             	autoHideDuration="5000"/>
+            </div>
 		)
 	}
 })
