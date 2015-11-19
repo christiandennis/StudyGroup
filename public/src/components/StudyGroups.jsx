@@ -261,18 +261,11 @@ var AllStudyGroups = React.createClass({
 
 					  	if (color_chosen_int == 1) {
 					  		color_chosen = "colorBarGreen";
-					  	}
-
-					  	else if (color_chosen_int == 2) {
+					  	} else if (color_chosen_int == 2) {
 					  		color_chosen = "colorBarYellow";
-					  	}
-
-					  	else {
+					  	} else {
 					  		color_chosen = "colorBarRed";
 					  	}
-
-					  	console.log("color chosen:")
-					  	console.log(color_chosen)
 					    return (
 					    	<div key={studyGroup.id}>
 			    		        <Paper zDepth={3} className="card-container">

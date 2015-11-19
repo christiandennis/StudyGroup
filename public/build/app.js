@@ -46621,9 +46621,6 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 					  	else {
 					  		color_chosen = "colorBarRed";
 					  	}
-
-					  	console.log("color chosen:")
-					  	console.log(color_chosen)
 					    return (
 					    	React.createElement("div", {key: studyGroup.id}, 
 			    		        React.createElement(Paper, {zDepth: 3, className: "card-container"}, 
@@ -46818,7 +46815,7 @@ var StudyGroupSource = {
 	          	resolve(data.data);
 	          	// history.pushState(null, '/studygroupapp');
 	          	setTimeout(function() {history.pushState(null, '/studygroupapp');}, 10);
-	          	
+	          	// loginDialog.dismiss();
 	          	console.log('**************END LOGIN**************');
 		        },
 		        error: function(response) {
