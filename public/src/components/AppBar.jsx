@@ -9,6 +9,7 @@ var AltContainer = require('alt/AltContainer');
 // import components
 var LandingPage = require('./LandingPage.jsx');
 var MyGroups = require('./MyGroups.jsx');
+var Dialog_LogIn = require('./Dialog_LogIn.jsx');
 
 var ReactTestUtils = require('react-addons-test-utils');
 
@@ -128,20 +129,9 @@ var TopBar = React.createClass({
 	mixins: [History],
 
 	dialogLogin() {
-		// this.refs.loginDialog.show();
+		this.refs.loginDialog.refs.loginDialog.show();
 		// BYPASS LOGIN FOR TESTING
-		StudyGroupStore.fetchUser( 'papa@gmail.com', 'iopiopiop', this.history, this.refs.loginDialog);
-	},
-
-	cancelLogIn() {
-		this.refs.loginDialog.dismiss();
-	},
-
-	submitLogIn() {
-		console.log("login here");
-		var user = this.refs.email.getValue();
-		var password = this.refs.password.getValue();
-		StudyGroupStore.fetchUser( user, password, this.history, this.refs.loginDialog);
+		// StudyGroupStore.fetchUser( 'papa@gmail.com', 'iopiopiop', this.history, this.refs.loginDialog);
 	},
 
 	dialogSignUp() {
@@ -467,33 +457,7 @@ var TopBar = React.createClass({
 
 				<LandingPage dialogSignUp={this.dialogSignUp}/>
 
-				<Dialog ref="loginDialog" 
-						title="Log In" 
-						actions={[
-							  <FlatButton
-							    label="Cancel"
-							    secondary={true}
-							    onTouchTap={this.cancelLogIn} />,
-							  <FlatButton
-							    label="Log In"
-							    primary={true}
-							    onTouchTap={this.submitLogIn} />]}
-				  		autoDetectWindowHeight={true} 
-				  		autoScrollBodyContent={true}>
-				    <div>
-				    	<TextField
-				    	  onEnterKeyDown = {this.submitLogIn}
-				    	  ref= "email"
-				    	  hintText="christiandennis@studygroup.com"
-				    	  floatingLabelText="Email" /><br />
-				    	<TextField
-				    	  onEnterKeyDown = {this.submitLogIn}
-				    	  ref= "password"
-				    	  hintText="Password"
-				    	  floatingLabelText="Password" 
-				    	  type="password"/><br />
-				    </div>
-				</Dialog>
+				<Dialog_LogIn ref='loginDialog'/>
 
 				<Dialog ref="signUpDialog" 
 						title="Sign Up" 

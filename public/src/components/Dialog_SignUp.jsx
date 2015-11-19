@@ -10,7 +10,7 @@ const TextField = require('material-ui/lib/text-field');
 const Dialog = require('material-ui/lib/dialog');
 const FlatButton = require('material-ui/lib/flat-button');
 
-var LoginDialog = React.createClass({
+var SignUpDialog = React.createClass({
 	mixins: [History],
 
 	submitLogIn() {
