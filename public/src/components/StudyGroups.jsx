@@ -99,27 +99,7 @@ var AllStudyGroups = React.createClass({
 		var newGroupDialog = this.refs.newGroupDialog;
 		var failedSnackbar = this.refs.createGroupFailedSnackbar;
 		var successSnackbar = this.refs.createGroupSuccessSnackbar;
-
 		StudyGroupStore.postNewGroup();
-
-		// axios.post(URL + "/groups/edit", {
-		// 	"title": title,
-		// 	"subject": subject,
-		// 	"description": description,
-		// 	"date": date,
-		// 	"location": location,
-		// 	"capacity": capacity,
-		// 	"host": host
-		// }).then(function(response) {
-		// 	console.log("post new group SUCCEED");
-		// 	StudyGroupStore.fetchStudyGroups();	
-		// 	successSnackbar.show();
-		// 	newGroupDialog.dismiss();
-		// }).catch(function(response) {
-		// 	failedSnackbar.show();
-		// 	console.log("post new group FAILED");
-		// });
-
 	},
 
 	joinGroup() {

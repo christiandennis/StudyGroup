@@ -46168,27 +46168,7 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 		var newGroupDialog = this.refs.newGroupDialog;
 		var failedSnackbar = this.refs.createGroupFailedSnackbar;
 		var successSnackbar = this.refs.createGroupSuccessSnackbar;
-
 		StudyGroupStore.postNewGroup();
-
-		// axios.post(URL + "/groups/edit", {
-		// 	"title": title,
-		// 	"subject": subject,
-		// 	"description": description,
-		// 	"date": date,
-		// 	"location": location,
-		// 	"capacity": capacity,
-		// 	"host": host
-		// }).then(function(response) {
-		// 	console.log("post new group SUCCEED");
-		// 	StudyGroupStore.fetchStudyGroups();	
-		// 	successSnackbar.show();
-		// 	newGroupDialog.dismiss();
-		// }).catch(function(response) {
-		// 	failedSnackbar.show();
-		// 	console.log("post new group FAILED");
-		// });
-
 	},
 
 	joinGroup:function() {
@@ -46417,23 +46397,177 @@ module.exports = StudyGroups;
 var StudyGroupActions = require('../actions/StudyGroupActions');
 var UserActions = require('../actions/UserActions');
 
-var axios = require('axios');
-
 const URL = "http://localhost:3000"
 const userURL = 'https://sheetsu.com/apis/72092a94';
-// const groupURL = 'https://sheetsu.com/apis/5964fc68';
 const groupURL = URL + "/groups";
 
 
-var mockData = [
-	{id: 0, name: "Theo"},
-	{id: 1, name: "Dennis"},
-	{id: 2, name: "Dion"}
-];
-
 var StudyGroupSource = {
+	// ****************************************************************************
+	// ****************************************************************************
+	// ******************************* ATHENTICATIONS *****************************
+	// ****************************************************************************
+	// ****************************************************************************
+
+	// ==================================================
+	// This function handles signup
+	// simply make a post request to the server
+	// ==================================================
+	signUp:function() {
+		return {
+		  remote:function(state, fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog) { 
+		    return new Promise(function (resolve, reject) {
+		      	console.log('--------------SIGN UP--------------');
+		      	var signUpData = {
+		      		"email": email.getValue(),
+		      		"password": password.getValue(),
+		      		"password_confirmation": confirmPassword.getValue(),
+		      		"school": schoolSignUp.getValue(),
+          		"name": fullnameSignUp.getValue(),
+          		"nickname": usernameSignUp.getValue()
+		      	} 	
+		      	$.ajax({ url: '/auth',
+		      	  type: 'POST',
+		      	  beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+		      	  data: signUpData,
+		      	  success: function(response) {
+	      	  		console.log('__SUCCESS--');
+	      	  	  console.log('response:' ,response);
+	      	  	  signUpDialog.dismiss();
+	      	  	  console.log('**************END SIGN UP**************');
+		      		},
+		      	  error: function(response) {
+		      	  	console.log('__FAILED__');
+	      	  	  console.log('response:' ,response);
+	      	  	  console.log('**************END SIGN UP**************');
+		      	  }
+		      })
+		    });
+		  },
+
+		  local:function() {
+		    // Never check locally, always fetch remotely.
+		    return null;
+		  },
+		}
+	},
+
+	// ==================================================
+	// Handles user sign in
+	// stores client, access-token, uid in the Store
+	// ==================================================
+	fetchUser:function() {
+		return {
+		  remote:function(state,email,password, history, loginDialog) { 
+		    return new Promise(function (resolve, reject) {
+		      console.log('--------------LOGIN--------------');
+		      var fata = {
+		      		"email": email,
+		      		"password": password,
+		      		"password_confirmation": password
+		      }
+		      $.ajax({ url: '/auth/sign_in',
+		        type: 'POST',
+		        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+		        data: fata,
+		        success: function(data, status, xhr) {
+		        	console.log('__SUCCESS__');
+		        	data.data.client = xhr.getResponseHeader('client');
+		        	data.data.accesstoken = xhr.getResponseHeader('access-token');
+		        	data.data.uid = xhr.getResponseHeader('uid');
+		          console.log('data' ,data.data);
+	          	resolve(data.data);
+	          	// history.pushState(null, '/studygroupapp');
+	          	setTimeout(function() {history.pushState(null, '/studygroupapp');}, 10);
+	          	loginDialog.dismiss();
+	          	console.log('**************END LOGIN**************');
+		        },
+		        error: function(response) {
+		        	console.log('__FAILED__');
+		          console.log('response' ,response);
+		          reject('login FAILED');
+		          console.log('**************END LOGIN**************');
+		        }
+		      });
+		    });
+		  },
+
+		  local:function() {
+		    // Never check locally, always fetch remotely.
+		    return null;
+		  },
+
+		  success: UserActions.updateUser,
+		  error: UserActions.userFailed,
+		  loading: UserActions.fetchUser
+		}
+	},
+
+	// ==================================================
+	// Handles sign out
+	// It makes a sign out request to the server
+	// and redirect to homepage
+	// requires authentication
+	// ==================================================
+	signOut:function() {
+		return {
+		  remote:function(state, uid, accesstoken, client, history) { 
+		    return new Promise(function (resolve, reject) {
+		    		console.log('--------------SIGN OUT--------------');
+		      	$.ajax({ url: '/auth/sign_out',
+      	      type: 'DELETE',
+      	      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+      	      headers: 	{
+		      	      				"access-token": state.user.accesstoken,
+		      	      				"client": state.user.client,
+		      	      				"uid": state.user.uid
+      	      					},
+      	      success: function(response) {
+      	      	console.log('__SUCCESS__');
+	      	  	  console.log('response:' ,response);
+      	        window.location.href = URL;
+      	        // history.pushState(null, '/');
+      	        console.log('**************END SIGN OUT**************');
+      	      },
+      	      error: function(response) {
+      	      	console.log('__FAILED__');
+      	      	// User was not found or was not logged in.
+	      	  	  console.log('response:' ,response.responseJSON);
+	      	  	  if (response.responseJSON.errors[0] === 'User was not found or was not logged in.') {
+	      	  	  	window.location.href = URL;
+	      	  	  }
+	      	  	  console.log('**************END SIGN OUT**************');
+      	      }
+      	    });
+		    });
+		  },
+
+		  local:function() {
+		    // Never check locally, always fetch remotely.
+		    return null;
+		  },
+		  success: UserActions.signOut,
+		  error: UserActions.signOut,
+		  loading: UserActions.signOut
+		}
+	},
+	// ****************************************************************************
+	// ****************************************************************************
+	// ****************************************************************************
+	// ****************************************************************************
+	// ****************************************************************************
+
+	// ****************************************************************************
+	// ****************************************************************************
+	// ******************************** STUDY GROUPS ******************************
+	// ****************************************************************************
+	// ****************************************************************************
+
+	// ==================================================
 	// This function handles posting new groups
 	// Takes in title, subject, description, date, location, capacity, host, school, privacy, uid, accesstoken, client, history, newGroupDialog
+	// requires authentication
+	// ==================================================
 	postNewGroup:function() {
 		console.log("postNewGroup here");
 		return {
@@ -46490,117 +46624,24 @@ var StudyGroupSource = {
 		  loading: StudyGroupActions.fetchStudyGroups
 		}
 	},
-
-	// This function handles sign out
-	// It makes a sign out request to the server
-	// and redirect to homepage
-	signOut:function() {
-		return {
-		  remote:function(state, uid, accesstoken, client, history) { 
-		    return new Promise(function (resolve, reject) {
-		    		console.log('--------------SIGN OUT--------------');
-		      	$.ajax({ url: '/auth/sign_out',
-      	      type: 'DELETE',
-      	      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-      	      headers: 	{
-		      	      				"access-token": state.user.accesstoken,
-		      	      				"client": state.user.client,
-		      	      				"uid": state.user.uid
-      	      					},
-      	      success: function(response) {
-      	      	console.log('__SUCCESS__');
-	      	  	  console.log('response:' ,response);
-      	        window.location.href = URL;
-      	        // history.pushState(null, '/');
-      	        console.log('**************END SIGN OUT**************');
-      	      },
-      	      error: function(response) {
-      	      	console.log('__FAILED__');
-      	      	// User was not found or was not logged in.
-	      	  	  console.log('response:' ,response.responseJSON);
-	      	  	  if (response.responseJSON.errors[0] === 'User was not found or was not logged in.') {
-	      	  	  	window.location.href = URL;
-	      	  	  }
-	      	  	  console.log('**************END SIGN OUT**************');
-      	      }
-      	    });
-		    });
-		  },
-
-		  local:function() {
-		    // Never check locally, always fetch remotely.
-		    return null;
-		  },
-		  success: UserActions.signOut,
-		  error: UserActions.signOut,
-		  loading: UserActions.signOut
-		}
-	},
-
-	// This function handles signup
-	signUp:function() {
-		return {
-		  remote:function(state, fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog) { 
-		    return new Promise(function (resolve, reject) {
-		      	console.log('--------------SIGN UP--------------');
-		      	var signUpData = {
-		      		"email": email.getValue(),
-		      		"password": password.getValue(),
-		      		"password_confirmation": confirmPassword.getValue(),
-		      		"school": schoolSignUp.getValue(),
-          		"name": fullnameSignUp.getValue(),
-          		"nickname": usernameSignUp.getValue()
-		      	} 	
-		      	$.ajax({ url: '/auth',
-		      	  type: 'POST',
-		      	  beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-		      	  data: signUpData,
-		      	  success: function(response) {
-	      	  		console.log('__SUCCESS--');
-	      	  	  console.log('response:' ,response);
-	      	  	  signUpDialog.dismiss();
-	      	  	  console.log('**************END SIGN UP**************');
-		      		},
-		      	  error: function(response) {
-		      	  	console.log('__FAILED__');
-	      	  	  console.log('response:' ,response);
-	      	  	  console.log('**************END SIGN UP**************');
-		      	  }
-		      })
-		    });
-		  },
-
-		  local:function() {
-		    // Never check locally, always fetch remotely.
-		    return null;
-		  },
-		}
-	},
-
+	
+	// ==================================================
 	// This function fetches the studygroups
 	// The resulting studygroups depend on the passed parameter!
-	// Parameter:
-	//		- Type: which data 
+	// requires authentication
+	// ==================================================
 	fetchStudyGroups:function() {
 		return {
-		  // remote(state, accesstoken, client, uid) { 
-		  remote:function(state, type) { 
-		  	var header = 	{
+		  remote:function(state) { 
+		    return new Promise(function (resolve, reject) {
+		    	console.log('--------------FETCH GROUP--------------');
+		      $.ajax({ url: '/groups/user/index',
+		        type: 'GET',
+		        headers: {
 			  								"access-token": state.user.accesstoken,
 		    	      				"client": state.user.client,
 		    	      				"uid": state.user.uid
-		  								}
-		  	var url = null;
-		  	if(type === 'user-feed') {
-		  		url = '/groups/user/index'
-		  	} else if(type === 'user-part-of') {
-		  		url = '/groups/user'
-		  	}
-		    return new Promise(function (resolve, reject) {
-		    	console.log('--------------FETCH GROUP--------------');
-		      $.ajax({ url: '/groups',
-		        type: 'GET',
-		        headers: header,
+		  								},
 		        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
 		        success: function(data, status, xhr) {
 		        	console.log('__SUCCESS__');
@@ -46627,59 +46668,12 @@ var StudyGroupSource = {
 		  error: StudyGroupActions.studyGroupsFailed,
 		  loading: StudyGroupActions.fetchStudyGroups
 		}
-	},
-
-	fetchUser:function() {
-		return {
-		  remote:function(state,email,password, history, loginDialog) { 
-		    return new Promise(function (resolve, reject) {
-		      console.log('--------------LOGIN--------------');
-		      var fata = {
-		      		"email": email,
-		      		"password": password,
-		      		"password_confirmation": password
-		      }
-		      $.ajax({ url: '/auth/sign_in',
-		        type: 'POST',
-		        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-		        data: fata,
-		        success: function(data, status, xhr) {
-		        	console.log('__SUCCESS__');
-		        	data.data.client = xhr.getResponseHeader('client');
-		        	data.data.accesstoken = xhr.getResponseHeader('access-token');
-		        	data.data.uid = xhr.getResponseHeader('uid');
-		          console.log('data' ,data.data);
-	          	resolve(data.data);
-	          	// history.pushState(null, '/studygroupapp');
-	          	setTimeout(function() {history.pushState(null, '/studygroupapp');}, 10);
-	          	loginDialog.dismiss();
-	          	console.log('**************END LOGIN**************');
-		        },
-		        error: function(response) {
-		        	console.log('__FAILED__');
-		          console.log('response' ,response);
-		          reject('login FAILED');
-		          console.log('**************END LOGIN**************');
-		        }
-		      });
-		    });
-		  },
-
-		  local:function() {
-		    // Never check locally, always fetch remotely.
-		    return null;
-		  },
-
-		  success: UserActions.updateUser,
-		  error: UserActions.userFailed,
-		  loading: UserActions.fetchUser
-		}
 	}
 };
 
 module.exports = StudyGroupSource;
 
-},{"../actions/StudyGroupActions":369,"../actions/UserActions":370,"axios":17}],376:[function(require,module,exports){
+},{"../actions/StudyGroupActions":369,"../actions/UserActions":370}],376:[function(require,module,exports){
 var alt = require('../alt');
 var StudyGroupActions = require('../actions/StudyGroupActions');
 var StudyGroupSource = require('../sources/StudyGroupSource');
