@@ -46461,7 +46461,37 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 		console.log("calculate the color for given time");
 		var card_epoch = moment(card_date).unix();
 		console.log("THIS IS THE EPOCH TIME");
+		console.log(card_date);
 		console.log(card_epoch);
+
+		var curr_time = new Date();
+		curr_time = curr_time.toString();
+		var curr_epoch = moment(curr_time).unix();
+		console.log("THIS IS EPOCH FOR CURRENT TIME");
+		console.log(curr_time);
+		console.log(curr_epoch);
+
+		var time_diff = card_epoch - curr_epoch;
+		console.log("TIME IDFF");
+		console.log(time_diff);
+
+		if (time_diff >= 259200) {
+			console.log("returned color")
+			console.log(1)
+			return 1;
+		}
+
+		else if (time_diff >= 86400) {
+			console.log("returned color")
+			console.log(2)
+			return 2;
+		}
+
+		else {
+			console.log("returned color")
+			console.log(3)
+			return 3;
+		}
 	},
 
 	render:function() {
@@ -46577,12 +46607,28 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 					  	var studygroupID = studyGroup.id;
 
 					  	// call the function to calculate color
-					  	this.calculateTimeColor(studyGroup.date);
+					  	var color_chosen_int = this.calculateTimeColor(studyGroup.date);
+					  	var color_chosen = "colorBar";
+
+					  	if (color_chosen_int == 1) {
+					  		color_chosen = "colorBarGreen";
+					  	}
+
+					  	else if (color_chosen_int == 2) {
+					  		color_chosen = "colorBarYellow";
+					  	}
+
+					  	else {
+					  		color_chosen = "colorBarRed";
+					  	}
+
+					  	console.log("color chosen:")
+					  	console.log(color_chosen)
 					    return (
 					    	React.createElement("div", {key: studyGroup.id}, 
 			    		        React.createElement(Paper, {zDepth: 3, className: "card-container"}, 
 			    			        React.createElement("div", {className: "card studyGroup"}, 
-			    			            React.createElement("div", {className: "colorBar"}), 
+			    			            React.createElement("div", {className: color_chosen}), 
 			    			            React.createElement("table", null, 
 			    			                React.createElement("tr", {className: "row1"}, 
 			    			                    React.createElement("td", {className: "userPhotoHolder"}, 
