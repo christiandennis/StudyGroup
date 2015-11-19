@@ -222,7 +222,8 @@ var StudyGroupSource = {
 		    return null;
 		  },
 		  
-		  success: StudyGroupActions.refreshGroups
+		  success: StudyGroupActions.refreshGroups,
+		  error: StudyGroupActions.studyGroupsFailed
 		}
 	},
 
@@ -319,8 +320,8 @@ var StudyGroupSource = {
 			},
 
 			success: StudyGroupActions.updateStudyGroups,
-			error: StudyGroupActions.studyGroupsFailed,
-			loading: StudyGroupActions.fetchStudyGroups
+			error: StudyGroupActions.studyGroupsFailed
+
 		}
 	},
 

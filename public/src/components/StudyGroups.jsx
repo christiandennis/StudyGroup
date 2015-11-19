@@ -47,15 +47,6 @@ var AllStudyGroups = React.createClass({
 				<div>{this.props.errorMessage}</div>
 			);
 		}
-		if (StudyGroupStore.isLoading()) {
-			var left = window.document.documentElement.clientWidth/2 - 25;
-			var top = window.document.documentElement.clientHeight/2 - 25;
-			return(
-				<div>
-					<RefreshIndicator size={50} left={left} top={top} status="loading" /> 
-				</div>
-			);
-		}
 
 		if (this.props.studyGroups){
 			return (
