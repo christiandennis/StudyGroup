@@ -19,6 +19,27 @@
 	background-color: #F50000;
 }
 
+.colorBarRed {
+	left: 0px;
+	height: 100%;
+	width: 10px;
+	float: left;
+	background-color: #F50000;
+}
+.colorBarGreen {
+	left: 0px;
+	height: 100%;
+	width: 10px;
+	float: left;
+	background-color: #00B800;
+}
+.colorBarYellow {
+	left: 0px;
+	height: 100%;
+	width: 10px;
+	float: left;
+	background-color: #FFFF00;
+}
 table {
 	height: 100%;
 	width: 540px;
