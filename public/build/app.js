@@ -46758,11 +46758,11 @@ var StudyGroupSource = {
 		        	data.data.client = xhr.getResponseHeader('client');
 		        	data.data.accesstoken = xhr.getResponseHeader('access-token');
 		        	data.data.uid = xhr.getResponseHeader('uid');
-		          console.log('data' ,data.data);
+		          	console.log('data' ,data.data);
 	          	resolve(data.data);
 	          	// history.pushState(null, '/studygroupapp');
 	          	setTimeout(function() {history.pushState(null, '/studygroupapp');}, 10);
-	          	loginDialog.dismiss();
+	          	
 	          	console.log('**************END LOGIN**************');
 		        },
 		        error: function(response) {
