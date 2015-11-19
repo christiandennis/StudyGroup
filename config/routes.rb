@@ -23,6 +23,11 @@ Rails.application.routes.draw do
   put '/groups/user/update', to: 'groups#addremoveuser'
 
 
+  #comments
+  get '/comments/:id', to: 'comment#commentsInGroup'
+
+
+
   resources :groups, :landing, :comment
 
   # Example of regular route:
