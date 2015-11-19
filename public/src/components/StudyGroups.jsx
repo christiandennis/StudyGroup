@@ -106,6 +106,13 @@ var AllStudyGroups = React.createClass({
 		console.log("Join group here");
 	},
 
+	calculateTimeColor(card_date) {
+		console.log("calculate the color for given time");
+		var card_epoch = moment(card_date).unix();
+		console.log("THIS IS THE EPOCH TIME");
+		console.log(card_epoch);
+	},
+
 	render() {
 		if (this.props.errorMessage) {
 			return (
@@ -217,6 +224,9 @@ var AllStudyGroups = React.createClass({
 					  	var date = moment(studyGroup.date).format("ddd, MMM D").toString();
 					  	var time = moment(studyGroup.date).format("h:mm a").toString();
 					  	var studygroupID = studyGroup.id;
+
+					  	// call the function to calculate color
+					  	this.calculateTimeColor(studyGroup.date);
 					    return (
 					    	<div key={studyGroup.id}>
 			    		        <Paper zDepth={3} className="card-container">

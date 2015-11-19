@@ -45800,9 +45800,6 @@ var NewGroupDialog = React.createClass({displayName: "NewGroupDialog",
 		date_str = date_str.slice(0,15);
 		date_str = date_str + time_str;
 
-		console.log("THIS IS DATE_STR")
-		console.log(date_str)
-
 		if (this.refs.createGroupPrivacy.isChecked()){
 			privacy = 1;
 		}
@@ -46449,6 +46446,13 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 		console.log("Join group here");
 	},
 
+	calculateTimeColor:function(card_date) {
+		console.log("calculate the color for given time");
+		var card_epoch = moment(card_date).unix();
+		console.log("THIS IS THE EPOCH TIME");
+		console.log(card_epoch);
+	},
+
 	render:function() {
 		if (this.props.errorMessage) {
 			return (
@@ -46560,6 +46564,9 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 					  	var date = moment(studyGroup.date).format("ddd, MMM D").toString();
 					  	var time = moment(studyGroup.date).format("h:mm a").toString();
 					  	var studygroupID = studyGroup.id;
+
+					  	// call the function to calculate color
+					  	this.calculateTimeColor(studyGroup.date);
 					    return (
 					    	React.createElement("div", {key: studyGroup.id}, 
 			    		        React.createElement(Paper, {zDepth: 3, className: "card-container"}, 
