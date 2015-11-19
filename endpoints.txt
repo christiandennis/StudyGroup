@@ -78,6 +78,7 @@ POST:
 	date: (epoch)
 	location: (String)
 	capacity:
+	privacy:
 }
 
 EditGroup: /groups/:id

@@ -45838,10 +45838,21 @@ var NewGroupDialog = React.createClass({displayName: "NewGroupDialog",
 		var subject = this.refs.createGroupSubject;
 		var description =  this.refs.createGroupDescription;
 		var date = this.refs.createGroupDate;
+		var time = this.refs.createGroupTime;
 		var location = this.refs.createGroupLocation;
 		var capacity = 	this.refs.createGroupCapacity;
 		var host = this.props.user;
 		var privacy = 0;
+
+		// create the date
+		new_time = time.getTime();
+		new_date = date.getDate();
+		date_str = new_date.toString();
+		time_str = new_time.toString();
+		time_str = time_str.slice(15);
+		date_str = date_str.slice(0,15);
+		date_str = date_str + time_str;
+
 		if (this.refs.createGroupPrivacy.isChecked()){
 			privacy = 1;
 		}
@@ -45851,7 +45862,7 @@ var NewGroupDialog = React.createClass({displayName: "NewGroupDialog",
 		var successSnackbar = this.refs.createGroupSuccessSnackbar;
 
 		if (title.getValue() && subject.getValue() && description.getValue() && location.getValue() && capacity.getValue() && date.getDate()) {
-			StudyGroupStore.postNewGroup(title, subject, description, date, location, capacity, host, this.props.user.school, privacy, this.history, newGroupDialog, failedSnackbar, successSnackbar);
+			StudyGroupStore.postNewGroup(title, subject, description, date_str, location, capacity, host, this.props.user.school, privacy, this.history, newGroupDialog, failedSnackbar, successSnackbar);
 		} else {
 
 			if (!title.getValue()){
@@ -46850,7 +46861,7 @@ var StudyGroupSource = {
 		      		"title": title.getValue(),
 	      			"subject": subject.getValue(),
 	      			"description": description.getValue(),
-	      			"date": date.getDate(), 
+	      			"date": date, 
 	      			"location": location.getValue(),
 	      			"capacity": capacity.getValue(),
 	      			"host": host,
