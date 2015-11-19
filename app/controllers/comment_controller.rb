@@ -7,8 +7,6 @@ class CommentController < ApplicationController
   	def create
 		status = 1 #intially set status to OK
 		error_messages = [] #List of all errors
-
-		userid = params[:userid]
 		groupid = params[:groupid]
 		content = params[:content]
 		title = params[:title]
@@ -28,17 +26,6 @@ class CommentController < ApplicationController
 		elsif content.length > 256
 			status = -1
 			error_messages << "Please enter content less than 256 characters" 
-		end
-
-		if userid.nil?
-			status = -1
-			error_messages << "Please pass in a userid"
-		else
-			@user = User.find_by_uid(userid)
-			if @user.nil?
-				status = -1
-				error_messages << "Couldn't find user with given uid"
-			end
 		end
 
 		if groupid.nil?
