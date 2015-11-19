@@ -144,7 +144,6 @@ var TopBar = React.createClass({
                     
                     <LeftBar ref="leftBar" user={this.props.user}/>
                     <Dialog_NewGroup ref='newGroupDialog' user={this.props.user}/>
-                
                 </div>
 			);
 		}
@@ -166,9 +165,7 @@ var TopBar = React.createClass({
 				</Sticky>
 
 				<LandingPage dialogSignUp={this.dialogSignUp} />
-
 				<Dialog_LogIn ref='loginDialog' />
-
 				<Dialog_SignUp ref='signUpDialog' />
 			</div>
 		)

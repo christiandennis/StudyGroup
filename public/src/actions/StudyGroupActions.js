@@ -20,6 +20,10 @@ class StudyGroupActions {
 	refreshGroups(studyGroups) {
 		this.dispatch(studyGroups);
 	}
+
+	editGroup(studyGroups) {
+		this.dispatch(studyGroups);
+	}
 }
 
 module.exports = alt.createActions(StudyGroupActions);

@@ -26,6 +26,7 @@ class StudyGroupStore {
 
 			handlePostNewGroup: StudyGroupActions.POST_NEW_GROUP,
 			handleRefreshGroups: StudyGroupActions.REFRESH_GROUPS,
+			handleEditGroup: StudyGroupActions.EDIT_GROUP,
 
 			handleFetchMyGroups: MyGroupsActions.FETCH_MY_GROUPS
 		});
@@ -39,6 +40,15 @@ class StudyGroupStore {
 
 	handleFetchMyGroups(myGroups) {
 		this.myGroups = myGroups;
+	}
+
+	handleEditGroup(studyGroup) {
+		for (var i in this.studyGroups) {
+	     	if (this.studyGroups[i].id == studyGroup.id) {
+	       		this.studyGroups[i] = studyGroup;
+	        	break;
+	     	}
+	   	}
 	}
 
 	handlePostNewGroup() {
