@@ -1,4 +1,5 @@
 class Group < ActiveRecord::Base
+	serialize :comments, Array
 	after_initialize :init
 
     def init
