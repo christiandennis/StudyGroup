@@ -1,5 +1,5 @@
 class CommentController < ApplicationController
-
+	before_action :authenticate_user!
 	skip_before_filter :verify_authenticity_token
   	clear_respond_to
   	respond_to :json
@@ -53,14 +53,14 @@ class CommentController < ApplicationController
 		end
 
 		if status == -1
-			render json: {'status'=>-1,'errors'=>error_messages}
+			render json: {'status'=>-1,'errors'=>error_messages}, status: 400
 		else
 			@comment = Comment.new(comment_params)
 			if @comment.save
 				render json: {'status' => 1, 'comment' => @comment}
 				return
 			end
-			render json: {'status'=> -1, 'errors' => error_messages}
+			render json: {'status'=> -1, 'errors' => error_messages}, status: 400
 		end
 	end
 
