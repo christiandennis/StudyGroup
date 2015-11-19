@@ -87,7 +87,7 @@ class GroupsController < ApplicationController
 		@groups = Group.where(:school => current_user.school).order("date")
 		@user = current_user
 
-		render json: {'status'=>1,'groups' => @groups}
+		render json: {'status'=>1,'groups' => @groups, 'user' => current_user}
 	end
 
 	#TODO: Order displayed_groups by date
