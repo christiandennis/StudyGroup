@@ -45561,6 +45561,10 @@ var TopBar = React.createClass({displayName: "TopBar",
 		this.refs.newGroupDialog.refs.newGroupDialog.show();
 	},
 
+	refreshGroups:function() {
+		StudyGroupStore.fetchStudyGroups();
+	},
+
 	updateUser:function(){
 
 	},
@@ -45601,8 +45605,10 @@ var TopBar = React.createClass({displayName: "TopBar",
 							  style: {
 							    backgroundColor: '#0D47A1 !important',
 							  }, 
-							  onLeftIconButtonTouchTap: this.openLeft, 
-							  iconElementRight:  React.createElement(FlatButton, {label: "New StudyGroup", onClick: this.dialogNewGroup})})
+							  onLeftIconButtonTouchTap: this.openLeft}, 
+								  React.createElement(FlatButton, {label: "Refresh", onClick: this.refreshGroups}), 
+								  React.createElement(FlatButton, {label: "New StudyGroup", onClick: this.dialogNewGroup})
+							)
 						)
                 	), 
                     
@@ -47083,7 +47089,8 @@ var StudyGroupSource = {
 		    return null;
 		  },
 		  
-		  success: StudyGroupActions.refreshGroups
+		  success: StudyGroupActions.refreshGroups,
+		  error: StudyGroupActions.studyGroupsFailed
 		}
 	},
 
@@ -47180,8 +47187,8 @@ var StudyGroupSource = {
 			},
 
 			success: StudyGroupActions.updateStudyGroups,
-			error: StudyGroupActions.studyGroupsFailed,
-			loading: StudyGroupActions.fetchStudyGroups
+			error: StudyGroupActions.studyGroupsFailed
+
 		}
 	},
 
