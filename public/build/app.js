@@ -45386,7 +45386,7 @@ React.render((
   ), document.getElementById('ReactApp')
 );
 
-},{"./components/AppBar.jsx":373,"./components/StudyGroups.jsx":376,"./stores/StudyGroupStore":378,"alt/AltContainer":1,"react":367,"react-dom":161,"react-router":181}],369:[function(require,module,exports){
+},{"./components/AppBar.jsx":373,"./components/StudyGroups.jsx":379,"./stores/StudyGroupStore":381,"alt/AltContainer":1,"react":367,"react-dom":161,"react-router":181}],369:[function(require,module,exports){
 var alt = require('../alt');
 
 function MyGroupsActions(){"use strict";}
@@ -45469,6 +45469,9 @@ var AltContainer = require('alt/AltContainer');
 // import components
 var LandingPage = require('./LandingPage.jsx');
 var MyGroups = require('./MyGroups.jsx');
+var Dialog_LogIn = require('./Dialog_LogIn.jsx');
+var Dialog_SignUp = require('./Dialog_SignUp.jsx');
+var Dialog_NewGroup = require('./Dialog_NewGroup.jsx');
 
 var ReactTestUtils = require('react-addons-test-utils');
 
@@ -45476,15 +45479,11 @@ var ReactTestUtils = require('react-addons-test-utils');
 const AppBar = require('material-ui/lib/app-bar');
 const Dialog = require('material-ui/lib/dialog');
 const FlatButton = require('material-ui/lib/flat-button');
-const TextField = require('material-ui/lib/text-field');
 const SideBar = require('material-ui/lib/left-nav');
 const MenuItem = require('material-ui/lib/menu/menu-item');
 const ThemeManager = require('material-ui/lib/styles/theme-manager');
 const Avatar = require('material-ui/lib/avatar');
-const Checkbox = require('material-ui/lib/checkbox');
 const Snackbar = require('material-ui/lib/snackbar');
-const DatePicker = require('material-ui/lib/date-picker/date-picker');
-const TimePicker = require('material-ui/lib/time-picker/time-picker');
 
 // custom material ui theme
 const MyRawTheme = require('material-ui/lib/styles/raw-themes/light-raw-theme.js');
@@ -45588,73 +45587,194 @@ var TopBar = React.createClass({displayName: "TopBar",
 	mixins: [History],
 
 	dialogLogin:function() {
-		// this.refs.loginDialog.show();
+		// this.refs.loginDialog.refs.loginDialog.show();
 		// BYPASS LOGIN FOR TESTING
 		StudyGroupStore.fetchUser( 'papa@gmail.com', 'iopiopiop', this.history, this.refs.loginDialog);
+	},
+
+	dialogSignUp:function() {
+		this.refs.signUpDialog.refs.signUpDialog.show();
+	},
+
+	dialogNewGroup:function() {
+		this.refs.newGroupDialog.refs.newGroupDialog.show();
+	},
+
+	updateUser:function(){
+
+	},
+    
+    openLeft:function() {
+        this.refs.leftBar.refs.leftNav.toggle();
+    },
+    
+    getStyle:function() {
+        console.log("style executed")
+        return {
+
+        }
+    },
+
+    // THEME
+	childContextTypes : {
+	    muiTheme: React.PropTypes.object,
+	  },
+
+	  getChildContext:function() {
+	    return {
+	      muiTheme: ThemeManager.getMuiTheme(MyRawTheme),
+	    };
+	  },
+
+// END THEME
+
+	render:function() {
+		if (this.props.user) {
+			return (
+                
+                React.createElement("div", null, 
+                	React.createElement("div", {style: {zIndex:"1000", paddingBottom:"64px"}}, 
+						React.createElement(Sticky, null, 
+							React.createElement(AppBar, {
+							  title: "StudyGroup", 
+							  style: {
+							    backgroundColor: '#0D47A1 !important',
+							  }, 
+							  onLeftIconButtonTouchTap: this.openLeft, 
+							  iconElementRight:  React.createElement(FlatButton, {label: "New StudyGroup", onClick: this.dialogNewGroup})})
+						)
+                	), 
+                    
+                    React.createElement(LeftBar, {ref: "leftBar", user: this.props.user}), 
+
+                    React.createElement(Dialog_NewGroup, {ref: "newGroupDialog", user: this.props.user}), 
+
+					React.createElement(Snackbar, {
+                   		ref: "createGroupFailedSnackbar", 
+                     	message: "Failed to create group", 
+                     	autoHideDuration: "5000"}), 
+
+            		React.createElement(Snackbar, {
+                   		ref: "createGroupSuccessSnackbar", 
+                     	message: "Group Created", 
+                     	autoHideDuration: "5000"})
+                
+                )
+			);
+		}
+			
+		return (
+			React.createElement("div", null, 
+				React.createElement(Sticky, {stickyStyle: {zIndex:"1000", paddingBottom:"64px"}}, 
+					React.createElement(AppBar, {
+					  className: "logo-title", 
+		              title: "StudyGroup", 
+		              style: {
+		                backgroundColor: '#0D47A1 !important',
+		                position: 'fixed',
+		                marginBottom: '64px'
+		              }, 
+		              zDepth: "100", 
+					  showMenuIconButton: false, 
+					  iconElementRight: React.createElement(FlatButton, {label: "Log In", onClick: this.dialogLogin})})
+				), 
+
+				React.createElement(LandingPage, {dialogSignUp: this.dialogSignUp}), 
+
+				React.createElement(Dialog_LogIn, {ref: "loginDialog"}), 
+
+				React.createElement(Dialog_SignUp, {ref: "signUpDialog"})
+			)
+		)
+		
+
+	}
+
+})
+
+module.exports = TopBar;
+
+},{"../stores/StudyGroupStore":381,"./Dialog_LogIn.jsx":374,"./Dialog_NewGroup.jsx":375,"./Dialog_SignUp.jsx":376,"./LandingPage.jsx":377,"./MyGroups.jsx":378,"alt/AltContainer":1,"material-ui/lib/app-bar":56,"material-ui/lib/avatar":57,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/left-nav":84,"material-ui/lib/menu/menu-item":86,"material-ui/lib/snackbar":101,"material-ui/lib/styles/raw-themes/light-raw-theme.js":106,"material-ui/lib/styles/raw-themes/sidebar-theme.js":107,"material-ui/lib/styles/theme-manager":110,"react":367,"react-addons-test-utils":158,"react-dom":161,"react-router":181,"react-sticky":188}],374:[function(require,module,exports){
+// React, react-reouter, alt
+var React = require('react');
+var render = require('react-dom').render;
+var Router = require('react-router');
+var History = Router.History;
+var StudyGroupStore = require('../stores/StudyGroupStore');
+
+// Matertial UI components
+const TextField = require('material-ui/lib/text-field');
+const Dialog = require('material-ui/lib/dialog');
+const FlatButton = require('material-ui/lib/flat-button');
+
+var LoginDialog = React.createClass({displayName: "LoginDialog",
+	mixins: [History],
+
+	submitLogIn:function() {
+		console.log("login here");
+		console.log("this.props", this.props);
+		var user = this.refs.email.getValue();
+		var password = this.refs.password.getValue();
+		StudyGroupStore.fetchUser( user, password, this.history, this.refs.loginDialog);
 	},
 
 	cancelLogIn:function() {
 		this.refs.loginDialog.dismiss();
 	},
 
-	submitLogIn:function() {
-		console.log("login here");
-		var user = this.refs.email.getValue();
-		var password = this.refs.password.getValue();
-		StudyGroupStore.fetchUser( user, password, this.history, this.refs.loginDialog);
-	},
+	render:function() {
+		return (
+			React.createElement(Dialog, {ref: "loginDialog", 
+					title: "Log In", 
+					actions: [
+						  React.createElement(FlatButton, {
+						    label: "Cancel", 
+						    secondary: true, 
+						    onTouchTap: this.cancelLogIn}),
+						  React.createElement(FlatButton, {
+						    label: "Log In", 
+						    primary: true, 
+						    onTouchTap: this.submitLogIn})], 
+			  		autoDetectWindowHeight: true, 
+			  		autoScrollBodyContent: true}, 
 
-	dialogSignUp:function() {
-		this.refs.signUpDialog.show();
-	},
+			    React.createElement(TextField, {
+			      onEnterKeyDown: this.submitLogIn, 
+			      ref: "email", 
+			      hintText: "christiandennis@studygroup.com", 
+			      floatingLabelText: "Email"}), React.createElement("br", null), 
+			    React.createElement(TextField, {
+			      onEnterKeyDown: this.submitLogIn, 
+			      ref: "password", 
+			      hintText: "Password", 
+			      floatingLabelText: "Password", 
+			      type: "password"}), React.createElement("br", null)
 
-	cancelSignUp:function() {
-		this.refs.signUpDialog.dismiss();
-	},
+			)
+		)
+	}
+})
 
-	submitSignUp:function() {
-		var fullname = this.refs.fullNameSignUp;
-		var fullnameSignUp = this.refs.fullNameSignUp;
-		var email = this.refs.emailSignUp;
-		var password = this.refs.passwordSignUp;
-		var confirmPassword = this.refs.confirmPasswordSignUp;
-		var signUpDialog = this.refs.signUpDialog;
-		var schoolSignUp =  this.refs.schoolSignUp;
-		var usernameSignUp =  this.refs.usernameSignUp;
-		if(false) {
-			console.log(fullname);
-			console.log(email);
-			console.log(password);
-			console.log(confirmPassword);
-			console.log("SIGNUP DONE");
-		}
+module.exports = LoginDialog;
 
-		if (email.getValue() && password.getValue() && confirmPassword.getValue() && fullname.getValue()){
-			if (confirmPassword.getValue() === password.getValue()){
-				StudyGroupStore.signUp(fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog);
-			}
-		} else {
-			if (!email.getValue()){
-				email.setErrorText("This field is required");
-			} else if (email.getValue().search("@")==-1){
-				email.setErrorText("Invalid email");
-			}
+},{"../stores/StudyGroupStore":381,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/text-field":121,"react":367,"react-dom":161,"react-router":181}],375:[function(require,module,exports){
+// React, react-reouter, alt
+var React = require('react');
+var render = require('react-dom').render;
+var Router = require('react-router');
+var History = Router.History;
+var StudyGroupStore = require('../stores/StudyGroupStore');
 
-			if (!password.getValue()) {
-				password.setErrorText("This field is required");
-			}
-			if(!confirmPassword.getValue()){
-				confirmPassword.setErrorText("This field is required");
-			}
-			if (!fullname.getValue()){
-				fullname.setErrorText("This field is required");
-			}
-		}
-	},
+// Matertial UI components
+const TextField = require('material-ui/lib/text-field');
+const Dialog = require('material-ui/lib/dialog');
+const FlatButton = require('material-ui/lib/flat-button');
+const DatePicker = require('material-ui/lib/date-picker/date-picker');
+const TimePicker = require('material-ui/lib/time-picker/time-picker');
+const Checkbox = require('material-ui/lib/checkbox');
 
-	dialogNewGroup:function() {
-		this.refs.newGroupDialog.show();
-	},
+var NewGroupDialog = React.createClass({displayName: "NewGroupDialog",
+	mixins: [History],
 
 	cancelNewGroup:function() {
 		this.refs.newGroupDialog.dismiss();
@@ -45666,6 +45786,10 @@ var TopBar = React.createClass({displayName: "TopBar",
 		var description =  this.refs.createGroupDescription;
 		var date = this.refs.createGroupDate;
 		var time = this.refs.createGroupTime;
+		var location = this.refs.createGroupLocation;
+		var capacity = 	this.refs.createGroupCapacity;
+		var host = this.props.user;
+		var privacy = 0;
 
 		// create the date
 		new_time = time.getTime();
@@ -45674,12 +45798,11 @@ var TopBar = React.createClass({displayName: "TopBar",
 		time_str = new_time.toString();
 		time_str = time_str.slice(15);
 		date_str = date_str.slice(0,15);
-		date_str = date_str + " " + time_str;
+		date_str = date_str + time_str;
 
-		var location = this.refs.createGroupLocation;
-		var capacity = 	this.refs.createGroupCapacity;
-		var host = this.props.user;
-		var privacy = 0;
+		console.log("THIS IS DATE_STR")
+		console.log(date_str)
+
 		if (this.refs.createGroupPrivacy.isChecked()){
 			privacy = 1;
 		}
@@ -45730,13 +45853,209 @@ var TopBar = React.createClass({displayName: "TopBar",
 			subject.setErrorText("");
 			return true;
 		} else {
-			subject.setErrorText("This field is required grrr");
+			subject.setErrorText("This field is required");
 			return false;
+		}
+	},
+
+	validateGroupTitle:function() {
+		var subject = this.refs.createGroupTitle;
+		if (subject.getValue()) {
+			subject.setErrorText("");
+			return true;
+		} else {
+			subject.setErrorText("This field is required");
+			return false;
+		}
+	},
+
+	validateGroupDescription:function() {
+		var subject = this.refs.createGroupDescription;
+		if (subject.getValue()) {
+			subject.setErrorText("");
+			return true;
+		} else {
+			subject.setErrorText("This field is required");
+			return false;
+		}
+	},
+
+	validateGroupLocation:function() {
+		var subject = this.refs.createGroupLocation;
+		if (subject.getValue()) {
+			subject.setErrorText("");
+			return true;
+		} else {
+			subject.setErrorText("This field is required");
+			return false;
+		}
+	},
+
+	validateGroupCapacity:function() {
+		var subject = this.refs.createGroupCapacity;
+		if (subject.getValue()) {
+			subject.setErrorText("");
+			return true;
+		} else {
+			subject.setErrorText("This field is required");
+			return false;
+		}
+	},
+
+	render:function() {
+		return (
+			React.createElement(Dialog, {ref: "newGroupDialog", 
+					title: "Create a New StudyGroup", 
+					modal: true, 
+					actions: [
+						  React.createElement(FlatButton, {
+						    label: "Cancel", 
+						    secondary: true, 
+						    onTouchTap: this.cancelNewGroup}),
+						  React.createElement(FlatButton, {
+						    label: "Submit", 
+						    primary: true, 
+						    onTouchTap: this.submitNewGroup})], 
+			  		autoDetectWindowHeight: true, 
+			  		autoScrollBodyContent: true}, 
+			    React.createElement("div", null, 
+			    	React.createElement(TextField, {
+			    		onEnterKeyDown: this.submitNewGroup, 
+			    		ref: "createGroupSubject", 
+			    		onChange: this.validateGroupSubject, 
+				    	hintText: "CS169", 
+				    	floatingLabelText: "Class"}), 
+			    	React.createElement(TextField, {
+			    		onEnterKeyDown: this.submitNewGroup, 
+			    		ref: "createGroupTitle", 
+			    		onChange: this.validateGroupTitle, 
+			    	  	hintText: "Learn React together", 
+			    	  	floatingLabelText: "Title"}), 
+			    	React.createElement(TextField, {
+			    		onEnterKeyDown: this.submitNewGroup, 
+			    		onChange: this.validateGroupDescription, 
+			    		ref: "createGroupDescription", 
+			    	  	hintText: "Come and learn the basic (and some advanced) React together! REACT IS THE FUTURE!!!", 
+			    	  	floatingLabelText: "Description", 
+			    	  	fullWidth: true, 
+			    	  	multiLine: true}), 
+			    	React.createElement(DatePicker, {
+			    		ref: "createGroupDate", 
+			    	  	hintText: "Nov 22, 2015", 
+			    	  	floatingLabelText: "Date"}), 
+			    	React.createElement(TimePicker, {
+			    		ref: "createGroupTime", 
+			    	  	hintText: "9:00 pm", 
+			    	  	floatingLabelText: "Time"}), 
+			    	React.createElement(TextField, {
+			    		onEnterKeyDown: this.submitNewGroup, 
+			    		onChange: this.validateGroupLocation, 
+			    		ref: "createGroupLocation", 
+			    	  	hintText: "Wozniak Longue, Soda Hall", 
+			    	  	floatingLabelText: "Location"}), 
+			    	React.createElement(TextField, {
+			    		onEnterKeyDown: this.submitNewGroup, 
+			    		onChange: this.validateGroupCapacity, 
+			    		ref: "createGroupCapacity", 
+			    	  	hintText: "20", 
+			    	  	floatingLabelText: "Capacity"}), 
+			    	React.createElement(Checkbox, {
+			    		ref: "createGroupPrivacy", 
+			    	  	name: "privacy", 
+			    	  	value: "private", 
+			    	  	label: "private"})
+			    )
+			)
+		)
+	}
+})
+
+module.exports = NewGroupDialog;
+
+},{"../stores/StudyGroupStore":381,"material-ui/lib/checkbox":66,"material-ui/lib/date-picker/date-picker":74,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/text-field":121,"material-ui/lib/time-picker/time-picker":130,"react":367,"react-dom":161,"react-router":181}],376:[function(require,module,exports){
+// React, react-reouter, alt
+var React = require('react');
+var render = require('react-dom').render;
+var Router = require('react-router');
+var History = Router.History;
+var StudyGroupStore = require('../stores/StudyGroupStore');
+
+// Matertial UI components
+const TextField = require('material-ui/lib/text-field');
+const Dialog = require('material-ui/lib/dialog');
+const FlatButton = require('material-ui/lib/flat-button');
+
+var SignUpDialog = React.createClass({displayName: "SignUpDialog",
+	mixins: [History],
+
+	cancelSignUp:function() {
+		this.refs.signUpDialog.dismiss();
+	},
+
+	submitSignUp:function() {
+		var fullname = this.refs.fullNameSignUp;
+		var fullnameSignUp = this.refs.fullNameSignUp;
+		var email = this.refs.emailSignUp;
+		var password = this.refs.passwordSignUp;
+		var confirmPassword = this.refs.confirmPasswordSignUp;
+		var signUpDialog = this.refs.signUpDialog;
+		var schoolSignUp =  this.refs.schoolSignUp;
+		var usernameSignUp =  this.refs.usernameSignUp;
+		if(false) {
+			console.log(fullname);
+			console.log(email);
+			console.log(password);
+			console.log(confirmPassword);
+			console.log("SIGNUP DONE");
+		}
+
+		if (email.getValue() && password.getValue() && confirmPassword.getValue() && fullname.getValue()){
+			if (confirmPassword.getValue() === password.getValue()){
+				StudyGroupStore.signUp(fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog);
+			}
+		} else {
+			if (!email.getValue()){
+				email.setErrorText("This field is required");
+			} else if (email.getValue().search("@")==-1){
+				email.setErrorText("Invalid email");
+			}
+
+			if (!password.getValue()) {
+				password.setErrorText("This field is required");
+			}
+			if(!confirmPassword.getValue()){
+				confirmPassword.setErrorText("This field is required");
+			}
+			if (!fullname.getValue()){
+				fullname.setErrorText("This field is required");
+			}
 		}
 	},
 
 	validateFullName:function() {
 		var fullname = this.refs.fullNameSignUp;
+		if (fullname.getValue()){
+			fullname.setErrorText("");
+			return true;
+		} else {
+			fullname.setErrorText("This field is required");
+			return false;
+		}
+	},
+
+	validateUsername:function() {
+		var fullname = this.refs.usernameSignUp;
+		if (fullname.getValue()){
+			fullname.setErrorText("");
+			return true;
+		} else {
+			fullname.setErrorText("This field is required");
+			return false;
+		}
+	},
+
+	validateSchool:function() {
+		var fullname = this.refs.schoolSignUp;
 		if (fullname.getValue()){
 			fullname.setErrorText("");
 			return true;
@@ -45793,244 +46112,69 @@ var TopBar = React.createClass({displayName: "TopBar",
 		}
 	},
 
-	updateUser:function(){
-
-	},
-    
-    openLeft:function() {
-        this.refs.leftBar.refs.leftNav.toggle();
-    },
-    
-    getStyle:function() {
-        console.log("style executed")
-        return {
-
-        }
-    },
-
-    // THEME
-	childContextTypes : {
-	    muiTheme: React.PropTypes.object,
-	  },
-
-	  getChildContext:function() {
-	    return {
-	      muiTheme: ThemeManager.getMuiTheme(MyRawTheme),
-	    };
-	  },
-
-// END THEME
-
 	render:function() {
-		if (this.props.user) {
-			return (
-                
-                React.createElement("div", null, 
-                	React.createElement("div", {style: {zIndex:"1000",
-										paddingBottom:"64px"}}, 
-						React.createElement(Sticky, null, 
-							React.createElement(AppBar, {
-							  title: "StudyGroup", 
-							  style: {
-							    backgroundColor: '#0D47A1 !important',
-							  }, 
-							  onLeftIconButtonTouchTap: this.openLeft, 
-							  iconElementRight:  React.createElement(FlatButton, {label: "New StudyGroup", onClick: this.dialogNewGroup})})
-						)
-                	), 
-                    
-                    React.createElement(LeftBar, {ref: "leftBar", user: this.props.user}), 
-
-                   React.createElement(Dialog, {ref: "newGroupDialog", 
-                   		title: "Create a New StudyGroup", 
-                   		modal: true, 
-                   		actions: [
-                   			  React.createElement(FlatButton, {
-                   			    label: "Cancel", 
-                   			    secondary: true, 
-                   			    onTouchTap: this.cancelNewGroup}),
-                   			  React.createElement(FlatButton, {
-                   			    label: "Submit", 
-                   			    primary: true, 
-                   			    onTouchTap: this.submitNewGroup})], 
-                     		autoDetectWindowHeight: true, 
-                     		autoScrollBodyContent: true}, 
-                       React.createElement("div", null, 
-                       	React.createElement(TextField, {
-                       		onEnterKeyDown: this.submitNewGroup, 
-                       		ref: "createGroupSubject", 
-                       		onChange: this.validateGroupSubject, 
-                       	  hintText: "CS169", 
-                       	  floatingLabelText: "Class"}), 
-                       	React.createElement(TextField, {
-                       		onEnterKeyDown: this.submitNewGroup, 
-                       		ref: "createGroupTitle", 
-                       		onChange: this.validateGroupTitle, 
-                       	  hintText: "Learn React together", 
-                       	  floatingLabelText: "Title"}), 
-                       	React.createElement(TextField, {
-                       		onEnterKeyDown: this.submitNewGroup, 
-                       		onChange: this.validateGroupDescription, 
-                       		ref: "createGroupDescription", 
-                       	  hintText: "Come and learn the basic (and some advanced) React together! REACT IS THE FUTURE!!!", 
-                       	  floatingLabelText: "Description", 
-                       	  fullWidth: true, 
-                       	  multiLine: true}), 
-                       	React.createElement(DatePicker, {
-                       		ref: "createGroupDate", 
-                       	  hintText: "Nov 22, 2015", 
-                       	  floatingLabelText: "Date"}), 
-                       	React.createElement(TimePicker, {
-                       		ref: "createGroupTime", 
-                       	  hintText: "9:00 pm", 
-                       	  floatingLabelText: "Time"}), 
-                       	React.createElement(TextField, {
-                       		onEnterKeyDown: this.submitNewGroup, 
-                       		onChange: this.validateGroupLocation, 
-                       		ref: "createGroupLocation", 
-                       	  hintText: "Wozniak Longue, Soda Hall", 
-                       	  floatingLabelText: "Location"}), 
-                       	React.createElement(TextField, {
-                       		onEnterKeyDown: this.submitNewGroup, 
-                       		onChange: this.validateGroupCapacity, 
-                       		ref: "createGroupCapacity", 
-                       	  hintText: "20", 
-                       	  floatingLabelText: "Capacity"}), 
-                       	React.createElement(Checkbox, {
-                       		ref: "createGroupPrivacy", 
-                       	  name: "privacy", 
-                       	  value: "private", 
-                       	  label: "private"})
-                       )
-                   ), 
-
-					React.createElement(Snackbar, {
-                   		ref: "createGroupFailedSnackbar", 
-                     	message: "Failed to create group", 
-                     	autoHideDuration: "5000"}), 
-
-            		React.createElement(Snackbar, {
-                   		ref: "createGroupSuccessSnackbar", 
-                     	message: "Group Created", 
-                     	autoHideDuration: "5000"})
-                
-                )
-			);
-		}
-			
 		return (
-			React.createElement("div", null, 
-
-				React.createElement(Sticky, {stickyStyle: {zIndex:"1000",
-									paddingBottom:"64px"}}, 
-					React.createElement(AppBar, {
-					  className: "logo-title", 
-		              title: "StudyGroup", 
-		              style: {
-		                backgroundColor: '#0D47A1 !important',
-		                position: 'fixed',
-		                marginBottom: '64px'
-		              }, 
-		              zDepth: "100", 
-					  showMenuIconButton: false, 
-					  iconElementRight: React.createElement(FlatButton, {label: "Log In", onClick: this.dialogLogin})})
-				), 
-
-				React.createElement(LandingPage, {dialogSignUp: this.dialogSignUp}), 
-
-				React.createElement(Dialog, {ref: "loginDialog", 
-						title: "Log In", 
-						actions: [
-							  React.createElement(FlatButton, {
-							    label: "Cancel", 
-							    secondary: true, 
-							    onTouchTap: this.cancelLogIn}),
-							  React.createElement(FlatButton, {
-							    label: "Log In", 
-							    primary: true, 
-							    onTouchTap: this.submitLogIn})], 
-				  		autoDetectWindowHeight: true, 
-				  		autoScrollBodyContent: true}, 
-				    React.createElement("div", null, 
-				    	React.createElement(TextField, {
-				    	  onEnterKeyDown: this.submitLogIn, 
-				    	  ref: "email", 
-				    	  hintText: "christiandennis@studygroup.com", 
-				    	  floatingLabelText: "Email"}), React.createElement("br", null), 
-				    	React.createElement(TextField, {
-				    	  onEnterKeyDown: this.submitLogIn, 
-				    	  ref: "password", 
-				    	  hintText: "Password", 
-				    	  floatingLabelText: "Password", 
-				    	  type: "password"}), React.createElement("br", null)
-				    )
-				), 
-
-				React.createElement(Dialog, {ref: "signUpDialog", 
-						title: "Sign Up", 
-						actions: [
-							  React.createElement(FlatButton, {
-							    label: "Cancel", 
-							    secondary: true, 
-							    onTouchTap: this.cancelSignUp}),
-							  React.createElement(FlatButton, {
-							    label: "Sign Up", 
-							    primary: true, 
-							    onTouchTap: this.submitSignUp})], 
-				  		autoDetectWindowHeight: true, 
-				  		autoScrollBodyContent: true}, 
-				    React.createElement("div", null, 
-				    	React.createElement(TextField, {
-				    	  onEnterKeyDown: this.submitSignUp, 
-				    	  ref: "fullNameSignUp", 
-				    	  hintText: "Christian Dennis", 
-				    	  onChange: this.validateFullName, 
-				    	  floatingLabelText: "Full Name"}), React.createElement("br", null), 
-				    	React.createElement(TextField, {
-				    	  onEnterKeyDown: this.submitSignUp, 
-				    	  ref: "usernameSignUp", 
-				    	  hintText: "christiandennis", 
-				    	  onChange: this.validateFullName, 
-				    	  floatingLabelText: "Username"}), React.createElement("br", null), 
-				    	React.createElement(TextField, {
-				    	  onEnterKeyDown: this.submitSignUp, 
-				    	  ref: "schoolSignUp", 
-				    	  hintText: "UC Berkeley", 
-				    	  onChange: this.validateFullName, 
-				    	  floatingLabelText: "School"}), React.createElement("br", null), 
-				    	React.createElement(TextField, {
-				    	  onEnterKeyDown: this.submitSignUp, 
-				    	  ref: "emailSignUp", 
-				    	  hintText: "christiandennis@studygroup.com", 
-				    	  onChange: this.validateEmail, 
-				    	  floatingLabelText: "Email"}), React.createElement("br", null), 
-				    	React.createElement(TextField, {
-				    	  onEnterKeyDown: this.submitSignUp, 
-				    	  ref: "passwordSignUp", 
-				    	  hintText: "Password", 
-				    	  onChange: this.validatePasswordMatch, 
-				    	  floatingLabelText: "Password", 
-				    	  type: "password"}), React.createElement("br", null), 
-				    	React.createElement(TextField, {
-				    	  onEnterKeyDown: this.submitSignUp, 
-				    	  ref: "confirmPasswordSignUp", 
-				    	  hintText: "must be hard!", 
-				    	  onChange: this.validatePasswordMatch, 
-				    	  floatingLabelText: "Confirm Password", 
-				    	  type: "password"})
-				    )
-				)
+			React.createElement(Dialog, {ref: "signUpDialog", 
+					title: "Sign Up", 
+					actions: [
+						  React.createElement(FlatButton, {
+						    label: "Cancel", 
+						    secondary: true, 
+						    onTouchTap: this.cancelSignUp}),
+						  React.createElement(FlatButton, {
+						    label: "Sign Up", 
+						    primary: true, 
+						    onTouchTap: this.submitSignUp})], 
+			  		autoDetectWindowHeight: true, 
+			  		autoScrollBodyContent: true}, 
+			    React.createElement("div", null, 
+			    	React.createElement(TextField, {
+			    	  onEnterKeyDown: this.submitSignUp, 
+			    	  ref: "fullNameSignUp", 
+			    	  hintText: "Christian Dennis", 
+			    	  onChange: this.validateFullName, 
+			    	  floatingLabelText: "Full Name"}), React.createElement("br", null), 
+			    	React.createElement(TextField, {
+			    	  onEnterKeyDown: this.submitSignUp, 
+			    	  ref: "usernameSignUp", 
+			    	  hintText: "christiandennis", 
+			    	  onChange: this.validateUsername, 
+			    	  floatingLabelText: "Username"}), React.createElement("br", null), 
+			    	React.createElement(TextField, {
+			    	  onEnterKeyDown: this.submitSignUp, 
+			    	  ref: "schoolSignUp", 
+			    	  hintText: "UC Berkeley", 
+			    	  onChange: this.validateSchool, 
+			    	  floatingLabelText: "School"}), React.createElement("br", null), 
+			    	React.createElement(TextField, {
+			    	  onEnterKeyDown: this.submitSignUp, 
+			    	  ref: "emailSignUp", 
+			    	  hintText: "christiandennis@studygroup.com", 
+			    	  onChange: this.validateEmail, 
+			    	  floatingLabelText: "Email"}), React.createElement("br", null), 
+			    	React.createElement(TextField, {
+			    	  onEnterKeyDown: this.submitSignUp, 
+			    	  ref: "passwordSignUp", 
+			    	  hintText: "Password", 
+			    	  onChange: this.validatePasswordMatch, 
+			    	  floatingLabelText: "Password", 
+			    	  type: "password"}), React.createElement("br", null), 
+			    	React.createElement(TextField, {
+			    	  onEnterKeyDown: this.submitSignUp, 
+			    	  ref: "confirmPasswordSignUp", 
+			    	  hintText: "must be hard!", 
+			    	  onChange: this.validatePasswordMatch, 
+			    	  floatingLabelText: "Confirm Password", 
+			    	  type: "password"})
+			    )
 			)
 		)
-		
-
 	}
-
 })
 
-module.exports =TopBar;
+module.exports = SignUpDialog;
 
-},{"../stores/StudyGroupStore":378,"./LandingPage.jsx":374,"./MyGroups.jsx":375,"alt/AltContainer":1,"material-ui/lib/app-bar":56,"material-ui/lib/avatar":57,"material-ui/lib/checkbox":66,"material-ui/lib/date-picker/date-picker":74,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/left-nav":84,"material-ui/lib/menu/menu-item":86,"material-ui/lib/snackbar":101,"material-ui/lib/styles/raw-themes/light-raw-theme.js":106,"material-ui/lib/styles/raw-themes/sidebar-theme.js":107,"material-ui/lib/styles/theme-manager":110,"material-ui/lib/text-field":121,"material-ui/lib/time-picker/time-picker":130,"react":367,"react-addons-test-utils":158,"react-dom":161,"react-router":181,"react-sticky":188}],374:[function(require,module,exports){
+},{"../stores/StudyGroupStore":381,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/text-field":121,"react":367,"react-dom":161,"react-router":181}],377:[function(require,module,exports){
 var React = require('react');
 var render = require('react-dom').render;
 var axios = require('axios');
@@ -46107,7 +46251,7 @@ var LandingPage = React.createClass({displayName: "LandingPage",
 
 module.exports = LandingPage;
 
-},{"./AppBar.jsx":373,"alt/AltContainer":1,"axios":17,"react":367,"react-dom":161}],375:[function(require,module,exports){
+},{"./AppBar.jsx":373,"alt/AltContainer":1,"axios":17,"react":367,"react-dom":161}],378:[function(require,module,exports){
 // var button = require('react-materialize').Button;
 var React = require('react');
 var Link = require('react-router').Link;
@@ -46196,7 +46340,7 @@ var MyGroups = React.createClass ({displayName: "MyGroups",
 
 module.exports = MyGroups;
 
-},{"../actions/StudyGroupActions":370,"../stores/StudyGroupStore":378,"alt/AltContainer":1,"axios":17,"material-ui/lib/paper":95,"moment":155,"react":367,"react-addons-test-utils":158,"react-dom":161,"react-router":181,"react-tap-event-plugin":192}],376:[function(require,module,exports){
+},{"../actions/StudyGroupActions":370,"../stores/StudyGroupStore":381,"alt/AltContainer":1,"axios":17,"material-ui/lib/paper":95,"moment":155,"react":367,"react-addons-test-utils":158,"react-dom":161,"react-router":181,"react-tap-event-plugin":192}],379:[function(require,module,exports){
 // var button = require('react-materialize').Button;
 var React = require('react');
 var Link = require('react-router').Link;
@@ -46523,7 +46667,7 @@ var StudyGroups = React.createClass ({displayName: "StudyGroups",
 
 module.exports = StudyGroups;
 
-},{"../actions/StudyGroupActions":370,"../stores/StudyGroupStore":378,"alt/AltContainer":1,"axios":17,"material-ui/lib/avatar":57,"material-ui/lib/card/card":65,"material-ui/lib/card/card-actions":60,"material-ui/lib/card/card-header":62,"material-ui/lib/card/card-text":63,"material-ui/lib/card/card-title":64,"material-ui/lib/date-picker/date-picker":74,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/paper":95,"material-ui/lib/raised-button":96,"material-ui/lib/refresh-indicator":97,"material-ui/lib/text-field":121,"material-ui/lib/time-picker/time-picker":130,"moment":155,"react":367,"react-addons-test-utils":158,"react-dom":161,"react-router":181,"react-tap-event-plugin":192}],377:[function(require,module,exports){
+},{"../actions/StudyGroupActions":370,"../stores/StudyGroupStore":381,"alt/AltContainer":1,"axios":17,"material-ui/lib/avatar":57,"material-ui/lib/card/card":65,"material-ui/lib/card/card-actions":60,"material-ui/lib/card/card-header":62,"material-ui/lib/card/card-text":63,"material-ui/lib/card/card-title":64,"material-ui/lib/date-picker/date-picker":74,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/paper":95,"material-ui/lib/raised-button":96,"material-ui/lib/refresh-indicator":97,"material-ui/lib/text-field":121,"material-ui/lib/time-picker/time-picker":130,"moment":155,"react":367,"react-addons-test-utils":158,"react-dom":161,"react-router":181,"react-tap-event-plugin":192}],380:[function(require,module,exports){
 var StudyGroupActions = require('../actions/StudyGroupActions');
 var UserActions = require('../actions/UserActions');
 var MyGroupsActions = require('../actions/MyGroupsActions');
@@ -46858,7 +47002,7 @@ var StudyGroupSource = {
 
 module.exports = StudyGroupSource;
 
-},{"../actions/MyGroupsActions":369,"../actions/StudyGroupActions":370,"../actions/UserActions":371}],378:[function(require,module,exports){
+},{"../actions/MyGroupsActions":369,"../actions/StudyGroupActions":370,"../actions/UserActions":371}],381:[function(require,module,exports){
 var alt = require('../alt');
 var StudyGroupActions = require('../actions/StudyGroupActions');
 var MyGroupsActions = require('../actions/MyGroupsActions');
@@ -46960,4 +47104,4 @@ var UserActions = require('../actions/UserActions');
 
 module.exports = alt.createStore(StudyGroupStore, 'StudyGroupStore');
 
-},{"../actions/MyGroupsActions":369,"../actions/StudyGroupActions":370,"../actions/UserActions":371,"../alt":372,"../sources/StudyGroupSource":377}]},{},[368]);
+},{"../actions/MyGroupsActions":369,"../actions/StudyGroupActions":370,"../actions/UserActions":371,"../alt":372,"../sources/StudyGroupSource":380}]},{},[368]);
