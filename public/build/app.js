@@ -45386,7 +45386,7 @@ React.render((
   ), document.getElementById('ReactApp')
 );
 
-},{"./components/AppBar.jsx":373,"./components/StudyGroups.jsx":377,"./stores/StudyGroupStore":379,"alt/AltContainer":1,"react":367,"react-dom":161,"react-router":181}],369:[function(require,module,exports){
+},{"./components/AppBar.jsx":373,"./components/StudyGroups.jsx":378,"./stores/StudyGroupStore":380,"alt/AltContainer":1,"react":367,"react-dom":161,"react-router":181}],369:[function(require,module,exports){
 var alt = require('../alt');
 
 function MyGroupsActions(){"use strict";}
@@ -45470,6 +45470,7 @@ var AltContainer = require('alt/AltContainer');
 var LandingPage = require('./LandingPage.jsx');
 var MyGroups = require('./MyGroups.jsx');
 var Dialog_LogIn = require('./Dialog_LogIn.jsx');
+var Dialog_SignUp = require('./Dialog_SignUp.jsx');
 
 var ReactTestUtils = require('react-addons-test-utils');
 
@@ -45595,51 +45596,7 @@ var TopBar = React.createClass({displayName: "TopBar",
 	},
 
 	dialogSignUp:function() {
-		this.refs.signUpDialog.show();
-	},
-
-	cancelSignUp:function() {
-		this.refs.signUpDialog.dismiss();
-	},
-
-	submitSignUp:function() {
-		var fullname = this.refs.fullNameSignUp;
-		var fullnameSignUp = this.refs.fullNameSignUp;
-		var email = this.refs.emailSignUp;
-		var password = this.refs.passwordSignUp;
-		var confirmPassword = this.refs.confirmPasswordSignUp;
-		var signUpDialog = this.refs.signUpDialog;
-		var schoolSignUp =  this.refs.schoolSignUp;
-		var usernameSignUp =  this.refs.usernameSignUp;
-		if(false) {
-			console.log(fullname);
-			console.log(email);
-			console.log(password);
-			console.log(confirmPassword);
-			console.log("SIGNUP DONE");
-		}
-
-		if (email.getValue() && password.getValue() && confirmPassword.getValue() && fullname.getValue()){
-			if (confirmPassword.getValue() === password.getValue()){
-				StudyGroupStore.signUp(fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog);
-			}
-		} else {
-			if (!email.getValue()){
-				email.setErrorText("This field is required");
-			} else if (email.getValue().search("@")==-1){
-				email.setErrorText("Invalid email");
-			}
-
-			if (!password.getValue()) {
-				password.setErrorText("This field is required");
-			}
-			if(!confirmPassword.getValue()){
-				confirmPassword.setErrorText("This field is required");
-			}
-			if (!fullname.getValue()){
-				fullname.setErrorText("This field is required");
-			}
-		}
+		this.refs.signUpDialog.refs.signUpDialog.show();
 	},
 
 	dialogNewGroup:function() {
@@ -45711,64 +45668,6 @@ var TopBar = React.createClass({displayName: "TopBar",
 		} else {
 			subject.setErrorText("This field is required grrr");
 			return false;
-		}
-	},
-
-	validateFullName:function() {
-		var fullname = this.refs.fullNameSignUp;
-		if (fullname.getValue()){
-			fullname.setErrorText("");
-			return true;
-		} else {
-			fullname.setErrorText("This field is required");
-			return false;
-		}
-	},
-
-	validateEmail:function() {
-		var email = this.refs.emailSignUp;
-		if (email.getValue()){
-			var at = email.getValue().search("@");
-			if (at!=-1) {
-				var dot = email.getValue().slice(at).search(".");
-				if (dot!=-1){
-					email.setErrorText("");
-					return true;
-				} else {
-					email.setErrorText("Invalid email");
-				}
-			} else {
-				email.setErrorText("Invalid email");
-				return false;
-			}
-		} else {
-			email.setErrorText("Invalid email");
-			return false;
-		}
-	},
-
-	validatePasswordMatch:function() {
-		var password = this.refs.passwordSignUp;
-		var confirmPassword = this.refs.confirmPasswordSignUp;
-		if (password.getValue()===confirmPassword.getValue()) {
-			password.setErrorText("");
-			confirmPassword.setErrorText("");
-			if(password.getValue().length < 8){
-				password.setErrorText("Password must be at least 8 characters");
-				confirmPassword.setErrorText("Password must be at least 8 characters");
-				return false;
-			}
-			return true;
-		} else {
-			if(password.getValue().length < 8){
-				password.setErrorText("Password must be at least 8 characters");
-				confirmPassword.setErrorText("Password must be at least 8 characters");
-				return false;
-			} else {
-				password.setErrorText("Password must match");
-				confirmPassword.setErrorText("Password must match");
-				return false;
-			}
 		}
 	},
 
@@ -45919,60 +45818,7 @@ var TopBar = React.createClass({displayName: "TopBar",
 
 				React.createElement(Dialog_LogIn, {ref: "loginDialog"}), 
 
-				React.createElement(Dialog, {ref: "signUpDialog", 
-						title: "Sign Up", 
-						actions: [
-							  React.createElement(FlatButton, {
-							    label: "Cancel", 
-							    secondary: true, 
-							    onTouchTap: this.cancelSignUp}),
-							  React.createElement(FlatButton, {
-							    label: "Sign Up", 
-							    primary: true, 
-							    onTouchTap: this.submitSignUp})], 
-				  		autoDetectWindowHeight: true, 
-				  		autoScrollBodyContent: true}, 
-				    React.createElement("div", null, 
-				    	React.createElement(TextField, {
-				    	  onEnterKeyDown: this.submitSignUp, 
-				    	  ref: "fullNameSignUp", 
-				    	  hintText: "Christian Dennis", 
-				    	  onChange: this.validateFullName, 
-				    	  floatingLabelText: "Full Name"}), React.createElement("br", null), 
-				    	React.createElement(TextField, {
-				    	  onEnterKeyDown: this.submitSignUp, 
-				    	  ref: "usernameSignUp", 
-				    	  hintText: "christiandennis", 
-				    	  onChange: this.validateFullName, 
-				    	  floatingLabelText: "Username"}), React.createElement("br", null), 
-				    	React.createElement(TextField, {
-				    	  onEnterKeyDown: this.submitSignUp, 
-				    	  ref: "schoolSignUp", 
-				    	  hintText: "UC Berkeley", 
-				    	  onChange: this.validateFullName, 
-				    	  floatingLabelText: "School"}), React.createElement("br", null), 
-				    	React.createElement(TextField, {
-				    	  onEnterKeyDown: this.submitSignUp, 
-				    	  ref: "emailSignUp", 
-				    	  hintText: "christiandennis@studygroup.com", 
-				    	  onChange: this.validateEmail, 
-				    	  floatingLabelText: "Email"}), React.createElement("br", null), 
-				    	React.createElement(TextField, {
-				    	  onEnterKeyDown: this.submitSignUp, 
-				    	  ref: "passwordSignUp", 
-				    	  hintText: "Password", 
-				    	  onChange: this.validatePasswordMatch, 
-				    	  floatingLabelText: "Password", 
-				    	  type: "password"}), React.createElement("br", null), 
-				    	React.createElement(TextField, {
-				    	  onEnterKeyDown: this.submitSignUp, 
-				    	  ref: "confirmPasswordSignUp", 
-				    	  hintText: "must be hard!", 
-				    	  onChange: this.validatePasswordMatch, 
-				    	  floatingLabelText: "Confirm Password", 
-				    	  type: "password"})
-				    )
-				)
+				React.createElement(Dialog_SignUp, {ref: "signUpDialog"})
 			)
 		)
 		
@@ -45983,7 +45829,7 @@ var TopBar = React.createClass({displayName: "TopBar",
 
 module.exports =TopBar;
 
-},{"../stores/StudyGroupStore":379,"./Dialog_LogIn.jsx":374,"./LandingPage.jsx":375,"./MyGroups.jsx":376,"alt/AltContainer":1,"material-ui/lib/app-bar":56,"material-ui/lib/avatar":57,"material-ui/lib/checkbox":66,"material-ui/lib/date-picker/date-picker":74,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/left-nav":84,"material-ui/lib/menu/menu-item":86,"material-ui/lib/snackbar":101,"material-ui/lib/styles/raw-themes/light-raw-theme.js":106,"material-ui/lib/styles/raw-themes/sidebar-theme.js":107,"material-ui/lib/styles/theme-manager":110,"material-ui/lib/text-field":121,"material-ui/lib/time-picker/time-picker":130,"react":367,"react-addons-test-utils":158,"react-dom":161,"react-router":181,"react-sticky":188}],374:[function(require,module,exports){
+},{"../stores/StudyGroupStore":380,"./Dialog_LogIn.jsx":374,"./Dialog_SignUp.jsx":375,"./LandingPage.jsx":376,"./MyGroups.jsx":377,"alt/AltContainer":1,"material-ui/lib/app-bar":56,"material-ui/lib/avatar":57,"material-ui/lib/checkbox":66,"material-ui/lib/date-picker/date-picker":74,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/left-nav":84,"material-ui/lib/menu/menu-item":86,"material-ui/lib/snackbar":101,"material-ui/lib/styles/raw-themes/light-raw-theme.js":106,"material-ui/lib/styles/raw-themes/sidebar-theme.js":107,"material-ui/lib/styles/theme-manager":110,"material-ui/lib/text-field":121,"material-ui/lib/time-picker/time-picker":130,"react":367,"react-addons-test-utils":158,"react-dom":161,"react-router":181,"react-sticky":188}],374:[function(require,module,exports){
 // React, react-reouter, alt
 var React = require('react');
 var render = require('react-dom').render;
@@ -46048,7 +45894,209 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 
 module.exports = LoginDialog;
 
-},{"../stores/StudyGroupStore":379,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/text-field":121,"react":367,"react-dom":161,"react-router":181}],375:[function(require,module,exports){
+},{"../stores/StudyGroupStore":380,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/text-field":121,"react":367,"react-dom":161,"react-router":181}],375:[function(require,module,exports){
+// React, react-reouter, alt
+var React = require('react');
+var render = require('react-dom').render;
+var Router = require('react-router');
+var History = Router.History;
+var StudyGroupStore = require('../stores/StudyGroupStore');
+
+// Matertial UI components
+const TextField = require('material-ui/lib/text-field');
+const Dialog = require('material-ui/lib/dialog');
+const FlatButton = require('material-ui/lib/flat-button');
+
+var SignUpDialog = React.createClass({displayName: "SignUpDialog",
+	mixins: [History],
+
+	cancelSignUp:function() {
+		this.refs.signUpDialog.dismiss();
+	},
+
+	submitSignUp:function() {
+		var fullname = this.refs.fullNameSignUp;
+		var fullnameSignUp = this.refs.fullNameSignUp;
+		var email = this.refs.emailSignUp;
+		var password = this.refs.passwordSignUp;
+		var confirmPassword = this.refs.confirmPasswordSignUp;
+		var signUpDialog = this.refs.signUpDialog;
+		var schoolSignUp =  this.refs.schoolSignUp;
+		var usernameSignUp =  this.refs.usernameSignUp;
+		if(false) {
+			console.log(fullname);
+			console.log(email);
+			console.log(password);
+			console.log(confirmPassword);
+			console.log("SIGNUP DONE");
+		}
+
+		if (email.getValue() && password.getValue() && confirmPassword.getValue() && fullname.getValue()){
+			if (confirmPassword.getValue() === password.getValue()){
+				StudyGroupStore.signUp(fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog);
+			}
+		} else {
+			if (!email.getValue()){
+				email.setErrorText("This field is required");
+			} else if (email.getValue().search("@")==-1){
+				email.setErrorText("Invalid email");
+			}
+
+			if (!password.getValue()) {
+				password.setErrorText("This field is required");
+			}
+			if(!confirmPassword.getValue()){
+				confirmPassword.setErrorText("This field is required");
+			}
+			if (!fullname.getValue()){
+				fullname.setErrorText("This field is required");
+			}
+		}
+	},
+
+	validateFullName:function() {
+		var fullname = this.refs.fullNameSignUp;
+		if (fullname.getValue()){
+			fullname.setErrorText("");
+			return true;
+		} else {
+			fullname.setErrorText("This field is required");
+			return false;
+		}
+	},
+
+	validateUsername:function() {
+		var fullname = this.refs.usernameSignUp;
+		if (fullname.getValue()){
+			fullname.setErrorText("");
+			return true;
+		} else {
+			fullname.setErrorText("This field is required");
+			return false;
+		}
+	},
+
+	validateSchool:function() {
+		var fullname = this.refs.schoolSignUp;
+		if (fullname.getValue()){
+			fullname.setErrorText("");
+			return true;
+		} else {
+			fullname.setErrorText("This field is required");
+			return false;
+		}
+	},
+
+	validateEmail:function() {
+		var email = this.refs.emailSignUp;
+		if (email.getValue()){
+			var at = email.getValue().search("@");
+			if (at!=-1) {
+				var dot = email.getValue().slice(at).search(".");
+				if (dot!=-1){
+					email.setErrorText("");
+					return true;
+				} else {
+					email.setErrorText("Invalid email");
+				}
+			} else {
+				email.setErrorText("Invalid email");
+				return false;
+			}
+		} else {
+			email.setErrorText("Invalid email");
+			return false;
+		}
+	},
+
+	validatePasswordMatch:function() {
+		var password = this.refs.passwordSignUp;
+		var confirmPassword = this.refs.confirmPasswordSignUp;
+		if (password.getValue()===confirmPassword.getValue()) {
+			password.setErrorText("");
+			confirmPassword.setErrorText("");
+			if(password.getValue().length < 8){
+				password.setErrorText("Password must be at least 8 characters");
+				confirmPassword.setErrorText("Password must be at least 8 characters");
+				return false;
+			}
+			return true;
+		} else {
+			if(password.getValue().length < 8){
+				password.setErrorText("Password must be at least 8 characters");
+				confirmPassword.setErrorText("Password must be at least 8 characters");
+				return false;
+			} else {
+				password.setErrorText("Password must match");
+				confirmPassword.setErrorText("Password must match");
+				return false;
+			}
+		}
+	},
+
+	render:function() {
+		return (
+			React.createElement(Dialog, {ref: "signUpDialog", 
+					title: "Sign Up", 
+					actions: [
+						  React.createElement(FlatButton, {
+						    label: "Cancel", 
+						    secondary: true, 
+						    onTouchTap: this.cancelSignUp}),
+						  React.createElement(FlatButton, {
+						    label: "Sign Up", 
+						    primary: true, 
+						    onTouchTap: this.submitSignUp})], 
+			  		autoDetectWindowHeight: true, 
+			  		autoScrollBodyContent: true}, 
+			    React.createElement("div", null, 
+			    	React.createElement(TextField, {
+			    	  onEnterKeyDown: this.submitSignUp, 
+			    	  ref: "fullNameSignUp", 
+			    	  hintText: "Christian Dennis", 
+			    	  onChange: this.validateFullName, 
+			    	  floatingLabelText: "Full Name"}), React.createElement("br", null), 
+			    	React.createElement(TextField, {
+			    	  onEnterKeyDown: this.submitSignUp, 
+			    	  ref: "usernameSignUp", 
+			    	  hintText: "christiandennis", 
+			    	  onChange: this.validateUsername, 
+			    	  floatingLabelText: "Username"}), React.createElement("br", null), 
+			    	React.createElement(TextField, {
+			    	  onEnterKeyDown: this.submitSignUp, 
+			    	  ref: "schoolSignUp", 
+			    	  hintText: "UC Berkeley", 
+			    	  onChange: this.validateSchool, 
+			    	  floatingLabelText: "School"}), React.createElement("br", null), 
+			    	React.createElement(TextField, {
+			    	  onEnterKeyDown: this.submitSignUp, 
+			    	  ref: "emailSignUp", 
+			    	  hintText: "christiandennis@studygroup.com", 
+			    	  onChange: this.validateEmail, 
+			    	  floatingLabelText: "Email"}), React.createElement("br", null), 
+			    	React.createElement(TextField, {
+			    	  onEnterKeyDown: this.submitSignUp, 
+			    	  ref: "passwordSignUp", 
+			    	  hintText: "Password", 
+			    	  onChange: this.validatePasswordMatch, 
+			    	  floatingLabelText: "Password", 
+			    	  type: "password"}), React.createElement("br", null), 
+			    	React.createElement(TextField, {
+			    	  onEnterKeyDown: this.submitSignUp, 
+			    	  ref: "confirmPasswordSignUp", 
+			    	  hintText: "must be hard!", 
+			    	  onChange: this.validatePasswordMatch, 
+			    	  floatingLabelText: "Confirm Password", 
+			    	  type: "password"})
+			    )
+			)
+		)
+	}
+})
+
+module.exports = SignUpDialog;
+
+},{"../stores/StudyGroupStore":380,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/text-field":121,"react":367,"react-dom":161,"react-router":181}],376:[function(require,module,exports){
 var React = require('react');
 var render = require('react-dom').render;
 var axios = require('axios');
@@ -46125,7 +46173,7 @@ var LandingPage = React.createClass({displayName: "LandingPage",
 
 module.exports = LandingPage;
 
-},{"./AppBar.jsx":373,"alt/AltContainer":1,"axios":17,"react":367,"react-dom":161}],376:[function(require,module,exports){
+},{"./AppBar.jsx":373,"alt/AltContainer":1,"axios":17,"react":367,"react-dom":161}],377:[function(require,module,exports){
 // var button = require('react-materialize').Button;
 var React = require('react');
 var Link = require('react-router').Link;
@@ -46214,7 +46262,7 @@ var MyGroups = React.createClass ({displayName: "MyGroups",
 
 module.exports = MyGroups;
 
-},{"../actions/StudyGroupActions":370,"../stores/StudyGroupStore":379,"alt/AltContainer":1,"axios":17,"material-ui/lib/paper":95,"moment":155,"react":367,"react-addons-test-utils":158,"react-dom":161,"react-router":181,"react-tap-event-plugin":192}],377:[function(require,module,exports){
+},{"../actions/StudyGroupActions":370,"../stores/StudyGroupStore":380,"alt/AltContainer":1,"axios":17,"material-ui/lib/paper":95,"moment":155,"react":367,"react-addons-test-utils":158,"react-dom":161,"react-router":181,"react-tap-event-plugin":192}],378:[function(require,module,exports){
 // var button = require('react-materialize').Button;
 var React = require('react');
 var Link = require('react-router').Link;
@@ -46541,7 +46589,7 @@ var StudyGroups = React.createClass ({displayName: "StudyGroups",
 
 module.exports = StudyGroups;
 
-},{"../actions/StudyGroupActions":370,"../stores/StudyGroupStore":379,"alt/AltContainer":1,"axios":17,"material-ui/lib/avatar":57,"material-ui/lib/card/card":65,"material-ui/lib/card/card-actions":60,"material-ui/lib/card/card-header":62,"material-ui/lib/card/card-text":63,"material-ui/lib/card/card-title":64,"material-ui/lib/date-picker/date-picker":74,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/paper":95,"material-ui/lib/raised-button":96,"material-ui/lib/refresh-indicator":97,"material-ui/lib/text-field":121,"material-ui/lib/time-picker/time-picker":130,"moment":155,"react":367,"react-addons-test-utils":158,"react-dom":161,"react-router":181,"react-tap-event-plugin":192}],378:[function(require,module,exports){
+},{"../actions/StudyGroupActions":370,"../stores/StudyGroupStore":380,"alt/AltContainer":1,"axios":17,"material-ui/lib/avatar":57,"material-ui/lib/card/card":65,"material-ui/lib/card/card-actions":60,"material-ui/lib/card/card-header":62,"material-ui/lib/card/card-text":63,"material-ui/lib/card/card-title":64,"material-ui/lib/date-picker/date-picker":74,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/paper":95,"material-ui/lib/raised-button":96,"material-ui/lib/refresh-indicator":97,"material-ui/lib/text-field":121,"material-ui/lib/time-picker/time-picker":130,"moment":155,"react":367,"react-addons-test-utils":158,"react-dom":161,"react-router":181,"react-tap-event-plugin":192}],379:[function(require,module,exports){
 var StudyGroupActions = require('../actions/StudyGroupActions');
 var UserActions = require('../actions/UserActions');
 var MyGroupsActions = require('../actions/MyGroupsActions');
@@ -46876,7 +46924,7 @@ var StudyGroupSource = {
 
 module.exports = StudyGroupSource;
 
-},{"../actions/MyGroupsActions":369,"../actions/StudyGroupActions":370,"../actions/UserActions":371}],379:[function(require,module,exports){
+},{"../actions/MyGroupsActions":369,"../actions/StudyGroupActions":370,"../actions/UserActions":371}],380:[function(require,module,exports){
 var alt = require('../alt');
 var StudyGroupActions = require('../actions/StudyGroupActions');
 var MyGroupsActions = require('../actions/MyGroupsActions');
@@ -46978,4 +47026,4 @@ var UserActions = require('../actions/UserActions');
 
 module.exports = alt.createStore(StudyGroupStore, 'StudyGroupStore');
 
-},{"../actions/MyGroupsActions":369,"../actions/StudyGroupActions":370,"../actions/UserActions":371,"../alt":372,"../sources/StudyGroupSource":378}]},{},[368]);
+},{"../actions/MyGroupsActions":369,"../actions/StudyGroupActions":370,"../actions/UserActions":371,"../alt":372,"../sources/StudyGroupSource":379}]},{},[368]);
