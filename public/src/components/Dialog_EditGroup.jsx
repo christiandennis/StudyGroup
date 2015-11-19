@@ -25,14 +25,97 @@ var LoginDialog = React.createClass({
 		var title = this.refs.editGroupTitle;
 		var subject = this.refs.editGroupSubject;
 		var description =  this.refs.editGroupDescription;
-		var date = this.refs.editGroupDate.getDate();
+		var date = this.refs.editGroupDate;
+		var time = this.refs.editGroupTime;
 		var location = this.refs.editGroupLocation;
 		var capacity = 	this.refs.editGroupCapacity;
+
+		var new_time = time.getTime();
+		var new_date = date.getDate();
+		var date_str = new_date.toString();
+		var time_str = new_time.toString();
+		var time_str = time_str.slice(15);
+		var date_str = date_str.slice(0,15);
+		var date_str = date_str + time_str;
 
 		var editGroupDialog = this.refs.editGroupDialog;
 		var failedSnackbar = this.refs.editGroupFailedSnackbar;
 		var successSnackbar = this.refs.editGroupSuccessSnackbar;
-		StudyGroupStore.editGroup(id, title, subject, description, date, location, capacity, editGroupDialog, failedSnackbar, successSnackbar);
+
+		if (title.getValue() && subject.getValue() && description.getValue() && location.getValue() && capacity.getValue() && date.getDate() && time.getTime()) {
+			StudyGroupStore.editGroup(id, title, subject, description, date_str, location, capacity, editGroupDialog, failedSnackbar, successSnackbar);
+		} else {
+			if (!title.getValue()){
+				title.setErrorText("This field is required");
+			}
+			if (!subject.getValue()){
+				subject.setErrorText("This field is required");
+			}
+			if (!description.getValue()){
+				description.setErrorText("This field is required");
+			}
+			if (!location.getValue()){
+				location.setErrorText("This field is required");
+			}
+			if (!capacity.getValue()){
+				capacity.setErrorText("This field is required");
+			}
+		}
+	},
+
+	validateGroupSubject() {
+		var subject = this.refs.editGroupSubject;
+		if (subject.getValue()) {
+			subject.setErrorText("");
+			return true;
+		} else {
+			subject.setErrorText("This field is required");
+			return false;
+		}
+	},
+
+	validateGroupTitle() {
+		var subject = this.refs.editGroupTitle;
+		if (subject.getValue()) {
+			subject.setErrorText("");
+			return true;
+		} else {
+			subject.setErrorText("This field is required");
+			return false;
+		}
+	},
+
+	validateGroupDescription() {
+		var subject = this.refs.editGroupDescription;
+		if (subject.getValue()) {
+			subject.setErrorText("");
+			return true;
+		} else {
+			subject.setErrorText("This field is required");
+			return false;
+		}
+	},
+
+	validateGroupLocation() {
+		var subject = this.refs.editGroupLocation;
+		if (subject.getValue()) {
+			subject.setErrorText("");
+			return true;
+		} else {
+			subject.setErrorText("This field is required");
+			return false;
+		}
+	},
+
+	validateGroupCapacity() {
+		var subject = this.refs.editGroupCapacity;
+		if (subject.getValue()) {
+			subject.setErrorText("");
+			return true;
+		} else {
+			subject.setErrorText("This field is required");
+			return false;
+		}
 	},
 
 	render() {
@@ -58,18 +141,21 @@ var LoginDialog = React.createClass({
 		          	<div>
 			         	<TextField
 			         		onEnterKeyDown = {this.submitEditGroupDetail}
+			         		onChange={this.validateGroupSubject}
 			         		ref = "editGroupSubject"
 			         	  	hintText="CS169"
 			         	  	defaultValue={studyGroup.subject}
 			         	  	floatingLabelText="Class" />
 			         	<TextField
 			         		onEnterKeyDown = {this.submitEditGroupDetail}
+				    		onChange={this.validateGroupTitle}
 			         		ref = "editGroupTitle"
 			         	  	hintText="Learn React together"
 			         	  	defaultValue={studyGroup.title}
 			         	  	floatingLabelText="Title" />
 			         	<TextField
 			         		onEnterKeyDown = {this.submitEditGroupDetail}
+				    		onChange={this.validateGroupDescription}
 			         		ref = "editGroupDescription"
 			         	  	hintText="Come and learn the basic (and some advanced) React together! REACT IS THE FUTURE!!!"
 			         	  	floatingLabelText="Description"
@@ -88,12 +174,14 @@ var LoginDialog = React.createClass({
 			         	  	floatingLabelText="Time"/>
 			         	<TextField
 			         		onEnterKeyDown = {this.submitEditGroupDetail}
+				    		onChange={this.validateGroupLocation}
 			         		ref = "editGroupLocation"
 			         	  	hintText="Wozniak Longue, Soda Hall"
 			         	  	defaultValue={studyGroup.location}
 			         	  	floatingLabelText="Location"/>
 			         	<TextField
 			         		onEnterKeyDown = {this.submitEditGroupDetail}
+				    		onChange={this.validateGroupCapacity}
 			         		ref = "editGroupCapacity"
 			         	  	hintText="20"
 			         	  	defaultValue={studyGroup.capacity}
