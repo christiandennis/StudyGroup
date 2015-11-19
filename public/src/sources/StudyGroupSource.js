@@ -28,8 +28,8 @@ var StudyGroupSource = {
 		      		"password": password.getValue(),
 		      		"password_confirmation": confirmPassword.getValue(),
 		      		"school": schoolSignUp.getValue(),
-          		"name": fullnameSignUp.getValue(),
-          		"nickname": usernameSignUp.getValue()
+          			"name": fullnameSignUp.getValue(),
+          			"nickname": usernameSignUp.getValue()
 		      	} 	
 		      	$.ajax({ url: '/auth',
 			      	type: 'POST',
@@ -379,6 +379,50 @@ var StudyGroupSource = {
 				return null;
 			},
 			success: MyGroupsActions.fetchMyGroups
+		}
+	},
+
+	joinOrLeaveGroup() {
+		return {
+			remote(state, groupID, joinOrLeave){
+				return new Promise(function(resolve, reject){
+					console.log('--------------JOIN OR LEAVE GROUP--------------');
+				    $.ajax({ url: '/groups/user/update',
+				        type: 'PUT',
+				        headers: {
+					  				"access-token": state.user.accesstoken,
+		    	      				"client": state.user.client,
+		    	      				"uid": state.user.uid
+		  						},
+		  				data: 	{
+		  							"groupid": groupID,
+		  							"command": joinOrLeave
+		  						},
+				        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+				        success: function(data, status, xhr) {
+				        	console.log('__SUCCESS__');
+					        console.log('data' ,data);
+					        var groupData = {
+					        					"group": data.going,
+					        					"groupID": groupID,
+					        					"joinOrLeave": joinOrLeave
+					        				};
+					        resolve(groupData);
+					        console.log('**************ENDJOIN OR LEAVE GROUP**************');
+				        },
+				        error: function(response) {
+				        	console.log('__FAILED__');
+				          	console.log('response' ,response);
+				          	// reject('fetch group FAILED');
+				          	console.log('**************END JOIN OR LEAVE GROUP**************');
+				        }
+				    })
+				})
+			},
+			local() {
+				return null;
+			},
+			success: MyGroupsActions.joinOrLeaveGroup
 		}
 	},
 

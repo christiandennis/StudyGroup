@@ -28,7 +28,8 @@ class StudyGroupStore {
 			handleRefreshGroups: StudyGroupActions.REFRESH_GROUPS,
 			handleEditGroup: StudyGroupActions.EDIT_GROUP,
 
-			handleFetchMyGroups: MyGroupsActions.FETCH_MY_GROUPS
+			handleFetchMyGroups: MyGroupsActions.FETCH_MY_GROUPS,
+			handleJoinOrLeaveGroup: MyGroupsActions.JOIN_OR_LEAVE_GROUP
 		});
 
 
@@ -40,6 +41,30 @@ class StudyGroupStore {
 
 	handleFetchMyGroups(myGroups) {
 		this.myGroups = myGroups;
+	}
+
+	handleJoinOrLeaveGroup(myGroup) {
+		console.log('mygroup', myGroup);
+
+		if(myGroup.joinOrLeave === 'add'){
+			var found = false;
+			for (var i in this.myGroups) {
+		     	if (this.myGroups[i].id === myGroup.groupID) {
+		       		found = true
+		        	break;
+		     	}
+		   	}
+		   	if (!found){
+		   		this.myGroups.push(myGroup.group);
+		   	}
+		} else {
+			for (var i in this.myGroups) {
+		     	if (this.myGroups[i].id === myGroup.groupID) {
+		       		this.myGroups.splice(i, 1);
+		       		break;
+		     	}
+		   	}
+		}
 	}
 
 	handleEditGroup(studyGroup) {

@@ -45394,6 +45394,10 @@ function MyGroupsActions(){"use strict";}
 		this.dispatch(myGroups);
 	}});
 
+	Object.defineProperty(MyGroupsActions.prototype,"joinOrLeaveGroup",{writable:true,configurable:true,value:function(myGroups) {"use strict";
+		this.dispatch(myGroups);
+	}});
+
 
 module.exports = alt.createActions(MyGroupsActions);
 
@@ -45548,9 +45552,9 @@ var TopBar = React.createClass({displayName: "TopBar",
 	mixins: [History],
 
 	dialogLogin:function() {
-		this.refs.loginDialog.refs.loginDialog.show();
+		// this.refs.loginDialog.refs.loginDialog.show();
 		// BYPASS LOGIN FOR TESTING
-		// StudyGroupStore.fetchUser( 'papa@gmail.com', 'iopiopiop', this.history, this.refs.loginDialog);
+		StudyGroupStore.fetchUser( 'papa@gmail.com', 'iopiopiop', this.history, this.refs.loginDialog);
 	},
 
 	dialogSignUp:function() {
@@ -45689,6 +45693,12 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 		}
 	},
 
+	joinLeaveGroup:function(joinOrLeave) {
+		// some logic to determine whether to join or to leave
+		joinOrLeave = 'remove';
+		StudyGroupStore.joinOrLeaveGroup(this.props.studyGroup.id, joinOrLeave);
+	},
+
 	render:function() {
 		var studyGroup = this.props.studyGroup;
 		var date = moment(studyGroup.date).format("ddd, MMM D").toString();
@@ -45747,7 +45757,7 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 			                    ), 
 			                    React.createElement("td", {colSpan: "2"}, 
 			                        React.createElement("div", {style: {textAlign:"right"}, className: "joinButtonContainer"}, 
-			                            React.createElement(RaisedButton, {label: "Join"})
+			                            React.createElement(RaisedButton, {onClick: this.joinLeaveGroup, label: "Join"})
 			                        )
 			                    ), 
 			                    React.createElement("td", null, 
@@ -46174,9 +46184,7 @@ var AllSimpleGroup = React.createClass({displayName: "AllSimpleGroup",
 
 var MyGroups = React.createClass ({displayName: "MyGroups",
 	componentDidMount:function() {
-		console.log('----------MY GROUPS---------');
 		var state = StudyGroupStore.getState();
-		console.log('componentDidMount state', state);
 		StudyGroupStore.fetchMyGroups();
 	},
 
@@ -46190,7 +46198,6 @@ var MyGroups = React.createClass ({displayName: "MyGroups",
 
 	render:function(){
 		var state = StudyGroupStore.getState();
-		console.log('render state', state);
 		if (state.myGroups) {
 			return (
 				React.createElement("div", null, 
@@ -46913,8 +46920,8 @@ var StudyGroupSource = {
 		      		"password": password.getValue(),
 		      		"password_confirmation": confirmPassword.getValue(),
 		      		"school": schoolSignUp.getValue(),
-          		"name": fullnameSignUp.getValue(),
-          		"nickname": usernameSignUp.getValue()
+          			"name": fullnameSignUp.getValue(),
+          			"nickname": usernameSignUp.getValue()
 		      	} 	
 		      	$.ajax({ url: '/auth',
 			      	type: 'POST',
@@ -47267,6 +47274,50 @@ var StudyGroupSource = {
 		}
 	},
 
+	joinOrLeaveGroup:function() {
+		return {
+			remote:function(state, groupID, joinOrLeave){
+				return new Promise(function(resolve, reject){
+					console.log('--------------JOIN OR LEAVE GROUP--------------');
+				    $.ajax({ url: '/groups/user/update',
+				        type: 'PUT',
+				        headers: {
+					  				"access-token": state.user.accesstoken,
+		    	      				"client": state.user.client,
+		    	      				"uid": state.user.uid
+		  						},
+		  				data: 	{
+		  							"groupid": groupID,
+		  							"command": joinOrLeave
+		  						},
+				        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+				        success: function(data, status, xhr) {
+				        	console.log('__SUCCESS__');
+					        console.log('data' ,data);
+					        var groupData = {
+					        					"group": data.going,
+					        					"groupID": groupID,
+					        					"joinOrLeave": joinOrLeave
+					        				};
+					        resolve(groupData);
+					        console.log('**************ENDJOIN OR LEAVE GROUP**************');
+				        },
+				        error: function(response) {
+				        	console.log('__FAILED__');
+				          	console.log('response' ,response);
+				          	// reject('fetch group FAILED');
+				          	console.log('**************END JOIN OR LEAVE GROUP**************');
+				        }
+				    })
+				})
+			},
+			local:function() {
+				return null;
+			},
+			success: MyGroupsActions.joinOrLeaveGroup
+		}
+	},
+
 	// ****************************************************************************
 	// ****************************************************************************
 	// ****************************************************************************
@@ -47309,7 +47360,8 @@ var UserActions = require('../actions/UserActions');
 			handleRefreshGroups: StudyGroupActions.REFRESH_GROUPS,
 			handleEditGroup: StudyGroupActions.EDIT_GROUP,
 
-			handleFetchMyGroups: MyGroupsActions.FETCH_MY_GROUPS
+			handleFetchMyGroups: MyGroupsActions.FETCH_MY_GROUPS,
+			handleJoinOrLeaveGroup: MyGroupsActions.JOIN_OR_LEAVE_GROUP
 		});
 
 
@@ -47321,6 +47373,30 @@ var UserActions = require('../actions/UserActions');
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleFetchMyGroups",{writable:true,configurable:true,value:function(myGroups) {"use strict";
 		this.myGroups = myGroups;
+	}});
+
+	Object.defineProperty(StudyGroupStore.prototype,"handleJoinOrLeaveGroup",{writable:true,configurable:true,value:function(myGroup) {"use strict";
+		console.log('mygroup', myGroup);
+
+		if(myGroup.joinOrLeave === 'add'){
+			var found = false;
+			for (var i in this.myGroups) {
+		     	if (this.myGroups[i].id === myGroup.groupID) {
+		       		found = true
+		        	break;
+		     	}
+		   	}
+		   	if (!found){
+		   		this.myGroups.push(myGroup.group);
+		   	}
+		} else {
+			for (var i in this.myGroups) {
+		     	if (this.myGroups[i].id === myGroup.groupID) {
+		       		this.myGroups.splice(i, 1);
+		       		break;
+		     	}
+		   	}
+		}
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleEditGroup",{writable:true,configurable:true,value:function(studyGroup) {"use strict";

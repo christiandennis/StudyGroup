@@ -56,9 +56,7 @@ var AllSimpleGroup = React.createClass({
 
 var MyGroups = React.createClass ({
 	componentDidMount() {
-		console.log('----------MY GROUPS---------');
 		var state = StudyGroupStore.getState();
-		console.log('componentDidMount state', state);
 		StudyGroupStore.fetchMyGroups();
 	},
 
@@ -72,7 +70,6 @@ var MyGroups = React.createClass ({
 
 	render(){
 		var state = StudyGroupStore.getState();
-		console.log('render state', state);
 		if (state.myGroups) {
 			return (
 				<div>

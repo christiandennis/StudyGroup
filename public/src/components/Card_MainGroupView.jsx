@@ -39,6 +39,12 @@ var MainGroupViewCard = React.createClass({
 		}
 	},
 
+	joinLeaveGroup(joinOrLeave) {
+		// some logic to determine whether to join or to leave
+		joinOrLeave = 'remove';
+		StudyGroupStore.joinOrLeaveGroup(this.props.studyGroup.id, joinOrLeave);
+	},
+
 	render() {
 		var studyGroup = this.props.studyGroup;
 		var date = moment(studyGroup.date).format("ddd, MMM D").toString();
@@ -97,7 +103,7 @@ var MainGroupViewCard = React.createClass({
 			                    </td>
 			                    <td colSpan="2">
 			                        <div style={{textAlign:"right"}} className="joinButtonContainer">
-			                            <RaisedButton label="Join"/>
+			                            <RaisedButton onClick={this.joinLeaveGroup} label="Join"/>
 			                        </div>
 			                    </td>
 			                    <td>
