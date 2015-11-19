@@ -46036,6 +46036,7 @@ var StudyGroupStore = require('../stores/StudyGroupStore');
 const TextField = require('material-ui/lib/text-field');
 const Dialog = require('material-ui/lib/dialog');
 const FlatButton = require('material-ui/lib/flat-button');
+const Paper = require('material-ui/lib/paper');
 
 var ProfileDialog = React.createClass({displayName: "ProfileDialog",
 	mixins: [History],
@@ -46055,12 +46056,19 @@ var ProfileDialog = React.createClass({displayName: "ProfileDialog",
 						    onTouchTap: this.cancelProfile}),
 						  ], 
 					onShow: this.viewProfileShow, 
+					style: {textAlign:"center"}, 
 			  		autoDetectWindowHeight: true, 
 			  		autoScrollBodyContent: true}, 
-			    React.createElement("div", null, 
-			    	React.createElement("div", {ref: "profileName", style: {fontSize:"30px", paddingBottom:"20px"}}, this.props.user.name), 
-			    	React.createElement("div", {ref: "profileEmail", className: "prof-email"}, this.props.user.email), 
-			    	React.createElement("div", {ref: "profileClass", className: "prof-class"}, this.props.user.school)
+			    React.createElement(Paper, {
+			    zDepth: 2, 
+			    rounded: true, 
+			    style: {backgroundColor:"white"}}, 
+			    	React.createElement("div", {className: "profile-box", 
+			    	style: {paddingTop:"50px", paddingBottom:"50px"}}, 
+				    	React.createElement("div", {style: {fontWeight:"bold", fontSize:"30px", paddingBottom:"20px"}, ref: "profileName"}, this.props.user.name), 
+				    	React.createElement("div", {ref: "profileEmail", className: "prof-email", style: {paddingBottom:"20px"}}, this.props.user.email), 
+				    	React.createElement("div", {style: {fontWeight:"100", fontSize:"15px", textAlign:"right", paddingRight:"20px", bottom:"0"}, ref: "profileClass", className: "prof-class"}, this.props.user.school)
+			    	)
 			    )
 			)
 		)
@@ -46069,7 +46077,7 @@ var ProfileDialog = React.createClass({displayName: "ProfileDialog",
 
 module.exports = ProfileDialog;
 
-},{"../stores/StudyGroupStore":382,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/text-field":121,"react":367,"react-dom":161,"react-router":181}],378:[function(require,module,exports){
+},{"../stores/StudyGroupStore":382,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/paper":95,"material-ui/lib/text-field":121,"react":367,"react-dom":161,"react-router":181}],378:[function(require,module,exports){
 // React, react-reouter, alt
 var React = require('react');
 var render = require('react-dom').render;
