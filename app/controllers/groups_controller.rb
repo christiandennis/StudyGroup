@@ -75,7 +75,7 @@ class GroupsController < ApplicationController
 
 	#TODO: order groups by date
 	def index
-		@groups = Group.all
+		@groups = Group.all.order("date")
 		render json: {'status'=>1,'groups' => @groups}
 	end
 
@@ -84,7 +84,7 @@ class GroupsController < ApplicationController
 	def userindex
 		#based on school/user
 		# what to initially show
-		@groups = Group.find_by_school(current_user.school)
+		@groups = Group.where(:school => current_user.school).order("date")
 		@user = current_user
 
 		render json: {'status'=>1,'groups' => @groups}
@@ -92,7 +92,7 @@ class GroupsController < ApplicationController
 
 	#TODO: Order displayed_groups by date
 	def usergroups
-		@groups = Group.all
+		@groups = Group.all.order("date")
 		@user = current_user
 		
 		id_formatted = ' '+@user.nickname.to_s+' '

@@ -29,7 +29,6 @@ var NewGroupDialog = React.createClass({
 		var time = this.refs.createGroupTime;
 		var location = this.refs.createGroupLocation;
 		var capacity = 	this.refs.createGroupCapacity;
-		var host = this.props.user;
 		var privacy = 0;
 
 		// create the date
@@ -50,7 +49,7 @@ var NewGroupDialog = React.createClass({
 		var successSnackbar = this.refs.createGroupSuccessSnackbar;
 
 		if (title.getValue() && subject.getValue() && description.getValue() && location.getValue() && capacity.getValue() && date.getDate()) {
-			StudyGroupStore.postNewGroup(title, subject, description, date_str, location, capacity, host, this.props.user.school, privacy, this.history, newGroupDialog, failedSnackbar, successSnackbar);
+			StudyGroupStore.postNewGroup(title, subject, description, date_str, location, capacity, privacy, newGroupDialog, failedSnackbar, successSnackbar);
 		} else {
 
 			if (!title.getValue()){

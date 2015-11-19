@@ -175,7 +175,7 @@ var StudyGroupSource = {
 	// ==================================================
 	postNewGroup() {
 		return {
-		  remote(state, title, subject, description, date, location, capacity, host, school, privacy, history, newGroupDialog, failedSnackbar, successSnackbar) { 
+		  remote(state, title, subject, description, date, location, capacity, privacy, newGroupDialog, failedSnackbar, successSnackbar) { 
 		    return new Promise(function (resolve, reject) {
 		      	console.log('--------------POST NEW GROUP--------------');
 		      	console.log("postnewgroupstate", state);
@@ -186,8 +186,6 @@ var StudyGroupSource = {
 	      			"date": date, 
 	      			"location": location.getValue(),
 	      			"capacity": capacity.getValue(),
-	      			"host": host,
-	      			"school": school,
 	      			"privacy": privacy
 		      	}
 		      	
@@ -203,7 +201,6 @@ var StudyGroupSource = {
       	      success: function(response) {
       	      	console.log('__SUCCESS__');
 	      	  	  console.log('response:' ,response);
-	      	  	  // history.pushState(null, '/studygroupapp');
 	      	  	  resolve(response.group);
 	      	  	  newGroupDialog.dismiss();
 	      	  	  successSnackbar.show();
@@ -225,63 +222,61 @@ var StudyGroupSource = {
 		    return null;
 		  },
 		  
-		  success: StudyGroupActions.refreshGroups,
-		  error: StudyGroupActions.studyGroupsFailed2,
-		  loading: StudyGroupActions.fetchStudyGroups
+		  success: StudyGroupActions.refreshGroups
 		}
 	},
 
 	editGroup() {
-				return {
-				  	remote(state, id, title, subject, description, date, location, capacity, editGroupDialog, failedSnackbar, successSnackbar) { 
-					    return new Promise(function (resolve, reject) {
-					      	console.log('--------------EDIT GROUP--------------');
-					      	var groupData = {
-					      		"title": title.getValue(),
-				      			"subject": subject.getValue(),
-				      			"description": description.getValue(),
-				      			"date": date, 
-				      			"location": location.getValue(),
-				      			"capacity": capacity.getValue(),
-				      			"id": id
-					      	};
-					      	var URL = '/groups/' + id;
-					      	$.ajax({ url: URL,
-				      	      	type: 'PUT',
-				      	      	beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-				      	      	headers:{
-				      	      				"access-token": state.user.accesstoken,
-				      	      				"client": state.user.client,
-				      	      				"uid": state.user.uid
-				      	      			},
-					      	    data: groupData,
-					      	    success: function(response) {
-					      	      	console.log('__SUCCESS__');
-					      	  	  	console.log('response:' ,response);
-					      	  	  	// history.pushState(null, '/studygroupapp');
-					      	  	  	resolve(response.group);
-					      	  	  	editGroupDialog.dismiss();
-					      	  	  	successSnackbar.show();
-					      	  	  	console.log('**************END EDIT GROUP**************');
-				      	      	},
-				      	      	error: function(response) {
-					      	      	console.log('__FAILED__');
-						      	  	console.log('response:' ,response.responseJSON);
-						      	  	failedSnackbar.show();
-						      	  	console.log('**************END EDIT GROUP**************');
-				      	      	}
-			      	    	});
-					    });
-					},
+		return {
+		  	remote(state, id, title, subject, description, date, location, capacity, editGroupDialog, failedSnackbar, successSnackbar) { 
+			    return new Promise(function (resolve, reject) {
+			      	console.log('--------------EDIT GROUP--------------');
+			      	var groupData = {
+			      		"title": title.getValue(),
+		      			"subject": subject.getValue(),
+		      			"description": description.getValue(),
+		      			"date": date, 
+		      			"location": location.getValue(),
+		      			"capacity": capacity.getValue(),
+		      			"id": id
+			      	};
+			      	var URL = '/groups/' + id;
+			      	$.ajax({ url: URL,
+		      	      	type: 'PUT',
+		      	      	beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+		      	      	headers:{
+		      	      				"access-token": state.user.accesstoken,
+		      	      				"client": state.user.client,
+		      	      				"uid": state.user.uid
+		      	      			},
+			      	    data: groupData,
+			      	    success: function(response) {
+			      	      	console.log('__SUCCESS__');
+			      	  	  	console.log('response:' ,response);
+			      	  	  	// history.pushState(null, '/studygroupapp');
+			      	  	  	resolve(response.group);
+			      	  	  	editGroupDialog.dismiss();
+			      	  	  	successSnackbar.show();
+			      	  	  	console.log('**************END EDIT GROUP**************');
+		      	      	},
+		      	      	error: function(response) {
+			      	      	console.log('__FAILED__');
+				      	  	console.log('response:' ,response.responseJSON);
+				      	  	failedSnackbar.show();
+				      	  	console.log('**************END EDIT GROUP**************');
+		      	      	}
+	      	    	});
+			    });
+			},
 
-				  local() {
-				    // Never check locally, always fetch remotely.
-				    return null;
-				  },
-				  
-				  success: StudyGroupActions.editGroup,
-				  error: StudyGroupActions.studyGroupsFailed
-				}
+		  local() {
+		    // Never check locally, always fetch remotely.
+		    return null;
+		  },
+		  
+		  success: StudyGroupActions.editGroup,
+		  error: StudyGroupActions.studyGroupsFailed
+		}
 	},
 	
 	// ==================================================
