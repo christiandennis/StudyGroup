@@ -41,7 +41,7 @@ var MainGroupViewCard = React.createClass({
 
 	joinLeaveGroup(joinOrLeave) {
 		// some logic to determine whether to join or to leave
-		joinOrLeave = 'remove';
+		joinOrLeave = 'add';
 		StudyGroupStore.joinOrLeaveGroup(this.props.studyGroup.id, joinOrLeave);
 	},
 

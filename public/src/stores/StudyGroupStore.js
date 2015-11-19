@@ -44,8 +44,7 @@ class StudyGroupStore {
 	}
 
 	handleJoinOrLeaveGroup(myGroup) {
-		console.log('mygroup', myGroup);
-
+		// add the joined group to mygroups
 		if(myGroup.joinOrLeave === 'add'){
 			var found = false;
 			for (var i in this.myGroups) {
@@ -57,7 +56,7 @@ class StudyGroupStore {
 		   	if (!found){
 		   		this.myGroups.push(myGroup.group);
 		   	}
-		} else {
+		} else { // remove the left group from mygroups
 			for (var i in this.myGroups) {
 		     	if (this.myGroups[i].id === myGroup.groupID) {
 		       		this.myGroups.splice(i, 1);
@@ -65,6 +64,14 @@ class StudyGroupStore {
 		     	}
 		   	}
 		}
+
+		// update the counter/capacity on the card
+		for (var i in this.studyGroups) {
+	     	if (this.studyGroups[i].id == myGroup.groupID) {
+	       		this.studyGroups[i] = myGroup.group;
+	        	break;
+	     	}
+	   	}
 	}
 
 	handleEditGroup(studyGroup) {

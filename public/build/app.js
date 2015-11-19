@@ -45695,7 +45695,7 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 
 	joinLeaveGroup:function(joinOrLeave) {
 		// some logic to determine whether to join or to leave
-		joinOrLeave = 'remove';
+		joinOrLeave = 'add';
 		StudyGroupStore.joinOrLeaveGroup(this.props.studyGroup.id, joinOrLeave);
 	},
 
@@ -47376,8 +47376,7 @@ var UserActions = require('../actions/UserActions');
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleJoinOrLeaveGroup",{writable:true,configurable:true,value:function(myGroup) {"use strict";
-		console.log('mygroup', myGroup);
-
+		// add the joined group to mygroups
 		if(myGroup.joinOrLeave === 'add'){
 			var found = false;
 			for (var i in this.myGroups) {
@@ -47389,7 +47388,7 @@ var UserActions = require('../actions/UserActions');
 		   	if (!found){
 		   		this.myGroups.push(myGroup.group);
 		   	}
-		} else {
+		} else { // remove the left group from mygroups
 			for (var i in this.myGroups) {
 		     	if (this.myGroups[i].id === myGroup.groupID) {
 		       		this.myGroups.splice(i, 1);
@@ -47397,6 +47396,14 @@ var UserActions = require('../actions/UserActions');
 		     	}
 		   	}
 		}
+
+		// update the counter/capacity on the card
+		for (var i in this.studyGroups) {
+	     	if (this.studyGroups[i].id == myGroup.groupID) {
+	       		this.studyGroups[i] = myGroup.group;
+	        	break;
+	     	}
+	   	}
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleEditGroup",{writable:true,configurable:true,value:function(studyGroup) {"use strict";
