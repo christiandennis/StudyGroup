@@ -183,7 +183,7 @@ var StudyGroupSource = {
 		      		"title": title.getValue(),
 	      			"subject": subject.getValue(),
 	      			"description": description.getValue(),
-	      			"date": date.getDate(), 
+	      			"date": date, 
 	      			"location": location.getValue(),
 	      			"capacity": capacity.getValue(),
 	      			"host": host,

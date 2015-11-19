@@ -45665,6 +45665,17 @@ var TopBar = React.createClass({displayName: "TopBar",
 		var subject = this.refs.createGroupSubject;
 		var description =  this.refs.createGroupDescription;
 		var date = this.refs.createGroupDate;
+		var time = this.refs.createGroupTime;
+
+		// create the date
+		new_time = time.getTime();
+		new_date = date.getDate();
+		date_str = new_date.toString();
+		time_str = new_time.toString();
+		time_str = time_str.slice(15);
+		date_str = date_str.slice(0,15);
+		date_str = date_str + " " + time_str;
+
 		var location = this.refs.createGroupLocation;
 		var capacity = 	this.refs.createGroupCapacity;
 		var host = this.props.user;
@@ -45688,7 +45699,7 @@ var TopBar = React.createClass({displayName: "TopBar",
 		var successSnackbar = this.refs.createGroupSuccessSnackbar;
 
 		if (title.getValue() && subject.getValue() && description.getValue() && location.getValue() && capacity.getValue() && date.getDate()) {
-			StudyGroupStore.postNewGroup(title, subject, description, date, location, capacity, host, this.props.user.school, privacy, this.history, newGroupDialog);
+			StudyGroupStore.postNewGroup(title, subject, description, date_str, location, capacity, host, this.props.user.school, privacy, this.history, newGroupDialog);
 		} else {
 
 			if (!title.getValue()){
@@ -46698,7 +46709,7 @@ var StudyGroupSource = {
 		      		"title": title.getValue(),
 	      			"subject": subject.getValue(),
 	      			"description": description.getValue(),
-	      			"date": date.getDate(), 
+	      			"date": date, 
 	      			"location": location.getValue(),
 	      			"capacity": capacity.getValue(),
 	      			"host": host,
