@@ -45695,17 +45695,32 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 
 	joinLeaveGroup:function(joinOrLeave) {
 		// some logic to determine whether to join or to leave
-		joinOrLeave = 'add';
-		StudyGroupStore.joinOrLeaveGroup(this.props.studyGroup.id, joinOrLeave);
+		if (joinOrLeave === 'Dismiss') {
+			console.log('TO DO: delete group');
+		} else if (joinOrLeave === 'Leave') {
+			StudyGroupStore.joinOrLeaveGroup(this.props.studyGroup.id, 'remove');
+		} else {
+			StudyGroupStore.joinOrLeaveGroup(this.props.studyGroup.id, 'add');
+		}
 	},
 
 	render:function() {
 		var studyGroup = this.props.studyGroup;
+		var user = this.props.user;
 		var d = new Date(0);
 		d.setUTCSeconds(Number(studyGroup.date));
 		var date = moment(d).format("ddd, MMM D").toString();
 		var time = moment(d).format("h:mm a").toString();
 		var color = this.calculateTimeColor(studyGroup.date);
+		
+		// determine if user is host, can join, or can leave		
+		var joinText = 'Join';
+		// if (studyGroup.host === user.nickname) {
+		// 	joinText = 'Dismiss';
+		// } else if(user.nickname in studyGroup.going) {
+		// 	joinText = 'Leave';
+		// }
+
 		return (
 			React.createElement("div", {key: studyGroup.id}, 
 				React.createElement(Dialog_GroupDetail, {ref: "groupDetailDialog", studyGroup: studyGroup}), 
@@ -45759,7 +45774,7 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 			                    ), 
 			                    React.createElement("td", {colSpan: "2"}, 
 			                        React.createElement("div", {style: {textAlign:"right"}, className: "joinButtonContainer"}, 
-			                            React.createElement(RaisedButton, {onClick: this.joinLeaveGroup, label: "Join"})
+			                            React.createElement(RaisedButton, {onClick: this.joinLeaveGroup, label: joinText})
 			                        )
 			                    ), 
 			                    React.createElement("td", null, 
@@ -46862,8 +46877,8 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 			return (
 				React.createElement("ul", null, 
 					this.props.studyGroups.map(function(studyGroup, i)  {
-					    return ( React.createElement(Card_MainGroupView, {studyGroup: studyGroup}) );
-					})
+					    return ( React.createElement(Card_MainGroupView, {studyGroup: studyGroup, user: this.props.user}) );
+					}.bind(this))
 				)					
 			);
 		}

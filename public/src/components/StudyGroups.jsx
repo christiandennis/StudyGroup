@@ -52,7 +52,7 @@ var AllStudyGroups = React.createClass({
 			return (
 				<ul>
 					{this.props.studyGroups.map((studyGroup, i) => {
-					    return ( <Card_MainGroupView studyGroup={studyGroup}/> );
+					    return ( <Card_MainGroupView studyGroup={studyGroup} user={this.props.user}/> );
 					})}
 				</ul>					
 			);

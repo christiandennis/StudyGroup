@@ -41,17 +41,32 @@ var MainGroupViewCard = React.createClass({
 
 	joinLeaveGroup(joinOrLeave) {
 		// some logic to determine whether to join or to leave
-		joinOrLeave = 'add';
-		StudyGroupStore.joinOrLeaveGroup(this.props.studyGroup.id, joinOrLeave);
+		if (joinOrLeave === 'Dismiss') {
+			console.log('TO DO: delete group');
+		} else if (joinOrLeave === 'Leave') {
+			StudyGroupStore.joinOrLeaveGroup(this.props.studyGroup.id, 'remove');
+		} else {
+			StudyGroupStore.joinOrLeaveGroup(this.props.studyGroup.id, 'add');
+		}
 	},
 
 	render() {
 		var studyGroup = this.props.studyGroup;
+		var user = this.props.user;
 		var d = new Date(0);
 		d.setUTCSeconds(Number(studyGroup.date));
 		var date = moment(d).format("ddd, MMM D").toString();
 		var time = moment(d).format("h:mm a").toString();
 		var color = this.calculateTimeColor(studyGroup.date);
+		
+		// determine if user is host, can join, or can leave		
+		var joinText = 'Join';
+		// if (studyGroup.host === user.nickname) {
+		// 	joinText = 'Dismiss';
+		// } else if(user.nickname in studyGroup.going) {
+		// 	joinText = 'Leave';
+		// }
+
 		return (
 			<div key={studyGroup.id}>
 				<Dialog_GroupDetail ref='groupDetailDialog' studyGroup={studyGroup}/>
@@ -105,7 +120,7 @@ var MainGroupViewCard = React.createClass({
 			                    </td>
 			                    <td colSpan="2">
 			                        <div style={{textAlign:"right"}} className="joinButtonContainer">
-			                            <RaisedButton onClick={this.joinLeaveGroup} label="Join"/>
+			                            <RaisedButton onClick={this.joinLeaveGroup} label={joinText}/>
 			                        </div>
 			                    </td>
 			                    <td>
