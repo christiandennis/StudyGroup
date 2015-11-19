@@ -12,6 +12,7 @@ const FlatButton = require('material-ui/lib/flat-button');
 const DatePicker = require('material-ui/lib/date-picker/date-picker');
 const TimePicker = require('material-ui/lib/time-picker/time-picker');
 const Checkbox = require('material-ui/lib/checkbox');
+const Snackbar = require('material-ui/lib/snackbar');
 
 var NewGroupDialog = React.createClass({
 	mixins: [History],
@@ -44,22 +45,12 @@ var NewGroupDialog = React.createClass({
 			privacy = 1;
 		}
 
-		if (false) {
-			console.log(title.getValue());
-			console.log(subject.getValue());
-			console.log(description.getValue());
-			console.log(date);
-			console.log(location.getValue());
-			console.log(capacity.getValue());
-			console.log(host);
-		}
-
 		var newGroupDialog = this.refs.newGroupDialog;
 		var failedSnackbar = this.refs.createGroupFailedSnackbar;
 		var successSnackbar = this.refs.createGroupSuccessSnackbar;
 
 		if (title.getValue() && subject.getValue() && description.getValue() && location.getValue() && capacity.getValue() && date.getDate()) {
-			StudyGroupStore.postNewGroup(title, subject, description, date_str, location, capacity, host, this.props.user.school, privacy, this.history, newGroupDialog);
+			StudyGroupStore.postNewGroup(title, subject, description, date_str, location, capacity, host, this.props.user.school, privacy, this.history, newGroupDialog, failedSnackbar, successSnackbar);
 		} else {
 
 			if (!title.getValue()){
@@ -141,68 +132,80 @@ var NewGroupDialog = React.createClass({
 
 	render() {
 		return (
-			<Dialog ref="newGroupDialog" 
-					title="Create a New StudyGroup" 
-					modal={true}
-					actions={[
-						  <FlatButton
-						    label="Cancel"
-						    secondary={true}
-						    onTouchTap={this.cancelNewGroup} />,
-						  <FlatButton
-						    label="Submit"
-						    primary={true}
-						    onTouchTap={this.submitNewGroup} />]}
-			  		autoDetectWindowHeight={true} 
-			  		autoScrollBodyContent={true}>
-			    <div>
-			    	<TextField
-			    		onEnterKeyDown = {this.submitNewGroup}
-			    		ref = "createGroupSubject"
-			    		onChange={this.validateGroupSubject}
-				    	hintText="CS169"
-				    	floatingLabelText="Class" />
-			    	<TextField
-			    		onEnterKeyDown = {this.submitNewGroup}
-			    		ref = "createGroupTitle"
-			    		onChange={this.validateGroupTitle}
-			    	  	hintText="Learn React together"
-			    	  	floatingLabelText="Title" />
-			    	<TextField
-			    		onEnterKeyDown = {this.submitNewGroup}
-			    		onChange={this.validateGroupDescription}
-			    		ref = "createGroupDescription"
-			    	  	hintText="Come and learn the basic (and some advanced) React together! REACT IS THE FUTURE!!!"
-			    	  	floatingLabelText="Description"
-			    	  	fullWidth={true}
-			    	  	multiLine={true}/>
-			    	<DatePicker
-			    		ref = "createGroupDate"
-			    	  	hintText="Nov 22, 2015"
-			    	  	floatingLabelText="Date"/>
-			    	<TimePicker
-			    		ref = "createGroupTime"
-			    	  	hintText="9:00 pm"
-			    	  	floatingLabelText="Time"/>
-			    	<TextField
-			    		onEnterKeyDown = {this.submitNewGroup}
-			    		onChange={this.validateGroupLocation}
-			    		ref = "createGroupLocation"
-			    	  	hintText="Wozniak Longue, Soda Hall"
-			    	  	floatingLabelText="Location"/>
-			    	<TextField
-			    		onEnterKeyDown = {this.submitNewGroup}
-			    		onChange={this.validateGroupCapacity}
-			    		ref = "createGroupCapacity"
-			    	  	hintText="20"
-			    	  	floatingLabelText="Capacity"/>
-			    	<Checkbox
-			    		ref = "createGroupPrivacy"
-			    	  	name="privacy"
-			    	  	value="private"
-			    	  	label="private"/>
-			    </div>
-			</Dialog>
+			<div>
+				<Dialog ref="newGroupDialog" 
+						title="Create a New StudyGroup" 
+						modal={true}
+						actions={[
+							  <FlatButton
+							    label="Cancel"
+							    secondary={true}
+							    onTouchTap={this.cancelNewGroup} />,
+							  <FlatButton
+							    label="Submit"
+							    primary={true}
+							    onTouchTap={this.submitNewGroup} />]}
+				  		autoDetectWindowHeight={true} 
+				  		autoScrollBodyContent={true}>
+				    <div>
+				    	<TextField
+				    		onEnterKeyDown = {this.submitNewGroup}
+				    		ref = "createGroupSubject"
+				    		onChange={this.validateGroupSubject}
+					    	hintText="CS169"
+					    	floatingLabelText="Class" />
+				    	<TextField
+				    		onEnterKeyDown = {this.submitNewGroup}
+				    		ref = "createGroupTitle"
+				    		onChange={this.validateGroupTitle}
+				    	  	hintText="Learn React together"
+				    	  	floatingLabelText="Title" />
+				    	<TextField
+				    		onEnterKeyDown = {this.submitNewGroup}
+				    		onChange={this.validateGroupDescription}
+				    		ref = "createGroupDescription"
+				    	  	hintText="Come and learn the basic (and some advanced) React together! REACT IS THE FUTURE!!!"
+				    	  	floatingLabelText="Description"
+				    	  	fullWidth={true}
+				    	  	multiLine={true}/>
+				    	<DatePicker
+				    		ref = "createGroupDate"
+				    	  	hintText="Nov 22, 2015"
+				    	  	floatingLabelText="Date"/>
+				    	<TimePicker
+				    		ref = "createGroupTime"
+				    	  	hintText="9:00 pm"
+				    	  	floatingLabelText="Time"/>
+				    	<TextField
+				    		onEnterKeyDown = {this.submitNewGroup}
+				    		onChange={this.validateGroupLocation}
+				    		ref = "createGroupLocation"
+				    	  	hintText="Wozniak Longue, Soda Hall"
+				    	  	floatingLabelText="Location"/>
+				    	<TextField
+				    		onEnterKeyDown = {this.submitNewGroup}
+				    		onChange={this.validateGroupCapacity}
+				    		ref = "createGroupCapacity"
+				    	  	hintText="20"
+				    	  	floatingLabelText="Capacity"/>
+				    	<Checkbox
+				    		ref = "createGroupPrivacy"
+				    	  	name="privacy"
+				    	  	value="private"
+				    	  	label="private"/>
+				    </div>
+				</Dialog>
+
+				<Snackbar
+	           		ref = "createGroupFailedSnackbar"
+	             	message="Failed to create group"
+	             	autoHideDuration="5000"/>
+
+	    		<Snackbar
+	           		ref = "createGroupSuccessSnackbar"
+	             	message="Group Created"
+	             	autoHideDuration="5000"/>
+            </div>
 		)
 	}
 })

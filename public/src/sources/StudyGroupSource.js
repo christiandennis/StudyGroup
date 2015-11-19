@@ -175,7 +175,7 @@ var StudyGroupSource = {
 	// ==================================================
 	postNewGroup() {
 		return {
-		  remote(state, title, subject, description, date, location, capacity, host, school, privacy, history, newGroupDialog) { 
+		  remote(state, title, subject, description, date, location, capacity, host, school, privacy, history, newGroupDialog, failedSnackbar, successSnackbar) { 
 		    return new Promise(function (resolve, reject) {
 		      	console.log('--------------POST NEW GROUP--------------');
 		      	console.log("postnewgroupstate", state);
@@ -206,12 +206,14 @@ var StudyGroupSource = {
 	      	  	  // history.pushState(null, '/studygroupapp');
 	      	  	  resolve(response.group);
 	      	  	  newGroupDialog.dismiss();
+	      	  	  successSnackbar.show();
 	      	  	  console.log('**************END POST NEW GROUP**************');
       	      },
       	      error: function(response) {
       	      	console.log('__FAILED__');
       	      	// User was not found or was not logged in.
 	      	  	  console.log('response:' ,response.responseJSON);
+	      	  	  failedSnackbar.show();
 	      	  	  console.log('**************END POST NEW GROUP**************');
       	      }
       	    }); 
