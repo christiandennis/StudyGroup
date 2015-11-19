@@ -9,6 +9,7 @@ var StudyGroupStore = require('../stores/StudyGroupStore');
 const TextField = require('material-ui/lib/text-field');
 const Dialog = require('material-ui/lib/dialog');
 const FlatButton = require('material-ui/lib/flat-button');
+const Snackbar = require('material-ui/lib/snackbar');
 
 var SignUpDialog = React.createClass({
 	mixins: [History],
@@ -36,7 +37,7 @@ var SignUpDialog = React.createClass({
 
 		if (email.getValue() && password.getValue() && confirmPassword.getValue() && fullname.getValue()){
 			if (confirmPassword.getValue() === password.getValue()){
-				StudyGroupStore.signUp(fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog);
+				StudyGroupStore.signUp(fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog, this.refs.invalidEmailSnackbar, this.refs.unavailableEmailSnackbar, this.refs.unavailableUsernameSnackbar, this.refs.failedSnackbar);
 			}
 		} else {
 			if (!email.getValue()){
@@ -139,60 +140,79 @@ var SignUpDialog = React.createClass({
 
 	render() {
 		return (
-			<Dialog ref="signUpDialog" 
-					title="Sign Up" 
-					actions={[
-						  <FlatButton
-						    label="Cancel"
-						    secondary={true}
-						    onTouchTap={this.cancelSignUp} />,
-						  <FlatButton
-						    label="Sign Up"
-						    primary={true}
-						    onTouchTap={this.submitSignUp} />]}
-			  		autoDetectWindowHeight={true} 
-			  		autoScrollBodyContent={true}>
-			    <div>
-			    	<TextField
-			    	  onEnterKeyDown = {this.submitSignUp}
-			    	  ref="fullNameSignUp"
-			    	  hintText="Christian Dennis"
-			    	  onChange={this.validateFullName}
-			    	  floatingLabelText="Full Name" /><br />
-			    	<TextField
-			    	  onEnterKeyDown = {this.submitSignUp}
-			    	  ref="usernameSignUp"
-			    	  hintText="christiandennis"
-			    	  onChange={this.validateUsername}
-			    	  floatingLabelText="Username" /><br />
-			    	<TextField
-			    	  onEnterKeyDown = {this.submitSignUp}
-			    	  ref="schoolSignUp"
-			    	  hintText="UC Berkeley"
-			    	  onChange={this.validateSchool}
-			    	  floatingLabelText="School" /><br />
-			    	<TextField
-			    	  onEnterKeyDown = {this.submitSignUp}
-			    	  ref="emailSignUp"
-			    	  hintText="christiandennis@studygroup.com"
-			    	  onChange={this.validateEmail}
-			    	  floatingLabelText="Email" /><br />
-			    	<TextField
-			    	  onEnterKeyDown = {this.submitSignUp}
-			    	  ref="passwordSignUp"
-			    	  hintText="Password"
-			    	  onChange={this.validatePasswordMatch}
-			    	  floatingLabelText="Password" 
-			    	  type="password"/><br />
-			    	<TextField
-			    	  onEnterKeyDown = {this.submitSignUp}
-			    	  ref="confirmPasswordSignUp"
-			    	  hintText="must be hard!"
-			    	  onChange={this.validatePasswordMatch}
-			    	  floatingLabelText="Confirm Password"
-			    	  type="password"/>
-			    </div>
-			</Dialog>
+			<div>
+				<Dialog ref="signUpDialog" 
+						title="Sign Up" 
+						actions={[
+							  <FlatButton
+							    label="Cancel"
+							    secondary={true}
+							    onTouchTap={this.cancelSignUp} />,
+							  <FlatButton
+							    label="Sign Up"
+							    primary={true}
+							    onTouchTap={this.submitSignUp} />]}
+				  		autoDetectWindowHeight={true} 
+				  		autoScrollBodyContent={true}>
+				    <div>
+				    	<TextField
+				    	  onEnterKeyDown = {this.submitSignUp}
+				    	  ref="fullNameSignUp"
+				    	  hintText="Christian Dennis"
+				    	  onChange={this.validateFullName}
+				    	  floatingLabelText="Full Name" /><br />
+				    	<TextField
+				    	  onEnterKeyDown = {this.submitSignUp}
+				    	  ref="usernameSignUp"
+				    	  hintText="christiandennis"
+				    	  onChange={this.validateUsername}
+				    	  floatingLabelText="Username" /><br />
+				    	<TextField
+				    	  onEnterKeyDown = {this.submitSignUp}
+				    	  ref="schoolSignUp"
+				    	  hintText="UC Berkeley"
+				    	  onChange={this.validateSchool}
+				    	  floatingLabelText="School" /><br />
+				    	<TextField
+				    	  onEnterKeyDown = {this.submitSignUp}
+				    	  ref="emailSignUp"
+				    	  hintText="christiandennis@studygroup.com"
+				    	  onChange={this.validateEmail}
+				    	  floatingLabelText="Email" /><br />
+				    	<TextField
+				    	  onEnterKeyDown = {this.submitSignUp}
+				    	  ref="passwordSignUp"
+				    	  hintText="Password"
+				    	  onChange={this.validatePasswordMatch}
+				    	  floatingLabelText="Password" 
+				    	  type="password"/><br />
+				    	<TextField
+				    	  onEnterKeyDown = {this.submitSignUp}
+				    	  ref="confirmPasswordSignUp"
+				    	  hintText="must be hard!"
+				    	  onChange={this.validatePasswordMatch}
+				    	  floatingLabelText="Confirm Password"
+				    	  type="password"/>
+				    </div>
+				</Dialog>
+
+				<Snackbar
+		       		ref = "unavailableEmailSnackbar"
+		         	message="Email is registered"
+		         	autoHideDuration="5000"/>
+		        <Snackbar
+		       		ref = "invalidEmailSnackbar"
+		         	message="Invalid email"
+		         	autoHideDuration="5000"/>
+		        <Snackbar
+		       		ref = "unavailableUsernameSnackbar"
+		         	message="Username not available"
+		         	autoHideDuration="5000"/>
+		        <Snackbar
+		       		ref = "failedSnackbar"
+		         	message="Signup failed"
+		         	autoHideDuration="5000"/>
+	        </div>
 		)
 	}
 })

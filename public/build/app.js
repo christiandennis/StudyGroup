@@ -45561,6 +45561,10 @@ var TopBar = React.createClass({displayName: "TopBar",
 		this.refs.newGroupDialog.refs.newGroupDialog.show();
 	},
 
+	refreshGroups:function() {
+		StudyGroupStore.fetchStudyGroups();
+	},
+
 	updateUser:function(){
 
 	},
@@ -45601,8 +45605,10 @@ var TopBar = React.createClass({displayName: "TopBar",
 							  style: {
 							    backgroundColor: '#0D47A1 !important',
 							  }, 
-							  onLeftIconButtonTouchTap: this.openLeft, 
-							  iconElementRight:  React.createElement(FlatButton, {label: "New StudyGroup", onClick: this.dialogNewGroup})})
+							  onLeftIconButtonTouchTap: this.openLeft}, 
+								  React.createElement(FlatButton, {label: "Refresh", onClick: this.refreshGroups}), 
+								  React.createElement(FlatButton, {label: "New StudyGroup", onClick: this.dialogNewGroup})
+							)
 						)
                 	), 
                     
@@ -46054,6 +46060,7 @@ var StudyGroupStore = require('../stores/StudyGroupStore');
 const TextField = require('material-ui/lib/text-field');
 const Dialog = require('material-ui/lib/dialog');
 const FlatButton = require('material-ui/lib/flat-button');
+const Snackbar = require('material-ui/lib/snackbar');
 
 var LoginDialog = React.createClass({displayName: "LoginDialog",
 	mixins: [History],
@@ -46063,7 +46070,7 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 		console.log("this.props", this.props);
 		var user = this.refs.email.getValue();
 		var password = this.refs.password.getValue();
-		StudyGroupStore.fetchUser( user, password, this.history, this.refs.loginDialog);
+		StudyGroupStore.fetchUser( user, password, this.history, this.refs.loginDialog, this.refs.loginFailedSnackbar);
 	},
 
 	cancelLogIn:function() {
@@ -46072,40 +46079,46 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 
 	render:function() {
 		return (
-			React.createElement(Dialog, {ref: "loginDialog", 
-					title: "Log In", 
-					actions: [
-						  React.createElement(FlatButton, {
-						    label: "Cancel", 
-						    secondary: true, 
-						    onTouchTap: this.cancelLogIn}),
-						  React.createElement(FlatButton, {
-						    label: "Log In", 
-						    primary: true, 
-						    onTouchTap: this.submitLogIn})], 
-			  		autoDetectWindowHeight: true, 
-			  		autoScrollBodyContent: true}, 
+			React.createElement("div", null, 
+				React.createElement(Dialog, {ref: "loginDialog", 
+						title: "Log In", 
+						actions: [
+							  React.createElement(FlatButton, {
+							    label: "Cancel", 
+							    secondary: true, 
+							    onTouchTap: this.cancelLogIn}),
+							  React.createElement(FlatButton, {
+							    label: "Log In", 
+							    primary: true, 
+							    onTouchTap: this.submitLogIn})], 
+				  		autoDetectWindowHeight: true, 
+				  		autoScrollBodyContent: true}, 
 
-			    React.createElement(TextField, {
-			      onEnterKeyDown: this.submitLogIn, 
-			      ref: "email", 
-			      hintText: "christiandennis@studygroup.com", 
-			      floatingLabelText: "Email"}), React.createElement("br", null), 
-			    React.createElement(TextField, {
-			      onEnterKeyDown: this.submitLogIn, 
-			      ref: "password", 
-			      hintText: "Password", 
-			      floatingLabelText: "Password", 
-			      type: "password"}), React.createElement("br", null)
+				    React.createElement(TextField, {
+				      onEnterKeyDown: this.submitLogIn, 
+				      ref: "email", 
+				      hintText: "christiandennis@studygroup.com", 
+				      floatingLabelText: "Email"}), React.createElement("br", null), 
+				    React.createElement(TextField, {
+				      onEnterKeyDown: this.submitLogIn, 
+				      ref: "password", 
+				      hintText: "Password", 
+				      floatingLabelText: "Password", 
+				      type: "password"}), React.createElement("br", null)
+				), 
 
-			)
+	    		React.createElement(Snackbar, {
+	           		ref: "loginFailedSnackbar", 
+	             	message: "Invalid login credentials", 
+	             	autoHideDuration: "5000"})
+            )
 		)
 	}
 })
 
 module.exports = LoginDialog;
 
-},{"../stores/StudyGroupStore":385,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/text-field":121,"react":367,"react-dom":161,"react-router":181}],378:[function(require,module,exports){
+},{"../stores/StudyGroupStore":385,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/snackbar":101,"material-ui/lib/text-field":121,"react":367,"react-dom":161,"react-router":181}],378:[function(require,module,exports){
 // var button = require('react-materialize').Button;
 var React = require('react');
 var Link = require('react-router').Link;
@@ -46490,6 +46503,7 @@ var StudyGroupStore = require('../stores/StudyGroupStore');
 const TextField = require('material-ui/lib/text-field');
 const Dialog = require('material-ui/lib/dialog');
 const FlatButton = require('material-ui/lib/flat-button');
+const Snackbar = require('material-ui/lib/snackbar');
 
 var SignUpDialog = React.createClass({displayName: "SignUpDialog",
 	mixins: [History],
@@ -46517,7 +46531,7 @@ var SignUpDialog = React.createClass({displayName: "SignUpDialog",
 
 		if (email.getValue() && password.getValue() && confirmPassword.getValue() && fullname.getValue()){
 			if (confirmPassword.getValue() === password.getValue()){
-				StudyGroupStore.signUp(fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog);
+				StudyGroupStore.signUp(fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog, this.refs.invalidEmailSnackbar, this.refs.unavailableEmailSnackbar, this.refs.unavailableUsernameSnackbar, this.refs.failedSnackbar);
 			}
 		} else {
 			if (!email.getValue()){
@@ -46620,67 +46634,86 @@ var SignUpDialog = React.createClass({displayName: "SignUpDialog",
 
 	render:function() {
 		return (
-			React.createElement(Dialog, {ref: "signUpDialog", 
-					title: "Sign Up", 
-					actions: [
-						  React.createElement(FlatButton, {
-						    label: "Cancel", 
-						    secondary: true, 
-						    onTouchTap: this.cancelSignUp}),
-						  React.createElement(FlatButton, {
-						    label: "Sign Up", 
-						    primary: true, 
-						    onTouchTap: this.submitSignUp})], 
-			  		autoDetectWindowHeight: true, 
-			  		autoScrollBodyContent: true}, 
-			    React.createElement("div", null, 
-			    	React.createElement(TextField, {
-			    	  onEnterKeyDown: this.submitSignUp, 
-			    	  ref: "fullNameSignUp", 
-			    	  hintText: "Christian Dennis", 
-			    	  onChange: this.validateFullName, 
-			    	  floatingLabelText: "Full Name"}), React.createElement("br", null), 
-			    	React.createElement(TextField, {
-			    	  onEnterKeyDown: this.submitSignUp, 
-			    	  ref: "usernameSignUp", 
-			    	  hintText: "christiandennis", 
-			    	  onChange: this.validateUsername, 
-			    	  floatingLabelText: "Username"}), React.createElement("br", null), 
-			    	React.createElement(TextField, {
-			    	  onEnterKeyDown: this.submitSignUp, 
-			    	  ref: "schoolSignUp", 
-			    	  hintText: "UC Berkeley", 
-			    	  onChange: this.validateSchool, 
-			    	  floatingLabelText: "School"}), React.createElement("br", null), 
-			    	React.createElement(TextField, {
-			    	  onEnterKeyDown: this.submitSignUp, 
-			    	  ref: "emailSignUp", 
-			    	  hintText: "christiandennis@studygroup.com", 
-			    	  onChange: this.validateEmail, 
-			    	  floatingLabelText: "Email"}), React.createElement("br", null), 
-			    	React.createElement(TextField, {
-			    	  onEnterKeyDown: this.submitSignUp, 
-			    	  ref: "passwordSignUp", 
-			    	  hintText: "Password", 
-			    	  onChange: this.validatePasswordMatch, 
-			    	  floatingLabelText: "Password", 
-			    	  type: "password"}), React.createElement("br", null), 
-			    	React.createElement(TextField, {
-			    	  onEnterKeyDown: this.submitSignUp, 
-			    	  ref: "confirmPasswordSignUp", 
-			    	  hintText: "must be hard!", 
-			    	  onChange: this.validatePasswordMatch, 
-			    	  floatingLabelText: "Confirm Password", 
-			    	  type: "password"})
-			    )
-			)
+			React.createElement("div", null, 
+				React.createElement(Dialog, {ref: "signUpDialog", 
+						title: "Sign Up", 
+						actions: [
+							  React.createElement(FlatButton, {
+							    label: "Cancel", 
+							    secondary: true, 
+							    onTouchTap: this.cancelSignUp}),
+							  React.createElement(FlatButton, {
+							    label: "Sign Up", 
+							    primary: true, 
+							    onTouchTap: this.submitSignUp})], 
+				  		autoDetectWindowHeight: true, 
+				  		autoScrollBodyContent: true}, 
+				    React.createElement("div", null, 
+				    	React.createElement(TextField, {
+				    	  onEnterKeyDown: this.submitSignUp, 
+				    	  ref: "fullNameSignUp", 
+				    	  hintText: "Christian Dennis", 
+				    	  onChange: this.validateFullName, 
+				    	  floatingLabelText: "Full Name"}), React.createElement("br", null), 
+				    	React.createElement(TextField, {
+				    	  onEnterKeyDown: this.submitSignUp, 
+				    	  ref: "usernameSignUp", 
+				    	  hintText: "christiandennis", 
+				    	  onChange: this.validateUsername, 
+				    	  floatingLabelText: "Username"}), React.createElement("br", null), 
+				    	React.createElement(TextField, {
+				    	  onEnterKeyDown: this.submitSignUp, 
+				    	  ref: "schoolSignUp", 
+				    	  hintText: "UC Berkeley", 
+				    	  onChange: this.validateSchool, 
+				    	  floatingLabelText: "School"}), React.createElement("br", null), 
+				    	React.createElement(TextField, {
+				    	  onEnterKeyDown: this.submitSignUp, 
+				    	  ref: "emailSignUp", 
+				    	  hintText: "christiandennis@studygroup.com", 
+				    	  onChange: this.validateEmail, 
+				    	  floatingLabelText: "Email"}), React.createElement("br", null), 
+				    	React.createElement(TextField, {
+				    	  onEnterKeyDown: this.submitSignUp, 
+				    	  ref: "passwordSignUp", 
+				    	  hintText: "Password", 
+				    	  onChange: this.validatePasswordMatch, 
+				    	  floatingLabelText: "Password", 
+				    	  type: "password"}), React.createElement("br", null), 
+				    	React.createElement(TextField, {
+				    	  onEnterKeyDown: this.submitSignUp, 
+				    	  ref: "confirmPasswordSignUp", 
+				    	  hintText: "must be hard!", 
+				    	  onChange: this.validatePasswordMatch, 
+				    	  floatingLabelText: "Confirm Password", 
+				    	  type: "password"})
+				    )
+				), 
+
+				React.createElement(Snackbar, {
+		       		ref: "unavailableEmailSnackbar", 
+		         	message: "Email is registered", 
+		         	autoHideDuration: "5000"}), 
+		        React.createElement(Snackbar, {
+		       		ref: "invalidEmailSnackbar", 
+		         	message: "Invalid email", 
+		         	autoHideDuration: "5000"}), 
+		        React.createElement(Snackbar, {
+		       		ref: "unavailableUsernameSnackbar", 
+		         	message: "Username not available", 
+		         	autoHideDuration: "5000"}), 
+		        React.createElement(Snackbar, {
+		       		ref: "failedSnackbar", 
+		         	message: "Signup failed", 
+		         	autoHideDuration: "5000"})
+	        )
 		)
 	}
 })
 
 module.exports = SignUpDialog;
 
-},{"../stores/StudyGroupStore":385,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/text-field":121,"react":367,"react-dom":161,"react-router":181}],382:[function(require,module,exports){
+},{"../stores/StudyGroupStore":385,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/snackbar":101,"material-ui/lib/text-field":121,"react":367,"react-dom":161,"react-router":181}],382:[function(require,module,exports){
 var React = require('react');
 var render = require('react-dom').render;
 var axios = require('axios');
@@ -46807,15 +46840,6 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 				React.createElement("div", null, this.props.errorMessage)
 			);
 		}
-		if (StudyGroupStore.isLoading()) {
-			var left = window.document.documentElement.clientWidth/2 - 25;
-			var top = window.document.documentElement.clientHeight/2 - 25;
-			return(
-				React.createElement("div", null, 
-					React.createElement(RefreshIndicator, {size: 50, left: left, top: top, status: "loading"})
-				)
-			);
-		}
 
 		if (this.props.studyGroups){
 			return (
@@ -46884,7 +46908,7 @@ var StudyGroupSource = {
 	// ==================================================
 	signUp:function() {
 		return {
-		  remote:function(state, fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog) { 
+		  remote:function(state, fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog, invalidEmailSnackbar, unavailableEmailSnackbar, unavailableUsernameSnackbar, failedSnackbar) { 
 		    return new Promise(function (resolve, reject) {
 		      	console.log('--------------SIGN UP--------------');
 		      	var signUpData = {
@@ -46896,20 +46920,29 @@ var StudyGroupSource = {
           		"nickname": usernameSignUp.getValue()
 		      	} 	
 		      	$.ajax({ url: '/auth',
-		      	  type: 'POST',
-		      	  beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-		      	  data: signUpData,
-		      	  success: function(response) {
-	      	  		console.log('__SUCCESS--');
-	      	  	  console.log('response:' ,response);
-	      	  	  signUpDialog.dismiss();
-	      	  	  console.log('**************END SIGN UP**************');
-		      		},
-		      	  error: function(response) {
-		      	  	console.log('__FAILED__');
-	      	  	  console.log('response:' ,response);
-	      	  	  console.log('**************END SIGN UP**************');
-		      	  }
+			      	type: 'POST',
+			      	beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+			      	data: signUpData,
+			      	success: function(response) {
+		      	  		console.log('__SUCCESS--');
+		      	  	  	console.log('response:' ,response);
+		      	  	  	signUpDialog.dismiss();
+		      	  	  	console.log('**************END SIGN UP**************');
+			      	},
+			      	error: function(response) {
+			      		console.log('__FAILED__');
+		      	  		console.log('response:' ,response.responseJSON);
+		      	  		if(response.responseJSON.errors[0] === 'Username is taken.'){
+		      	  			unavailableUsernameSnackbar.show();
+		      	  		} else if(response.responseJSON.errors[0] === 'address is already in use'){
+		      	  			unavailableEmailSnackbar.show();
+		      	  		} else if (response.responseJSON.errors[0] === 'is not an email'){
+		      	  			invalidEmailSnackbar.show();
+		      	  		} else {
+		      	  			failedSnackbar.show();
+		      	  		}
+		      	  		console.log('**************END SIGN UP**************');
+		      	}
 		      })
 		    });
 		  },
@@ -46927,7 +46960,7 @@ var StudyGroupSource = {
 	// ==================================================
 	fetchUser:function() {
 		return {
-		  remote:function(state,email,password, history, loginDialog) { 
+		  remote:function(state,email,password, history, loginDialog, loginFailedSnackbar) { 
 		    return new Promise(function (resolve, reject) {
 		      console.log('--------------LOGIN--------------');
 		      var fata = {
@@ -46953,9 +46986,10 @@ var StudyGroupSource = {
 		        },
 		        error: function(response) {
 		        	console.log('__FAILED__');
-		          console.log('response' ,response);
-		          reject('login FAILED');
-		          console.log('**************END LOGIN**************');
+		          	console.log('response' ,response);
+		          	loginFailedSnackbar.show();
+			        reject('login FAILED');
+			        console.log('**************END LOGIN**************');
 		        }
 		      });
 		    });
@@ -47086,7 +47120,8 @@ var StudyGroupSource = {
 		    return null;
 		  },
 		  
-		  success: StudyGroupActions.refreshGroups
+		  success: StudyGroupActions.refreshGroups,
+		  error: StudyGroupActions.studyGroupsFailed
 		}
 	},
 
@@ -47183,8 +47218,8 @@ var StudyGroupSource = {
 			},
 
 			success: StudyGroupActions.updateStudyGroups,
-			error: StudyGroupActions.studyGroupsFailed,
-			loading: StudyGroupActions.fetchStudyGroups
+			error: StudyGroupActions.studyGroupsFailed
+
 		}
 	},
 

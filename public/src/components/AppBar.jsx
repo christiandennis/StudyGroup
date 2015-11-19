@@ -97,6 +97,10 @@ var TopBar = React.createClass({
 		this.refs.newGroupDialog.refs.newGroupDialog.show();
 	},
 
+	refreshGroups() {
+		StudyGroupStore.fetchStudyGroups();
+	},
+
 	updateUser(){
 
 	},
@@ -137,8 +141,10 @@ var TopBar = React.createClass({
 							  style = {{
 							    backgroundColor: '#0D47A1 !important',
 							  }}
-							  onLeftIconButtonTouchTap={this.openLeft}
-							  iconElementRight={ <FlatButton label="New StudyGroup" onClick={this.dialogNewGroup}/>}/>
+							  onLeftIconButtonTouchTap={this.openLeft}>
+								  <FlatButton label="Refresh" onClick={this.refreshGroups} />
+								  <FlatButton label="New StudyGroup" onClick={this.dialogNewGroup}/>
+							</AppBar>
 						</Sticky>
                 	</div>
                     
