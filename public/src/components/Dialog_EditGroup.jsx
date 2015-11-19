@@ -13,6 +13,8 @@ const DatePicker = require('material-ui/lib/date-picker/date-picker');
 const TimePicker = require('material-ui/lib/time-picker/time-picker');
 const Snackbar = require('material-ui/lib/snackbar');
 
+const moment = require('moment');
+
 var LoginDialog = React.createClass({
 	mixins: [History],
 
@@ -120,7 +122,8 @@ var LoginDialog = React.createClass({
 
 	render() {
 		var studyGroup = this.props.studyGroup;
-		var date = new Date(studyGroup.date);
+		var date = new Date(0);
+		date.setUTCSeconds(studyGroup.date);
 		return (
 			<div>
 				<Dialog ref="editGroupDialog"

@@ -45784,6 +45784,8 @@ const DatePicker = require('material-ui/lib/date-picker/date-picker');
 const TimePicker = require('material-ui/lib/time-picker/time-picker');
 const Snackbar = require('material-ui/lib/snackbar');
 
+const moment = require('moment');
+
 var LoginDialog = React.createClass({displayName: "LoginDialog",
 	mixins: [History],
 
@@ -45891,7 +45893,8 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 
 	render:function() {
 		var studyGroup = this.props.studyGroup;
-		var date = new Date(studyGroup.date);
+		var date = new Date(0);
+		date.setUTCSeconds(studyGroup.date);
 		return (
 			React.createElement("div", null, 
 				React.createElement(Dialog, {ref: "editGroupDialog", 
@@ -45976,7 +45979,7 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 
 module.exports = LoginDialog;
 
-},{"../stores/StudyGroupStore":385,"material-ui/lib/date-picker/date-picker":74,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/snackbar":101,"material-ui/lib/text-field":121,"material-ui/lib/time-picker/time-picker":130,"react":367,"react-dom":161,"react-router":181}],376:[function(require,module,exports){
+},{"../stores/StudyGroupStore":385,"material-ui/lib/date-picker/date-picker":74,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/snackbar":101,"material-ui/lib/text-field":121,"material-ui/lib/time-picker/time-picker":130,"moment":155,"react":367,"react-dom":161,"react-router":181}],376:[function(require,module,exports){
 // React, react-reouter, alt
 var React = require('react');
 var render = require('react-dom').render;
@@ -47342,6 +47345,17 @@ const moment = require('moment');
 	        	break;
 	     	}
 	   	}
+
+	   	function compare(a,b) {
+		  if (Number(a.date) < Number(b.date))
+		    return -1;
+		  if (Number(a.date) > Number(b.date))
+		    return 1;
+		  return 0;
+		}
+
+
+		this.studyGroups.sort(compare);
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handlePostNewGroup",{writable:true,configurable:true,value:function() {"use strict";

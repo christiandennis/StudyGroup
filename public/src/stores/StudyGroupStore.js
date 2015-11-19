@@ -51,6 +51,17 @@ class StudyGroupStore {
 	        	break;
 	     	}
 	   	}
+
+	   	function compare(a,b) {
+		  if (Number(a.date) < Number(b.date))
+		    return -1;
+		  if (Number(a.date) > Number(b.date))
+		    return 1;
+		  return 0;
+		}
+
+
+		this.studyGroups.sort(compare);
 	}
 
 	handlePostNewGroup() {
