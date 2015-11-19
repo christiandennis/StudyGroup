@@ -55,7 +55,7 @@ before_filter :configure_sign_up_params, only: [:create]
 
 
     if status == -1
-      render json: {'status'=>-1, 'errors'=>error_messages, 'nick'=> nickname}, status:400
+      render json: {'status'=>-1, 'errors'=>error_messages}, status:400
     else
       @user = User.find_by_nickname(nickname)
       if !@user.nil?

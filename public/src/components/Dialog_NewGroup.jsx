@@ -13,6 +13,8 @@ const DatePicker = require('material-ui/lib/date-picker/date-picker');
 const TimePicker = require('material-ui/lib/time-picker/time-picker');
 const Checkbox = require('material-ui/lib/checkbox');
 const Snackbar = require('material-ui/lib/snackbar');
+const moment = require('moment');
+
 
 var NewGroupDialog = React.createClass({
 	mixins: [History],
@@ -49,7 +51,7 @@ var NewGroupDialog = React.createClass({
 		var successSnackbar = this.refs.createGroupSuccessSnackbar;
 
 		if (title.getValue() && subject.getValue() && description.getValue() && location.getValue() && capacity.getValue() && date.getDate()) {
-			StudyGroupStore.postNewGroup(title, subject, description, date_str, location, capacity, privacy, newGroupDialog, failedSnackbar, successSnackbar);
+			StudyGroupStore.postNewGroup(title, subject, description, moment(date_str).unix(), location, capacity, privacy, newGroupDialog, failedSnackbar, successSnackbar);
 		} else {
 
 			if (!title.getValue()){

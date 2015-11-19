@@ -25,7 +25,7 @@ var MainGroupViewCard = React.createClass({
 	},
 
 	calculateTimeColor(card_date) {
-		var card_epoch = moment(card_date).unix();
+		var card_epoch = Number(card_date);
 		var curr_time = new Date().toString();
 		var curr_epoch = moment(curr_time).unix();
 		var time_diff = card_epoch - curr_epoch;
@@ -47,8 +47,10 @@ var MainGroupViewCard = React.createClass({
 
 	render() {
 		var studyGroup = this.props.studyGroup;
-		var date = moment(studyGroup.date).format("ddd, MMM D").toString();
-		var time = moment(studyGroup.date).format("h:mm a").toString();
+		var d = new Date(0);
+		d.setUTCSeconds(Number(studyGroup.date));
+		var date = moment(d).format("ddd, MMM D").toString();
+		var time = moment(d).format("h:mm a").toString();
 		var color = this.calculateTimeColor(studyGroup.date);
 		return (
 			<div key={studyGroup.id}>

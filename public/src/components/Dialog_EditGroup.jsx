@@ -13,6 +13,8 @@ const DatePicker = require('material-ui/lib/date-picker/date-picker');
 const TimePicker = require('material-ui/lib/time-picker/time-picker');
 const Snackbar = require('material-ui/lib/snackbar');
 
+const moment = require('moment');
+
 var LoginDialog = React.createClass({
 	mixins: [History],
 
@@ -43,7 +45,7 @@ var LoginDialog = React.createClass({
 		var successSnackbar = this.refs.editGroupSuccessSnackbar;
 
 		if (title.getValue() && subject.getValue() && description.getValue() && location.getValue() && capacity.getValue() && date.getDate() && time.getTime()) {
-			StudyGroupStore.editGroup(id, title, subject, description, date_str, location, capacity, editGroupDialog, failedSnackbar, successSnackbar);
+			StudyGroupStore.editGroup(id, title, subject, description, moment(date_str).unix(), location, capacity, editGroupDialog, failedSnackbar, successSnackbar);
 		} else {
 			if (!title.getValue()){
 				title.setErrorText("This field is required");
@@ -120,7 +122,8 @@ var LoginDialog = React.createClass({
 
 	render() {
 		var studyGroup = this.props.studyGroup;
-		var date = new Date(studyGroup.date);
+		var date = new Date(0);
+		date.setUTCSeconds(studyGroup.date);
 		return (
 			<div>
 				<Dialog ref="editGroupDialog"

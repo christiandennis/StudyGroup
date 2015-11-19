@@ -4,6 +4,8 @@ var MyGroupsActions = require('../actions/MyGroupsActions');
 var StudyGroupSource = require('../sources/StudyGroupSource');
 var UserActions = require('../actions/UserActions');
 
+const moment = require('moment');
+
 class StudyGroupStore {
 	constructor() {
 		this.user = null;
@@ -81,6 +83,17 @@ class StudyGroupStore {
 	        	break;
 	     	}
 	   	}
+
+	   	function compare(a,b) {
+		  if (Number(a.date) < Number(b.date))
+		    return -1;
+		  if (Number(a.date) > Number(b.date))
+		    return 1;
+		  return 0;
+		}
+
+
+		this.studyGroups.sort(compare);
 	}
 
 	handlePostNewGroup() {
@@ -98,7 +111,7 @@ class StudyGroupStore {
 	}
 
 	handleUpdateStudyGroups(studyGroups){
-		this.studyGroups = studyGroups.reverse();
+		this.studyGroups = studyGroups;
 		this.errorMessage = null;
 	}
 	handleFetchStudyGroups() {
@@ -109,7 +122,19 @@ class StudyGroupStore {
 	}
 
 	handleRefreshGroups(studyGroup){
+
 		this.studyGroups.unshift(studyGroup);
+
+		function compare(a,b) {
+		  if (Number(a.date) < Number(b.date))
+		    return -1;
+		  if (Number(a.date) > Number(b.date))
+		    return 1;
+		  return 0;
+		}
+
+
+		this.studyGroups.sort(compare);
 		this.errorMessage = null;
 	}
 

@@ -11,6 +11,7 @@ var Dialog_EditGroup = require('./Dialog_EditGroup.jsx');
 const TextField = require('material-ui/lib/text-field');
 const Dialog = require('material-ui/lib/dialog');
 const FlatButton = require('material-ui/lib/flat-button');
+const Paper = require('material-ui/lib/paper');
 
 const moment = require('moment');
 
@@ -24,18 +25,23 @@ var GroupDetailDialog = React.createClass({
 
 	render() {
 		var studyGroup = this.props.studyGroup;
-		var date = moment(studyGroup.date).format("ddd, MMM D").toString();
-		var time = moment(studyGroup.date).format("h:mm a").toString();
+		var d = new Date(0);
+		d.setUTCSeconds(Number(studyGroup.date));
+
+		var date = moment(d).format("ddd, MMM D").toString();
+		var time = moment(d).format("h:mm a").toString();
 		return (
 			<div>
 				<Dialog_EditGroup ref='editGroupDialog' studyGroup={studyGroup}/>
 
 				<Dialog ref="groupDetailDialog"
-						title="StudyGroup Detail" 
+						title="StudyGroup Detail"
+						style = {{textAlign:"center", color:"#0D47A1 !important"}} 
 						actions={[]}
 				  		autoDetectWindowHeight={true} 
 				  		autoScrollBodyContent={true}>
-				    <div>
+				    <Paper zDepth={2}
+				    style = {{paddingTop:"20px"}}>
 				    	<div className="groupdesc-title">Class</div>
 				    	<div ref="groupdetailClass" className="groupdesc-subtitle">{studyGroup.subject}</div>
 
@@ -59,7 +65,7 @@ var GroupDetailDialog = React.createClass({
 
 				    	<FlatButton label="Edit" onClick={this.openEditGroupDialog}/>
 
-				    </div>
+				    </Paper>
 				</Dialog>
 			</div>
 		)
