@@ -11,6 +11,7 @@ var Dialog_EditGroup = require('./Dialog_EditGroup.jsx');
 const TextField = require('material-ui/lib/text-field');
 const Dialog = require('material-ui/lib/dialog');
 const FlatButton = require('material-ui/lib/flat-button');
+const Paper = require('material-ui/lib/paper');
 
 const moment = require('moment');
 
@@ -31,11 +32,13 @@ var GroupDetailDialog = React.createClass({
 				<Dialog_EditGroup ref='editGroupDialog' studyGroup={studyGroup}/>
 
 				<Dialog ref="groupDetailDialog"
-						title="StudyGroup Detail" 
+						title="StudyGroup Detail"
+						style = {{textAlign:"center", color:"#0D47A1 !important"}} 
 						actions={[]}
 				  		autoDetectWindowHeight={true} 
 				  		autoScrollBodyContent={true}>
-				    <div>
+				    <Paper zDepth={2}
+				    style = {{paddingTop:"20px"}}>
 				    	<div className="groupdesc-title">Class</div>
 				    	<div ref="groupdetailClass" className="groupdesc-subtitle">{studyGroup.subject}</div>
 
@@ -59,7 +62,7 @@ var GroupDetailDialog = React.createClass({
 
 				    	<FlatButton label="Edit" onClick={this.openEditGroupDialog}/>
 
-				    </div>
+				    </Paper>
 				</Dialog>
 			</div>
 		)

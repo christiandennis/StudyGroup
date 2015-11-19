@@ -45982,6 +45982,7 @@ var Dialog_EditGroup = require('./Dialog_EditGroup.jsx');
 const TextField = require('material-ui/lib/text-field');
 const Dialog = require('material-ui/lib/dialog');
 const FlatButton = require('material-ui/lib/flat-button');
+const Paper = require('material-ui/lib/paper');
 
 const moment = require('moment');
 
@@ -46003,10 +46004,12 @@ var GroupDetailDialog = React.createClass({displayName: "GroupDetailDialog",
 
 				React.createElement(Dialog, {ref: "groupDetailDialog", 
 						title: "StudyGroup Detail", 
+						style: {textAlign:"center", color:"#0D47A1 !important"}, 
 						actions: [], 
 				  		autoDetectWindowHeight: true, 
 				  		autoScrollBodyContent: true}, 
-				    React.createElement("div", null, 
+				    React.createElement(Paper, {zDepth: 2, 
+				    style: {paddingTop:"20px"}}, 
 				    	React.createElement("div", {className: "groupdesc-title"}, "Class"), 
 				    	React.createElement("div", {ref: "groupdetailClass", className: "groupdesc-subtitle"}, studyGroup.subject), 
 
@@ -46039,7 +46042,7 @@ var GroupDetailDialog = React.createClass({displayName: "GroupDetailDialog",
 
 module.exports = GroupDetailDialog;
 
-},{"../stores/StudyGroupStore":385,"./Dialog_EditGroup.jsx":375,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/text-field":121,"moment":155,"react":367,"react-dom":161,"react-router":181}],377:[function(require,module,exports){
+},{"../stores/StudyGroupStore":385,"./Dialog_EditGroup.jsx":375,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/paper":95,"material-ui/lib/text-field":121,"moment":155,"react":367,"react-dom":161,"react-router":181}],377:[function(require,module,exports){
 // React, react-reouter, alt
 var React = require('react');
 var render = require('react-dom').render;
