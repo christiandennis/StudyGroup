@@ -27,35 +27,33 @@ var LoginDialog = React.createClass({
 
 	render() {
 		return (
-			<div>
-				<Dialog ref="loginDialog" 
-						title="Log In" 
-						actions={[
-							  <FlatButton
-							    label="Cancel"
-							    secondary={true}
-							    onTouchTap={this.cancelLogIn} />,
-							  <FlatButton
-							    label="Log In"
-							    primary={true}
-							    onTouchTap={this.submitLogIn} />]}
-				  		autoDetectWindowHeight={true} 
-				  		autoScrollBodyContent={true}>
+			<Dialog ref="loginDialog" 
+					title="Log In" 
+					actions={[
+						  <FlatButton
+						    label="Cancel"
+						    secondary={true}
+						    onTouchTap={this.cancelLogIn} />,
+						  <FlatButton
+						    label="Log In"
+						    primary={true}
+						    onTouchTap={this.submitLogIn} />]}
+			  		autoDetectWindowHeight={true} 
+			  		autoScrollBodyContent={true}>
 
-				    <TextField
-				      onEnterKeyDown = {this.submitLogIn}
-				      ref= "email"
-				      hintText="christiandennis@studygroup.com"
-				      floatingLabelText="Email" /><br />
-				    <TextField
-				      onEnterKeyDown = {this.submitLogIn}
-				      ref= "password"
-				      hintText="Password"
-				      floatingLabelText="Password" 
-				      type="password"/><br />
+			    <TextField
+			      onEnterKeyDown = {this.submitLogIn}
+			      ref= "email"
+			      hintText="christiandennis@studygroup.com"
+			      floatingLabelText="Email" /><br />
+			    <TextField
+			      onEnterKeyDown = {this.submitLogIn}
+			      ref= "password"
+			      hintText="Password"
+			      floatingLabelText="Password" 
+			      type="password"/><br />
 
-				</Dialog>
-		    </div>
+			</Dialog>
 		)
 	}
 })

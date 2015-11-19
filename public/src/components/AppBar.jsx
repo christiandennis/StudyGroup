@@ -11,6 +11,7 @@ var LandingPage = require('./LandingPage.jsx');
 var MyGroups = require('./MyGroups.jsx');
 var Dialog_LogIn = require('./Dialog_LogIn.jsx');
 var Dialog_SignUp = require('./Dialog_SignUp.jsx');
+var Dialog_NewGroup = require('./Dialog_NewGroup.jsx');
 
 var ReactTestUtils = require('react-addons-test-utils');
 
@@ -18,15 +19,11 @@ var ReactTestUtils = require('react-addons-test-utils');
 const AppBar = require('material-ui/lib/app-bar');
 const Dialog = require('material-ui/lib/dialog');
 const FlatButton = require('material-ui/lib/flat-button');
-const TextField = require('material-ui/lib/text-field');
 const SideBar = require('material-ui/lib/left-nav');
 const MenuItem = require('material-ui/lib/menu/menu-item');
 const ThemeManager = require('material-ui/lib/styles/theme-manager');
 const Avatar = require('material-ui/lib/avatar');
-const Checkbox = require('material-ui/lib/checkbox');
 const Snackbar = require('material-ui/lib/snackbar');
-const DatePicker = require('material-ui/lib/date-picker/date-picker');
-const TimePicker = require('material-ui/lib/time-picker/time-picker');
 
 // custom material ui theme
 const MyRawTheme = require('material-ui/lib/styles/raw-themes/light-raw-theme.js');
@@ -140,75 +137,7 @@ var TopBar = React.createClass({
 	},
 
 	dialogNewGroup() {
-		this.refs.newGroupDialog.show();
-	},
-
-	cancelNewGroup() {
-		this.refs.newGroupDialog.dismiss();
-	},
-
-	submitNewGroup() {
-		var title = this.refs.createGroupTitle;
-		var subject = this.refs.createGroupSubject;
-		var description =  this.refs.createGroupDescription;
-		var date = this.refs.createGroupDate;
-		var location = this.refs.createGroupLocation;
-		var capacity = 	this.refs.createGroupCapacity;
-		var host = this.props.user;
-		var privacy = 0;
-		if (this.refs.createGroupPrivacy.isChecked()){
-			privacy = 1;
-		}
-
-		if (false) {
-			console.log(title.getValue());
-			console.log(subject.getValue());
-			console.log(description.getValue());
-			console.log(date);
-			console.log(location.getValue());
-			console.log(capacity.getValue());
-			console.log(host);
-		}
-
-		var newGroupDialog = this.refs.newGroupDialog;
-		var failedSnackbar = this.refs.createGroupFailedSnackbar;
-		var successSnackbar = this.refs.createGroupSuccessSnackbar;
-
-		if (title.getValue() && subject.getValue() && description.getValue() && location.getValue() && capacity.getValue() && date.getDate()) {
-			StudyGroupStore.postNewGroup(title, subject, description, date, location, capacity, host, this.props.user.school, privacy, this.history, newGroupDialog);
-		} else {
-
-			if (!title.getValue()){
-				title.setErrorText("This field is required");
-			}
-			if (!subject.getValue()){
-				subject.setErrorText("This field is required");
-			}
-			if (!description.getValue()){
-				description.setErrorText("This field is required");
-			}
-			if (!location.getValue()){
-				location.setErrorText("This field is required");
-			}
-			if (!capacity.getValue()){
-				capacity.setErrorText("This field is required");
-			}
-			if (!date.getDate()){
-				date.setErrorText("This field is required");
-			}
-
-		}
-	},
-
-	validateGroupSubject() {
-		var subject = this.refs.createGroupSubject;
-		if (subject.getValue()) {
-			subject.setErrorText("");
-			return true;
-		} else {
-			subject.setErrorText("This field is required grrr");
-			return false;
-		}
+		this.refs.newGroupDialog.refs.newGroupDialog.show();
 	},
 
 	updateUser(){
@@ -244,8 +173,7 @@ var TopBar = React.createClass({
 			return (
                 
                 <div>
-                	<div style={{zIndex:"1000",
-										paddingBottom:"64px"}}>
+                	<div style={{zIndex:"1000", paddingBottom:"64px"}}>
 						<Sticky>
 							<AppBar
 							  title="StudyGroup" 
@@ -259,68 +187,7 @@ var TopBar = React.createClass({
                     
                     <LeftBar ref="leftBar" user={this.props.user}/>
 
-                   <Dialog ref="newGroupDialog" 
-                   		title="Create a New StudyGroup" 
-                   		modal={true}
-                   		actions={[
-                   			  <FlatButton
-                   			    label="Cancel"
-                   			    secondary={true}
-                   			    onTouchTap={this.cancelNewGroup} />,
-                   			  <FlatButton
-                   			    label="Submit"
-                   			    primary={true}
-                   			    onTouchTap={this.submitNewGroup} />]}
-                     		autoDetectWindowHeight={true} 
-                     		autoScrollBodyContent={true}>
-                       <div>
-                       	<TextField
-                       		onEnterKeyDown = {this.submitNewGroup}
-                       		ref = "createGroupSubject"
-                       		onChange={this.validateGroupSubject}
-                       	  hintText="CS169"
-                       	  floatingLabelText="Class" />
-                       	<TextField
-                       		onEnterKeyDown = {this.submitNewGroup}
-                       		ref = "createGroupTitle"
-                       		onChange={this.validateGroupTitle}
-                       	  hintText="Learn React together"
-                       	  floatingLabelText="Title" />
-                       	<TextField
-                       		onEnterKeyDown = {this.submitNewGroup}
-                       		onChange={this.validateGroupDescription}
-                       		ref = "createGroupDescription"
-                       	  hintText="Come and learn the basic (and some advanced) React together! REACT IS THE FUTURE!!!"
-                       	  floatingLabelText="Description"
-                       	  fullWidth={true}
-                       	  multiLine={true}/>
-                       	<DatePicker
-                       		ref = "createGroupDate"
-                       	  hintText="Nov 22, 2015"
-                       	  floatingLabelText="Date"/>
-                       	<TimePicker
-                       		ref = "createGroupTime"
-                       	  hintText="9:00 pm"
-                       	  floatingLabelText="Time"/>
-                       	<TextField
-                       		onEnterKeyDown = {this.submitNewGroup}
-                       		onChange={this.validateGroupLocation}
-                       		ref = "createGroupLocation"
-                       	  hintText="Wozniak Longue, Soda Hall"
-                       	  floatingLabelText="Location"/>
-                       	<TextField
-                       		onEnterKeyDown = {this.submitNewGroup}
-                       		onChange={this.validateGroupCapacity}
-                       		ref = "createGroupCapacity"
-                       	  hintText="20"
-                       	  floatingLabelText="Capacity"/>
-                       	<Checkbox
-                       		ref = "createGroupPrivacy"
-                       	  name="privacy"
-                       	  value="private"
-                       	  label="private"/>
-                       </div>
-                   </Dialog>
+                    <Dialog_NewGroup ref='newGroupDialog' user={this.props.user}/>
 
 					<Snackbar
                    		ref = "createGroupFailedSnackbar"
@@ -338,9 +205,7 @@ var TopBar = React.createClass({
 			
 		return (
 			<div>
-
-				<Sticky stickyStyle={{zIndex:"1000",
-									paddingBottom:"64px"}}>
+				<Sticky stickyStyle={{zIndex:"1000", paddingBottom:"64px"}}>
 					<AppBar
 					  className = "logo-title"
 		              title="StudyGroup"
@@ -367,4 +232,4 @@ var TopBar = React.createClass({
 
 })
 
-module.exports =TopBar;
+module.exports = TopBar;
