@@ -214,8 +214,8 @@ var AllStudyGroups = React.createClass({
 
 					<ul>
 					  {this.props.studyGroups.map((studyGroup, i) => {
-					  	var date = moment(studyGroup.datetime).format("ddd, MMM D").toString();
-					  	var time = moment(studyGroup.datetime).format("h:mm a").toString();
+					  	var date = moment(studyGroup.date).format("ddd, MMM D").toString();
+					  	var time = moment(studyGroup.date).format("h:mm a").toString();
 					  	var studygroupID = studyGroup.id;
 					    return (
 					    	<div key={studyGroup.id}>

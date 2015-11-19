@@ -1,13 +1,18 @@
+// React, react-reouter, alt
 var React = require('react');
 var render = require('react-dom').render;
-var Link = require('react-router').Link;
-
+var Router = require('react-router');
+var History = Router.History;
 var StudyGroupStore = require('../stores/StudyGroupStore');
 var AltContainer = require('alt/AltContainer');
 
+// import components
 var LandingPage = require('./LandingPage.jsx');
+var MyGroups = require('./MyGroups.jsx');
+
 var ReactTestUtils = require('react-addons-test-utils');
 
+// material ui components
 const AppBar = require('material-ui/lib/app-bar');
 const Dialog = require('material-ui/lib/dialog');
 const FlatButton = require('material-ui/lib/flat-button');
@@ -15,22 +20,18 @@ const TextField = require('material-ui/lib/text-field');
 const SideBar = require('material-ui/lib/left-nav');
 const MenuItem = require('material-ui/lib/menu/menu-item');
 const ThemeManager = require('material-ui/lib/styles/theme-manager');
-const MyRawTheme = require('material-ui/lib/styles/raw-themes/light-raw-theme.js');
-const MyRawTheme2 = require('material-ui/lib/styles/raw-themes/sidebar-theme.js');
 const Avatar = require('material-ui/lib/avatar');
 const Checkbox = require('material-ui/lib/checkbox');
 const Snackbar = require('material-ui/lib/snackbar');
 const DatePicker = require('material-ui/lib/date-picker/date-picker');
 const TimePicker = require('material-ui/lib/time-picker/time-picker');
 
+// custom material ui theme
+const MyRawTheme = require('material-ui/lib/styles/raw-themes/light-raw-theme.js');
+const MyRawTheme2 = require('material-ui/lib/styles/raw-themes/sidebar-theme.js');
+
+// sticky headers
 const Sticky = require('react-sticky');
-
-const URL = "http://localhost:3000";
-var axios = require('axios');
-
-var Router = require('react-router');
-var History = Router.History;
-
 
 var LeftBar = React.createClass({
 	mixins: [History],
@@ -61,6 +62,7 @@ var LeftBar = React.createClass({
 
 	myGroups() {
 		console.log("trigger my-group-view here");
+		this.refs.myGroups.show();
 	},
 
 	editProfile() {
@@ -83,22 +85,29 @@ var LeftBar = React.createClass({
 	  			</SideBar>
 
 	  			<Dialog ref="profileDialog" 
-							title="My Profile" 
-							actions={[
-								  <FlatButton
-								    label="Dismiss"
-								    secondary={true}
-								    onTouchTap={this.cancelProfile} />,
-								  ]}
-							onShow={this.viewProfileShow}
-					  		autoDetectWindowHeight={true} 
-					  		autoScrollBodyContent={true}>
-					    <div>
-					    	<div ref="profileName" style={{fontSize:"30px", paddingBottom:"20px"}}>{this.props.user.name}</div>
-					    	<div ref="profileEmail" className="prof-email">{this.props.user.email}</div>
-					    	<div ref="profileClass" className="prof-class">{this.props.user.school}</div>
-					    </div>
-					</Dialog>
+						title="My Profile" 
+						actions={[
+							  <FlatButton
+							    label="Dismiss"
+							    secondary={true}
+							    onTouchTap={this.cancelProfile} />,
+							  ]}
+						onShow={this.viewProfileShow}
+				  		autoDetectWindowHeight={true} 
+				  		autoScrollBodyContent={true}>
+				    <div>
+				    	<div ref="profileName" style={{fontSize:"30px", paddingBottom:"20px"}}>{this.props.user.name}</div>
+				    	<div ref="profileEmail" className="prof-email">{this.props.user.email}</div>
+				    	<div ref="profileClass" className="prof-class">{this.props.user.school}</div>
+				    </div>
+				</Dialog>
+
+				<Dialog ref="myGroups"
+						autoDetectWindowHeight={true}
+  						autoScrollBodyContent={true}
+  						modal={true}>
+					<MyGroups/>
+				</Dialog>
 			</div>
 		)
 	}

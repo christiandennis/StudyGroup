@@ -45386,7 +45386,18 @@ React.render((
   ), document.getElementById('ReactApp')
 );
 
-},{"./components/AppBar.jsx":372,"./components/StudyGroups.jsx":374,"./stores/StudyGroupStore":376,"alt/AltContainer":1,"react":367,"react-dom":161,"react-router":181}],369:[function(require,module,exports){
+},{"./components/AppBar.jsx":373,"./components/StudyGroups.jsx":376,"./stores/StudyGroupStore":378,"alt/AltContainer":1,"react":367,"react-dom":161,"react-router":181}],369:[function(require,module,exports){
+var alt = require('../alt');
+
+function MyGroupsActions(){"use strict";}
+	Object.defineProperty(MyGroupsActions.prototype,"fetchMyGroups",{writable:true,configurable:true,value:function(myGroups) {"use strict";
+		this.dispatch(myGroups);
+	}});
+
+
+module.exports = alt.createActions(MyGroupsActions);
+
+},{"../alt":372}],370:[function(require,module,exports){
 var alt = require('../alt');
 
 function StudyGroupActions(){"use strict";}
@@ -45413,7 +45424,7 @@ function StudyGroupActions(){"use strict";}
 
 module.exports = alt.createActions(StudyGroupActions);
 
-},{"../alt":371}],370:[function(require,module,exports){
+},{"../alt":372}],371:[function(require,module,exports){
 var alt = require('../alt');
 
 function UserActions(){"use strict";}
@@ -45440,23 +45451,28 @@ function UserActions(){"use strict";}
 
 module.exports = alt.createActions(UserActions);
 
-},{"../alt":371}],371:[function(require,module,exports){
+},{"../alt":372}],372:[function(require,module,exports){
 var Alt = require('alt');
 var alt = new Alt();
 
 module.exports = alt;
 
-},{"alt":5}],372:[function(require,module,exports){
+},{"alt":5}],373:[function(require,module,exports){
+// React, react-reouter, alt
 var React = require('react');
 var render = require('react-dom').render;
-var Link = require('react-router').Link;
-
+var Router = require('react-router');
+var History = Router.History;
 var StudyGroupStore = require('../stores/StudyGroupStore');
 var AltContainer = require('alt/AltContainer');
 
+// import components
 var LandingPage = require('./LandingPage.jsx');
+var MyGroups = require('./MyGroups.jsx');
+
 var ReactTestUtils = require('react-addons-test-utils');
 
+// material ui components
 const AppBar = require('material-ui/lib/app-bar');
 const Dialog = require('material-ui/lib/dialog');
 const FlatButton = require('material-ui/lib/flat-button');
@@ -45464,22 +45480,18 @@ const TextField = require('material-ui/lib/text-field');
 const SideBar = require('material-ui/lib/left-nav');
 const MenuItem = require('material-ui/lib/menu/menu-item');
 const ThemeManager = require('material-ui/lib/styles/theme-manager');
-const MyRawTheme = require('material-ui/lib/styles/raw-themes/light-raw-theme.js');
-const MyRawTheme2 = require('material-ui/lib/styles/raw-themes/sidebar-theme.js');
 const Avatar = require('material-ui/lib/avatar');
 const Checkbox = require('material-ui/lib/checkbox');
 const Snackbar = require('material-ui/lib/snackbar');
 const DatePicker = require('material-ui/lib/date-picker/date-picker');
 const TimePicker = require('material-ui/lib/time-picker/time-picker');
 
+// custom material ui theme
+const MyRawTheme = require('material-ui/lib/styles/raw-themes/light-raw-theme.js');
+const MyRawTheme2 = require('material-ui/lib/styles/raw-themes/sidebar-theme.js');
+
+// sticky headers
 const Sticky = require('react-sticky');
-
-const URL = "http://localhost:3000";
-var axios = require('axios');
-
-var Router = require('react-router');
-var History = Router.History;
-
 
 var LeftBar = React.createClass({displayName: "LeftBar",
 	mixins: [History],
@@ -45510,6 +45522,7 @@ var LeftBar = React.createClass({displayName: "LeftBar",
 
 	myGroups:function() {
 		console.log("trigger my-group-view here");
+		this.refs.myGroups.show();
 	},
 
 	editProfile:function() {
@@ -45532,22 +45545,29 @@ var LeftBar = React.createClass({displayName: "LeftBar",
 	  			), 
 
 	  			React.createElement(Dialog, {ref: "profileDialog", 
-							title: "My Profile", 
-							actions: [
-								  React.createElement(FlatButton, {
-								    label: "Dismiss", 
-								    secondary: true, 
-								    onTouchTap: this.cancelProfile}),
-								  ], 
-							onShow: this.viewProfileShow, 
-					  		autoDetectWindowHeight: true, 
-					  		autoScrollBodyContent: true}, 
-					    React.createElement("div", null, 
-					    	React.createElement("div", {ref: "profileName", style: {fontSize:"30px", paddingBottom:"20px"}}, this.props.user.name), 
-					    	React.createElement("div", {ref: "profileEmail", className: "prof-email"}, this.props.user.email), 
-					    	React.createElement("div", {ref: "profileClass", className: "prof-class"}, this.props.user.school)
-					    )
-					)
+						title: "My Profile", 
+						actions: [
+							  React.createElement(FlatButton, {
+							    label: "Dismiss", 
+							    secondary: true, 
+							    onTouchTap: this.cancelProfile}),
+							  ], 
+						onShow: this.viewProfileShow, 
+				  		autoDetectWindowHeight: true, 
+				  		autoScrollBodyContent: true}, 
+				    React.createElement("div", null, 
+				    	React.createElement("div", {ref: "profileName", style: {fontSize:"30px", paddingBottom:"20px"}}, this.props.user.name), 
+				    	React.createElement("div", {ref: "profileEmail", className: "prof-email"}, this.props.user.email), 
+				    	React.createElement("div", {ref: "profileClass", className: "prof-class"}, this.props.user.school)
+				    )
+				), 
+
+				React.createElement(Dialog, {ref: "myGroups", 
+						autoDetectWindowHeight: true, 
+  						autoScrollBodyContent: true, 
+  						modal: true}, 
+					React.createElement(MyGroups, null)
+				)
 			)
 		)
 	}
@@ -45989,7 +46009,7 @@ var TopBar = React.createClass({displayName: "TopBar",
 
 module.exports =TopBar;
 
-},{"../stores/StudyGroupStore":376,"./LandingPage.jsx":373,"alt/AltContainer":1,"axios":17,"material-ui/lib/app-bar":56,"material-ui/lib/avatar":57,"material-ui/lib/checkbox":66,"material-ui/lib/date-picker/date-picker":74,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/left-nav":84,"material-ui/lib/menu/menu-item":86,"material-ui/lib/snackbar":101,"material-ui/lib/styles/raw-themes/light-raw-theme.js":106,"material-ui/lib/styles/raw-themes/sidebar-theme.js":107,"material-ui/lib/styles/theme-manager":110,"material-ui/lib/text-field":121,"material-ui/lib/time-picker/time-picker":130,"react":367,"react-addons-test-utils":158,"react-dom":161,"react-router":181,"react-sticky":188}],373:[function(require,module,exports){
+},{"../stores/StudyGroupStore":378,"./LandingPage.jsx":374,"./MyGroups.jsx":375,"alt/AltContainer":1,"material-ui/lib/app-bar":56,"material-ui/lib/avatar":57,"material-ui/lib/checkbox":66,"material-ui/lib/date-picker/date-picker":74,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/left-nav":84,"material-ui/lib/menu/menu-item":86,"material-ui/lib/snackbar":101,"material-ui/lib/styles/raw-themes/light-raw-theme.js":106,"material-ui/lib/styles/raw-themes/sidebar-theme.js":107,"material-ui/lib/styles/theme-manager":110,"material-ui/lib/text-field":121,"material-ui/lib/time-picker/time-picker":130,"react":367,"react-addons-test-utils":158,"react-dom":161,"react-router":181,"react-sticky":188}],374:[function(require,module,exports){
 var React = require('react');
 var render = require('react-dom').render;
 var axios = require('axios');
@@ -46066,7 +46086,96 @@ var LandingPage = React.createClass({displayName: "LandingPage",
 
 module.exports = LandingPage;
 
-},{"./AppBar.jsx":372,"alt/AltContainer":1,"axios":17,"react":367,"react-dom":161}],374:[function(require,module,exports){
+},{"./AppBar.jsx":373,"alt/AltContainer":1,"axios":17,"react":367,"react-dom":161}],375:[function(require,module,exports){
+// var button = require('react-materialize').Button;
+var React = require('react');
+var Link = require('react-router').Link;
+var render = require('react-dom').render;
+
+var AltContainer = require('alt/AltContainer');
+var StudyGroupStore = require('../stores/StudyGroupStore');
+var StudyGroupActions = require('../actions/StudyGroupActions');
+var ReactTestUtils = require('react-addons-test-utils');
+
+const Paper = require('material-ui/lib/paper');
+
+var injectTapEventPlugin = require("react-tap-event-plugin");
+injectTapEventPlugin();
+
+const moment = require('moment');
+
+const URL = "http://localhost:3000";
+var axios = require('axios');
+
+var AllSimpleGroup = React.createClass({displayName: "AllSimpleGroup",
+	render:function() {
+			return 	(
+					React.createElement("div", null, 
+						  	this.props.myGroups.map(function(myGroup, i)  {
+								  	var date = moment(myGroup.date).format("ddd, MMM D").toString();
+								  	var time = moment(myGroup.date).format("h:mm a").toString();
+								    return (
+								    	React.createElement("div", {key: myGroup.id}, 
+						    		        React.createElement(Paper, null, 
+						    		        	React.createElement("div", {className: "groupdesc-title"}, "Class"), 
+						    		        	React.createElement("div", {className: "groupdesc-subtitle"}, myGroup.subject), 
+
+						    		        	React.createElement("div", {className: "groupdesc-title"}, "Title"), 
+						    		        	React.createElement("div", {className: "groupdesc-subtitle"}, myGroup.title), 
+
+						    		        	React.createElement("div", {className: "groupdesc-title"}, "Time"), 
+						    		        	React.createElement("div", {className: "groupdesc-subtitle"}, time), 
+
+						    		        	React.createElement("div", {className: "groupdesc-title"}, "Date"), 
+						    		        	React.createElement("div", {className: "groupdesc-subtitle"}, date), 
+
+						    		        	React.createElement("div", {className: "groupdesc-title"}, "Location"), 
+						    		        	React.createElement("div", {className: "groupdesc-subtitle"}, myGroup.location)
+						    		        )
+								    	)
+								    );
+							  	})
+						  	
+					)
+					)
+	}
+});
+
+var MyGroups = React.createClass ({displayName: "MyGroups",
+	componentDidMount:function() {
+		console.log('----------MY GROUPS---------');
+		var state = StudyGroupStore.getState();
+		console.log('componentDidMount state', state);
+		StudyGroupStore.fetchMyGroups();
+	},
+
+	componentWillUpdate:function() {
+		var state = StudyGroupStore.getState();
+	},
+
+	render:function(){
+		var state = StudyGroupStore.getState();
+		console.log('render state', state);
+		if (state.myGroups) {
+			return (
+				React.createElement("div", null, 
+					React.createElement(AltContainer, {store: StudyGroupStore}, 
+						React.createElement(AllSimpleGroup, null)
+					)
+				)
+			);
+		}
+		return (
+			React.createElement("div", null, 
+				"\"error\""
+			)
+		);
+	}
+});
+
+module.exports = MyGroups;
+
+},{"../actions/StudyGroupActions":370,"../stores/StudyGroupStore":378,"alt/AltContainer":1,"axios":17,"material-ui/lib/paper":95,"moment":155,"react":367,"react-addons-test-utils":158,"react-dom":161,"react-router":181,"react-tap-event-plugin":192}],376:[function(require,module,exports){
 // var button = require('react-materialize').Button;
 var React = require('react');
 var Link = require('react-router').Link;
@@ -46283,8 +46392,8 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 
 					React.createElement("ul", null, 
 					  this.props.studyGroups.map(function(studyGroup, i)  {
-					  	var date = moment(studyGroup.datetime).format("ddd, MMM D").toString();
-					  	var time = moment(studyGroup.datetime).format("h:mm a").toString();
+					  	var date = moment(studyGroup.date).format("ddd, MMM D").toString();
+					  	var time = moment(studyGroup.date).format("h:mm a").toString();
 					  	var studygroupID = studyGroup.id;
 					    return (
 					    	React.createElement("div", {key: studyGroup.id}, 
@@ -46393,9 +46502,10 @@ var StudyGroups = React.createClass ({displayName: "StudyGroups",
 
 module.exports = StudyGroups;
 
-},{"../actions/StudyGroupActions":369,"../stores/StudyGroupStore":376,"alt/AltContainer":1,"axios":17,"material-ui/lib/avatar":57,"material-ui/lib/card/card":65,"material-ui/lib/card/card-actions":60,"material-ui/lib/card/card-header":62,"material-ui/lib/card/card-text":63,"material-ui/lib/card/card-title":64,"material-ui/lib/date-picker/date-picker":74,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/paper":95,"material-ui/lib/raised-button":96,"material-ui/lib/refresh-indicator":97,"material-ui/lib/text-field":121,"material-ui/lib/time-picker/time-picker":130,"moment":155,"react":367,"react-addons-test-utils":158,"react-dom":161,"react-router":181,"react-tap-event-plugin":192}],375:[function(require,module,exports){
+},{"../actions/StudyGroupActions":370,"../stores/StudyGroupStore":378,"alt/AltContainer":1,"axios":17,"material-ui/lib/avatar":57,"material-ui/lib/card/card":65,"material-ui/lib/card/card-actions":60,"material-ui/lib/card/card-header":62,"material-ui/lib/card/card-text":63,"material-ui/lib/card/card-title":64,"material-ui/lib/date-picker/date-picker":74,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/paper":95,"material-ui/lib/raised-button":96,"material-ui/lib/refresh-indicator":97,"material-ui/lib/text-field":121,"material-ui/lib/time-picker/time-picker":130,"moment":155,"react":367,"react-addons-test-utils":158,"react-dom":161,"react-router":181,"react-tap-event-plugin":192}],377:[function(require,module,exports){
 var StudyGroupActions = require('../actions/StudyGroupActions');
 var UserActions = require('../actions/UserActions');
+var MyGroupsActions = require('../actions/MyGroupsActions');
 
 const URL = "http://localhost:3000"
 const userURL = 'https://sheetsu.com/apis/72092a94';
@@ -46559,7 +46669,7 @@ var StudyGroupSource = {
 
 	// ****************************************************************************
 	// ****************************************************************************
-	// ******************************** STUDY GROUPS ******************************
+	// **************************** STUDY GROUPS (FEED) ***************************
 	// ****************************************************************************
 	// ****************************************************************************
 
@@ -46569,7 +46679,6 @@ var StudyGroupSource = {
 	// requires authentication
 	// ==================================================
 	postNewGroup:function() {
-		console.log("postNewGroup here");
 		return {
 		  remote:function(state, title, subject, description, date, location, capacity, host, school, privacy, history, newGroupDialog) { 
 		    return new Promise(function (resolve, reject) {
@@ -46632,50 +46741,106 @@ var StudyGroupSource = {
 	// ==================================================
 	fetchStudyGroups:function() {
 		return {
-		  remote:function(state) { 
-		    return new Promise(function (resolve, reject) {
-		    	console.log('--------------FETCH GROUP--------------');
-		      $.ajax({ url: '/groups/user/index',
-		        type: 'GET',
-		        headers: {
-			  								"access-token": state.user.accesstoken,
+			remote:function(state) { 
+			    return new Promise(function (resolve, reject) {
+			    	console.log('--------------FETCH GROUP--------------');
+			      	$.ajax({ url: '/groups/user/index',
+				        type: 'GET',
+				        headers: {
+				  						"access-token": state.user.accesstoken,
+			    	      				"client": state.user.client,
+			    	      				"uid": state.user.uid
+			  								},
+				        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+				        success: function(data, status, xhr) {
+				        	console.log('__SUCCESS__');
+					        console.log('groups' ,data.groups);
+					        resolve(data.groups);
+					        console.log('**************END FETCH GROUP**************');
+				        },
+				        error: function(response) {
+				        	console.log('__FAILED__');
+				          	console.log('response' ,response);
+				          	reject('fetch group FAILED');
+				          	console.log('**************END FETCH GROUP**************');
+				        }
+			      	});
+			    });
+			},
+
+			local:function() {
+			    // Never check locally, always fetch remotely.
+			    return null;
+			},
+
+			success: StudyGroupActions.updateStudyGroups,
+			error: StudyGroupActions.studyGroupsFailed,
+			loading: StudyGroupActions.fetchStudyGroups
+		}
+	},
+
+	// ****************************************************************************
+	// ****************************************************************************
+	// ****************************************************************************
+	// ****************************************************************************
+	// ****************************************************************************
+
+	// ****************************************************************************
+	// ****************************************************************************
+	// ****************************** MY STUDY GROUPS *****************************
+	// ****************************************************************************
+	// ****************************************************************************
+
+	fetchMyGroups:function() {
+		return {
+			remote:function(state){
+				return new Promise(function(resolve, reject){
+					console.log('--------------FETCH MY GROUPS--------------');
+				    $.ajax({ url: '/groups/user',
+				        type: 'GET',
+				        headers: {
+					  				"access-token": state.user.accesstoken,
 		    	      				"client": state.user.client,
 		    	      				"uid": state.user.uid
-		  								},
-		        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-		        success: function(data, status, xhr) {
-		        	console.log('__SUCCESS__');
-			        console.log('groups' ,data.groups);
-			        resolve(data.groups);
-			        console.log('**************END FETCH GROUP**************');
-		        },
-		        error: function(response) {
-		        	console.log('__FAILED__');
-		          console.log('response' ,response);
-		          reject('fetch group FAILED');
-		          console.log('**************END FETCH GROUP**************');
-		        }
-		      })
-		    });
-		  },
-
-		  local:function() {
-		    // Never check locally, always fetch remotely.
-		    return null;
-		  },
-
-		  success: StudyGroupActions.updateStudyGroups,
-		  error: StudyGroupActions.studyGroupsFailed,
-		  loading: StudyGroupActions.fetchStudyGroups
+		  						},
+				        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+				        success: function(data, status, xhr) {
+				        	console.log('__SUCCESS__');
+					        console.log('groups' ,data.groups);
+					        resolve(data.groups);
+					        console.log('**************END FETCH MY GROUPS**************');
+				        },
+				        error: function(response) {
+				        	console.log('__FAILED__');
+				          console.log('response' ,response);
+				          reject('fetch group FAILED');
+				          console.log('**************END FETCH MY GROUPS**************');
+				        }
+				    })
+				})
+			},
+			local:function() {
+				return null;
+			},
+			success: MyGroupsActions.fetchMyGroups
 		}
-	}
+	},
+
+	// ****************************************************************************
+	// ****************************************************************************
+	// ****************************************************************************
+	// ****************************************************************************
+	// ****************************************************************************
+
+	
 };
 
 module.exports = StudyGroupSource;
 
-},{"../actions/StudyGroupActions":369,"../actions/UserActions":370}],376:[function(require,module,exports){
+},{"../actions/MyGroupsActions":369,"../actions/StudyGroupActions":370,"../actions/UserActions":371}],378:[function(require,module,exports){
 var alt = require('../alt');
 var StudyGroupActions = require('../actions/StudyGroupActions');
+var MyGroupsActions = require('../actions/MyGroupsActions');
 var StudyGroupSource = require('../sources/StudyGroupSource');
 var UserActions = require('../actions/UserActions');
 
@@ -46684,6 +46849,7 @@ var UserActions = require('../actions/UserActions');
 		this.user = null;
 		this.errorMessageUser = null;
 		this.studyGroups = null;
+		this.myGroups = null;
 
 
 		this.bindListeners({
@@ -46699,7 +46865,9 @@ var UserActions = require('../actions/UserActions');
 			handleSignOut: UserActions.SIGN_OUT,
 
 			handlePostNewGroup: StudyGroupActions.POST_NEW_GROUP,
-			handleRefreshGroups: StudyGroupActions.REFRESH_GROUPS
+			handleRefreshGroups: StudyGroupActions.REFRESH_GROUPS,
+
+			handleFetchMyGroups: MyGroupsActions.FETCH_MY_GROUPS
 		});
 
 
@@ -46708,6 +46876,10 @@ var UserActions = require('../actions/UserActions');
 		});
 		this.exportAsync(StudyGroupSource);
 	}
+
+	Object.defineProperty(StudyGroupStore.prototype,"handleFetchMyGroups",{writable:true,configurable:true,value:function(myGroups) {"use strict";
+		this.myGroups = myGroups;
+	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handlePostNewGroup",{writable:true,configurable:true,value:function() {"use strict";
 		
@@ -46767,4 +46939,4 @@ var UserActions = require('../actions/UserActions');
 
 module.exports = alt.createStore(StudyGroupStore, 'StudyGroupStore');
 
-},{"../actions/StudyGroupActions":369,"../actions/UserActions":370,"../alt":371,"../sources/StudyGroupSource":375}]},{},[368]);
+},{"../actions/MyGroupsActions":369,"../actions/StudyGroupActions":370,"../actions/UserActions":371,"../alt":372,"../sources/StudyGroupSource":377}]},{},[368]);

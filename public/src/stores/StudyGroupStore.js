@@ -1,5 +1,6 @@
 var alt = require('../alt');
 var StudyGroupActions = require('../actions/StudyGroupActions');
+var MyGroupsActions = require('../actions/MyGroupsActions');
 var StudyGroupSource = require('../sources/StudyGroupSource');
 var UserActions = require('../actions/UserActions');
 
@@ -8,6 +9,7 @@ class StudyGroupStore {
 		this.user = null;
 		this.errorMessageUser = null;
 		this.studyGroups = null;
+		this.myGroups = null;
 
 
 		this.bindListeners({
@@ -23,7 +25,9 @@ class StudyGroupStore {
 			handleSignOut: UserActions.SIGN_OUT,
 
 			handlePostNewGroup: StudyGroupActions.POST_NEW_GROUP,
-			handleRefreshGroups: StudyGroupActions.REFRESH_GROUPS
+			handleRefreshGroups: StudyGroupActions.REFRESH_GROUPS,
+
+			handleFetchMyGroups: MyGroupsActions.FETCH_MY_GROUPS
 		});
 
 
@@ -31,6 +35,10 @@ class StudyGroupStore {
 			getStudyGroup: this.getStudyGroup
 		});
 		this.exportAsync(StudyGroupSource);
+	}
+
+	handleFetchMyGroups(myGroups) {
+		this.myGroups = myGroups;
 	}
 
 	handlePostNewGroup() {

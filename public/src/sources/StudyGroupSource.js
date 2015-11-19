@@ -1,5 +1,6 @@
 var StudyGroupActions = require('../actions/StudyGroupActions');
 var UserActions = require('../actions/UserActions');
+var MyGroupsActions = require('../actions/MyGroupsActions');
 
 const URL = "http://localhost:3000"
 const userURL = 'https://sheetsu.com/apis/72092a94';
@@ -163,7 +164,7 @@ var StudyGroupSource = {
 
 	// ****************************************************************************
 	// ****************************************************************************
-	// ******************************** STUDY GROUPS ******************************
+	// **************************** STUDY GROUPS (FEED) ***************************
 	// ****************************************************************************
 	// ****************************************************************************
 
@@ -173,7 +174,6 @@ var StudyGroupSource = {
 	// requires authentication
 	// ==================================================
 	postNewGroup() {
-		console.log("postNewGroup here");
 		return {
 		  remote(state, title, subject, description, date, location, capacity, host, school, privacy, history, newGroupDialog) { 
 		    return new Promise(function (resolve, reject) {
@@ -236,43 +236,90 @@ var StudyGroupSource = {
 	// ==================================================
 	fetchStudyGroups() {
 		return {
-		  remote(state) { 
-		    return new Promise(function (resolve, reject) {
-		    	console.log('--------------FETCH GROUP--------------');
-		      $.ajax({ url: '/groups/user/index',
-		        type: 'GET',
-		        headers: {
-			  								"access-token": state.user.accesstoken,
+			remote(state) { 
+			    return new Promise(function (resolve, reject) {
+			    	console.log('--------------FETCH GROUP--------------');
+			      	$.ajax({ url: '/groups/user/index',
+				        type: 'GET',
+				        headers: {
+				  						"access-token": state.user.accesstoken,
+			    	      				"client": state.user.client,
+			    	      				"uid": state.user.uid
+			  								},
+				        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+				        success: function(data, status, xhr) {
+				        	console.log('__SUCCESS__');
+					        console.log('groups' ,data.groups);
+					        resolve(data.groups);
+					        console.log('**************END FETCH GROUP**************');
+				        },
+				        error: function(response) {
+				        	console.log('__FAILED__');
+				          	console.log('response' ,response);
+				          	reject('fetch group FAILED');
+				          	console.log('**************END FETCH GROUP**************');
+				        }
+			      	});
+			    });
+			},
+
+			local() {
+			    // Never check locally, always fetch remotely.
+			    return null;
+			},
+
+			success: StudyGroupActions.updateStudyGroups,
+			error: StudyGroupActions.studyGroupsFailed,
+			loading: StudyGroupActions.fetchStudyGroups
+		}
+	},
+
+	// ****************************************************************************
+	// ****************************************************************************
+	// ****************************************************************************
+	// ****************************************************************************
+	// ****************************************************************************
+
+	// ****************************************************************************
+	// ****************************************************************************
+	// ****************************** MY STUDY GROUPS *****************************
+	// ****************************************************************************
+	// ****************************************************************************
+
+	fetchMyGroups() {
+		return {
+			remote(state){
+				return new Promise(function(resolve, reject){
+					console.log('--------------FETCH MY GROUPS--------------');
+				    $.ajax({ url: '/groups/user',
+				        type: 'GET',
+				        headers: {
+					  				"access-token": state.user.accesstoken,
 		    	      				"client": state.user.client,
 		    	      				"uid": state.user.uid
-		  								},
-		        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-		        success: function(data, status, xhr) {
-		        	console.log('__SUCCESS__');
-			        console.log('groups' ,data.groups);
-			        resolve(data.groups);
-			        console.log('**************END FETCH GROUP**************');
-		        },
-		        error: function(response) {
-		        	console.log('__FAILED__');
-		          console.log('response' ,response);
-		          reject('fetch group FAILED');
-		          console.log('**************END FETCH GROUP**************');
-		        }
-		      })
-		    });
-		  },
-
-		  local() {
-		    // Never check locally, always fetch remotely.
-		    return null;
-		  },
-
-		  success: StudyGroupActions.updateStudyGroups,
-		  error: StudyGroupActions.studyGroupsFailed,
-		  loading: StudyGroupActions.fetchStudyGroups
+		  						},
+				        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+				        success: function(data, status, xhr) {
+				        	console.log('__SUCCESS__');
+					        console.log('groups' ,data.groups);
+					        resolve(data.groups);
+					        console.log('**************END FETCH MY GROUPS**************');
+				        },
+				        error: function(response) {
+				        	console.log('__FAILED__');
+				          console.log('response' ,response);
+				          reject('fetch group FAILED');
+				          console.log('**************END FETCH MY GROUPS**************');
+				        }
+				    })
+				})
+			},
+			local() {
+				return null;
+			},
+			success: MyGroupsActions.fetchMyGroups
 		}
-	}
+	},
 
 	// ****************************************************************************
 	// ****************************************************************************

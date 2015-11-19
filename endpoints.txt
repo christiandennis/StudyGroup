@@ -41,7 +41,8 @@ GET:
 }
 
 MyGroup: /groups/user/
-# Returns all groups that the user is a part of
+# Re
+turns all groups that the user is a part of
 GET:
 {
 
