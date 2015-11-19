@@ -169,22 +169,16 @@ var StudyGroupSource = {
 		return {
 		  // remote(state, accesstoken, client, uid) { 
 		  remote(state, type) { 
-		  	var header = null;
+		  	var header = 	{
+			  								"access-token": state.user.accesstoken,
+		    	      				"client": state.user.client,
+		    	      				"uid": state.user.uid
+		  								}
 		  	var url = null;
 		  	if(type === 'user-feed') {
 		  		url = '/groups/user/index'
-		  		header = 	{
-	        						"access-token": "qYO3pGwd1rbybYS6ebbAqA",
-	        						"client": "NV2CbKG_ZiijqfsqsrGqRw",
-	        						"uid": "papa@gmail.com"
-        						}
 		  	} else if(type === 'user-part-of') {
 		  		url = '/groups/user'
-		  		header = 	{
-		  								"access-token": state.user.accesstoken,
-      	      				"client": state.user.client,
-      	      				"uid": state.user.uid
-		  							}
 		  	}
 		    return new Promise(function (resolve, reject) {
 		    	console.log('--------------FETCH GROUP--------------');

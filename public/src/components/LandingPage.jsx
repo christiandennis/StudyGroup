@@ -31,7 +31,7 @@ var LandingPage = React.createClass({
 				  <div className="parallax"><img style={{display:"block"}} src="campanile-3.jpg" alt="Unsplashed background img 1" /></div>
 				</div>
 				  
-				<div className="container ">
+				<div className="container white-background">
 				  <div className="section">
 				    <div className="row">
 				      <div className="col s6 l6">

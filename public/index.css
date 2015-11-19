@@ -1,5 +1,12 @@
 body {
 	margin: 0 0;
+	background-color: #D9E7FC;
+}
+
+.white-background {
+	background-color: #FFFFFF;
+	width: 100%;
+	border-color: #FFFFFF;
 }
 
 

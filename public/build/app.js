@@ -46023,7 +46023,7 @@ var LandingPage = React.createClass({displayName: "LandingPage",
 				  React.createElement("div", {className: "parallax"}, React.createElement("img", {style: {display:"block"}, src: "campanile-3.jpg", alt: "Unsplashed background img 1"}))
 				), 
 				  
-				React.createElement("div", {className: "container "}, 
+				React.createElement("div", {className: "container white-background"}, 
 				  React.createElement("div", {className: "section"}, 
 				    React.createElement("div", {className: "row"}, 
 				      React.createElement("div", {className: "col s6 l6"}, 
@@ -46197,7 +46197,6 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 
 	render:function() {
 		if (this.props.errorMessage) {
-			console.log('1');
 			return (
 				React.createElement("div", null, this.props.errorMessage)
 			);
@@ -46205,7 +46204,6 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 		if (StudyGroupStore.isLoading()) {
 			var left = window.document.documentElement.clientWidth/2 - 25;
 			var top = window.document.documentElement.clientHeight/2 - 25;
-			console.log('2');
 			return(
 				React.createElement("div", null, 
 					React.createElement(RefreshIndicator, {size: 50, left: left, top: top, status: "loading"})
@@ -46214,7 +46212,6 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 		}
 
 		if (this.props.studyGroups){
-			console.log('3');
 			return (
 				React.createElement("div", null, 
 					React.createElement(Dialog, {ref: "groupDetailDialog", 
@@ -46389,24 +46386,16 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 var StudyGroups = React.createClass ({displayName: "StudyGroups",
 	componentDidMount:function() {
 		var state = StudyGroupStore.getState();
-		console.log('----------strudygroup componentDidMount------------');
-		console.log('state: ', state);
 		StudyGroupStore.fetchStudyGroups();	
-		console.log('---------------------------------------------------');	
 		
 	},
 
 	componentWillUpdate:function() {
 		var state = StudyGroupStore.getState();
-		console.log('----------strudygroup componentWillReceiveProps------------');
-		console.log('state: ', state);
-		// StudyGroupStore.fetchStudyGroups(state.user.accesstoken, state.user.client, state.user.uid);
-		console.log('-----------------------------------------------------------');	
 	},
 
 	render:function(){
 		if (this.props.studyGroups!=null) {
-			console.log('hey');
 			return (
 				React.createElement("div", null, 
 					React.createElement(AltContainer, {store: StudyGroupStore}, 
@@ -46596,22 +46585,16 @@ var StudyGroupSource = {
 		return {
 		  // remote(state, accesstoken, client, uid) { 
 		  remote:function(state, type) { 
-		  	var header = null;
+		  	var header = 	{
+			  								"access-token": state.user.accesstoken,
+		    	      				"client": state.user.client,
+		    	      				"uid": state.user.uid
+		  								}
 		  	var url = null;
 		  	if(type === 'user-feed') {
 		  		url = '/groups/user/index'
-		  		header = 	{
-	        						"access-token": "qYO3pGwd1rbybYS6ebbAqA",
-	        						"client": "NV2CbKG_ZiijqfsqsrGqRw",
-	        						"uid": "papa@gmail.com"
-        						}
 		  	} else if(type === 'user-part-of') {
 		  		url = '/groups/user'
-		  		header = 	{
-		  								"access-token": state.user.accesstoken,
-      	      				"client": state.user.client,
-      	      				"uid": state.user.uid
-		  							}
 		  	}
 		    return new Promise(function (resolve, reject) {
 		    	console.log('--------------FETCH GROUP--------------');
