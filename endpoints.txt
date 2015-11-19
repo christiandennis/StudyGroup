@@ -119,7 +119,6 @@ GET
 Create comment: /comment
 POST
 {
-	userid (same as uid)
 	groupid
 	title
 	content

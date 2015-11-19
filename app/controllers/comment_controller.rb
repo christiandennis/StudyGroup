@@ -10,8 +10,6 @@ class CommentController < ApplicationController
 		groupid = params[:groupid]
 		content = params[:content]
 		title = params[:title]
-		
-
 		if title.nil? || title.length==0
 			status = -1
 			error_messages << "Please enter a title"
@@ -43,7 +41,10 @@ class CommentController < ApplicationController
 			render json: {'status'=>-1,'errors'=>error_messages}, status: 400
 		else
 			@comment = Comment.new(comment_params)
+			
 			if @comment.save
+				@group.comments.append(@comment.id)
+				@group.save
 				render json: {'status' => 1, 'comment' => @comment}
 				return
 			end

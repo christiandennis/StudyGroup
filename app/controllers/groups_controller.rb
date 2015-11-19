@@ -52,10 +52,7 @@ class GroupsController < ApplicationController
 
 		if capacity.nil? || capacity.length==0
 			status = -1
-			error_messages << "Please enter capacity"
-		elsif capacity.to_i > 99
-			status = -1
-			error_messages << "Please enter capacity less than 100" 
+			error_messages << "Please enter capacity" 
 		end
 
 		if privacy != '0' and privacy != '1'
@@ -65,7 +62,7 @@ class GroupsController < ApplicationController
 
 
 		if status == 1
-			@group = Group.new(group_params)
+			@group = Group.new(group_params.merge(:school=> current_user.school))
 			@group.guestlist+=1
 			@group.going = @group.going + ' '+@name.nickname.to_s + ' '
 			if @group.save
@@ -87,7 +84,7 @@ class GroupsController < ApplicationController
 	def userindex
 		#based on school/user
 		# what to initially show
-		@groups = Group.all
+		@groups = Group.find_by_school(current_user.school)
 		@user = current_user
 
 		render json: {'status'=>1,'groups' => @groups}
