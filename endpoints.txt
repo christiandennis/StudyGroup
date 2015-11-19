@@ -109,7 +109,7 @@ GET
 }
 
 
-Get comment in a group: /comment/:groupId
+Get comment in a group: /comments/:groupId
 GET
 {
 	
