@@ -45386,7 +45386,7 @@ React.render((
   ), document.getElementById('ReactApp')
 );
 
-},{"./components/AppBar.jsx":373,"./components/StudyGroups.jsx":380,"./stores/StudyGroupStore":382,"alt/AltContainer":1,"react":367,"react-dom":161,"react-router":181}],369:[function(require,module,exports){
+},{"./components/AppBar.jsx":373,"./components/StudyGroups.jsx":383,"./stores/StudyGroupStore":385,"alt/AltContainer":1,"react":367,"react-dom":161,"react-router":181}],369:[function(require,module,exports){
 var alt = require('../alt');
 
 function MyGroupsActions(){"use strict";}
@@ -45418,6 +45418,10 @@ function StudyGroupActions(){"use strict";}
 	}});
 
 	Object.defineProperty(StudyGroupActions.prototype,"refreshGroups",{writable:true,configurable:true,value:function(studyGroups) {"use strict";
+		this.dispatch(studyGroups);
+	}});
+
+	Object.defineProperty(StudyGroupActions.prototype,"editGroup",{writable:true,configurable:true,value:function(studyGroups) {"use strict";
 		this.dispatch(studyGroups);
 	}});
 
@@ -45604,7 +45608,6 @@ var TopBar = React.createClass({displayName: "TopBar",
                     
                     React.createElement(LeftBar, {ref: "leftBar", user: this.props.user}), 
                     React.createElement(Dialog_NewGroup, {ref: "newGroupDialog", user: this.props.user})
-                
                 )
 			);
 		}
@@ -45626,9 +45629,7 @@ var TopBar = React.createClass({displayName: "TopBar",
 				), 
 
 				React.createElement(LandingPage, {dialogSignUp: this.dialogSignUp}), 
-
 				React.createElement(Dialog_LogIn, {ref: "loginDialog"}), 
-
 				React.createElement(Dialog_SignUp, {ref: "signUpDialog"})
 			)
 		)
@@ -45640,7 +45641,317 @@ var TopBar = React.createClass({displayName: "TopBar",
 
 module.exports = TopBar;
 
-},{"../stores/StudyGroupStore":382,"./Dialog_LogIn.jsx":374,"./Dialog_MyGroups.jsx":375,"./Dialog_NewGroup.jsx":376,"./Dialog_Profile.jsx":377,"./Dialog_SignUp.jsx":378,"./LandingPage.jsx":379,"alt/AltContainer":1,"material-ui/lib/app-bar":56,"material-ui/lib/avatar":57,"material-ui/lib/flat-button":81,"material-ui/lib/left-nav":84,"material-ui/lib/menu/menu-item":86,"material-ui/lib/snackbar":101,"material-ui/lib/styles/raw-themes/light-raw-theme.js":106,"material-ui/lib/styles/raw-themes/sidebar-theme.js":107,"material-ui/lib/styles/theme-manager":110,"react":367,"react-addons-test-utils":158,"react-dom":161,"react-router":181,"react-sticky":188}],374:[function(require,module,exports){
+},{"../stores/StudyGroupStore":385,"./Dialog_LogIn.jsx":377,"./Dialog_MyGroups.jsx":378,"./Dialog_NewGroup.jsx":379,"./Dialog_Profile.jsx":380,"./Dialog_SignUp.jsx":381,"./LandingPage.jsx":382,"alt/AltContainer":1,"material-ui/lib/app-bar":56,"material-ui/lib/avatar":57,"material-ui/lib/flat-button":81,"material-ui/lib/left-nav":84,"material-ui/lib/menu/menu-item":86,"material-ui/lib/snackbar":101,"material-ui/lib/styles/raw-themes/light-raw-theme.js":106,"material-ui/lib/styles/raw-themes/sidebar-theme.js":107,"material-ui/lib/styles/theme-manager":110,"react":367,"react-addons-test-utils":158,"react-dom":161,"react-router":181,"react-sticky":188}],374:[function(require,module,exports){
+// React, react-reouter, alt
+var React = require('react');
+var render = require('react-dom').render;
+var Router = require('react-router');
+var History = Router.History;
+var StudyGroupStore = require('../stores/StudyGroupStore');
+
+// import components
+var Dialog_GroupDetail = require('./Dialog_GroupDetail.jsx');
+
+// Matertial UI components
+const TextField = require('material-ui/lib/text-field');
+const Dialog = require('material-ui/lib/dialog');
+const FlatButton = require('material-ui/lib/flat-button');
+const RaisedButton = require('material-ui/lib/raised-button');
+const Paper = require('material-ui/lib/paper');
+
+const moment = require('moment');
+
+var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
+	mixins: [History],
+
+	openGroupDetailDialog:function() {
+		this.refs.groupDetailDialog.refs.groupDetailDialog.show();
+	},
+
+	calculateTimeColor:function(card_date) {
+		var card_epoch = moment(card_date).unix();
+		var curr_time = new Date().toString();
+		var curr_epoch = moment(curr_time).unix();
+		var time_diff = card_epoch - curr_epoch;
+
+		if (time_diff >= 259200) {
+			return 'colorBarGreen';
+		} else if (time_diff >= 86400) {
+			return 'colorBarYellow';
+		} else {
+			return 'colorBarRed';
+		}
+	},
+
+	render:function() {
+		var studyGroup = this.props.studyGroup;
+		var date = moment(studyGroup.date).format("ddd, MMM D").toString();
+		var time = moment(studyGroup.date).format("h:mm a").toString();
+		var color = this.calculateTimeColor(studyGroup.date);
+		return (
+			React.createElement("div", {key: studyGroup.id}, 
+				React.createElement(Dialog_GroupDetail, {ref: "groupDetailDialog", studyGroup: studyGroup}), 
+
+		        React.createElement(Paper, {zDepth: 3, className: "card-container"}, 
+			        React.createElement("div", {className: "card studyGroup"}, 
+			            React.createElement("div", {className: color}), 
+			            React.createElement("table", null, 
+			                React.createElement("tr", {className: "row1"}, 
+			                    React.createElement("td", {className: "userPhotoHolder"}, 
+			                        React.createElement("div", {className: "photoHolder"}, 
+			                            React.createElement("div", {className: "circle"}, 
+			                                React.createElement("img", {className: "userPhoto", src: "http://nick.mtvnimages.com/nick/properties/spongebob-squarepants/characters/spongebob-about-web-desktop.jpg?quality=0.75"})
+			                            )
+			                        )
+
+			                    ), 
+			                    React.createElement("td", {colSpan: "2"}, 
+			                        React.createElement("span", {className: "subject"}, studyGroup.subject), 
+			                        React.createElement("span", {className: "title"}, studyGroup.title)
+			                    ), 
+
+			                    React.createElement("td", {colSpan: "2", align: "right", className: "dateTimeHolder"}, 
+			                        React.createElement("div", {className: "date"}, date), 
+			                        React.createElement("div", {className: "time"}, time)
+			                    )
+			                ), 
+
+			                React.createElement("tr", {className: "row2"}, 
+			                    React.createElement("td", {className: "exclamationHolder"}, 
+			                        React.createElement("div", {className: "exclamation"})
+			                    ), 
+			                    React.createElement("td", {colSpan: "3"}, 
+			                        React.createElement("div", {className: "description"}, studyGroup.description), 
+			                        React.createElement("div", {className: "seeMore", onClick: this.openGroupDetailDialog}, "See more...")
+			                    )
+			                ), 
+
+			                React.createElement("tr", {className: "row3"}, 
+			                    React.createElement("td", {className: "pinHolder"}, 
+			                        React.createElement("div", {className: "pin"})
+			                    ), 
+			                    React.createElement("td", {colSpan: "2"}, 
+			                        React.createElement("div", {className: "location"}, studyGroup.location)
+			                    )
+			                ), 
+
+			                React.createElement("tr", {className: "row4"}, 
+			                    React.createElement("td", null), 
+			                    React.createElement("td", {colSpan: "1"}, React.createElement("span", {className: "host"}, "@", studyGroup.host)
+			                    ), 
+			                    React.createElement("td", {colSpan: "2"}, 
+			                        React.createElement("div", {style: {textAlign:"right"}, className: "joinButtonContainer"}, 
+			                            React.createElement(RaisedButton, {label: "Join"})
+			                        )
+			                    ), 
+			                    React.createElement("td", null, 
+			                        React.createElement("div", {className: "capacityHolder"}, 
+			                            React.createElement("div", {className: "capacity"}, studyGroup.guestlist, "/", studyGroup.capacity)
+			                        )
+			                    )
+			                )
+			            )
+			        )
+		        )
+	    	)
+		)
+	}
+})
+
+module.exports = MainGroupViewCard;
+
+},{"../stores/StudyGroupStore":385,"./Dialog_GroupDetail.jsx":376,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/paper":95,"material-ui/lib/raised-button":96,"material-ui/lib/text-field":121,"moment":155,"react":367,"react-dom":161,"react-router":181}],375:[function(require,module,exports){
+// React, react-reouter, alt
+var React = require('react');
+var render = require('react-dom').render;
+var Router = require('react-router');
+var History = Router.History;
+var StudyGroupStore = require('../stores/StudyGroupStore');
+
+// Matertial UI components
+const TextField = require('material-ui/lib/text-field');
+const Dialog = require('material-ui/lib/dialog');
+const FlatButton = require('material-ui/lib/flat-button');
+const DatePicker = require('material-ui/lib/date-picker/date-picker');
+const TimePicker = require('material-ui/lib/time-picker/time-picker');
+const Snackbar = require('material-ui/lib/snackbar');
+
+var LoginDialog = React.createClass({displayName: "LoginDialog",
+	mixins: [History],
+
+	cancelEditGroupDetail:function() {
+		this.refs.editGroupDialog.dismiss();
+	},
+
+	submitEditGroupDetail:function() {
+		var id = this.props.studyGroup.id;
+		var title = this.refs.editGroupTitle;
+		var subject = this.refs.editGroupSubject;
+		var description =  this.refs.editGroupDescription;
+		var date = this.refs.editGroupDate.getDate();
+		var location = this.refs.editGroupLocation;
+		var capacity = 	this.refs.editGroupCapacity;
+
+		var editGroupDialog = this.refs.editGroupDialog;
+		var failedSnackbar = this.refs.editGroupFailedSnackbar;
+		var successSnackbar = this.refs.editGroupSuccessSnackbar;
+		StudyGroupStore.editGroup(id, title, subject, description, date, location, capacity, editGroupDialog, failedSnackbar, successSnackbar);
+	},
+
+	render:function() {
+		var studyGroup = this.props.studyGroup;
+		var date = new Date(studyGroup.date);
+		return (
+			React.createElement("div", null, 
+				React.createElement(Dialog, {ref: "editGroupDialog", 
+		        	title: "Edit StudyGroup", 
+		        	onShow: this.editGroupDetailOnShow, 
+		        	modal: true, 
+		        	actions: [
+		        		  React.createElement(FlatButton, {
+		        		    label: "Cancel", 
+		        		    secondary: true, 
+		        		    onTouchTap: this.cancelEditGroupDetail}),
+		        		  React.createElement(FlatButton, {
+		        		    label: "Submit", 
+		        		    primary: true, 
+		        		    onTouchTap: this.submitEditGroupDetail})], 
+		        		autoDetectWindowHeight: true, 
+		        		autoScrollBodyContent: true}, 
+		          	React.createElement("div", null, 
+			         	React.createElement(TextField, {
+			         		onEnterKeyDown: this.submitEditGroupDetail, 
+			         		ref: "editGroupSubject", 
+			         	  	hintText: "CS169", 
+			         	  	defaultValue: studyGroup.subject, 
+			         	  	floatingLabelText: "Class"}), 
+			         	React.createElement(TextField, {
+			         		onEnterKeyDown: this.submitEditGroupDetail, 
+			         		ref: "editGroupTitle", 
+			         	  	hintText: "Learn React together", 
+			         	  	defaultValue: studyGroup.title, 
+			         	  	floatingLabelText: "Title"}), 
+			         	React.createElement(TextField, {
+			         		onEnterKeyDown: this.submitEditGroupDetail, 
+			         		ref: "editGroupDescription", 
+			         	  	hintText: "Come and learn the basic (and some advanced) React together! REACT IS THE FUTURE!!!", 
+			         	  	floatingLabelText: "Description", 
+			         	  	defaultValue: studyGroup.description, 
+			         	  	fullWidth: true, 
+			         	  	multiLine: true}), 
+			         	React.createElement(DatePicker, {
+			         		ref: "editGroupDate", 
+			         	  	hintText: "Nov 22, 2015", 
+			         	  	defaultDate: date, 
+			         	  	floatingLabelText: "Date"}), 
+			         	React.createElement(TimePicker, {
+			         		ref: "editGroupTime", 
+			         	  	hintText: "9:00 pm", 
+			         	  	defaultTime: date, 
+			         	  	floatingLabelText: "Time"}), 
+			         	React.createElement(TextField, {
+			         		onEnterKeyDown: this.submitEditGroupDetail, 
+			         		ref: "editGroupLocation", 
+			         	  	hintText: "Wozniak Longue, Soda Hall", 
+			         	  	defaultValue: studyGroup.location, 
+			         	  	floatingLabelText: "Location"}), 
+			         	React.createElement(TextField, {
+			         		onEnterKeyDown: this.submitEditGroupDetail, 
+			         		ref: "editGroupCapacity", 
+			         	  	hintText: "20", 
+			         	  	defaultValue: studyGroup.capacity, 
+			         	  	floatingLabelText: "Capacity"})
+		        	)
+		        ), 
+
+    			React.createElement(Snackbar, {
+               		ref: "editGroupFailedSnackbar", 
+                 	message: "Failed to edit group", 
+                 	autoHideDuration: "5000"}), 
+
+        		React.createElement(Snackbar, {
+               		ref: "editGroupSuccessSnackbar", 
+                 	message: "Group Edited", 
+                 	autoHideDuration: "5000"})
+			)
+		)
+	}
+})
+
+module.exports = LoginDialog;
+
+},{"../stores/StudyGroupStore":385,"material-ui/lib/date-picker/date-picker":74,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/snackbar":101,"material-ui/lib/text-field":121,"material-ui/lib/time-picker/time-picker":130,"react":367,"react-dom":161,"react-router":181}],376:[function(require,module,exports){
+// React, react-reouter, alt
+var React = require('react');
+var render = require('react-dom').render;
+var Router = require('react-router');
+var History = Router.History;
+var StudyGroupStore = require('../stores/StudyGroupStore');
+
+var Dialog_EditGroup = require('./Dialog_EditGroup.jsx');
+
+// Matertial UI components
+const TextField = require('material-ui/lib/text-field');
+const Dialog = require('material-ui/lib/dialog');
+const FlatButton = require('material-ui/lib/flat-button');
+
+const moment = require('moment');
+
+var GroupDetailDialog = React.createClass({displayName: "GroupDetailDialog",
+	mixins: [History],
+
+	openEditGroupDialog:function() {
+		this.refs.groupDetailDialog.dismiss();
+		this.refs.editGroupDialog.refs.editGroupDialog.show();
+	},
+
+	render:function() {
+		var studyGroup = this.props.studyGroup;
+		var date = moment(studyGroup.date).format("ddd, MMM D").toString();
+		var time = moment(studyGroup.date).format("h:mm a").toString();
+		return (
+			React.createElement("div", null, 
+				React.createElement(Dialog_EditGroup, {ref: "editGroupDialog", studyGroup: studyGroup}), 
+
+				React.createElement(Dialog, {ref: "groupDetailDialog", 
+						title: "StudyGroup Detail", 
+						actions: [], 
+				  		autoDetectWindowHeight: true, 
+				  		autoScrollBodyContent: true}, 
+				    React.createElement("div", null, 
+				    	React.createElement("div", {className: "groupdesc-title"}, "Class"), 
+				    	React.createElement("div", {ref: "groupdetailClass", className: "groupdesc-subtitle"}, studyGroup.subject), 
+
+				    	React.createElement("div", {className: "groupdesc-title"}, "Title"), 
+				    	React.createElement("div", {ref: "groupdetailTitle", className: "groupdesc-subtitle"}, studyGroup.title), 
+
+				    	React.createElement("div", {className: "groupdesc-title"}, "Host"), 
+				    	React.createElement("div", {ref: "groupdetailHost", className: "groupdesc-subtitle"}, studyGroup.host), 
+
+				    	React.createElement("div", {className: "groupdesc-title"}, "Date"), 
+				    	React.createElement("div", {ref: "groupdetailDate", className: "groupdesc-subtitle"}, date), 
+
+				    	React.createElement("div", {className: "groupdesc-title"}, "Time"), 
+				    	React.createElement("div", {ref: "groupdetailTime", className: "groupdesc-subtitle"}, time), 
+
+				    	React.createElement("div", {className: "groupdesc-title"}, "Location"), 
+				    	React.createElement("div", {ref: "groupdetailLocation", className: "groupdesc-subtitle"}, studyGroup.location), 
+
+				    	React.createElement("div", {className: "groupdesc-title"}, "Description"), 
+				    	React.createElement("div", {ref: "groupdetailDescription", className: "groupdesc-subtitle"}, studyGroup.description), 
+
+				    	React.createElement(FlatButton, {label: "Edit", onClick: this.openEditGroupDialog})
+
+				    )
+				)
+			)
+		)
+	}
+})
+
+module.exports = GroupDetailDialog;
+
+},{"../stores/StudyGroupStore":385,"./Dialog_EditGroup.jsx":375,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/text-field":121,"moment":155,"react":367,"react-dom":161,"react-router":181}],377:[function(require,module,exports){
 // React, react-reouter, alt
 var React = require('react');
 var render = require('react-dom').render;
@@ -45703,7 +46014,7 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 
 module.exports = LoginDialog;
 
-},{"../stores/StudyGroupStore":382,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/text-field":121,"react":367,"react-dom":161,"react-router":181}],375:[function(require,module,exports){
+},{"../stores/StudyGroupStore":385,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/text-field":121,"react":367,"react-dom":161,"react-router":181}],378:[function(require,module,exports){
 // var button = require('react-materialize').Button;
 var React = require('react');
 var Link = require('react-router').Link;
@@ -45809,7 +46120,7 @@ var MyGroups = React.createClass ({displayName: "MyGroups",
 
 module.exports = MyGroups;
 
-},{"../actions/StudyGroupActions":370,"../stores/StudyGroupStore":382,"alt/AltContainer":1,"axios":17,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/paper":95,"moment":155,"react":367,"react-addons-test-utils":158,"react-dom":161,"react-router":181,"react-tap-event-plugin":192}],376:[function(require,module,exports){
+},{"../actions/StudyGroupActions":370,"../stores/StudyGroupStore":385,"alt/AltContainer":1,"axios":17,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/paper":95,"moment":155,"react":367,"react-addons-test-utils":158,"react-dom":161,"react-router":181,"react-tap-event-plugin":192}],379:[function(require,module,exports){
 // React, react-reouter, alt
 var React = require('react');
 var render = require('react-dom').render;
@@ -46024,7 +46335,7 @@ var NewGroupDialog = React.createClass({displayName: "NewGroupDialog",
 
 module.exports = NewGroupDialog;
 
-},{"../stores/StudyGroupStore":382,"material-ui/lib/checkbox":66,"material-ui/lib/date-picker/date-picker":74,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/snackbar":101,"material-ui/lib/text-field":121,"material-ui/lib/time-picker/time-picker":130,"react":367,"react-dom":161,"react-router":181}],377:[function(require,module,exports){
+},{"../stores/StudyGroupStore":385,"material-ui/lib/checkbox":66,"material-ui/lib/date-picker/date-picker":74,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/snackbar":101,"material-ui/lib/text-field":121,"material-ui/lib/time-picker/time-picker":130,"react":367,"react-dom":161,"react-router":181}],380:[function(require,module,exports){
 // React, react-reouter, alt
 var React = require('react');
 var render = require('react-dom').render;
@@ -46069,7 +46380,7 @@ var ProfileDialog = React.createClass({displayName: "ProfileDialog",
 
 module.exports = ProfileDialog;
 
-},{"../stores/StudyGroupStore":382,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/text-field":121,"react":367,"react-dom":161,"react-router":181}],378:[function(require,module,exports){
+},{"../stores/StudyGroupStore":385,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/text-field":121,"react":367,"react-dom":161,"react-router":181}],381:[function(require,module,exports){
 // React, react-reouter, alt
 var React = require('react');
 var render = require('react-dom').render;
@@ -46271,7 +46582,7 @@ var SignUpDialog = React.createClass({displayName: "SignUpDialog",
 
 module.exports = SignUpDialog;
 
-},{"../stores/StudyGroupStore":382,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/text-field":121,"react":367,"react-dom":161,"react-router":181}],379:[function(require,module,exports){
+},{"../stores/StudyGroupStore":385,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/text-field":121,"react":367,"react-dom":161,"react-router":181}],382:[function(require,module,exports){
 var React = require('react');
 var render = require('react-dom').render;
 var axios = require('axios');
@@ -46348,20 +46659,24 @@ var LandingPage = React.createClass({displayName: "LandingPage",
 
 module.exports = LandingPage;
 
-},{"./AppBar.jsx":373,"alt/AltContainer":1,"axios":17,"react":367,"react-dom":161}],380:[function(require,module,exports){
-// var button = require('react-materialize').Button;
+},{"./AppBar.jsx":373,"alt/AltContainer":1,"axios":17,"react":367,"react-dom":161}],383:[function(require,module,exports){
+// import react, react-router, alt
 var React = require('react');
 var Link = require('react-router').Link;
 var render = require('react-dom').render;
-
 var AltContainer = require('alt/AltContainer');
+
+// import store and action
 var StudyGroupStore = require('../stores/StudyGroupStore');
 var StudyGroupActions = require('../actions/StudyGroupActions');
-var ReactTestUtils = require('react-addons-test-utils');
+
+// import components
+var Card_MainGroupView = require('./Card_MainGroupView.jsx');
 
 var injectTapEventPlugin = require("react-tap-event-plugin");
 injectTapEventPlugin();
 
+// import Material UI components
 const RaisedButton = require('material-ui/lib/raised-button');
 const Paper = require('material-ui/lib/paper');
 const Avatar = require('material-ui/lib/avatar');
@@ -46382,118 +46697,12 @@ const moment = require('moment');
 const URL = "http://localhost:3000";
 var axios = require('axios');
 
+var ReactTestUtils = require('react-addons-test-utils');
+
 var tmpStudyGroup = null;
 
 
 var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
-	// this method should fetch the group detail and comments
-	// parameter : groupId
-	viewGroupDetail:function(param) {
-		console.log("open group detail");
-		tmpStudyGroup = param;
-		this.refs.groupDetailDialog.show();
-	},
-
-	viewGroupDetailOnShow:function() {
-		this.refs.groupdetailClass.innerHTML = tmpStudyGroup.subject;
-		this.refs.groupdetailTitle.innerHTML = tmpStudyGroup.title;
-		this.refs.groupdetailHost.innerHTML = "@" + tmpStudyGroup.host;
-		var date = moment(tmpStudyGroup.datetime).format("ddd, MMM D").toString();
-		var time = moment(tmpStudyGroup.datetime).format("h:mm a").toString();
-		this.refs.groupdetailTime.innerHTML = time;
-		this.refs.groupdetailDate.innerHTML = date;
-		this.refs.groupdetailLocation.innerHTML = tmpStudyGroup.location;
-		this.refs.groupdetailDescription.innerHTML = tmpStudyGroup.description;
-	},
-
-	editGroupDetail:function(){
-		this.refs.groupDetailDialog.dismiss();
-		this.refs.editGroupDialog.show();
-	},
-
-	editGroupDetailOnShow:function(){
-		this.refs.editGroupTitle.setValue(tmpStudyGroup.title);
-		this.refs.editGroupSubject.setValue(tmpStudyGroup.subject);
-		this.refs.editGroupLocation.setValue(tmpStudyGroup.location);
-		this.refs.editGroupDescription.setValue(tmpStudyGroup.description);
-		this.refs.editGroupCapacity.setValue(tmpStudyGroup.capacity);
-		var datetime = moment(tmpStudyGroup.datetime).toDate();
-		this.refs.editGroupTime.setTime(datetime);
-		this.refs.editGroupDate.setDate(datetime);
-
-	},
-
-	cancelEditGroupDetail:function() {
-		console.log("closing editgroup dialog");
-		this.refs.editGroupDialog.dismiss();
-	},
-
-	submitEditGroupDetail:function() {
-		var title = this.refs.editGroupTitle.getValue();
-		var subject = this.refs.editGroupSubject.getValue();
-		var description =  this.refs.editGroupDescription.getValue();
-		var date = this.refs.editGroupDate.getDate();
-		var location = this.refs.editGroupLocation.getValue();
-		var capacity = 	this.refs.editGroupCapacity.getValue();
-		var host = this.props.user;
-
-		if (false) {
-			console.log(title);
-			console.log(subject);
-			console.log(description);
-			console.log(date);
-			console.log(location);
-			console.log(capacity);
-			console.log(host);
-		}
-
-		var newGroupDialog = this.refs.newGroupDialog;
-		var failedSnackbar = this.refs.createGroupFailedSnackbar;
-		var successSnackbar = this.refs.createGroupSuccessSnackbar;
-		StudyGroupStore.postNewGroup();
-	},
-
-	joinGroup:function() {
-		console.log("Join group here");
-	},
-
-	calculateTimeColor:function(card_date) {
-		console.log("calculate the color for given time");
-		var card_epoch = moment(card_date).unix();
-		console.log("THIS IS THE EPOCH TIME");
-		console.log(card_date);
-		console.log(card_epoch);
-
-		var curr_time = new Date();
-		curr_time = curr_time.toString();
-		var curr_epoch = moment(curr_time).unix();
-		console.log("THIS IS EPOCH FOR CURRENT TIME");
-		console.log(curr_time);
-		console.log(curr_epoch);
-
-		var time_diff = card_epoch - curr_epoch;
-		console.log("TIME IDFF");
-		console.log(time_diff);
-
-		if (time_diff >= 259200) {
-			console.log("returned color")
-			console.log(1)
-			return 1;
-		}
-
-		else if (time_diff >= 86400) {
-			console.log("returned color")
-			console.log(2)
-			return 2;
-		}
-
-		else {
-			console.log("returned color")
-			console.log(3)
-			return 3;
-		}
-	},
-
 	render:function() {
 		if (this.props.errorMessage) {
 			return (
@@ -46512,185 +46721,11 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 
 		if (this.props.studyGroups){
 			return (
-				React.createElement("div", null, 
-					React.createElement(Dialog, {ref: "groupDetailDialog", 
-							title: "StudyGroup Detail", 
-							actions: [], 
-							onShow: this.viewGroupDetailOnShow, 
-					  		autoDetectWindowHeight: true, 
-					  		autoScrollBodyContent: true}, 
-					    React.createElement("div", null, 
-					    	React.createElement("div", {className: "groupdesc-title"}, "Class"), 
-					    	React.createElement("div", {ref: "groupdetailClass", className: "groupdesc-subtitle"}), 
-
-					    	React.createElement("div", {className: "groupdesc-title"}, "Title"), 
-					    	React.createElement("div", {ref: "groupdetailTitle", className: "groupdesc-subtitle"}), 
-
-					    	React.createElement("div", {className: "groupdesc-title"}, "Host"), 
-					    	React.createElement("div", {ref: "groupdetailHost", className: "groupdesc-subtitle"}), 
-
-					    	React.createElement("div", {className: "groupdesc-title"}, "Time"), 
-					    	React.createElement("div", {ref: "groupdetailTime", className: "groupdesc-subtitle"}), 
-
-					    	React.createElement("div", {className: "groupdesc-title"}, "Date"), 
-					    	React.createElement("div", {ref: "groupdetailDate", className: "groupdesc-subtitle"}), 
-
-					    	React.createElement("div", {className: "groupdesc-title"}, "Location"), 
-					    	React.createElement("div", {ref: "groupdetailLocation", className: "groupdesc-subtitle"}), 
-
-					    	React.createElement("div", {className: "groupdesc-title"}, "Description"), 
-					    	React.createElement("div", {ref: "groupdetailDescription", className: "groupdesc-subtitle"}), 
-
-					    	React.createElement(FlatButton, {label: "Edit", onClick: this.editGroupDetail})
-
-					    )
-					), 
-
-			        React.createElement(Dialog, {ref: "editGroupDialog", 
-			        	title: "Edit StudyGroup", 
-			        	onShow: this.editGroupDetailOnShow, 
-			        	modal: true, 
-			        	actions: [
-			        		  React.createElement(FlatButton, {
-			        		    label: "Cancel", 
-			        		    secondary: true, 
-			        		    onTouchTap: this.cancelEditGroupDetail}),
-			        		  React.createElement(FlatButton, {
-			        		    label: "Submit", 
-			        		    primary: true, 
-			        		    onTouchTap: this.submitEditGroupDetail})], 
-			        		autoDetectWindowHeight: true, 
-			        		autoScrollBodyContent: true}, 
-			          	React.createElement("div", null, 
-				         	React.createElement(TextField, {
-				         		onEnterKeyDown: this.submitEditGroupDetail, 
-				         		ref: "editGroupSubject", 
-				         	  	hintText: "CS169", 
-				         	  	floatingLabelText: "Class"}), 
-				         	React.createElement(TextField, {
-				         		onEnterKeyDown: this.submitEditGroupDetail, 
-				         		ref: "editGroupTitle", 
-				         	  	hintText: "Learn React together", 
-				         	  	floatingLabelText: "Title"}), 
-				         	React.createElement(TextField, {
-				         		onEnterKeyDown: this.submitEditGroupDetail, 
-				         		ref: "editGroupDescription", 
-				         	  	hintText: "Come and learn the basic (and some advanced) React together! REACT IS THE FUTURE!!!", 
-				         	  	floatingLabelText: "Description", 
-				         	  	fullWidth: true, 
-				         	  	multiLine: true}), 
-				         	React.createElement(DatePicker, {
-				         		ref: "editGroupDate", 
-				         	  	hintText: "Nov 22, 2015", 
-				         	  	floatingLabelText: "Date"}), 
-				         	React.createElement(TimePicker, {
-				         		ref: "editGroupTime", 
-				         	  	hintText: "9:00 pm", 
-				         	  	floatingLabelText: "Time"}), 
-				         	React.createElement(TextField, {
-				         		onEnterKeyDown: this.submitEditGroupDetail, 
-				         		ref: "editGroupLocation", 
-				         	  	hintText: "Wozniak Longue, Soda Hall", 
-				         	  	floatingLabelText: "Location"}), 
-				         	React.createElement(TextField, {
-				         		onEnterKeyDown: this.submitEditGroupDetail, 
-				         		ref: "editGroupCapacity", 
-				         	  	hintText: "20", 
-				         	  	floatingLabelText: "Capacity"})
-			        	)
-			        ), 
-
-					React.createElement("ul", null, 
-					  this.props.studyGroups.map(function(studyGroup, i)  {
-					  	var date = moment(studyGroup.date).format("ddd, MMM D").toString();
-					  	var time = moment(studyGroup.date).format("h:mm a").toString();
-					  	var studygroupID = studyGroup.id;
-
-					  	// call the function to calculate color
-					  	var color_chosen_int = this.calculateTimeColor(studyGroup.date);
-					  	var color_chosen = "colorBar";
-
-					  	if (color_chosen_int == 1) {
-					  		color_chosen = "colorBarGreen";
-					  	}
-
-					  	else if (color_chosen_int == 2) {
-					  		color_chosen = "colorBarYellow";
-					  	}
-
-					  	else {
-					  		color_chosen = "colorBarRed";
-					  	}
-					    return (
-					    	React.createElement("div", {key: studyGroup.id}, 
-			    		        React.createElement(Paper, {zDepth: 3, className: "card-container"}, 
-			    			        React.createElement("div", {className: "card studyGroup"}, 
-			    			            React.createElement("div", {className: color_chosen}), 
-			    			            React.createElement("table", null, 
-			    			                React.createElement("tr", {className: "row1"}, 
-			    			                    React.createElement("td", {className: "userPhotoHolder"}, 
-			    			                        React.createElement("div", {className: "photoHolder"}, 
-			    			                            React.createElement("div", {className: "circle"}, 
-			    			                                React.createElement("img", {className: "userPhoto", src: "http://nick.mtvnimages.com/nick/properties/spongebob-squarepants/characters/spongebob-about-web-desktop.jpg?quality=0.75"})
-			    			                            )
-			    			                        )
-
-			    			                    ), 
-			    			                    React.createElement("td", {colSpan: "2"}, 
-			    			                        React.createElement("span", {className: "subject"}, studyGroup.subject), 
-			    			                        React.createElement("span", {className: "title"}, studyGroup.title)
-			    			                    ), 
-
-			    			                    React.createElement("td", {colSpan: "2", align: "right", className: "dateTimeHolder"}, 
-			    			                        React.createElement("div", {className: "date"}, date), 
-			    			                        React.createElement("div", {className: "time"}, time)
-			    			                    )
-			    			                ), 
-
-			    			                React.createElement("tr", {className: "row2"}, 
-			    			                    React.createElement("td", {className: "exclamationHolder"}, 
-			    			                        React.createElement("div", {className: "exclamation"})
-			    			                    ), 
-			    			                    React.createElement("td", {colSpan: "3"}, 
-			    			                        React.createElement("div", {className: "description"}, studyGroup.description), 
-			    			                        React.createElement("div", {className: "seeMore", onClick: this.viewGroupDetail.bind(this, studyGroup)}, "See more...")
-			    			                    )
-			    			                ), 
-
-			    			                React.createElement("tr", {className: "row3"}, 
-			    			                    React.createElement("td", {className: "pinHolder"}, 
-			    			                        React.createElement("div", {className: "pin"})
-			    			                    ), 
-			    			                    React.createElement("td", {colSpan: "2"}, 
-			    			                        React.createElement("div", {className: "location"}, studyGroup.location)
-			    			                    )
-			    			                ), 
-
-			    			                React.createElement("tr", {className: "row4"}, 
-			    			                    React.createElement("td", null), 
-			    			                    React.createElement("td", {colSpan: "1"}, React.createElement("span", {className: "host"}, "@", studyGroup.host)
-			    			                    ), 
-			    			                    React.createElement("td", {colSpan: "2"}, 
-			    			                        React.createElement("div", {style: {textAlign:"right"}, className: "joinButtonContainer"}, 
-			    			                            React.createElement(RaisedButton, {onClick: this.joinGroup.bind(this, studyGroup), label: "Join"})
-			    			                        )
-			    			                    ), 
-			    			                    React.createElement("td", null, 
-			    			                        React.createElement("div", {className: "capacityHolder"}, 
-			    			                            React.createElement("div", {className: "capacity"}, studyGroup.guestlist, "/", studyGroup.capacity)
-			    			                        )
-			    			                    )
-			    			                )
-			    			            )
-			    			        )
-			    		        )
-					    	)
-					    );
-					  }.bind(this))
-					)
-
-					
-				)
+				React.createElement("ul", null, 
+					this.props.studyGroups.map(function(studyGroup, i)  {
+					    return ( React.createElement(Card_MainGroupView, {studyGroup: studyGroup}) );
+					})
+				)					
 			);
 		}
 	}
@@ -46728,7 +46763,7 @@ var StudyGroups = React.createClass ({displayName: "StudyGroups",
 
 module.exports = StudyGroups;
 
-},{"../actions/StudyGroupActions":370,"../stores/StudyGroupStore":382,"alt/AltContainer":1,"axios":17,"material-ui/lib/avatar":57,"material-ui/lib/card/card":65,"material-ui/lib/card/card-actions":60,"material-ui/lib/card/card-header":62,"material-ui/lib/card/card-text":63,"material-ui/lib/card/card-title":64,"material-ui/lib/date-picker/date-picker":74,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/paper":95,"material-ui/lib/raised-button":96,"material-ui/lib/refresh-indicator":97,"material-ui/lib/text-field":121,"material-ui/lib/time-picker/time-picker":130,"moment":155,"react":367,"react-addons-test-utils":158,"react-dom":161,"react-router":181,"react-tap-event-plugin":192}],381:[function(require,module,exports){
+},{"../actions/StudyGroupActions":370,"../stores/StudyGroupStore":385,"./Card_MainGroupView.jsx":374,"alt/AltContainer":1,"axios":17,"material-ui/lib/avatar":57,"material-ui/lib/card/card":65,"material-ui/lib/card/card-actions":60,"material-ui/lib/card/card-header":62,"material-ui/lib/card/card-text":63,"material-ui/lib/card/card-title":64,"material-ui/lib/date-picker/date-picker":74,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/paper":95,"material-ui/lib/raised-button":96,"material-ui/lib/refresh-indicator":97,"material-ui/lib/text-field":121,"material-ui/lib/time-picker/time-picker":130,"moment":155,"react":367,"react-addons-test-utils":158,"react-dom":161,"react-router":181,"react-tap-event-plugin":192}],384:[function(require,module,exports){
 var StudyGroupActions = require('../actions/StudyGroupActions');
 var UserActions = require('../actions/UserActions');
 var MyGroupsActions = require('../actions/MyGroupsActions');
@@ -46961,6 +46996,59 @@ var StudyGroupSource = {
 		  loading: StudyGroupActions.fetchStudyGroups
 		}
 	},
+
+	editGroup:function() {
+				return {
+				  	remote:function(state, id, title, subject, description, date, location, capacity, editGroupDialog, failedSnackbar, successSnackbar) { 
+					    return new Promise(function (resolve, reject) {
+					      	console.log('--------------EDIT GROUP--------------');
+					      	var groupData = {
+					      		"title": title.getValue(),
+				      			"subject": subject.getValue(),
+				      			"description": description.getValue(),
+				      			"date": date, 
+				      			"location": location.getValue(),
+				      			"capacity": capacity.getValue(),
+				      			"id": id
+					      	};
+					      	var URL = '/groups/' + id;
+					      	$.ajax({ url: URL,
+				      	      	type: 'PUT',
+				      	      	beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+				      	      	headers:{
+				      	      				"access-token": state.user.accesstoken,
+				      	      				"client": state.user.client,
+				      	      				"uid": state.user.uid
+				      	      			},
+					      	    data: groupData,
+					      	    success: function(response) {
+					      	      	console.log('__SUCCESS__');
+					      	  	  	console.log('response:' ,response);
+					      	  	  	// history.pushState(null, '/studygroupapp');
+					      	  	  	resolve(response.group);
+					      	  	  	editGroupDialog.dismiss();
+					      	  	  	successSnackbar.show();
+					      	  	  	console.log('**************END EDIT GROUP**************');
+				      	      	},
+				      	      	error: function(response) {
+					      	      	console.log('__FAILED__');
+						      	  	console.log('response:' ,response.responseJSON);
+						      	  	failedSnackbar.show();
+						      	  	console.log('**************END EDIT GROUP**************');
+				      	      	}
+			      	    	});
+					    });
+					},
+
+				  local:function() {
+				    // Never check locally, always fetch remotely.
+				    return null;
+				  },
+				  
+				  success: StudyGroupActions.editGroup,
+				  error: StudyGroupActions.studyGroupsFailed
+				}
+	},
 	
 	// ==================================================
 	// This function fetches the studygroups
@@ -47065,7 +47153,7 @@ var StudyGroupSource = {
 
 module.exports = StudyGroupSource;
 
-},{"../actions/MyGroupsActions":369,"../actions/StudyGroupActions":370,"../actions/UserActions":371}],382:[function(require,module,exports){
+},{"../actions/MyGroupsActions":369,"../actions/StudyGroupActions":370,"../actions/UserActions":371}],385:[function(require,module,exports){
 var alt = require('../alt');
 var StudyGroupActions = require('../actions/StudyGroupActions');
 var MyGroupsActions = require('../actions/MyGroupsActions');
@@ -47094,6 +47182,7 @@ var UserActions = require('../actions/UserActions');
 
 			handlePostNewGroup: StudyGroupActions.POST_NEW_GROUP,
 			handleRefreshGroups: StudyGroupActions.REFRESH_GROUPS,
+			handleEditGroup: StudyGroupActions.EDIT_GROUP,
 
 			handleFetchMyGroups: MyGroupsActions.FETCH_MY_GROUPS
 		});
@@ -47107,6 +47196,15 @@ var UserActions = require('../actions/UserActions');
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleFetchMyGroups",{writable:true,configurable:true,value:function(myGroups) {"use strict";
 		this.myGroups = myGroups;
+	}});
+
+	Object.defineProperty(StudyGroupStore.prototype,"handleEditGroup",{writable:true,configurable:true,value:function(studyGroup) {"use strict";
+		for (var i in this.studyGroups) {
+	     	if (this.studyGroups[i].id == studyGroup.id) {
+	       		this.studyGroups[i] = studyGroup;
+	        	break;
+	     	}
+	   	}
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handlePostNewGroup",{writable:true,configurable:true,value:function() {"use strict";
@@ -47167,4 +47265,4 @@ var UserActions = require('../actions/UserActions');
 
 module.exports = alt.createStore(StudyGroupStore, 'StudyGroupStore');
 
-},{"../actions/MyGroupsActions":369,"../actions/StudyGroupActions":370,"../actions/UserActions":371,"../alt":372,"../sources/StudyGroupSource":381}]},{},[368]);
+},{"../actions/MyGroupsActions":369,"../actions/StudyGroupActions":370,"../actions/UserActions":371,"../alt":372,"../sources/StudyGroupSource":384}]},{},[368]);
