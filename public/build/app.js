@@ -45479,7 +45479,6 @@ var ReactTestUtils = require('react-addons-test-utils');
 const AppBar = require('material-ui/lib/app-bar');
 const Dialog = require('material-ui/lib/dialog');
 const FlatButton = require('material-ui/lib/flat-button');
-const TextField = require('material-ui/lib/text-field');
 const SideBar = require('material-ui/lib/left-nav');
 const MenuItem = require('material-ui/lib/menu/menu-item');
 const ThemeManager = require('material-ui/lib/styles/theme-manager');
@@ -45588,9 +45587,9 @@ var TopBar = React.createClass({displayName: "TopBar",
 	mixins: [History],
 
 	dialogLogin:function() {
-		this.refs.loginDialog.refs.loginDialog.show();
+		// this.refs.loginDialog.refs.loginDialog.show();
 		// BYPASS LOGIN FOR TESTING
-		// StudyGroupStore.fetchUser( 'papa@gmail.com', 'iopiopiop', this.history, this.refs.loginDialog);
+		StudyGroupStore.fetchUser( 'papa@gmail.com', 'iopiopiop', this.history, this.refs.loginDialog);
 	},
 
 	dialogSignUp:function() {
@@ -45695,7 +45694,7 @@ var TopBar = React.createClass({displayName: "TopBar",
 
 module.exports = TopBar;
 
-},{"../stores/StudyGroupStore":381,"./Dialog_LogIn.jsx":374,"./Dialog_NewGroup.jsx":375,"./Dialog_SignUp.jsx":376,"./LandingPage.jsx":377,"./MyGroups.jsx":378,"alt/AltContainer":1,"material-ui/lib/app-bar":56,"material-ui/lib/avatar":57,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/left-nav":84,"material-ui/lib/menu/menu-item":86,"material-ui/lib/snackbar":101,"material-ui/lib/styles/raw-themes/light-raw-theme.js":106,"material-ui/lib/styles/raw-themes/sidebar-theme.js":107,"material-ui/lib/styles/theme-manager":110,"material-ui/lib/text-field":121,"react":367,"react-addons-test-utils":158,"react-dom":161,"react-router":181,"react-sticky":188}],374:[function(require,module,exports){
+},{"../stores/StudyGroupStore":381,"./Dialog_LogIn.jsx":374,"./Dialog_NewGroup.jsx":375,"./Dialog_SignUp.jsx":376,"./LandingPage.jsx":377,"./MyGroups.jsx":378,"alt/AltContainer":1,"material-ui/lib/app-bar":56,"material-ui/lib/avatar":57,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/left-nav":84,"material-ui/lib/menu/menu-item":86,"material-ui/lib/snackbar":101,"material-ui/lib/styles/raw-themes/light-raw-theme.js":106,"material-ui/lib/styles/raw-themes/sidebar-theme.js":107,"material-ui/lib/styles/theme-manager":110,"react":367,"react-addons-test-utils":158,"react-dom":161,"react-router":181,"react-sticky":188}],374:[function(require,module,exports){
 // React, react-reouter, alt
 var React = require('react');
 var render = require('react-dom').render;
