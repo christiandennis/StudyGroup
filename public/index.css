@@ -34,3 +34,8 @@ body {
 	color: grey;
 	font-size: 30px;
 }
+
+.profile-box {
+	padding-top: 20px;
+	padding-bottom: 20px;
+}

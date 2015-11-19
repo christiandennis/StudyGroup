@@ -72,7 +72,7 @@ class GroupsController < ApplicationController
 				render json: {'status' => 1, 'group' => @group}
 			end
 		else
-			render json: {'status'=> -1, 'errors' => error_messages}
+			render json: {'status'=> -1, 'errors' => error_messages}, status: 400
 		end
 	end 
 
@@ -145,7 +145,7 @@ class GroupsController < ApplicationController
 		end
 
 		if status == -1
-			render json: {'status'=>-1,'errors'=>err}
+			render json: {'status'=>-1,'errors'=>err}, status: 400
 			return
 		end
 
@@ -172,12 +172,12 @@ class GroupsController < ApplicationController
 		id = params[:id]
 		@group = nil
 		if id.nil?
-			render json: {'status'=>-1,'errors:'=>['Please pass in a valid group id']}
+			render json: {'status'=>-1,'errors:'=>['Please pass in a valid group id']}, status: 400
 			return
 		else
 			@group = Group.find(params[:id])
 			if @group.nil?
-				render json: {'status'=>-1,'errors:'=>['Could not find group with id']}
+				render json: {'status'=>-1,'errors:'=>['Could not find group with id']}, status: 400
 				return
 			end
 		end
@@ -222,7 +222,7 @@ class GroupsController < ApplicationController
 		end
 
 		if @group.host != current_user.nickname
-			render json: {'status'=>-1, 'errors'=>['You can only edit group you host']}
+			render json: {'status'=>-1, 'errors'=>['You can only edit group you host']}, status: 400
 		else
 			@group.save
 			render json: {'status'=>1,'group'=>@group}
@@ -234,7 +234,7 @@ class GroupsController < ApplicationController
 		if not @group.nil?
 			render json: {'status'=>1, 'group'=>@group}
 		else
-			render json: {'status'=>-1,'errors'=>['Could not find group with id']}
+			render json: {'status'=>-1,'errors'=>['Could not find group with id']}, status: 400
 		end
 	end
 
