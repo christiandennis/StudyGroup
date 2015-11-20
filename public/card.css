@@ -7,7 +7,7 @@
 .card {
 	width: 550px;
 	height: 300px;
-	background-color: #FFFFFF;
+	background-color: #FAFAFA;
 	overflow: hidden;
 }
 
@@ -24,21 +24,21 @@
 	height: 100%;
 	width: 10px;
 	float: left;
-	background-color: #F50000;
+	background-color: #D50000;
 }
 .colorBarGreen {
 	left: 0px;
 	height: 100%;
 	width: 10px;
 	float: left;
-	background-color: #00B800;
+	background-color: #2ECC71;
 }
 .colorBarYellow {
 	left: 0px;
 	height: 100%;
 	width: 10px;
 	float: left;
-	background-color: #FFFF00;
+	background-color: #FFC107;
 }
 table {
 	height: 100%;

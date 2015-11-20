@@ -89,7 +89,7 @@ var MainGroupViewCard = React.createClass({
 
 			                    </td>
 			                    <td colSpan="2">
-			                        <span className="subject">{studyGroup.subject}</span>
+			                        <span className="subject">{studyGroup.subject}:</span>
 			                        <span className="title">{studyGroup.title}</span>
 			                    </td>
 

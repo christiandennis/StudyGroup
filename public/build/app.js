@@ -45743,7 +45743,7 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 
 			                    ), 
 			                    React.createElement("td", {colSpan: "2"}, 
-			                        React.createElement("span", {className: "subject"}, studyGroup.subject), 
+			                        React.createElement("span", {className: "subject"}, studyGroup.subject, ":"), 
 			                        React.createElement("span", {className: "title"}, studyGroup.title)
 			                    ), 
 
