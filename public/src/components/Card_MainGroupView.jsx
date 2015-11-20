@@ -14,6 +14,7 @@ const Dialog = require('material-ui/lib/dialog');
 const FlatButton = require('material-ui/lib/flat-button');
 const RaisedButton = require('material-ui/lib/raised-button');
 const Paper = require('material-ui/lib/paper');
+const Avatar = require('material-ui/lib/avatar');
 
 const moment = require('moment');
 
@@ -83,7 +84,7 @@ var MainGroupViewCard = React.createClass({
 			                    <td className="userPhotoHolder">
 			                        <div className="photoHolder">
 			                            <div className="circle">
-			                                <img className="userPhoto" src="http://nick.mtvnimages.com/nick/properties/spongebob-squarepants/characters/spongebob-about-web-desktop.jpg?quality=0.75" />
+			                                <Avatar size="120"> {studyGroup.host.slice(0,1)} </Avatar>
 			                            </div>
 			                        </div>
 

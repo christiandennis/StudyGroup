@@ -45668,6 +45668,7 @@ const Dialog = require('material-ui/lib/dialog');
 const FlatButton = require('material-ui/lib/flat-button');
 const RaisedButton = require('material-ui/lib/raised-button');
 const Paper = require('material-ui/lib/paper');
+const Avatar = require('material-ui/lib/avatar');
 
 const moment = require('moment');
 
@@ -45737,7 +45738,7 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 			                    React.createElement("td", {className: "userPhotoHolder"}, 
 			                        React.createElement("div", {className: "photoHolder"}, 
 			                            React.createElement("div", {className: "circle"}, 
-			                                React.createElement("img", {className: "userPhoto", src: "http://nick.mtvnimages.com/nick/properties/spongebob-squarepants/characters/spongebob-about-web-desktop.jpg?quality=0.75"})
+			                                React.createElement(Avatar, {size: "120"}, " ", studyGroup.host.slice(0,1), " ")
 			                            )
 			                        )
 
@@ -45797,7 +45798,7 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 
 module.exports = MainGroupViewCard;
 
-},{"../stores/StudyGroupStore":385,"./Dialog_GroupDetail.jsx":376,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/paper":95,"material-ui/lib/raised-button":96,"material-ui/lib/text-field":121,"moment":155,"react":367,"react-dom":161,"react-router":181}],375:[function(require,module,exports){
+},{"../stores/StudyGroupStore":385,"./Dialog_GroupDetail.jsx":376,"material-ui/lib/avatar":57,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/paper":95,"material-ui/lib/raised-button":96,"material-ui/lib/text-field":121,"moment":155,"react":367,"react-dom":161,"react-router":181}],375:[function(require,module,exports){
 // React, react-reouter, alt
 var React = require('react');
 var render = require('react-dom').render;
