@@ -27,17 +27,10 @@ var SignUpDialog = React.createClass({
 		var signUpDialog = this.refs.signUpDialog;
 		var schoolSignUp =  this.refs.schoolSignUp;
 		var usernameSignUp =  this.refs.usernameSignUp;
-		if(false) {
-			console.log(fullname);
-			console.log(email);
-			console.log(password);
-			console.log(confirmPassword);
-			console.log("SIGNUP DONE");
-		}
 
 		if (email.getValue() && password.getValue() && confirmPassword.getValue() && fullname.getValue()){
 			if (confirmPassword.getValue() === password.getValue()){
-				StudyGroupStore.signUp(fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog, this.refs.invalidEmailSnackbar, this.refs.unavailableEmailSnackbar, this.refs.unavailableUsernameSnackbar, this.refs.failedSnackbar);
+				StudyGroupStore.signUp(this.history, fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog, this.refs.invalidEmailSnackbar, this.refs.unavailableEmailSnackbar, this.refs.unavailableUsernameSnackbar, this.refs.failedSnackbar);
 			}
 		} else {
 			if (!email.getValue()){

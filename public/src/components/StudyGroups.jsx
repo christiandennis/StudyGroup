@@ -1,6 +1,5 @@
 // import react, react-router, alt
 var React = require('react');
-var Link = require('react-router').Link;
 var render = require('react-dom').render;
 var AltContainer = require('alt/AltContainer');
 
@@ -75,13 +74,8 @@ var AllStudyGroups = React.createClass({
 
 var StudyGroups = React.createClass ({
 	componentDidMount: function() {
-		var state = StudyGroupStore.getState();
 		StudyGroupStore.fetchStudyGroups();	
 		setInterval(function() {StudyGroupStore.fetchStudyGroups();} , refreshInterval);
-	},
-
-	componentWillUpdate() {
-		var state = StudyGroupStore.getState();
 	},
 
 	render(){

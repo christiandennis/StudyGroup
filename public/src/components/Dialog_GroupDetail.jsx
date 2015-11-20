@@ -2,9 +2,8 @@
 var React = require('react');
 var render = require('react-dom').render;
 var Router = require('react-router');
-var History = Router.History;
 var StudyGroupStore = require('../stores/StudyGroupStore');
-
+ 
 var Dialog_EditGroup = require('./Dialog_EditGroup.jsx');
 
 // Matertial UI components
@@ -16,8 +15,6 @@ const Paper = require('material-ui/lib/paper');
 const moment = require('moment');
 
 var GroupDetailDialog = React.createClass({
-	mixins: [History],
-
 	openEditGroupDialog() {
 		this.refs.groupDetailDialog.dismiss();
 		this.refs.editGroupDialog.refs.editGroupDialog.show();

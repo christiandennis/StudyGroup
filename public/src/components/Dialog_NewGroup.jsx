@@ -2,7 +2,7 @@
 var React = require('react');
 var render = require('react-dom').render;
 var Router = require('react-router');
-var History = Router.History;
+
 var StudyGroupStore = require('../stores/StudyGroupStore');
 
 // Matertial UI components
@@ -17,8 +17,6 @@ const moment = require('moment');
 
 
 var NewGroupDialog = React.createClass({
-	mixins: [History],
-
 	cancelNewGroup() {
 		this.refs.newGroupDialog.dismiss();
 	},

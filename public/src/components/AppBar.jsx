@@ -81,8 +81,6 @@ var LeftBar = React.createClass({
 
 
 var TopBar = React.createClass({
-	mixins: [History],
-
 	dialogLogin() {
 		this.refs.loginDialog.refs.loginDialog.show();
 		// BYPASS LOGIN FOR TESTING
