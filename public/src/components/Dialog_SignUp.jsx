@@ -28,26 +28,8 @@ var SignUpDialog = React.createClass({
 		var schoolSignUp =  this.refs.schoolSignUp;
 		var usernameSignUp =  this.refs.usernameSignUp;
 
-		if (email.getValue() && password.getValue() && confirmPassword.getValue() && fullname.getValue()){
-			if (confirmPassword.getValue() === password.getValue()){
-				StudyGroupStore.signUp(this.history, fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog, this.refs.invalidEmailSnackbar, this.refs.unavailableEmailSnackbar, this.refs.unavailableUsernameSnackbar, this.refs.failedSnackbar);
-			}
-		} else {
-			if (!email.getValue()){
-				email.setErrorText("This field is required");
-			} else if (email.getValue().search("@")==-1){
-				email.setErrorText("Invalid email");
-			}
-
-			if (!password.getValue()) {
-				password.setErrorText("This field is required");
-			}
-			if(!confirmPassword.getValue()){
-				confirmPassword.setErrorText("This field is required");
-			}
-			if (!fullname.getValue()){
-				fullname.setErrorText("This field is required");
-			}
+		if (this.validateUsername() & this.validateSchool() & this.validateEmail() & this.validateFullName() & this.validatePasswordMatch()) {
+			StudyGroupStore.signUp(this.history, fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog, this.refs.invalidEmailSnackbar, this.refs.unavailableEmailSnackbar, this.refs.unavailableUsernameSnackbar, this.refs.failedSnackbar);
 		}
 	},
 
@@ -110,7 +92,19 @@ var SignUpDialog = React.createClass({
 	validatePasswordMatch() {
 		var password = this.refs.passwordSignUp;
 		var confirmPassword = this.refs.confirmPasswordSignUp;
-		if (password.getValue()===confirmPassword.getValue()) {
+		var filled = true;
+		
+		if (!password.getValue()){
+			password.setErrorText('This field is required');
+			filled = false;
+		}
+		if (!confirmPassword.getValue()){
+			confirmPassword.setErrorText('This field is required');
+			filled = false;
+		}
+
+
+		if (filled && password.getValue()===confirmPassword.getValue()) {
 			password.setErrorText("");
 			confirmPassword.setErrorText("");
 			if(password.getValue().length < 8){
@@ -119,7 +113,7 @@ var SignUpDialog = React.createClass({
 				return false;
 			}
 			return true;
-		} else {
+		} else if (filled) {
 			if(password.getValue().length < 8){
 				password.setErrorText("Password must be at least 8 characters");
 				confirmPassword.setErrorText("Password must be at least 8 characters");
@@ -129,6 +123,8 @@ var SignUpDialog = React.createClass({
 				confirmPassword.setErrorText("Password must match");
 				return false;
 			}
+		} else {
+			return false;
 		}
 	},
 
