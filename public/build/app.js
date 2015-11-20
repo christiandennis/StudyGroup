@@ -46048,7 +46048,7 @@ var GroupDetailDialog = React.createClass({displayName: "GroupDetailDialog",
 				  		autoDetectWindowHeight: true, 
 				  		autoScrollBodyContent: true}, 
 				    React.createElement(Paper, {zDepth: 2, 
-				    style: {paddingTop:"20px"}}, 
+				    style: {paddingTop:"20px", paddingBottom:"20px"}}, 
 				    	React.createElement("div", {className: "groupdesc-title"}, "Class"), 
 				    	React.createElement("div", {ref: "groupdetailClass", className: "groupdesc-subtitle"}, studyGroup.subject), 
 
@@ -46072,7 +46072,18 @@ var GroupDetailDialog = React.createClass({displayName: "GroupDetailDialog",
 
 				    	React.createElement(FlatButton, {label: "Edit", onClick: this.openEditGroupDialog})
 
+				    ), 
+
+				    React.createElement(Paper, {zDepth: 2, 
+				    style: {paddingTop:"20px", marginTop:"30px"}}, 
+
+				    	React.createElement("div", {ref: "commentTitle", className: "groupdesc-comment-title", style: {paddingBottom:"20px"}}, "Comments"), 
+				    	React.createElement("div", {ref: "commentBox", className: "groupdesc-comment"}), 
+				    	
+				    	React.createElement(TextField, {
+				    	hintText: "New Comment"})
 				    )
+
 				)
 			)
 		)

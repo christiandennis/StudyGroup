@@ -41,7 +41,7 @@ var GroupDetailDialog = React.createClass({
 				  		autoDetectWindowHeight={true} 
 				  		autoScrollBodyContent={true}>
 				    <Paper zDepth={2}
-				    style = {{paddingTop:"20px"}}>
+				    style = {{paddingTop:"20px", paddingBottom:"20px"}}>
 				    	<div className="groupdesc-title">Class</div>
 				    	<div ref="groupdetailClass" className="groupdesc-subtitle">{studyGroup.subject}</div>
 
@@ -66,6 +66,17 @@ var GroupDetailDialog = React.createClass({
 				    	<FlatButton label="Edit" onClick={this.openEditGroupDialog}/>
 
 				    </Paper>
+
+				    <Paper zDepth={2}
+				    style = {{paddingTop:"20px", marginTop:"30px"}}>
+
+				    	<div ref="commentTitle" className="groupdesc-comment-title" style={{paddingBottom:"20px"}}>Comments</div>
+				    	<div ref="commentBox" className="groupdesc-comment"></div>
+				    	
+				    	<TextField
+				    	hintText="New Comment"/>
+				    </Paper>
+
 				</Dialog>
 			</div>
 		)
