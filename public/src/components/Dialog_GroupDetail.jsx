@@ -20,14 +20,24 @@ var GroupDetailDialog = React.createClass({
 		this.refs.editGroupDialog.refs.editGroupDialog.show();
 	},
 
+	getTimeString(time) {
+		var d = new Date(0);
+		d.setUTCSeconds(Number(time));
+		return moment(d).format("h:mm a").toString();
+	},
+
+	getDateString(date) {
+		var d = new Date(0);
+		d.setUTCSeconds(Number(date));
+		return moment(d).format("ddd, MMM D").toString();
+	},
+
 	render() {
 		var studyGroup = this.props.studyGroup;
 		var user = this.props.user;
-		var d = new Date(0);
-		d.setUTCSeconds(Number(studyGroup.date));
 
-		var date = moment(d).format("ddd, MMM D").toString();
-		var time = moment(d).format("h:mm a").toString();
+		var date = this.getDateString(studyGroup.date);
+		var time = this.getTimeString(studyGroup.date);
 
 		if (user.nickname === studyGroup.host) {
 			return (

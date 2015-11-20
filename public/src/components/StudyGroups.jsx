@@ -62,11 +62,9 @@ var AllStudyGroups = React.createClass({
 	                options={masonryOptions}
 	                disableImagesLoaded={false}>
 					{this.props.studyGroups.map((studyGroup, i) => {
-					    return ( 
-					    		<Card_MainGroupView studyGroup={studyGroup} user={this.props.user} />
-					    		);
+					    return ( <Card_MainGroupView studyGroup={studyGroup} user={this.props.user} key={studyGroup.id}/>);
 					})}
-				</Masonry>			
+				</Masonry>		
 			);
 		}
 	}

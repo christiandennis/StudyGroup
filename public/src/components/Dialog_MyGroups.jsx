@@ -18,39 +18,49 @@ injectTapEventPlugin();
 const refreshInterval = 10000;
 
 var AllSimpleGroup = React.createClass({
+
+	getTimeString(time) {
+		var d = new Date(0);
+		d.setUTCSeconds(Number(time));
+		return moment(d).format("h:mm a").toString();
+	},
+
+	getDateString(date) {
+		var d = new Date(0);
+		d.setUTCSeconds(Number(date));
+		return moment(d).format("ddd, MMM D").toString();
+	},
+
 	render() {
-			return 	(
-					<div>
-					  	{this.props.myGroups.map((myGroup, i) => {
-					  		var d = new Date(0);
-					  		d.setUTCSeconds(myGroup.date);
+		return 	(
+			<div>
+			  	{this.props.myGroups.map((myGroup, i) => {
+				  	var date = this.getDateString(studyGroup.date);
+					var time = this.getTimeString(studyGroup.date);
+				    return (
+				    	<div key={myGroup.id}>
+		    		        <Paper>
+		    		        	<div className="groupdesc-title">Class</div>
+		    		        	<div className="groupdesc-subtitle">{myGroup.subject}</div>
 
-						  	var date = moment(d).format("ddd, MMM D").toString();
-						  	var time = moment(d).format("h:mm a").toString();
-						    return (
-						    	<div key={myGroup.id}>
-				    		        <Paper>
-				    		        	<div className="groupdesc-title">Class</div>
-				    		        	<div className="groupdesc-subtitle">{myGroup.subject}</div>
+		    		        	<div className="groupdesc-title">Title</div>
+		    		        	<div className="groupdesc-subtitle">{myGroup.title}</div>
 
-				    		        	<div className="groupdesc-title">Title</div>
-				    		        	<div className="groupdesc-subtitle">{myGroup.title}</div>
+		    		        	<div className="groupdesc-title">Time</div>
+		    		        	<div className="groupdesc-subtitle">{time}</div>
 
-				    		        	<div className="groupdesc-title">Time</div>
-				    		        	<div className="groupdesc-subtitle">{time}</div>
+		    		        	<div className="groupdesc-title">Date</div>
+		    		        	<div className="groupdesc-subtitle">{date}</div>
 
-				    		        	<div className="groupdesc-title">Date</div>
-				    		        	<div className="groupdesc-subtitle">{date}</div>
-
-				    		        	<div className="groupdesc-title">Location</div>
-				    		        	<div className="groupdesc-subtitle">{myGroup.location}</div>
-				    		        </Paper>
-						    	</div>
-						    );
-						})
-					  	}
-					</div>
-					)
+		    		        	<div className="groupdesc-title">Location</div>
+		    		        	<div className="groupdesc-subtitle">{myGroup.location}</div>
+		    		        </Paper>
+				    	</div>
+				    );
+				})
+			  	}
+			</div>
+		)
 	}
 });
 
