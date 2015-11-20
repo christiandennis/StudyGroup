@@ -78,15 +78,16 @@ var NewGroupDialog = React.createClass({
 	},
 
 	validateGroupDateTime() {
-		new_time = this.refs.createGroupTime.getTime();
-		new_date = this.refs.createGroupDate.getDate();
-		date_str = new_date.toString().slice(0,15);
-		time_str = new_time.toString().slice(15);
-		date_epoch = moment(date_str + time_str).unix();
-		if (date_epoch > getTime()){
-			return false;
-		} else {
+		var new_time = this.refs.createGroupTime.getTime();
+		var new_date = this.refs.createGroupDate.getDate();
+		var date_str = new_date.toString().slice(0,15);
+		var time_str = new_time.toString().slice(15);
+		var date_epoch = moment(date_str + time_str).unix();
+		var time_now = new Date().getTime() / 1000;
+		if (date_epoch > new Date().getTime()){
 			return true;
+		} else {
+			return false;
 		}
 	},
 
