@@ -21,6 +21,17 @@ var NewGroupDialog = React.createClass({
 		this.refs.newGroupDialog.dismiss();
 	},
 
+	calculateTimeEpoch(time, date) {
+		new_time = time.getTime();
+		new_date = date.getDate();
+		date_str = new_date.toString();
+		time_str = new_time.toString();
+		time_str = time_str.slice(15);
+		date_str = date_str.slice(0,15);
+		date_str = date_str + time_str;
+		return moment(date_str).unix();
+	},
+
 	submitNewGroup() {
 		var title = this.refs.createGroupTitle;
 		var subject = this.refs.createGroupSubject;
@@ -31,16 +42,6 @@ var NewGroupDialog = React.createClass({
 		var capacity = 	this.refs.createGroupCapacity;
 		var privacy = 0;
 
-		// create the date
-		new_time = time.getTime();
-		new_date = date.getDate();
-		date_str = new_date.toString();
-		time_str = new_time.toString();
-		time_str = time_str.slice(15);
-		date_str = date_str.slice(0,15);
-		date_str = date_str + time_str;
-		date_epoch = moment(date_str).unix();
-
 		if (this.refs.createGroupPrivacy.isChecked()){
 			privacy = 1;
 		}
@@ -50,31 +51,8 @@ var NewGroupDialog = React.createClass({
 		var successSnackbar = this.refs.createGroupSuccessSnackbar;
 
 		if (this.validateGroupSubject() && this.validateGroupTitle() && this.validateGroupDescription() && this.validateGroupLocation() && this.validateGroupCapacity() && validateGroupDateTime()) {
-			StudyGroupStore.postNewGroup(title, subject, description, date_epoch, location, capacity, privacy, newGroupDialog, failedSnackbar, successSnackbar);
+			StudyGroupStore.postNewGroup(title, subject, description, this.calculateTimeEpoch(time, date), location, capacity, privacy, newGroupDialog, failedSnackbar, successSnackbar);
 		}
-
-		// if (title.getValue() && subject.getValue() && description.getValue() && location.getValue() && capacity.getValue() && date.getDate()) {
-		// 	StudyGroupStore.postNewGroup(title, subject, description, moment(date_str).unix(), location, capacity, privacy, newGroupDialog, failedSnackbar, successSnackbar);
-		// } else {
-		// 	if (!title.getValue()){
-		// 		title.setErrorText("This field is required");
-		// 	}
-		// 	if (!subject.getValue()){
-		// 		subject.setErrorText("This field is required");
-		// 	}
-		// 	if (!description.getValue()){
-		// 		description.setErrorText("This field is required");
-		// 	}
-		// 	if (!location.getValue()){
-		// 		location.setErrorText("This field is required");
-		// 	}
-		// 	if (!capacity.getValue()){
-		// 		capacity.setErrorText("This field is required");
-		// 	}
-		// 	if (!date.getDate()){
-		// 		date.setErrorText("This field is required");
-		// 	}
-		// }
 	},
 
 	validateGroupDateTime() {

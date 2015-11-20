@@ -49654,6 +49654,17 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 		this.refs.editGroupDialog.dismiss();
 	},
 
+	calculateTimeEpoch:function(time, date) {
+		new_time = time.getTime();
+		new_date = date.getDate();
+		date_str = new_date.toString();
+		time_str = new_time.toString();
+		time_str = time_str.slice(15);
+		date_str = date_str.slice(0,15);
+		date_str = date_str + time_str;
+		return moment(date_str).unix();
+	},
+
 	submitEditGroupDetail:function() {
 		var id = this.props.studyGroup.id;
 		var title = this.refs.editGroupTitle;
@@ -49664,40 +49675,13 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 		var location = this.refs.editGroupLocation;
 		var capacity = 	this.refs.editGroupCapacity;
 
-		var new_time = time.getTime();
-		var new_date = date.getDate();
-		var date_str = new_date.toString();
-		var time_str = new_time.toString();
-		var time_str = time_str.slice(15);
-		var date_str = date_str.slice(0,15);
-		var date_str = date_str + time_str;
-
 		var editGroupDialog = this.refs.editGroupDialog;
 		var failedSnackbar = this.refs.editGroupFailedSnackbar;
 		var successSnackbar = this.refs.editGroupSuccessSnackbar;
 
 		if (this.validateGroupSubject() && this.validateGroupTitle() && this.validateGroupDescription() && this.validateGroupLocation() && this.validateGroupCapacity() && this.validateGroupDateTime()) {
-			StudyGroupStore.editGroup(id, title, subject, description, moment(date_str).unix(), location, capacity, editGroupDialog, failedSnackbar, successSnackbar);
+			StudyGroupStore.editGroup(id, title, subject, description, this.calculateTimeEpoch(time, date), location, capacity, editGroupDialog, failedSnackbar, successSnackbar);
 		}
-		// if (title.getValue() && subject.getValue() && description.getValue() && location.getValue() && capacity.getValue() && date.getDate() && time.getTime()) {
-		// 	StudyGroupStore.editGroup(id, title, subject, description, moment(date_str).unix(), location, capacity, editGroupDialog, failedSnackbar, successSnackbar);
-		// } else {
-		// 	if (!title.getValue()){
-		// 		title.setErrorText("This field is required");
-		// 	}
-		// 	if (!subject.getValue()){
-		// 		subject.setErrorText("This field is required");
-		// 	}
-		// 	if (!description.getValue()){
-		// 		description.setErrorText("This field is required");
-		// 	}
-		// 	if (!location.getValue()){
-		// 		location.setErrorText("This field is required");
-		// 	}
-		// 	if (!capacity.getValue()){
-		// 		capacity.setErrorText("This field is required");
-		// 	}
-		// }
 	},
 
 	validateGroupDateTime:function() {
@@ -49707,10 +49691,7 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 		var time_str = new_time.toString().slice(15);
 		var date_epoch = moment(date_str + time_str).unix();
 		var time_now = new Date().getTime() / 1000;
-		console.log('time now', time_now);
-		console.log('date_epoch', date_epoch);
 		if (date_epoch > time_now){
-			console.log('true');
 			return true;
 		} else {
 			return false;
@@ -50205,6 +50186,17 @@ var NewGroupDialog = React.createClass({displayName: "NewGroupDialog",
 		this.refs.newGroupDialog.dismiss();
 	},
 
+	calculateTimeEpoch:function(time, date) {
+		new_time = time.getTime();
+		new_date = date.getDate();
+		date_str = new_date.toString();
+		time_str = new_time.toString();
+		time_str = time_str.slice(15);
+		date_str = date_str.slice(0,15);
+		date_str = date_str + time_str;
+		return moment(date_str).unix();
+	},
+
 	submitNewGroup:function() {
 		var title = this.refs.createGroupTitle;
 		var subject = this.refs.createGroupSubject;
@@ -50215,16 +50207,6 @@ var NewGroupDialog = React.createClass({displayName: "NewGroupDialog",
 		var capacity = 	this.refs.createGroupCapacity;
 		var privacy = 0;
 
-		// create the date
-		new_time = time.getTime();
-		new_date = date.getDate();
-		date_str = new_date.toString();
-		time_str = new_time.toString();
-		time_str = time_str.slice(15);
-		date_str = date_str.slice(0,15);
-		date_str = date_str + time_str;
-		date_epoch = moment(date_str).unix();
-
 		if (this.refs.createGroupPrivacy.isChecked()){
 			privacy = 1;
 		}
@@ -50234,39 +50216,17 @@ var NewGroupDialog = React.createClass({displayName: "NewGroupDialog",
 		var successSnackbar = this.refs.createGroupSuccessSnackbar;
 
 		if (this.validateGroupSubject() && this.validateGroupTitle() && this.validateGroupDescription() && this.validateGroupLocation() && this.validateGroupCapacity() && validateGroupDateTime()) {
-			StudyGroupStore.postNewGroup(title, subject, description, date_epoch, location, capacity, privacy, newGroupDialog, failedSnackbar, successSnackbar);
+			StudyGroupStore.postNewGroup(title, subject, description, this.calculateTimeEpoch(time, date), location, capacity, privacy, newGroupDialog, failedSnackbar, successSnackbar);
 		}
-
-		// if (title.getValue() && subject.getValue() && description.getValue() && location.getValue() && capacity.getValue() && date.getDate()) {
-		// 	StudyGroupStore.postNewGroup(title, subject, description, moment(date_str).unix(), location, capacity, privacy, newGroupDialog, failedSnackbar, successSnackbar);
-		// } else {
-		// 	if (!title.getValue()){
-		// 		title.setErrorText("This field is required");
-		// 	}
-		// 	if (!subject.getValue()){
-		// 		subject.setErrorText("This field is required");
-		// 	}
-		// 	if (!description.getValue()){
-		// 		description.setErrorText("This field is required");
-		// 	}
-		// 	if (!location.getValue()){
-		// 		location.setErrorText("This field is required");
-		// 	}
-		// 	if (!capacity.getValue()){
-		// 		capacity.setErrorText("This field is required");
-		// 	}
-		// 	if (!date.getDate()){
-		// 		date.setErrorText("This field is required");
-		// 	}
-		// }
 	},
 
 	validateGroupDateTime:function() {
-		new_time = this.refs.createGroupTime.getTime();
-		new_date = this.refs.createGroupDate.getDate();
-		date_str = new_date.toString().slice(0,15);
-		time_str = new_time.toString().slice(15);
-		date_epoch = moment(date_str + time_str).unix();
+		var new_time = this.refs.createGroupTime.getTime();
+		var new_date = this.refs.createGroupDate.getDate();
+		var date_str = new_date.toString().slice(0,15);
+		var time_str = new_time.toString().slice(15);
+		var date_epoch = moment(date_str + time_str).unix();
+		var time_now = new Date().getTime() / 1000;
 		if (date_epoch > new Date().getTime()){
 			return true;
 		} else {
