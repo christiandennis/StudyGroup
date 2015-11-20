@@ -50547,14 +50547,15 @@ var SignUpDialog = React.createClass({displayName: "SignUpDialog",
 	validateEmail:function() {
 		var email = this.refs.emailSignUp;
 		if (email.getValue()){
-			var at = email.getValue().search("@");
-			if (at!=-1) {
-				var dot = email.getValue().slice(at).search(".");
-				if (dot!=-1){
+			var at = email.getValue().indexOf("@");
+			if (at!=-1 && at===email.getValue().lastIndexOf("@")) {
+				var dot = email.getValue().lastIndexOf(".");
+				if (dot!=-1 && dot>at && dot!=email.getValue().length-1){
 					email.setErrorText("");
 					return true;
 				} else {
 					email.setErrorText("Invalid email");
+					return false;
 				}
 			} else {
 				email.setErrorText("Invalid email");
