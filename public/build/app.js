@@ -49685,8 +49685,6 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 		if (time.getTime() && date.getDate()) {
 			var time_epoch = this.calculateTimeEpoch(time.getTime(), date.getDate());
 			var time_now = new Date().getTime() / 1000;
-			console.log('time epoch', time_epoch);
-			console.log('time now', time_now);
 			if (time_epoch > time_now){
 				return true;
 			} else {
@@ -50218,8 +50216,6 @@ var NewGroupDialog = React.createClass({displayName: "NewGroupDialog",
 		if (time.getTime() && date.getDate()) {
 			var time_epoch = this.calculateTimeEpoch(time.getTime(), date.getDate());
 			var time_now = new Date().getTime() / 1000;
-			console.log('time epoch', time_epoch);
-			console.log('time now', time_now);
 			if (time_epoch > time_now){
 				return true;
 			} else {
