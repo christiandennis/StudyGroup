@@ -49393,9 +49393,9 @@ var TopBar = React.createClass({displayName: "TopBar",
 	mixins: [History],
 
 	dialogLogin:function() {
-		// this.refs.loginDialog.refs.loginDialog.show();
+		this.refs.loginDialog.refs.loginDialog.show();
 		// BYPASS LOGIN FOR TESTING
-		StudyGroupStore.fetchUser( 'papa@gmail.com', 'iopiopiop', this.history, this.refs.loginDialog);
+		// StudyGroupStore.fetchUser( 'papa@gmail.com', 'iopiopiop', this.history, this.refs.loginDialog);
 	},
 
 	dialogSignUp:function() {
@@ -50803,10 +50803,14 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 // TESTING
 
 var StudyGroups = React.createClass ({displayName: "StudyGroups",
-	componentDidMount:function() {
-		var state = StudyGroupStore.getState();
+	fetchStudyGroups:function() {
 		StudyGroupStore.fetchStudyGroups();	
-		
+	},
+
+	componentDidMount: function() {
+		var state = StudyGroupStore.getState();
+		this.fetchStudyGroups();	
+		setInterval(this.fetchStudyGroups , 5000);
 	},
 
 	componentWillUpdate:function() {

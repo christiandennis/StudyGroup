@@ -76,10 +76,14 @@ var AllStudyGroups = React.createClass({
 // TESTING
 
 var StudyGroups = React.createClass ({
-	componentDidMount() {
-		var state = StudyGroupStore.getState();
+	fetchStudyGroups() {
 		StudyGroupStore.fetchStudyGroups();	
-		
+	},
+
+	componentDidMount: function() {
+		var state = StudyGroupStore.getState();
+		this.fetchStudyGroups();	
+		setInterval(this.fetchStudyGroups , 5000);
 	},
 
 	componentWillUpdate() {
