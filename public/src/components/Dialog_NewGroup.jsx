@@ -39,6 +39,7 @@ var NewGroupDialog = React.createClass({
 		time_str = time_str.slice(15);
 		date_str = date_str.slice(0,15);
 		date_str = date_str + time_str;
+		date_epoch = moment(date_str).unix();
 
 		if (this.refs.createGroupPrivacy.isChecked()){
 			privacy = 1;
@@ -48,37 +49,57 @@ var NewGroupDialog = React.createClass({
 		var failedSnackbar = this.refs.createGroupFailedSnackbar;
 		var successSnackbar = this.refs.createGroupSuccessSnackbar;
 
-		if (title.getValue() && subject.getValue() && description.getValue() && location.getValue() && capacity.getValue() && date.getDate()) {
-			StudyGroupStore.postNewGroup(title, subject, description, moment(date_str).unix(), location, capacity, privacy, newGroupDialog, failedSnackbar, successSnackbar);
+		if (this.validateGroupSubject() && this.validateGroupTitle() && this.validateGroupDescription() && this.validateGroupLocation() && this.validateGroupCapacity() && validateGroupDateTime()) {
+			StudyGroupStore.postNewGroup(title, subject, description, date_epoch, location, capacity, privacy, newGroupDialog, failedSnackbar, successSnackbar);
+		}
+
+		// if (title.getValue() && subject.getValue() && description.getValue() && location.getValue() && capacity.getValue() && date.getDate()) {
+		// 	StudyGroupStore.postNewGroup(title, subject, description, moment(date_str).unix(), location, capacity, privacy, newGroupDialog, failedSnackbar, successSnackbar);
+		// } else {
+		// 	if (!title.getValue()){
+		// 		title.setErrorText("This field is required");
+		// 	}
+		// 	if (!subject.getValue()){
+		// 		subject.setErrorText("This field is required");
+		// 	}
+		// 	if (!description.getValue()){
+		// 		description.setErrorText("This field is required");
+		// 	}
+		// 	if (!location.getValue()){
+		// 		location.setErrorText("This field is required");
+		// 	}
+		// 	if (!capacity.getValue()){
+		// 		capacity.setErrorText("This field is required");
+		// 	}
+		// 	if (!date.getDate()){
+		// 		date.setErrorText("This field is required");
+		// 	}
+		// }
+	},
+
+	validateGroupDateTime() {
+		new_time = this.refs.createGroupTime.getTime();
+		new_date = this.refs.createGroupDate.getDate();
+		date_str = new_date.toString().slice(0,15);
+		time_str = new_time.toString().slice(15);
+		date_epoch = moment(date_str + time_str).unix();
+		if (date_epoch > getTime()){
+			return false;
 		} else {
-
-			if (!title.getValue()){
-				title.setErrorText("This field is required");
-			}
-			if (!subject.getValue()){
-				subject.setErrorText("This field is required");
-			}
-			if (!description.getValue()){
-				description.setErrorText("This field is required");
-			}
-			if (!location.getValue()){
-				location.setErrorText("This field is required");
-			}
-			if (!capacity.getValue()){
-				capacity.setErrorText("This field is required");
-			}
-			if (!date.getDate()){
-				date.setErrorText("This field is required");
-			}
-
+			return true;
 		}
 	},
 
 	validateGroupSubject() {
 		var subject = this.refs.createGroupSubject;
 		if (subject.getValue()) {
-			subject.setErrorText("");
-			return true;
+			if (subject.getValue().length <= 10){
+				subject.setErrorText("");
+				return true;
+			} else {
+				subject.setErrorText("Max 10 characters");
+				return false;
+			}
 		} else {
 			subject.setErrorText("This field is required");
 			return false;
@@ -86,10 +107,15 @@ var NewGroupDialog = React.createClass({
 	},
 
 	validateGroupTitle() {
-		var subject = this.refs.createGroupTitle;
-		if (subject.getValue()) {
-			subject.setErrorText("");
-			return true;
+		var title = this.refs.createGroupTitle;
+		if (title.getValue()) {
+			if (title.getValue().length <= 30){
+				title.setErrorText("");
+				return true;	
+			} else {
+				title.setErrorText("Max 30 character");
+				return false;
+			}
 		} else {
 			subject.setErrorText("This field is required");
 			return false;
@@ -97,34 +123,54 @@ var NewGroupDialog = React.createClass({
 	},
 
 	validateGroupDescription() {
-		var subject = this.refs.createGroupDescription;
-		if (subject.getValue()) {
-			subject.setErrorText("");
-			return true;
+		var description = this.refs.createGroupDescription;
+		if (description.getValue()) {
+			if(description.getValue().length <= 256){
+				description.setErrorText("");
+				return true;
+			} else {
+				description.setErrorText("Max 256 character");
+				return false;
+			}
 		} else {
-			subject.setErrorText("This field is required");
+			description.setErrorText("This field is required");
 			return false;
 		}
 	},
 
 	validateGroupLocation() {
-		var subject = this.refs.createGroupLocation;
-		if (subject.getValue()) {
-			subject.setErrorText("");
-			return true;
+		var location = this.refs.createGroupLocation;
+		if (location.getValue()) {
+			if (location.getValue().length <= 30){
+				location.setErrorText("");
+				return true;
+			} else {
+				location.setErrorText("Max 30 characters");
+				return false;
+			}
 		} else {
-			subject.setErrorText("This field is required");
+			location.setErrorText("This field is required");
 			return false;
 		}
 	},
 
 	validateGroupCapacity() {
-		var subject = this.refs.createGroupCapacity;
-		if (subject.getValue()) {
-			subject.setErrorText("");
-			return true;
+		var capacity = this.refs.createGroupCapacity;
+		if (capacity.getValue()) {
+			if (/^\d+$/.test(capacity.getValue())) {
+				if (parseInt(capacity.getValue()) > 0){
+					capacity.setErrorText("");
+					return true;
+				} else {
+					capacity.setErrorText("Must be greater than 0");
+					return false;
+				}
+			} else {
+				capacity.setErrorText("Capacity must be a number");
+				return false;
+			}
 		} else {
-			subject.setErrorText("This field is required");
+			capacity.setErrorText("This field is required");
 			return false;
 		}
 	},
