@@ -2,7 +2,6 @@
 var React = require('react');
 var render = require('react-dom').render;
 var Router = require('react-router');
-var History = Router.History;
 var StudyGroupStore = require('../stores/StudyGroupStore');
 
 // import components
@@ -19,8 +18,6 @@ const Avatar = require('material-ui/lib/avatar');
 const moment = require('moment');
 
 var MainGroupViewCard = React.createClass({
-	mixins: [History],
-
 	openGroupDetailDialog() {
 		this.refs.groupDetailDialog.refs.groupDetailDialog.show();
 	},

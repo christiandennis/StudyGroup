@@ -2,7 +2,7 @@
 var React = require('react');
 var render = require('react-dom').render;
 var Router = require('react-router');
-var History = Router.History;
+
 var StudyGroupStore = require('../stores/StudyGroupStore');
 
 // Matertial UI components
@@ -12,8 +12,6 @@ const FlatButton = require('material-ui/lib/flat-button');
 const Paper = require('material-ui/lib/paper');
 
 var ProfileDialog = React.createClass({
-	mixins: [History],
-
 	cancelProfile() {
 		this.refs.profileDialog.dismiss();
 	},

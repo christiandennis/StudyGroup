@@ -2,7 +2,6 @@
 var React = require('react');
 var render = require('react-dom').render;
 var Router = require('react-router');
-var History = Router.History;
 var StudyGroupStore = require('../stores/StudyGroupStore');
 
 // Matertial UI components
@@ -16,8 +15,6 @@ const Snackbar = require('material-ui/lib/snackbar');
 const moment = require('moment');
 
 var LoginDialog = React.createClass({
-	mixins: [History],
-
 	cancelEditGroupDetail() {
 		this.refs.editGroupDialog.dismiss();
 	},

@@ -16,7 +16,7 @@ var StudyGroupSource = {
 	// ==================================================
 	signUp() {
 		return {
-		  remote(state, fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog, invalidEmailSnackbar, unavailableEmailSnackbar, unavailableUsernameSnackbar, failedSnackbar) { 
+		  remote(state, history, fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog, invalidEmailSnackbar, unavailableEmailSnackbar, unavailableUsernameSnackbar, failedSnackbar) { 
 		    return new Promise(function (resolve, reject) {
 		      	// console.log('--------------SIGN UP--------------');
 		      	var signUpData = {
@@ -31,11 +31,40 @@ var StudyGroupSource = {
 			      	type: 'POST',
 			      	beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
 			      	data: signUpData,
-			      	success: function(response) {
+			      	success: function(data, status, xhr) {
 		      	  		// console.log('__SUCCESS--');
-		      	  	  	// console.log('response:' ,response);
+		      	  	  	// console.log('data:' ,data);
+		      	  	  	// console.log('header', xhr);
 		      	  	  	signUpDialog.dismiss();
 		      	  	  	// console.log('**************END SIGN UP**************');
+
+		      	  	  	// AUTO LOG IN AFTER SIGN UP
+      	  	  		    $.ajax({ url: '/auth/sign_in',
+      	  	  		        type: 'POST',
+      	  	  		        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+      	  	  		        data: {
+      	  	  		        		"email": email.getValue(),
+      	  	  		        		"password": password.getValue()
+      	  	  		        		},
+      	  	  		        success: function(data, status, xhr) {
+      	  	  		        	// console.log('__SUCCESS__');
+      	  	  		        	data.data.client = xhr.getResponseHeader('client');
+      	  	  		        	data.data.accesstoken = xhr.getResponseHeader('access-token');
+      	  	  		        	data.data.uid = xhr.getResponseHeader('uid');
+      	  	  		          	// console.log('data' ,data.data);
+      	  	  	          	resolve(data.data);
+      	  	  	          	setTimeout(function() {history.pushState(null, '/studygroupapp');}, 15);
+      	  	  	          	// loginDialog.dismiss();
+      	  	  	          	// console.log('**************END LOGIN**************');
+      	  	  		        },
+      	  	  		        error: function(response) {
+      	  	  		        	// console.log('__FAILED__');
+      	  	  		          	// console.log('response' ,response);
+      	  	  		          	loginFailedSnackbar.show();
+      	  	  			        reject('login FAILED');
+      	  	  			        // console.log('**************END LOGIN**************');
+      	  	  		        }
+      	  	  		    });
 			      	},
 			      	error: function(response) {
 			      		// console.log('__FAILED__');
@@ -59,6 +88,9 @@ var StudyGroupSource = {
 		    // Never check locally, always fetch remotely.
 		    return null;
 		  },
+		  success: UserActions.updateUser,
+		  error: UserActions.userFailed,
+		  loading: UserActions.fetchUser
 		}
 	},
 

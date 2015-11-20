@@ -49390,8 +49390,6 @@ var LeftBar = React.createClass({displayName: "LeftBar",
 
 
 var TopBar = React.createClass({displayName: "TopBar",
-	mixins: [History],
-
 	dialogLogin:function() {
 		this.refs.loginDialog.refs.loginDialog.show();
 		// BYPASS LOGIN FOR TESTING
@@ -49495,7 +49493,6 @@ module.exports = TopBar;
 var React = require('react');
 var render = require('react-dom').render;
 var Router = require('react-router');
-var History = Router.History;
 var StudyGroupStore = require('../stores/StudyGroupStore');
 
 // import components
@@ -49512,8 +49509,6 @@ const Avatar = require('material-ui/lib/avatar');
 const moment = require('moment');
 
 var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
-	mixins: [History],
-
 	openGroupDetailDialog:function() {
 		this.refs.groupDetailDialog.refs.groupDetailDialog.show();
 	},
@@ -49642,7 +49637,6 @@ module.exports = MainGroupViewCard;
 var React = require('react');
 var render = require('react-dom').render;
 var Router = require('react-router');
-var History = Router.History;
 var StudyGroupStore = require('../stores/StudyGroupStore');
 
 // Matertial UI components
@@ -49656,8 +49650,6 @@ const Snackbar = require('material-ui/lib/snackbar');
 const moment = require('moment');
 
 var LoginDialog = React.createClass({displayName: "LoginDialog",
-	mixins: [History],
-
 	cancelEditGroupDetail:function() {
 		this.refs.editGroupDialog.dismiss();
 	},
@@ -49853,9 +49845,8 @@ module.exports = LoginDialog;
 var React = require('react');
 var render = require('react-dom').render;
 var Router = require('react-router');
-var History = Router.History;
 var StudyGroupStore = require('../stores/StudyGroupStore');
-
+ 
 var Dialog_EditGroup = require('./Dialog_EditGroup.jsx');
 
 // Matertial UI components
@@ -49867,8 +49858,6 @@ const Paper = require('material-ui/lib/paper');
 const moment = require('moment');
 
 var GroupDetailDialog = React.createClass({displayName: "GroupDetailDialog",
-	mixins: [History],
-
 	openEditGroupDialog:function() {
 		this.refs.groupDetailDialog.dismiss();
 		this.refs.editGroupDialog.refs.editGroupDialog.show();
@@ -50047,7 +50036,6 @@ module.exports = LoginDialog;
 },{"../stores/StudyGroupStore":402,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/snackbar":101,"material-ui/lib/text-field":121,"react":384,"react-dom":161,"react-router":198}],395:[function(require,module,exports){
 // var button = require('react-materialize').Button;
 var React = require('react');
-var Link = require('react-router').Link;
 var render = require('react-dom').render;
 
 var AltContainer = require('alt/AltContainer');
@@ -50143,12 +50131,12 @@ var MyGroups = React.createClass ({displayName: "MyGroups",
 
 module.exports = MyGroups;
 
-},{"../actions/StudyGroupActions":387,"../stores/StudyGroupStore":402,"alt/AltContainer":1,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/paper":95,"moment":155,"react":384,"react-addons-test-utils":158,"react-dom":161,"react-router":198,"react-tap-event-plugin":209}],396:[function(require,module,exports){
+},{"../actions/StudyGroupActions":387,"../stores/StudyGroupStore":402,"alt/AltContainer":1,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/paper":95,"moment":155,"react":384,"react-addons-test-utils":158,"react-dom":161,"react-tap-event-plugin":209}],396:[function(require,module,exports){
 // React, react-reouter, alt
 var React = require('react');
 var render = require('react-dom').render;
 var Router = require('react-router');
-var History = Router.History;
+
 var StudyGroupStore = require('../stores/StudyGroupStore');
 
 // Matertial UI components
@@ -50163,8 +50151,6 @@ const moment = require('moment');
 
 
 var NewGroupDialog = React.createClass({displayName: "NewGroupDialog",
-	mixins: [History],
-
 	cancelNewGroup:function() {
 		this.refs.newGroupDialog.dismiss();
 	},
@@ -50369,7 +50355,7 @@ module.exports = NewGroupDialog;
 var React = require('react');
 var render = require('react-dom').render;
 var Router = require('react-router');
-var History = Router.History;
+
 var StudyGroupStore = require('../stores/StudyGroupStore');
 
 // Matertial UI components
@@ -50379,8 +50365,6 @@ const FlatButton = require('material-ui/lib/flat-button');
 const Paper = require('material-ui/lib/paper');
 
 var ProfileDialog = React.createClass({displayName: "ProfileDialog",
-	mixins: [History],
-
 	cancelProfile:function() {
 		this.refs.profileDialog.dismiss();
 	},
@@ -50447,17 +50431,10 @@ var SignUpDialog = React.createClass({displayName: "SignUpDialog",
 		var signUpDialog = this.refs.signUpDialog;
 		var schoolSignUp =  this.refs.schoolSignUp;
 		var usernameSignUp =  this.refs.usernameSignUp;
-		if(false) {
-			console.log(fullname);
-			console.log(email);
-			console.log(password);
-			console.log(confirmPassword);
-			console.log("SIGNUP DONE");
-		}
 
 		if (email.getValue() && password.getValue() && confirmPassword.getValue() && fullname.getValue()){
 			if (confirmPassword.getValue() === password.getValue()){
-				StudyGroupStore.signUp(fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog, this.refs.invalidEmailSnackbar, this.refs.unavailableEmailSnackbar, this.refs.unavailableUsernameSnackbar, this.refs.failedSnackbar);
+				StudyGroupStore.signUp(this.history, fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog, this.refs.invalidEmailSnackbar, this.refs.unavailableEmailSnackbar, this.refs.unavailableUsernameSnackbar, this.refs.failedSnackbar);
 			}
 		} else {
 			if (!email.getValue()){
@@ -50719,7 +50696,6 @@ module.exports = LandingPage;
 },{"./AppBar.jsx":390,"alt/AltContainer":1,"axios":17,"react":384,"react-dom":161}],400:[function(require,module,exports){
 // import react, react-router, alt
 var React = require('react');
-var Link = require('react-router').Link;
 var render = require('react-dom').render;
 var AltContainer = require('alt/AltContainer');
 
@@ -50817,14 +50793,10 @@ var StudyGroups = React.createClass ({displayName: "StudyGroups",
 
 module.exports = StudyGroups;
 
-},{"../actions/StudyGroupActions":387,"../stores/StudyGroupStore":402,"./Card_MainGroupView.jsx":391,"alt/AltContainer":1,"axios":17,"material-ui/lib/avatar":57,"material-ui/lib/card/card":65,"material-ui/lib/card/card-actions":60,"material-ui/lib/card/card-header":62,"material-ui/lib/card/card-text":63,"material-ui/lib/card/card-title":64,"material-ui/lib/date-picker/date-picker":74,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/paper":95,"material-ui/lib/raised-button":96,"material-ui/lib/refresh-indicator":97,"material-ui/lib/text-field":121,"material-ui/lib/time-picker/time-picker":130,"moment":155,"react":384,"react-addons-test-utils":158,"react-dom":161,"react-masonry-component":162,"react-router":198,"react-tap-event-plugin":209}],401:[function(require,module,exports){
+},{"../actions/StudyGroupActions":387,"../stores/StudyGroupStore":402,"./Card_MainGroupView.jsx":391,"alt/AltContainer":1,"axios":17,"material-ui/lib/avatar":57,"material-ui/lib/card/card":65,"material-ui/lib/card/card-actions":60,"material-ui/lib/card/card-header":62,"material-ui/lib/card/card-text":63,"material-ui/lib/card/card-title":64,"material-ui/lib/date-picker/date-picker":74,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/paper":95,"material-ui/lib/raised-button":96,"material-ui/lib/refresh-indicator":97,"material-ui/lib/text-field":121,"material-ui/lib/time-picker/time-picker":130,"moment":155,"react":384,"react-addons-test-utils":158,"react-dom":161,"react-masonry-component":162,"react-tap-event-plugin":209}],401:[function(require,module,exports){
 var StudyGroupActions = require('../actions/StudyGroupActions');
 var UserActions = require('../actions/UserActions');
 var MyGroupsActions = require('../actions/MyGroupsActions');
-
-const URL = "http://localhost:3000"
-const userURL = 'https://sheetsu.com/apis/72092a94';
-const groupURL = URL + "/groups";
 
 
 var StudyGroupSource = {
@@ -50840,7 +50812,7 @@ var StudyGroupSource = {
 	// ==================================================
 	signUp:function() {
 		return {
-		  remote:function(state, fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog, invalidEmailSnackbar, unavailableEmailSnackbar, unavailableUsernameSnackbar, failedSnackbar) { 
+		  remote:function(state, history, fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog, invalidEmailSnackbar, unavailableEmailSnackbar, unavailableUsernameSnackbar, failedSnackbar) { 
 		    return new Promise(function (resolve, reject) {
 		      	// console.log('--------------SIGN UP--------------');
 		      	var signUpData = {
@@ -50855,11 +50827,40 @@ var StudyGroupSource = {
 			      	type: 'POST',
 			      	beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
 			      	data: signUpData,
-			      	success: function(response) {
+			      	success: function(data, status, xhr) {
 		      	  		// console.log('__SUCCESS--');
-		      	  	  	// console.log('response:' ,response);
+		      	  	  	// console.log('data:' ,data);
+		      	  	  	// console.log('header', xhr);
 		      	  	  	signUpDialog.dismiss();
 		      	  	  	// console.log('**************END SIGN UP**************');
+
+		      	  	  	// AUTO LOG IN AFTER SIGN UP
+      	  	  		    $.ajax({ url: '/auth/sign_in',
+      	  	  		        type: 'POST',
+      	  	  		        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+      	  	  		        data: {
+      	  	  		        		"email": email.getValue(),
+      	  	  		        		"password": password.getValue()
+      	  	  		        		},
+      	  	  		        success: function(data, status, xhr) {
+      	  	  		        	// console.log('__SUCCESS__');
+      	  	  		        	data.data.client = xhr.getResponseHeader('client');
+      	  	  		        	data.data.accesstoken = xhr.getResponseHeader('access-token');
+      	  	  		        	data.data.uid = xhr.getResponseHeader('uid');
+      	  	  		          	// console.log('data' ,data.data);
+      	  	  	          	resolve(data.data);
+      	  	  	          	setTimeout(function() {history.pushState(null, '/studygroupapp');}, 10);
+      	  	  	          	// loginDialog.dismiss();
+      	  	  	          	// console.log('**************END LOGIN**************');
+      	  	  		        },
+      	  	  		        error: function(response) {
+      	  	  		        	// console.log('__FAILED__');
+      	  	  		          	// console.log('response' ,response);
+      	  	  		          	loginFailedSnackbar.show();
+      	  	  			        reject('login FAILED');
+      	  	  			        // console.log('**************END LOGIN**************');
+      	  	  		        }
+      	  	  		    });
 			      	},
 			      	error: function(response) {
 			      		// console.log('__FAILED__');
@@ -50883,6 +50884,9 @@ var StudyGroupSource = {
 		    // Never check locally, always fetch remotely.
 		    return null;
 		  },
+		  success: UserActions.updateUser,
+		  error: UserActions.userFailed,
+		  loading: UserActions.fetchUser
 		}
 	},
 

@@ -1,6 +1,5 @@
 // import react, react-router, alt
 var React = require('react');
-var Link = require('react-router').Link;
 var render = require('react-dom').render;
 var AltContainer = require('alt/AltContainer');
 
