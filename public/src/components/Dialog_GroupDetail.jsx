@@ -5,6 +5,7 @@ var Router = require('react-router');
 var StudyGroupStore = require('../stores/StudyGroupStore');
  
 var Dialog_EditGroup = require('./Dialog_EditGroup.jsx');
+var Comments = require('./Comments.jsx');
 
 // Matertial UI components
 const TextField = require('material-ui/lib/text-field');
@@ -77,6 +78,9 @@ var GroupDetailDialog = React.createClass({
 
 					    </Paper>
 					</Dialog>
+
+					<Comments studyGroup={studyGroup}/>
+					
 				</div>
 			);
 		} else {
@@ -112,15 +116,10 @@ var GroupDetailDialog = React.createClass({
 					    	<div ref="groupdetailDescription" className="groupdesc-subtitle">{studyGroup.description}</div>
 					    </Paper>
 
-					    <Paper zDepth={2}
-					    style = {{paddingTop:"20px", marginTop:"30px"}}>
-					    	<div ref="commentTitle" className="groupdesc-comment-title" style={{paddingBottom:"20px"}}>Comments</div>
-					    	<div ref="commentBox" className="groupdesc-comment"></div>
-					    	<TextField
-					    	hintText="New Comment"/>
-					    </Paper>
-
 					</Dialog>
+
+					<Comments studyGroup={studyGroup}/>
+
 				</div>
 			)
 		}

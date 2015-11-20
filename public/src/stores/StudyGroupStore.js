@@ -3,6 +3,7 @@ var StudyGroupActions = require('../actions/StudyGroupActions');
 var MyGroupsActions = require('../actions/MyGroupsActions');
 var StudyGroupSource = require('../sources/StudyGroupSource');
 var UserActions = require('../actions/UserActions');
+var CommentsActions = require('../actions/CommentsActions');
 
 const moment = require('moment');
 
@@ -31,7 +32,9 @@ class StudyGroupStore {
 			handleEditGroup: StudyGroupActions.EDIT_GROUP,
 
 			handleFetchMyGroups: MyGroupsActions.FETCH_MY_GROUPS,
-			handleJoinOrLeaveGroup: MyGroupsActions.JOIN_OR_LEAVE_GROUP
+			handleJoinOrLeaveGroup: MyGroupsActions.JOIN_OR_LEAVE_GROUP,
+
+			handleFetchComments: CommentsActions.FETCH_COMMENTS
 		});
 
 
@@ -47,6 +50,11 @@ class StudyGroupStore {
 		if (Number(a.date) > Number(b.date))
 		    return 1;
 		return 0;
+	}
+
+	handleFetchComments(data) {
+
+		this.studyGroups[data.groupID].comments = data.comments;
 	}
 
 	handleFetchMyGroups(myGroups) {

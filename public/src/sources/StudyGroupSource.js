@@ -1,6 +1,7 @@
 var StudyGroupActions = require('../actions/StudyGroupActions');
 var UserActions = require('../actions/UserActions');
 var MyGroupsActions = require('../actions/MyGroupsActions');
+var CommentsActions = require('../actions/CommentsActions');
 
 
 var StudyGroupSource = {
@@ -459,6 +460,53 @@ var StudyGroupSource = {
 	// ****************************************************************************
 	// ****************************************************************************
 	// ****************************************************************************
+
+	// ****************************************************************************
+	// ****************************************************************************
+	// ******************************* COMMENTS ***********************************
+	// ****************************************************************************
+	// ****************************************************************************
+
+	fetchComments() {
+
+		return {
+			remote(state, groupID){
+				return new Promise(function(resolve, reject){
+					// console.log('--------------JOIN OR LEAVE GROUP--------------');
+				    $.ajax({ url: '/comments/' + groupID.toString(),
+				        type: 'GET',
+				        headers: {
+					  				"access-token": state.user.accesstoken,
+		    	      				"client": state.user.client,
+		    	      				"uid": state.user.uid
+		  						},
+				        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+				        success: function(data, status, xhr) {
+				        	// console.log('__SUCCESS__');
+					        // console.log('data' ,data);
+					        var comment = {
+					        					"comments": data.comments,
+					        					"groupID": groupID,
+					        				};
+					        resolve(comment);
+					        // console.log('**************ENDJOIN OR LEAVE GROUP**************');
+				        },
+				        error: function(response) {
+				        	// console.log('__FAILED__');
+				          	// console.log('response' ,response);
+				          	// reject('fetch group FAILED');
+				          	// console.log('**************END JOIN OR LEAVE GROUP**************');
+				        }
+				    })
+				})
+			},
+			local() {
+				return null;
+			},
+			success: CommentsActions.fetchComments
+		}
+
+	}
 
 	
 };
