@@ -45552,9 +45552,9 @@ var TopBar = React.createClass({displayName: "TopBar",
 	mixins: [History],
 
 	dialogLogin:function() {
-		this.refs.loginDialog.refs.loginDialog.show();
+		// this.refs.loginDialog.refs.loginDialog.show();
 		// BYPASS LOGIN FOR TESTING
-		// StudyGroupStore.fetchUser( 'papa@gmail.com', 'iopiopiop', this.history, this.refs.loginDialog);
+		StudyGroupStore.fetchUser( 'papa@gmail.com', 'iopiopiop', this.history, this.refs.loginDialog);
 	},
 
 	dialogSignUp:function() {
@@ -45700,10 +45700,8 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 		} else if (joinOrLeave.joinText === 'Leave') {
 			StudyGroupStore.joinOrLeaveGroup(this.props.studyGroup.id, 'remove');
 		} else if (joinOrLeave.joinText === 'Join'){
-			console.log('join');
 			StudyGroupStore.joinOrLeaveGroup(this.props.studyGroup.id, 'add');
 		}
-		console.log('join or leave', joinOrLeave);
 	},
 
 	render:function() {
@@ -46431,6 +46429,10 @@ var NewGroupDialog = React.createClass({displayName: "NewGroupDialog",
 		}
 	},
 
+	openTimePicker:function() {
+			this.refs.createGroupTime.openDialog();
+	},
+
 	render:function() {
 		return (
 			React.createElement("div", null, 
@@ -46472,6 +46474,7 @@ var NewGroupDialog = React.createClass({displayName: "NewGroupDialog",
 				    	React.createElement(DatePicker, {
 				    		ref: "createGroupDate", 
 				    	  	hintText: "Nov 22, 2015", 
+				    	  	onDismiss: this.openTimePicker, 
 				    	  	floatingLabelText: "Date"}), 
 				    	React.createElement(TimePicker, {
 				    		ref: "createGroupTime", 
