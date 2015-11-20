@@ -67,7 +67,7 @@ var AllSimpleGroup = React.createClass({
 var MyGroups = React.createClass ({
 	componentDidMount() {
 		StudyGroupStore.fetchMyGroups();
-		setInterval(function() {StudyGroupStore.fetchMyGroups();} , refreshInterval);
+		// setInterval(function() {StudyGroupStore.fetchMyGroups();} , refreshInterval);
 	},
 
 	closeMygroupsDialog() {
