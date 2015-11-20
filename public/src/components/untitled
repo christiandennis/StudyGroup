@@ -1,0 +1,24 @@
+var React = require('react');
+var render = require('react-dom').render;
+var Link = require('react-router').Link;
+
+var StudyGroupStore = require('../stores/StudyGroupStore');
+var AltContainer = require('alt/AltContainer');
+
+const URL = "http://localhost:3000";
+
+var Router = require('react-router');
+var History = Router.History;
+
+
+var Loggedin = React.createClass({
+
+	render() {
+		return(
+			<div>
+			</div>
+		)
+	}
+})
+
+module.exports =Loggedin;

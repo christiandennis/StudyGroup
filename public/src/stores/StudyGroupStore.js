@@ -1,12 +1,17 @@
 var alt = require('../alt');
 var StudyGroupActions = require('../actions/StudyGroupActions');
+var MyGroupsActions = require('../actions/MyGroupsActions');
 var StudyGroupSource = require('../sources/StudyGroupSource');
 var UserActions = require('../actions/UserActions');
+
+const moment = require('moment');
 
 class StudyGroupStore {
 	constructor() {
 		this.user = null;
 		this.errorMessageUser = null;
+		this.studyGroups = null;
+		this.myGroups = null;
 
 
 		this.bindListeners({
@@ -19,7 +24,14 @@ class StudyGroupStore {
 			handleStudyUser: UserActions.USER_FAILED,
 
 			handleSignUp: UserActions.SIGN_UP,
-			handleSignOut: UserActions.SIGN_OUT
+			handleSignOut: UserActions.SIGN_OUT,
+
+			handlePostNewGroup: StudyGroupActions.POST_NEW_GROUP,
+			handleRefreshGroups: StudyGroupActions.REFRESH_GROUPS,
+			handleEditGroup: StudyGroupActions.EDIT_GROUP,
+
+			handleFetchMyGroups: MyGroupsActions.FETCH_MY_GROUPS,
+			handleJoinOrLeaveGroup: MyGroupsActions.JOIN_OR_LEAVE_GROUP
 		});
 
 
@@ -28,6 +40,73 @@ class StudyGroupStore {
 		});
 		this.exportAsync(StudyGroupSource);
 	}
+	
+	compare(a,b) {
+		if (Number(a.date) < Number(b.date))
+		    return -1;
+		if (Number(a.date) > Number(b.date))
+		    return 1;
+		return 0;
+	}
+
+	handleFetchMyGroups(myGroups) {
+		this.myGroups = myGroups;
+		this.myGroups.sort(this.compare);
+	}
+
+	handleJoinOrLeaveGroup(myGroup) {
+		// add the joined group to mygroups
+		if(myGroup.joinOrLeave === 'add'){
+			var found = false;
+			for (var i in this.myGroups) {
+		     	if (this.myGroups[i].id === myGroup.groupID) {
+		       		found = true
+		        	break;
+		     	}
+		   	}
+		   	if (!found){
+		   		this.myGroups.push(myGroup.group);
+		   	}
+		} else { // remove the left group from mygroups
+			for (var i in this.myGroups) {
+		     	if (this.myGroups[i].id === myGroup.groupID) {
+		       		this.myGroups.splice(i, 1);
+		       		break;
+		     	}
+		   	}
+		}
+
+		// update the counter/capacity on the card
+		for (var i in this.studyGroups) {
+	     	if (this.studyGroups[i].id == myGroup.groupID) {
+	       		this.studyGroups[i] = myGroup.group;
+	        	break;
+	     	}
+	   	}
+
+	   	this.myGroups.sort(this.compare);
+	}
+
+	handleEditGroup(studyGroup) {
+		for (var i in this.studyGroups) {
+	     	if (this.studyGroups[i].id == studyGroup.id) {
+	       		this.studyGroups[i] = studyGroup;
+	        	break;
+	     	}
+	   	}
+
+		this.studyGroups.sort(this.compare);
+	}
+
+	handlePostNewGroup(studyGroup) {
+		this.studyGroups.unshift(studyGroup);
+		this.studyGroups.sort(this.compare);
+
+		this.myGroups.unshift(studyGroup);
+		this.myGroups.sort(this.compare);
+
+		this.errorMessage = null;
+	}
 
 	handleSignUp() {
 		
@@ -35,17 +114,24 @@ class StudyGroupStore {
 
 	handleSignOut() {
 		this.user = null;
+		this.studyGroups = null;
+		this.errorMessage = null;
 	}
 
 	handleUpdateStudyGroups(studyGroups){
 		this.studyGroups = studyGroups;
+		this.studyGroups.sort(this.compare);
 		this.errorMessage = null;
 	}
+
 	handleFetchStudyGroups() {
-		this.studyGroups = [];
 	}
+
 	handleStudyGroupFailed(errorMessage) {
 		this.errorMessage = errorMessage;
+	}
+
+	handleRefreshGroups(studyGroup){
 	}
 
 	handleUpdateUser(user){
@@ -55,11 +141,6 @@ class StudyGroupStore {
 
 	handleFetchUser() {
 		this.user = null;
-		this.username = null;
-		this.email = null;
-		this.id = null;
-		this.name = null;
-		this.school = null;
 	}
 	
 	handleStudyUser(errorMessage) {

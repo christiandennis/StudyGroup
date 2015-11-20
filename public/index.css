@@ -1,5 +1,12 @@
 body {
 	margin: 0 0;
+	background-color: #D9E7FC;
+}
+
+.white-background {
+	background-color: #FFFFFF;
+	width: 100%;
+	border-color: #FFFFFF;
 }
 
 
@@ -26,4 +33,9 @@ body {
 .prof-name {
 	color: grey;
 	font-size: 30px;
+}
+
+.profile-box {
+	padding-top: 20px;
+	padding-bottom: 20px;
 }

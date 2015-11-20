@@ -1,14 +1,22 @@
 .card-container{
 	margin-top: 20px;
 	margin-bottom: 20px;
-	width: 550px;
+	width: 510px;
 }
 
 .card {
-	width: 550px;
+	width: 510px;
 	height: 300px;
-	background-color: #FFFFFF;
+	background-color: #FAFAFA;
 	overflow: hidden;
+}
+
+table {
+	height: 100%;
+	width: 500px;
+	overflow: hidden;
+	margin-top: 0px;
+	margin-bottom: 0px;
 }
 
 .colorBar {
@@ -19,12 +27,26 @@
 	background-color: #F50000;
 }
 
-table {
+.colorBarRed {
+	left: 0px;
 	height: 100%;
-	width: 540px;
-	overflow: hidden;
-	margin-top: 5px;
-	margin-bottom: 20px;
+	width: 10px;
+	float: left;
+	background-color: #D50000;
+}
+.colorBarGreen {
+	left: 0px;
+	height: 100%;
+	width: 10px;
+	float: left;
+	background-color: #2ECC71;
+}
+.colorBarYellow {
+	left: 0px;
+	height: 100%;
+	width: 10px;
+	float: left;
+	background-color: #FFC107;
 }
 
 tr {
@@ -130,5 +152,5 @@ tr {
 	top: 50%;
 	transform: translate(-50%, -50%);	
 	font-size: 25px;
-
+	margin-right: 15px;
 }

@@ -41,7 +41,8 @@ GET:
 }
 
 MyGroup: /groups/user/
-# Returns all groups that the user is a part of
+# Re
+turns all groups that the user is a part of
 GET:
 {
 
@@ -77,6 +78,7 @@ POST:
 	date: (epoch)
 	location: (String)
 	capacity:
+	privacy:
 }
 
 EditGroup: /groups/:id
@@ -107,7 +109,7 @@ GET
 }
 
 
-Get one comment: /comment/:id
+Get comment in a group: /comments/:groupId
 GET
 {
 	
@@ -117,7 +119,6 @@ GET
 Create comment: /comment
 POST
 {
-	userid (same as uid)
 	groupid
 	title
 	content

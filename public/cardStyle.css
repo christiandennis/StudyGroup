@@ -1,7 +1,7 @@
 .card {
 	width: 550px;
 	height: 300px;
-	background-color: #FFFFFF;
+	background-color: #000000;
 	overflow: hidden;
 }
 
@@ -12,6 +12,7 @@
 	float: left;
 	background-color: #F50000;
 }
+
 
 table {
 	height: 100%;
@@ -128,86 +129,6 @@ tr {
 	transform: translate(-50%, -50%);	
 	font-size: 18px;
 
-}
-
-.navbar-brand{
-    font-family: 'Lobster', cursive;
-}
-.navbar-default {
-    z-index: 100000;
-    background-color: #3F51B5;
-    border-color: transparent;
-    color: #FFFFFF;
-    border-radius: 0;
-}
-
-.navbar-default .navbar-brand {
-    color: #FFFFFF;
-}
-
-.navbar-default .navbar-brand:hover {
-    color: #FFFFFF;
-    background-color: #4d5ec1;
-    transition: all 0.5s ease;
-}
-
-body {
-	background-color: #F3F3F3;
-	padding-top: 65px; 
-}
-
-.modal.in .modal-dialog {
-	padding-top: 100px
-}
-
-.modal-header {
-	background-color: #4d5ec1;
-	color: #FFFFFF;
-}
-
-.modal-body {
-	padding-bottom: 5px;
-}
-
-.modal-footer {
-	margin-top: 10px;
-	padding-top: 5px;
-	padding-bottom: 0px;
-}
-
-.navbar-default .navbar-nav>li>.new-group {
-	color: #FFFFFF;
-}
-
-.navbar-default .navbar-nav>li>.new-group:hover {
-	color: #FFFFFF;
-	background-color: #4d5ec1;
-    transition: all 0.5s ease;
-}
-
-
-.fa-search {
-    margin-top: 18px;
-    margin-right: 10px;
-    color: white;
-}
-
-.search_input{
-    height: 25px;
-    margin-top: 12px;
-}
-
-.class-input-wrapper, .title-input-wrapper, .date-input-wrapper, .time-input-wrapper, .capacity-input-wrapper {
-	display: inline-block;
-}
-
-.inner-wrapper {
-	margin-top: 15px;
-	margin-bottom: 15px;
-}
-
-.capacity-input {
-	width: 40%;
 }
 
 

@@ -52,10 +52,7 @@ class GroupsController < ApplicationController
 
 		if capacity.nil? || capacity.length==0
 			status = -1
-			error_messages << "Please enter capacity"
-		elsif capacity.to_i > 99
-			status = -1
-			error_messages << "Please enter capacity less than 100" 
+			error_messages << "Please enter capacity" 
 		end
 
 		if privacy != '0' and privacy != '1'
@@ -65,20 +62,20 @@ class GroupsController < ApplicationController
 
 
 		if status == 1
-			@group = Group.new(group_params)
+			@group = Group.new(group_params.merge(:school=> current_user.school))
 			@group.guestlist+=1
 			@group.going = @group.going + ' '+@name.nickname.to_s + ' '
 			if @group.save
 				render json: {'status' => 1, 'group' => @group}
 			end
 		else
-			render json: {'status'=> -1, 'errors' => error_messages}
+			render json: {'status'=> -1, 'errors' => error_messages}, status: 400
 		end
 	end 
 
 	#TODO: order groups by date
 	def index
-		@groups = Group.all
+		@groups = Group.all.order("date")
 		render json: {'status'=>1,'groups' => @groups}
 	end
 
@@ -87,7 +84,7 @@ class GroupsController < ApplicationController
 	def userindex
 		#based on school/user
 		# what to initially show
-		@groups = Group.all
+		@groups = Group.where("lower(school) = ? ", current_user.school.downcase).order("date")
 		@user = current_user
 
 		render json: {'status'=>1,'groups' => @groups}
@@ -95,7 +92,7 @@ class GroupsController < ApplicationController
 
 	#TODO: Order displayed_groups by date
 	def usergroups
-		@groups = Group.all
+		@groups = Group.all.order("date")
 		@user = current_user
 		
 		id_formatted = ' '+@user.nickname.to_s+' '
@@ -145,7 +142,7 @@ class GroupsController < ApplicationController
 		end
 
 		if status == -1
-			render json: {'status'=>-1,'errors'=>err}
+			render json: {'status'=>-1,'errors'=>err}, status: 400
 			return
 		end
 
@@ -172,12 +169,12 @@ class GroupsController < ApplicationController
 		id = params[:id]
 		@group = nil
 		if id.nil?
-			render json: {'status'=>-1,'errors:'=>['Please pass in a valid group id']}
+			render json: {'status'=>-1,'errors:'=>['Please pass in a valid group id']}, status: 400
 			return
 		else
 			@group = Group.find(params[:id])
 			if @group.nil?
-				render json: {'status'=>-1,'errors:'=>['Could not find group with id']}
+				render json: {'status'=>-1,'errors:'=>['Could not find group with id']}, status: 400
 				return
 			end
 		end
@@ -222,7 +219,7 @@ class GroupsController < ApplicationController
 		end
 
 		if @group.host != current_user.nickname
-			render json: {'status'=>-1, 'errors'=>['You can only edit group you host']}
+			render json: {'status'=>-1, 'errors'=>['You can only edit group you host']}, status: 400
 		else
 			@group.save
 			render json: {'status'=>1,'group'=>@group}
@@ -234,7 +231,7 @@ class GroupsController < ApplicationController
 		if not @group.nil?
 			render json: {'status'=>1, 'group'=>@group}
 		else
-			render json: {'status'=>-1,'errors'=>['Could not find group with id']}
+			render json: {'status'=>-1,'errors'=>['Could not find group with id']}, status: 400
 		end
 	end
 

@@ -18,7 +18,9 @@ const App = React.createClass({
         <AltContainer store = {StudyGroupStore}>
           <AppBar/>
         </AltContainer>
-        {this.props.children}
+        <AltContainer store = {StudyGroupStore}>
+          {this.props.children}
+        </AltContainer>
       </div>
     )
   }
