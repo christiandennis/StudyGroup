@@ -130,7 +130,6 @@ var TopBar = React.createClass({
 	render() {
 		if (this.props.user) {
 			return (
-                
                 <div>
                 	<div style={{zIndex:"1000", paddingBottom:"64px"}}>
 						<Sticky>

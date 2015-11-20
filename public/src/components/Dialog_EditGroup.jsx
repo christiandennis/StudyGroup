@@ -143,10 +143,15 @@ var LoginDialog = React.createClass({
 		}
 	},
 
+	getDateEpoch(date){
+		var d = new Date(0);
+		d.setUTCSeconds(date);
+		return d;
+	},
+
 	render() {
 		var studyGroup = this.props.studyGroup;
-		var date = new Date(0);
-		date.setUTCSeconds(studyGroup.date);
+		var date = this.getDateEpoch(studyGroup.date);
 		return (
 			<div>
 				<Dialog ref="editGroupDialog"

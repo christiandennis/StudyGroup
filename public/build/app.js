@@ -49439,7 +49439,6 @@ var TopBar = React.createClass({displayName: "TopBar",
 	render:function() {
 		if (this.props.user) {
 			return (
-                
                 React.createElement("div", null, 
                 	React.createElement("div", {style: {zIndex:"1000", paddingBottom:"64px"}}, 
 						React.createElement(Sticky, null, 
@@ -49539,26 +49538,38 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 		}
 	},
 
-	render:function() {
-		var studyGroup = this.props.studyGroup;
-		var user = this.props.user;
+	getTimeString:function(time) {
 		var d = new Date(0);
-		d.setUTCSeconds(Number(studyGroup.date));
-		var date = moment(d).format("ddd, MMM D").toString();
-		var time = moment(d).format("h:mm a").toString();
-		var color = this.calculateTimeColor(studyGroup.date);
-		
-		// determine if user is host, can join, or can leave		
-		var joinText = 'Join';
+		d.setUTCSeconds(Number(time));
+		return moment(d).format("h:mm a").toString();
+	},
+
+	getDateString:function(date) {
+		var d = new Date(0);
+		d.setUTCSeconds(Number(date));
+		return moment(d).format("ddd, MMM D").toString();
+	},
+
+	getJoinText:function(studyGroup, user) {
 		if (studyGroup.host === user.nickname) {
-			joinText = 'Dismiss';
+			return 'Dismiss';
 		} 
 		//else if(user.nickname in studyGroup.going) {
 		// 	joinText = 'Leave';
 		// }
 		else if (studyGroup.guestlist === studyGroup.capacity) {
-			joinText = 'Full';
+			return 'Full';
 		}
+	},
+
+	render:function() {
+		var studyGroup = this.props.studyGroup;
+		var user = this.props.user;
+
+		var date = this.getDateString(studyGroup.date);
+		var time = this.getTimeString(studyGroup.date);
+		var color = this.calculateTimeColor(studyGroup.date);	
+		var joinText = this.getJoinText(studyGroup, user);
 
 		return (
 			React.createElement("div", {key: studyGroup.id}, 
@@ -49780,10 +49791,15 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 		}
 	},
 
+	getDateEpoch:function(date){
+		var d = new Date(0);
+		d.setUTCSeconds(date);
+		return d;
+	},
+
 	render:function() {
 		var studyGroup = this.props.studyGroup;
-		var date = new Date(0);
-		date.setUTCSeconds(studyGroup.date);
+		var date = this.getDateEpoch(studyGroup.date);
 		return (
 			React.createElement("div", null, 
 				React.createElement(Dialog, {ref: "editGroupDialog", 
@@ -49891,14 +49907,24 @@ var GroupDetailDialog = React.createClass({displayName: "GroupDetailDialog",
 		this.refs.editGroupDialog.refs.editGroupDialog.show();
 	},
 
+	getTimeString:function(time) {
+		var d = new Date(0);
+		d.setUTCSeconds(Number(time));
+		return moment(d).format("h:mm a").toString();
+	},
+
+	getDateString:function(date) {
+		var d = new Date(0);
+		d.setUTCSeconds(Number(date));
+		return moment(d).format("ddd, MMM D").toString();
+	},
+
 	render:function() {
 		var studyGroup = this.props.studyGroup;
 		var user = this.props.user;
-		var d = new Date(0);
-		d.setUTCSeconds(Number(studyGroup.date));
 
-		var date = moment(d).format("ddd, MMM D").toString();
-		var time = moment(d).format("h:mm a").toString();
+		var date = this.getDateString(studyGroup.date);
+		var time = this.getTimeString(studyGroup.date);
 
 		if (user.nickname === studyGroup.host) {
 			return (
