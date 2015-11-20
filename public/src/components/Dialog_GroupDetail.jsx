@@ -4,7 +4,7 @@ var render = require('react-dom').render;
 var Router = require('react-router');
 var History = Router.History;
 var StudyGroupStore = require('../stores/StudyGroupStore');
-
+ 
 var Dialog_EditGroup = require('./Dialog_EditGroup.jsx');
 
 // Matertial UI components
