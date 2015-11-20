@@ -75,13 +75,8 @@ var AllStudyGroups = React.createClass({
 
 var StudyGroups = React.createClass ({
 	componentDidMount: function() {
-		var state = StudyGroupStore.getState();
 		StudyGroupStore.fetchStudyGroups();	
 		setInterval(function() {StudyGroupStore.fetchStudyGroups();} , refreshInterval);
-	},
-
-	componentWillUpdate() {
-		var state = StudyGroupStore.getState();
 	},
 
 	render(){

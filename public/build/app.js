@@ -49992,8 +49992,8 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 	mixins: [History],
 
 	submitLogIn:function() {
-		console.log("login here");
-		console.log("this.props", this.props);
+		// console.log("login here");
+		// console.log("this.props", this.props);
 		var user = this.refs.email.getValue();
 		var password = this.refs.password.getValue();
 		StudyGroupStore.fetchUser( user, password, this.history, this.refs.loginDialog, this.refs.loginFailedSnackbar);
@@ -50063,8 +50063,7 @@ const moment = require('moment');
 var injectTapEventPlugin = require("react-tap-event-plugin");
 injectTapEventPlugin();
 
-const URL = "http://localhost:3000";
-var axios = require('axios');
+const refreshInterval = 10000;
 
 var AllSimpleGroup = React.createClass({displayName: "AllSimpleGroup",
 	render:function() {
@@ -50105,12 +50104,8 @@ var AllSimpleGroup = React.createClass({displayName: "AllSimpleGroup",
 
 var MyGroups = React.createClass ({displayName: "MyGroups",
 	componentDidMount:function() {
-		var state = StudyGroupStore.getState();
 		StudyGroupStore.fetchMyGroups();
-	},
-
-	componentWillUpdate:function() {
-		var state = StudyGroupStore.getState();
+		setInterval(function() {StudyGroupStore.fetchMyGroups();} , refreshInterval);
 	},
 
 	closeMygroupsDialog:function() {
@@ -50140,8 +50135,7 @@ var MyGroups = React.createClass ({displayName: "MyGroups",
 			);
 		}
 		return (
-			React.createElement("div", null, 
-				"\"error\""
+			React.createElement("div", null
 			)
 		);
 	}
@@ -50149,7 +50143,7 @@ var MyGroups = React.createClass ({displayName: "MyGroups",
 
 module.exports = MyGroups;
 
-},{"../actions/StudyGroupActions":387,"../stores/StudyGroupStore":402,"alt/AltContainer":1,"axios":17,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/paper":95,"moment":155,"react":384,"react-addons-test-utils":158,"react-dom":161,"react-router":198,"react-tap-event-plugin":209}],396:[function(require,module,exports){
+},{"../actions/StudyGroupActions":387,"../stores/StudyGroupStore":402,"alt/AltContainer":1,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/paper":95,"moment":155,"react":384,"react-addons-test-utils":158,"react-dom":161,"react-router":198,"react-tap-event-plugin":209}],396:[function(require,module,exports){
 // React, react-reouter, alt
 var React = require('react');
 var render = require('react-dom').render;
@@ -50800,13 +50794,8 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 
 var StudyGroups = React.createClass ({displayName: "StudyGroups",
 	componentDidMount: function() {
-		var state = StudyGroupStore.getState();
 		StudyGroupStore.fetchStudyGroups();	
 		setInterval(function() {StudyGroupStore.fetchStudyGroups();} , refreshInterval);
-	},
-
-	componentWillUpdate:function() {
-		var state = StudyGroupStore.getState();
 	},
 
 	render:function(){
@@ -50853,7 +50842,7 @@ var StudyGroupSource = {
 		return {
 		  remote:function(state, fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog, invalidEmailSnackbar, unavailableEmailSnackbar, unavailableUsernameSnackbar, failedSnackbar) { 
 		    return new Promise(function (resolve, reject) {
-		      	console.log('--------------SIGN UP--------------');
+		      	// console.log('--------------SIGN UP--------------');
 		      	var signUpData = {
 		      		"email": email.getValue(),
 		      		"password": password.getValue(),
@@ -50905,7 +50894,7 @@ var StudyGroupSource = {
 		return {
 		  remote:function(state,email,password, history, loginDialog, loginFailedSnackbar) { 
 		    return new Promise(function (resolve, reject) {
-		      console.log('--------------LOGIN--------------');
+		      // console.log('--------------LOGIN--------------');
 		      var fata = {
 		      		"email": email,
 		      		"password": password,

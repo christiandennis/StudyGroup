@@ -2,10 +2,6 @@ var StudyGroupActions = require('../actions/StudyGroupActions');
 var UserActions = require('../actions/UserActions');
 var MyGroupsActions = require('../actions/MyGroupsActions');
 
-const URL = "http://localhost:3000"
-const userURL = 'https://sheetsu.com/apis/72092a94';
-const groupURL = URL + "/groups";
-
 
 var StudyGroupSource = {
 	// ****************************************************************************

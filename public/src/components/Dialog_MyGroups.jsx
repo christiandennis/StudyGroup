@@ -16,8 +16,7 @@ const moment = require('moment');
 var injectTapEventPlugin = require("react-tap-event-plugin");
 injectTapEventPlugin();
 
-const URL = "http://localhost:3000";
-var axios = require('axios');
+const refreshInterval = 10000;
 
 var AllSimpleGroup = React.createClass({
 	render() {
@@ -58,12 +57,8 @@ var AllSimpleGroup = React.createClass({
 
 var MyGroups = React.createClass ({
 	componentDidMount() {
-		var state = StudyGroupStore.getState();
 		StudyGroupStore.fetchMyGroups();
-	},
-
-	componentWillUpdate() {
-		var state = StudyGroupStore.getState();
+		setInterval(function() {StudyGroupStore.fetchMyGroups();} , refreshInterval);
 	},
 
 	closeMygroupsDialog() {
@@ -94,7 +89,6 @@ var MyGroups = React.createClass ({
 		}
 		return (
 			<div>
-				"error"
 			</div>
 		);
 	}
