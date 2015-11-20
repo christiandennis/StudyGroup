@@ -11,6 +11,13 @@ var StudyGroupActions = require('../actions/StudyGroupActions');
 // import components
 var Card_MainGroupView = require('./Card_MainGroupView.jsx');
 
+// masonry react
+var Masonry = require('react-masonry-component')(React);
+var masonryOptions = {
+	columnWidth: 550,
+    transitionDuration: 0
+};
+
 var injectTapEventPlugin = require("react-tap-event-plugin");
 injectTapEventPlugin();
 
@@ -50,11 +57,17 @@ var AllStudyGroups = React.createClass({
 
 		if (this.props.studyGroups){
 			return (
-				<ul>
+				<Masonry
+	                className={'my-gallery-class'}
+	                elementType={'ul'}
+	                options={masonryOptions}
+	                disableImagesLoaded={false}>
 					{this.props.studyGroups.map((studyGroup, i) => {
-					    return ( <Card_MainGroupView studyGroup={studyGroup} user={this.props.user}/> );
+					    return ( 
+					    		<Card_MainGroupView studyGroup={studyGroup} user={this.props.user} />
+					    		);
 					})}
-				</ul>					
+				</Masonry>			
 			);
 		}
 	}
