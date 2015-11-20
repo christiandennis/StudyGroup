@@ -46086,40 +46086,52 @@ var GroupDetailDialog = React.createClass({displayName: "GroupDetailDialog",
 			);
 		} else {
 			return (
-				React.createElement(Dialog, {ref: "groupDetailDialog", 
-						title: "StudyGroup Detail", 
-						style: {textAlign:"center", color:"#0D47A1 !important"}, 
-						actions: [], 
-				  		autoDetectWindowHeight: true, 
-				  		autoScrollBodyContent: true}, 
-				    React.createElement(Paper, {zDepth: 2, 
-				    style: {paddingTop:"20px"}}, 
-				    	React.createElement("div", {className: "groupdesc-title"}, "Class"), 
-				    	React.createElement("div", {ref: "groupdetailClass", className: "groupdesc-subtitle"}, studyGroup.subject), 
+				React.createElement("div", null, 
+					React.createElement(Dialog, {ref: "groupDetailDialog", 
+							title: "StudyGroup Detail", 
+							style: {textAlign:"center", color:"#0D47A1 !important"}, 
+							actions: [], 
+					  		autoDetectWindowHeight: true, 
+					  		autoScrollBodyContent: true}, 
+					    React.createElement(Paper, {zDepth: 2, 
+					    style: {paddingTop:"20px", paddingBottom:"20px"}}, 
+					    	React.createElement("div", {className: "groupdesc-title"}, "Class"), 
+					    	React.createElement("div", {ref: "groupdetailClass", className: "groupdesc-subtitle"}, studyGroup.subject), 
 
-				    	React.createElement("div", {className: "groupdesc-title"}, "Title"), 
-				    	React.createElement("div", {ref: "groupdetailTitle", className: "groupdesc-subtitle"}, studyGroup.title), 
+					    	React.createElement("div", {className: "groupdesc-title"}, "Title"), 
+					    	React.createElement("div", {ref: "groupdetailTitle", className: "groupdesc-subtitle"}, studyGroup.title), 
 
-				    	React.createElement("div", {className: "groupdesc-title"}, "Host"), 
-				    	React.createElement("div", {ref: "groupdetailHost", className: "groupdesc-subtitle"}, studyGroup.host), 
+					    	React.createElement("div", {className: "groupdesc-title"}, "Host"), 
+					    	React.createElement("div", {ref: "groupdetailHost", className: "groupdesc-subtitle"}, studyGroup.host), 
 
-				    	React.createElement("div", {className: "groupdesc-title"}, "Date"), 
-				    	React.createElement("div", {ref: "groupdetailDate", className: "groupdesc-subtitle"}, date), 
+					    	React.createElement("div", {className: "groupdesc-title"}, "Date"), 
+					    	React.createElement("div", {ref: "groupdetailDate", className: "groupdesc-subtitle"}, date), 
 
-				    	React.createElement("div", {className: "groupdesc-title"}, "Time"), 
-				    	React.createElement("div", {ref: "groupdetailTime", className: "groupdesc-subtitle"}, time), 
+					    	React.createElement("div", {className: "groupdesc-title"}, "Time"), 
+					    	React.createElement("div", {ref: "groupdetailTime", className: "groupdesc-subtitle"}, time), 
 
-				    	React.createElement("div", {className: "groupdesc-title"}, "Location"), 
-				    	React.createElement("div", {ref: "groupdetailLocation", className: "groupdesc-subtitle"}, studyGroup.location), 
+					    	React.createElement("div", {className: "groupdesc-title"}, "Location"), 
+					    	React.createElement("div", {ref: "groupdetailLocation", className: "groupdesc-subtitle"}, studyGroup.location), 
 
-				    	React.createElement("div", {className: "groupdesc-title"}, "Description"), 
-				    	React.createElement("div", {ref: "groupdetailDescription", className: "groupdesc-subtitle"}, studyGroup.description)
-				    )
-				));
+					    	React.createElement("div", {className: "groupdesc-title"}, "Description"), 
+					    	React.createElement("div", {ref: "groupdetailDescription", className: "groupdesc-subtitle"}, studyGroup.description)
+					    ), 
+
+					    React.createElement(Paper, {zDepth: 2, 
+					    style: {paddingTop:"20px", marginTop:"30px"}}, 
+					    	React.createElement("div", {ref: "commentTitle", className: "groupdesc-comment-title", style: {paddingBottom:"20px"}}, "Comments"), 
+					    	React.createElement("div", {ref: "commentBox", className: "groupdesc-comment"}), 
+					    	React.createElement(TextField, {
+					    	hintText: "New Comment"})
+					    )
+
+					)
+				)
+			)
 		}
-		
 	}
 })
+
 
 module.exports = GroupDetailDialog;
 
@@ -46207,11 +46219,10 @@ var ReactTestUtils = require('react-addons-test-utils');
 const Paper = require('material-ui/lib/paper');
 const Dialog = require('material-ui/lib/dialog');
 const FlatButton = require('material-ui/lib/flat-button');
+const moment = require('moment');
 
 var injectTapEventPlugin = require("react-tap-event-plugin");
 injectTapEventPlugin();
-
-const moment = require('moment');
 
 const URL = "http://localhost:3000";
 var axios = require('axios');
@@ -46221,8 +46232,11 @@ var AllSimpleGroup = React.createClass({displayName: "AllSimpleGroup",
 			return 	(
 					React.createElement("div", null, 
 					  	this.props.myGroups.map(function(myGroup, i)  {
-						  	var date = moment(myGroup.date).format("ddd, MMM D").toString();
-						  	var time = moment(myGroup.date).format("h:mm a").toString();
+					  		var d = new Date(0);
+					  		d.setUTCSeconds(myGroup.date);
+
+						  	var date = moment(d).format("ddd, MMM D").toString();
+						  	var time = moment(d).format("h:mm a").toString();
 						    return (
 						    	React.createElement("div", {key: myGroup.id}, 
 				    		        React.createElement(Paper, null, 
