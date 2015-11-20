@@ -49655,14 +49655,9 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 	},
 
 	calculateTimeEpoch:function(time, date) {
-		new_time = time.getTime();
-		new_date = date.getDate();
-		date_str = new_date.toString();
-		time_str = new_time.toString();
-		time_str = time_str.slice(15);
-		date_str = date_str.slice(0,15);
-		date_str = date_str + time_str;
-		return moment(date_str).unix();
+		date_str = date.toString().slice(0,15);
+		time_str = time.toString().slice(15);
+		return moment(date_str + time_str).unix();
 	},
 
 	submitEditGroupDetail:function() {
@@ -49679,22 +49674,24 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 		var failedSnackbar = this.refs.editGroupFailedSnackbar;
 		var successSnackbar = this.refs.editGroupSuccessSnackbar;
 
-		if (this.validateGroupSubject() && this.validateGroupTitle() && this.validateGroupDescription() && this.validateGroupLocation() && this.validateGroupCapacity() && this.validateGroupDateTime()) {
-			StudyGroupStore.editGroup(id, title, subject, description, this.calculateTimeEpoch(time, date), location, capacity, editGroupDialog, failedSnackbar, successSnackbar);
+		if (this.validateGroupSubject() & this.validateGroupTitle() & this.validateGroupDescription() & this.validateGroupLocation() & this.validateGroupCapacity() & this.validateGroupDateTime()) {
+			StudyGroupStore.editGroup(id, title, subject, description, this.calculateTimeEpoch(time.getTime(), date.getDate()), location, capacity, editGroupDialog, failedSnackbar, successSnackbar);
 		}
 	},
 
 	validateGroupDateTime:function() {
-		var new_time = this.refs.editGroupTime.getTime();
-		var new_date = this.refs.editGroupDate.getDate();
-		var date_str = new_date.toString().slice(0,15);
-		var time_str = new_time.toString().slice(15);
-		var date_epoch = moment(date_str + time_str).unix();
-		var time_now = new Date().getTime() / 1000;
-		if (date_epoch > time_now){
-			return true;
-		} else {
-			return false;
+		var time = this.refs.editGroupTime;
+		var date = this.refs.editGroupDate;
+		if (time.getTime() && date.getDate()) {
+			var time_epoch = this.calculateTimeEpoch(time.getTime(), date.getDate());
+			var time_now = new Date().getTime() / 1000;
+			console.log('time epoch', time_epoch);
+			console.log('time now', time_now);
+			if (time_epoch > time_now){
+				return true;
+			} else {
+				return false;
+			}
 		}
 	},
 
@@ -50187,14 +50184,9 @@ var NewGroupDialog = React.createClass({displayName: "NewGroupDialog",
 	},
 
 	calculateTimeEpoch:function(time, date) {
-		new_time = time.getTime();
-		new_date = date.getDate();
-		date_str = new_date.toString();
-		time_str = new_time.toString();
-		time_str = time_str.slice(15);
-		date_str = date_str.slice(0,15);
-		date_str = date_str + time_str;
-		return moment(date_str).unix();
+		date_str = date.toString().slice(0,15);
+		time_str = time.toString().slice(15);
+		return moment(date_str + time_str).unix();
 	},
 
 	submitNewGroup:function() {
@@ -50215,22 +50207,24 @@ var NewGroupDialog = React.createClass({displayName: "NewGroupDialog",
 		var failedSnackbar = this.refs.createGroupFailedSnackbar;
 		var successSnackbar = this.refs.createGroupSuccessSnackbar;
 
-		if (this.validateGroupSubject() && this.validateGroupTitle() && this.validateGroupDescription() && this.validateGroupLocation() && this.validateGroupCapacity() && validateGroupDateTime()) {
-			StudyGroupStore.postNewGroup(title, subject, description, this.calculateTimeEpoch(time, date), location, capacity, privacy, newGroupDialog, failedSnackbar, successSnackbar);
+		if (this.validateGroupSubject() & this.validateGroupTitle() & this.validateGroupDescription() & this.validateGroupLocation() & this.validateGroupCapacity() & this.validateGroupDateTime()) {
+			StudyGroupStore.postNewGroup(title, subject, description, this.calculateTimeEpoch(time.getTime(), date.getDate()), location, capacity, privacy, newGroupDialog, failedSnackbar, successSnackbar);
 		}
 	},
 
 	validateGroupDateTime:function() {
-		var new_time = this.refs.createGroupTime.getTime();
-		var new_date = this.refs.createGroupDate.getDate();
-		var date_str = new_date.toString().slice(0,15);
-		var time_str = new_time.toString().slice(15);
-		var date_epoch = moment(date_str + time_str).unix();
-		var time_now = new Date().getTime() / 1000;
-		if (date_epoch > new Date().getTime()){
-			return true;
-		} else {
-			return false;
+		var time = this.refs.createGroupTime;
+		var date = this.refs.createGroupDate;
+		if (time.getTime() && date.getDate()) {
+			var time_epoch = this.calculateTimeEpoch(time.getTime(), date.getDate());
+			var time_now = new Date().getTime() / 1000;
+			console.log('time epoch', time_epoch);
+			console.log('time now', time_now);
+			if (time_epoch > time_now){
+				return true;
+			} else {
+				return false;
+			}
 		}
 	},
 
@@ -50261,7 +50255,7 @@ var NewGroupDialog = React.createClass({displayName: "NewGroupDialog",
 				return false;
 			}
 		} else {
-			subject.setErrorText("This field is required");
+			title.setErrorText("This field is required");
 			return false;
 		}
 	},
@@ -50491,39 +50485,14 @@ var SignUpDialog = React.createClass({displayName: "SignUpDialog",
 		if (this.validateUsername() & this.validateSchool() & this.validateEmail() & this.validateFullName() & this.validatePasswordMatch()) {
 			StudyGroupStore.signUp(this.history, fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog, this.refs.invalidEmailSnackbar, this.refs.unavailableEmailSnackbar, this.refs.unavailableUsernameSnackbar, this.refs.failedSnackbar);
 		}
-
-		// if (email.getValue() && password.getValue() && confirmPassword.getValue() && fullname.getValue()){
-		// 	if (confirmPassword.getValue() === password.getValue()){
-		// 		StudyGroupStore.signUp(this.history, fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog, this.refs.invalidEmailSnackbar, this.refs.unavailableEmailSnackbar, this.refs.unavailableUsernameSnackbar, this.refs.failedSnackbar);
-		// 	}
-		// } else {
-		// 	if (!email.getValue()){
-		// 		email.setErrorText("This field is required");
-		// 	} else if (email.getValue().search("@")==-1){
-		// 		email.setErrorText("Invalid email");
-		// 	}
-
-		// 	if (!password.getValue()) {
-		// 		password.setErrorText("This field is required");
-		// 	}
-		// 	if(!confirmPassword.getValue()){
-		// 		confirmPassword.setErrorText("This field is required");
-		// 	}
-		// 	if (!fullname.getValue()){
-		// 		fullname.setErrorText("This field is required");
-		// 	}
-		// }
 	},
 
 	validateFullName:function() {
-		console.log('masuk');
 		var fullname = this.refs.fullNameSignUp;
 		if (fullname.getValue()){
-			console.log('fullname value');
 			fullname.setErrorText("");
 			return true;
 		} else {
-			console.log('fullname no value');
 			fullname.setErrorText("This field is required");
 			return false;
 		}

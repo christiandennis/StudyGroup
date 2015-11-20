@@ -22,14 +22,9 @@ var NewGroupDialog = React.createClass({
 	},
 
 	calculateTimeEpoch(time, date) {
-		new_time = time.getTime();
-		new_date = date.getDate();
-		date_str = new_date.toString();
-		time_str = new_time.toString();
-		time_str = time_str.slice(15);
-		date_str = date_str.slice(0,15);
-		date_str = date_str + time_str;
-		return moment(date_str).unix();
+		date_str = date.toString().slice(0,15);
+		time_str = time.toString().slice(15);
+		return moment(date_str + time_str).unix();
 	},
 
 	submitNewGroup() {
@@ -50,22 +45,22 @@ var NewGroupDialog = React.createClass({
 		var failedSnackbar = this.refs.createGroupFailedSnackbar;
 		var successSnackbar = this.refs.createGroupSuccessSnackbar;
 
-		if (this.validateGroupSubject() && this.validateGroupTitle() && this.validateGroupDescription() && this.validateGroupLocation() && this.validateGroupCapacity() && validateGroupDateTime()) {
-			StudyGroupStore.postNewGroup(title, subject, description, this.calculateTimeEpoch(time, date), location, capacity, privacy, newGroupDialog, failedSnackbar, successSnackbar);
+		if (this.validateGroupSubject() & this.validateGroupTitle() & this.validateGroupDescription() & this.validateGroupLocation() & this.validateGroupCapacity() & this.validateGroupDateTime()) {
+			StudyGroupStore.postNewGroup(title, subject, description, this.calculateTimeEpoch(time.getTime(), date.getDate()), location, capacity, privacy, newGroupDialog, failedSnackbar, successSnackbar);
 		}
 	},
 
 	validateGroupDateTime() {
-		var new_time = this.refs.createGroupTime.getTime();
-		var new_date = this.refs.createGroupDate.getDate();
-		var date_str = new_date.toString().slice(0,15);
-		var time_str = new_time.toString().slice(15);
-		var date_epoch = moment(date_str + time_str).unix();
-		var time_now = new Date().getTime() / 1000;
-		if (date_epoch > new Date().getTime()){
-			return true;
-		} else {
-			return false;
+		var time = this.refs.createGroupTime;
+		var date = this.refs.createGroupDate;
+		if (time.getTime() && date.getDate()) {
+			var time_epoch = this.calculateTimeEpoch(time.getTime(), date.getDate());
+			var time_now = new Date().getTime() / 1000;
+			if (time_epoch > time_now){
+				return true;
+			} else {
+				return false;
+			}
 		}
 	},
 
@@ -96,7 +91,7 @@ var NewGroupDialog = React.createClass({
 				return false;
 			}
 		} else {
-			subject.setErrorText("This field is required");
+			title.setErrorText("This field is required");
 			return false;
 		}
 	},

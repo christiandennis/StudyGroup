@@ -20,14 +20,9 @@ var LoginDialog = React.createClass({
 	},
 
 	calculateTimeEpoch(time, date) {
-		new_time = time.getTime();
-		new_date = date.getDate();
-		date_str = new_date.toString();
-		time_str = new_time.toString();
-		time_str = time_str.slice(15);
-		date_str = date_str.slice(0,15);
-		date_str = date_str + time_str;
-		return moment(date_str).unix();
+		date_str = date.toString().slice(0,15);
+		time_str = time.toString().slice(15);
+		return moment(date_str + time_str).unix();
 	},
 
 	submitEditGroupDetail() {
@@ -44,22 +39,22 @@ var LoginDialog = React.createClass({
 		var failedSnackbar = this.refs.editGroupFailedSnackbar;
 		var successSnackbar = this.refs.editGroupSuccessSnackbar;
 
-		if (this.validateGroupSubject() && this.validateGroupTitle() && this.validateGroupDescription() && this.validateGroupLocation() && this.validateGroupCapacity() && this.validateGroupDateTime()) {
-			StudyGroupStore.editGroup(id, title, subject, description, this.calculateTimeEpoch(time, date), location, capacity, editGroupDialog, failedSnackbar, successSnackbar);
+		if (this.validateGroupSubject() & this.validateGroupTitle() & this.validateGroupDescription() & this.validateGroupLocation() & this.validateGroupCapacity() & this.validateGroupDateTime()) {
+			StudyGroupStore.editGroup(id, title, subject, description, this.calculateTimeEpoch(time.getTime(), date.getDate()), location, capacity, editGroupDialog, failedSnackbar, successSnackbar);
 		}
 	},
 
 	validateGroupDateTime() {
-		var new_time = this.refs.editGroupTime.getTime();
-		var new_date = this.refs.editGroupDate.getDate();
-		var date_str = new_date.toString().slice(0,15);
-		var time_str = new_time.toString().slice(15);
-		var date_epoch = moment(date_str + time_str).unix();
-		var time_now = new Date().getTime() / 1000;
-		if (date_epoch > time_now){
-			return true;
-		} else {
-			return false;
+		var time = this.refs.editGroupTime;
+		var date = this.refs.editGroupDate;
+		if (time.getTime() && date.getDate()) {
+			var time_epoch = this.calculateTimeEpoch(time.getTime(), date.getDate());
+			var time_now = new Date().getTime() / 1000;
+			if (time_epoch > time_now){
+				return true;
+			} else {
+				return false;
+			}
 		}
 	},
 
