@@ -22,7 +22,7 @@ var StudyGroupSource = {
 		return {
 		  remote(state, fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog, invalidEmailSnackbar, unavailableEmailSnackbar, unavailableUsernameSnackbar, failedSnackbar) { 
 		    return new Promise(function (resolve, reject) {
-		      	console.log('--------------SIGN UP--------------');
+		      	// console.log('--------------SIGN UP--------------');
 		      	var signUpData = {
 		      		"email": email.getValue(),
 		      		"password": password.getValue(),
@@ -36,14 +36,14 @@ var StudyGroupSource = {
 			      	beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
 			      	data: signUpData,
 			      	success: function(response) {
-		      	  		console.log('__SUCCESS--');
-		      	  	  	console.log('response:' ,response);
+		      	  		// console.log('__SUCCESS--');
+		      	  	  	// console.log('response:' ,response);
 		      	  	  	signUpDialog.dismiss();
-		      	  	  	console.log('**************END SIGN UP**************');
+		      	  	  	// console.log('**************END SIGN UP**************');
 			      	},
 			      	error: function(response) {
-			      		console.log('__FAILED__');
-		      	  		console.log('response:' ,response.responseJSON);
+			      		// console.log('__FAILED__');
+		      	  		// console.log('response:' ,response.responseJSON);
 		      	  		if(response.responseJSON.errors[0] === 'Username is taken.'){
 		      	  			unavailableUsernameSnackbar.show();
 		      	  		} else if(response.responseJSON.errors[0] === 'address is already in use'){
@@ -53,7 +53,7 @@ var StudyGroupSource = {
 		      	  		} else {
 		      	  			failedSnackbar.show();
 		      	  		}
-		      	  		console.log('**************END SIGN UP**************');
+		      	  		// console.log('**************END SIGN UP**************');
 		      	}
 		      })
 		    });
@@ -74,7 +74,7 @@ var StudyGroupSource = {
 		return {
 		  remote(state,email,password, history, loginDialog, loginFailedSnackbar) { 
 		    return new Promise(function (resolve, reject) {
-		      console.log('--------------LOGIN--------------');
+		      // console.log('--------------LOGIN--------------');
 		      var fata = {
 		      		"email": email,
 		      		"password": password,
@@ -85,23 +85,23 @@ var StudyGroupSource = {
 		        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
 		        data: fata,
 		        success: function(data, status, xhr) {
-		        	console.log('__SUCCESS__');
+		        	// console.log('__SUCCESS__');
 		        	data.data.client = xhr.getResponseHeader('client');
 		        	data.data.accesstoken = xhr.getResponseHeader('access-token');
 		        	data.data.uid = xhr.getResponseHeader('uid');
-		          	console.log('data' ,data.data);
+		          	// console.log('data' ,data.data);
 	          	resolve(data.data);
 	          	// history.pushState(null, '/studygroupapp');
 	          	setTimeout(function() {history.pushState(null, '/studygroupapp');}, 10);
 	          	// loginDialog.dismiss();
-	          	console.log('**************END LOGIN**************');
+	          	// console.log('**************END LOGIN**************');
 		        },
 		        error: function(response) {
-		        	console.log('__FAILED__');
-		          	console.log('response' ,response);
+		        	// console.log('__FAILED__');
+		          	// console.log('response' ,response);
 		          	loginFailedSnackbar.show();
 			        reject('login FAILED');
-			        console.log('**************END LOGIN**************');
+			        // console.log('**************END LOGIN**************');
 		        }
 		      });
 		    });
@@ -138,20 +138,20 @@ var StudyGroupSource = {
 		      	      				"uid": state.user.uid
       	      					},
       	      success: function(response) {
-      	      	console.log('__SUCCESS__');
-	      	  	  console.log('response:' ,response);
+      	      	// console.log('__SUCCESS__');
+	      	  	  // console.log('response:' ,response);
       	        window.location.href = URL;
       	        // history.pushState(null, '/');
-      	        console.log('**************END SIGN OUT**************');
+      	        // console.log('**************END SIGN OUT**************');
       	      },
       	      error: function(response) {
-      	      	console.log('__FAILED__');
+      	      	// console.log('__FAILED__');
       	      	// User was not found or was not logged in.
-	      	  	  console.log('response:' ,response.responseJSON);
+	      	  	  // console.log('response:' ,response.responseJSON);
 	      	  	  if (response.responseJSON.errors[0] === 'User was not found or was not logged in.') {
 	      	  	  	window.location.href = URL;
 	      	  	  }
-	      	  	  console.log('**************END SIGN OUT**************');
+	      	  	  // console.log('**************END SIGN OUT**************');
       	      }
       	    });
 		    });
@@ -187,8 +187,8 @@ var StudyGroupSource = {
 		return {
 		  remote(state, title, subject, description, date, location, capacity, privacy, newGroupDialog, failedSnackbar, successSnackbar) { 
 		    return new Promise(function (resolve, reject) {
-		      	console.log('--------------POST NEW GROUP--------------');
-		      	console.log("postnewgroupstate", state);
+		      	// console.log('--------------POST NEW GROUP--------------');
+		      	// console.log("postnewgroupstate", state);
 		      	var groupData = {
 		      		"title": title.getValue(),
 	      			"subject": subject.getValue(),
@@ -209,19 +209,19 @@ var StudyGroupSource = {
       	      			},
       	      data: groupData,
       	      success: function(response) {
-      	      	console.log('__SUCCESS__');
-	      	  	  console.log('response:' ,response);
+      	      	// console.log('__SUCCESS__');
+	      	  	  // console.log('response:' ,response);
 	      	  	  resolve(response.group);
 	      	  	  newGroupDialog.dismiss();
 	      	  	  successSnackbar.show();
-	      	  	  console.log('**************END POST NEW GROUP**************');
+	      	  	  // console.log('**************END POST NEW GROUP**************');
       	      },
       	      error: function(response) {
-      	      	console.log('__FAILED__');
+      	      	// console.log('__FAILED__');
       	      	// User was not found or was not logged in.
-	      	  	  console.log('response:' ,response.responseJSON);
+	      	  	  // console.log('response:' ,response.responseJSON);
 	      	  	  failedSnackbar.show();
-	      	  	  console.log('**************END POST NEW GROUP**************');
+	      	  	  // console.log('**************END POST NEW GROUP**************');
       	      }
       	    }); 
 		    });
@@ -241,7 +241,7 @@ var StudyGroupSource = {
 		return {
 		  	remote(state, id, title, subject, description, date, location, capacity, editGroupDialog, failedSnackbar, successSnackbar) { 
 			    return new Promise(function (resolve, reject) {
-			      	console.log('--------------EDIT GROUP--------------');
+			      	// console.log('--------------EDIT GROUP--------------');
 			      	var groupData = {
 			      		"title": title.getValue(),
 		      			"subject": subject.getValue(),
@@ -262,19 +262,19 @@ var StudyGroupSource = {
 		      	      			},
 			      	    data: groupData,
 			      	    success: function(response) {
-			      	      	console.log('__SUCCESS__');
-			      	  	  	console.log('response:' ,response);
+			      	      // 	console.log('__SUCCESS__');
+			      	  	  	// console.log('response:' ,response);
 			      	  	  	// history.pushState(null, '/studygroupapp');
 			      	  	  	resolve(response.group);
 			      	  	  	editGroupDialog.dismiss();
 			      	  	  	successSnackbar.show();
-			      	  	  	console.log('**************END EDIT GROUP**************');
+			      	  	  	// console.log('**************END EDIT GROUP**************');
 		      	      	},
 		      	      	error: function(response) {
-			      	      	console.log('__FAILED__');
-				      	  	console.log('response:' ,response.responseJSON);
+			      	    //   	console.log('__FAILED__');
+				      	  	// console.log('response:' ,response.responseJSON);
 				      	  	failedSnackbar.show();
-				      	  	console.log('**************END EDIT GROUP**************');
+				      	  	// console.log('**************END EDIT GROUP**************');
 		      	      	}
 	      	    	});
 			    });
@@ -299,7 +299,7 @@ var StudyGroupSource = {
 		return {
 			remote(state) { 
 			    return new Promise(function (resolve, reject) {
-			    	console.log('--------------FETCH GROUP--------------');
+			    	// console.log('--------------FETCH GROUP--------------');
 			      	$.ajax({ url: '/groups/user/index',
 				        type: 'GET',
 				        headers: {
@@ -309,16 +309,16 @@ var StudyGroupSource = {
 			  								},
 				        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
 				        success: function(data, status, xhr) {
-				        	console.log('__SUCCESS__');
-					        console.log('groups' ,data.groups);
+				        	// console.log('__SUCCESS__');
+					        // console.log('groups' ,data.groups);
 					        resolve(data.groups);
-					        console.log('**************END FETCH GROUP**************');
+					        // console.log('**************END FETCH GROUP**************');
 				        },
 				        error: function(response) {
-				        	console.log('__FAILED__');
-				          	console.log('response' ,response);
+				        	// console.log('__FAILED__');
+				         //  	console.log('response' ,response);
 				          	reject('fetch group FAILED');
-				          	console.log('**************END FETCH GROUP**************');
+				          	// console.log('**************END FETCH GROUP**************');
 				        }
 			      	});
 			    });
@@ -351,7 +351,7 @@ var StudyGroupSource = {
 		return {
 			remote(state){
 				return new Promise(function(resolve, reject){
-					console.log('--------------FETCH MY GROUPS--------------');
+					// console.log('--------------FETCH MY GROUPS--------------');
 				    $.ajax({ url: '/groups/user',
 				        type: 'GET',
 				        headers: {
@@ -361,16 +361,16 @@ var StudyGroupSource = {
 		  						},
 				        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
 				        success: function(data, status, xhr) {
-				        	console.log('__SUCCESS__');
-					        console.log('groups' ,data.groups);
+				        	// console.log('__SUCCESS__');
+					        // console.log('groups' ,data.groups);
 					        resolve(data.groups);
-					        console.log('**************END FETCH MY GROUPS**************');
+					        // console.log('**************END FETCH MY GROUPS**************');
 				        },
 				        error: function(response) {
-				        	console.log('__FAILED__');
-				          console.log('response' ,response);
+				        	// console.log('__FAILED__');
+				          // console.log('response' ,response);
 				          reject('fetch group FAILED');
-				          console.log('**************END FETCH MY GROUPS**************');
+				          // console.log('**************END FETCH MY GROUPS**************');
 				        }
 				    })
 				})
@@ -386,7 +386,7 @@ var StudyGroupSource = {
 		return {
 			remote(state, groupID, joinOrLeave){
 				return new Promise(function(resolve, reject){
-					console.log('--------------JOIN OR LEAVE GROUP--------------');
+					// console.log('--------------JOIN OR LEAVE GROUP--------------');
 				    $.ajax({ url: '/groups/user/update',
 				        type: 'PUT',
 				        headers: {
@@ -400,21 +400,21 @@ var StudyGroupSource = {
 		  						},
 				        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
 				        success: function(data, status, xhr) {
-				        	console.log('__SUCCESS__');
-					        console.log('data' ,data);
+				        	// console.log('__SUCCESS__');
+					        // console.log('data' ,data);
 					        var groupData = {
 					        					"group": data.going,
 					        					"groupID": groupID,
 					        					"joinOrLeave": joinOrLeave
 					        				};
 					        resolve(groupData);
-					        console.log('**************ENDJOIN OR LEAVE GROUP**************');
+					        // console.log('**************ENDJOIN OR LEAVE GROUP**************');
 				        },
 				        error: function(response) {
-				        	console.log('__FAILED__');
-				          	console.log('response' ,response);
+				        	// console.log('__FAILED__');
+				          	// console.log('response' ,response);
 				          	// reject('fetch group FAILED');
-				          	console.log('**************END JOIN OR LEAVE GROUP**************');
+				          	// console.log('**************END JOIN OR LEAVE GROUP**************');
 				        }
 				    })
 				})

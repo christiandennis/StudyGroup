@@ -44,7 +44,7 @@ var axios = require('axios');
 
 var ReactTestUtils = require('react-addons-test-utils');
 
-var tmpStudyGroup = null;
+var refreshInterval = 10000;
 
 
 var AllStudyGroups = React.createClass({
@@ -73,13 +73,11 @@ var AllStudyGroups = React.createClass({
 	}
 });
 
-// TESTING
-
 var StudyGroups = React.createClass ({
-	componentDidMount() {
+	componentDidMount: function() {
 		var state = StudyGroupStore.getState();
 		StudyGroupStore.fetchStudyGroups();	
-		
+		setInterval(function() {StudyGroupStore.fetchStudyGroups();} , refreshInterval);
 	},
 
 	componentWillUpdate() {

@@ -84,9 +84,9 @@ var TopBar = React.createClass({
 	mixins: [History],
 
 	dialogLogin() {
-		// this.refs.loginDialog.refs.loginDialog.show();
+		this.refs.loginDialog.refs.loginDialog.show();
 		// BYPASS LOGIN FOR TESTING
-		StudyGroupStore.fetchUser( 'papa@gmail.com', 'iopiopiop', this.history, this.refs.loginDialog);
+		// StudyGroupStore.fetchUser( 'papa@gmail.com', 'iopiopiop', this.history, this.refs.loginDialog);
 	},
 
 	dialogSignUp() {
@@ -110,7 +110,7 @@ var TopBar = React.createClass({
     },
     
     getStyle() {
-        console.log("style executed")
+        // console.log("style executed")
         return {
 
         }
@@ -141,10 +141,8 @@ var TopBar = React.createClass({
 							  style = {{
 							    backgroundColor: '#0D47A1 !important',
 							  }}
-							  onLeftIconButtonTouchTap={this.openLeft}>
-								  <FlatButton label="Refresh" onClick={this.refreshGroups} />
-								  <FlatButton label="New StudyGroup" onClick={this.dialogNewGroup}/>
-							</AppBar>
+							  iconElementRight={<FlatButton label="New StudyGroup" onClick={this.dialogNewGroup}/>}
+							  onLeftIconButtonTouchTap={this.openLeft}/>
 						</Sticky>
                 	</div>
                     

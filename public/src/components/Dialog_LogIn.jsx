@@ -15,8 +15,8 @@ var LoginDialog = React.createClass({
 	mixins: [History],
 
 	submitLogIn() {
-		console.log("login here");
-		console.log("this.props", this.props);
+		// console.log("login here");
+		// console.log("this.props", this.props);
 		var user = this.refs.email.getValue();
 		var password = this.refs.password.getValue();
 		StudyGroupStore.fetchUser( user, password, this.history, this.refs.loginDialog, this.refs.loginFailedSnackbar);
