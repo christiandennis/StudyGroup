@@ -76,62 +76,64 @@ var MainGroupViewCard = React.createClass({
 		        <Paper zDepth={3} className="card-container">
 			        <div className="card studyGroup">
 			            <div className={color}></div>
-			            <table>
-			                <tr className="row1">
-			                    <td className="userPhotoHolder">
-			                        <div className="photoHolder">
-			                            <div className="circle">
-			                                <Avatar size="120"> {studyGroup.host.slice(0,1)} </Avatar>
-			                            </div>
-			                        </div>
+				            <table>
+				            	<tbody>
+				                <tr className="row1">
+				                    <td className="userPhotoHolder">
+				                        <div className="photoHolder">
+				                            <div className="circle">
+				                                <Avatar size={120}> {studyGroup.host.slice(0,1)} </Avatar>
+				                            </div>
+				                        </div>
 
-			                    </td>
-			                    <td colSpan="2">
-			                        <span className="subject">{studyGroup.subject}:</span>
-			                        <span className="title">{studyGroup.title}</span>
-			                    </td>
+				                    </td>
+				                    <td colSpan="2">
+				                        <span className="subject">{studyGroup.subject}:</span>
+				                        <span className="title">{studyGroup.title}</span>
+				                    </td>
 
-			                    <td colSpan="2" align="right" className="dateTimeHolder">
-			                        <div className="date">{date}</div>
-			                        <div className="time">{time}</div>
-			                    </td>
-			                </tr>
+				                    <td colSpan="2" align="right" className="dateTimeHolder">
+				                        <div className="date">{date}</div>
+				                        <div className="time">{time}</div>
+				                    </td>
+				                </tr>
 
-			                <tr className="row2">
-			                    <td className="exclamationHolder">
-			                        <div className="exclamation"></div>
-			                    </td>
-			                    <td colSpan="3">
-			                        <div className="description">{studyGroup.description}</div>
-			                        <div className="seeMore" onClick={this.openGroupDetailDialog} >See more...</div>
-			                    </td>
-			                </tr>
+				                <tr className="row2">
+				                    <td className="exclamationHolder">
+				                        <div className="exclamation"></div>
+				                    </td>
+				                    <td colSpan="3">
+				                        <div className="description">{studyGroup.description}</div>
+				                        <div className="seeMore" onClick={this.openGroupDetailDialog} >See more...</div>
+				                    </td>
+				                </tr>
 
-			                <tr className="row3">
-			                    <td className="pinHolder">
-			                        <div className="pin"></div>
-			                    </td>
-			                    <td colSpan="2">
-			                        <div className="location">{studyGroup.location}</div>
-			                    </td>
-			                </tr>
+				                <tr className="row3">
+				                    <td className="pinHolder">
+				                        <div className="pin"></div>
+				                    </td>
+				                    <td colSpan="2">
+				                        <div className="location">{studyGroup.location}</div>
+				                    </td>
+				                </tr>
 
-			                <tr className="row4">
-			                    <td></td>
-			                    <td colSpan="1"><span className="host">@{studyGroup.host}</span>
-			                    </td>
-			                    <td colSpan="2">
-			                        <div style={{textAlign:"right"}} className="joinButtonContainer">
-			                            <RaisedButton onClick={this.joinLeaveGroup.bind(this, {joinText})} label={joinText}/>
-			                        </div>
-			                    </td>
-			                    <td>
-			                        <div className="capacityHolder">
-			                            <div className="capacity">{studyGroup.guestlist}/{studyGroup.capacity}</div>
-			                        </div>
-			                    </td>
-			                </tr>
-			            </table>
+				                <tr className="row4">
+				                    <td></td>
+				                    <td colSpan="1"><span className="host">@{studyGroup.host}</span>
+				                    </td>
+				                    <td colSpan="2">
+				                        <div style={{textAlign:"right"}} className="joinButtonContainer">
+				                            <RaisedButton onClick={this.joinLeaveGroup.bind(this, {joinText})} label={joinText}/>
+				                        </div>
+				                    </td>
+				                    <td>
+				                        <div className="capacityHolder">
+				                            <div className="capacity">{studyGroup.guestlist}/{studyGroup.capacity}</div>
+				                        </div>
+				                    </td>
+				                </tr>
+				        	</tbody>
+				        </table>
 			        </div>
 		        </Paper>
 	    	</div>

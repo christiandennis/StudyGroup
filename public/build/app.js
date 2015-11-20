@@ -49375,7 +49375,7 @@ var LeftBar = React.createClass({displayName: "LeftBar",
 			React.createElement("div", null, 
 				React.createElement(SideBar, {ref: "leftNav", docked: false}, 
 					React.createElement(MenuItem, {index: 0, style: {textAlign:"center"}}, "Hi, ", this.props.user.name, "!"), 
-					React.createElement(MenuItem, {index: 1, style: {textAlign:"center", marginBottom:"20px"} }, React.createElement("span", {onClick: this.myProfile}, React.createElement(Avatar, {size: "120"}, " ", this.props.user.name.slice(0,1), " "))), 
+					React.createElement(MenuItem, {index: 1, style: {textAlign:"center", marginBottom:"20px"} }, React.createElement("span", {onClick: this.myProfile}, React.createElement(Avatar, {size: 120}, " ", this.props.user.name.slice(0,1), " "))), 
 					React.createElement("span", {onClick: this.myGroups}, "  ", React.createElement(MenuItem, {index: 2}, "My Groups"), " "), 
 	  				React.createElement("span", {onClick: this.editProfile}, " ", React.createElement(MenuItem, {index: 3}, "Edit Profile"), " "), 
 	  				React.createElement("span", {onClick: this.logout}, "  ", React.createElement(MenuItem, {index: 4}, "Log Out"), "  ")
@@ -49567,62 +49567,64 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 		        React.createElement(Paper, {zDepth: 3, className: "card-container"}, 
 			        React.createElement("div", {className: "card studyGroup"}, 
 			            React.createElement("div", {className: color}), 
-			            React.createElement("table", null, 
-			                React.createElement("tr", {className: "row1"}, 
-			                    React.createElement("td", {className: "userPhotoHolder"}, 
-			                        React.createElement("div", {className: "photoHolder"}, 
-			                            React.createElement("div", {className: "circle"}, 
-			                                React.createElement(Avatar, {size: "120"}, " ", studyGroup.host.slice(0,1), " ")
-			                            )
-			                        )
+				            React.createElement("table", null, 
+				            	React.createElement("tbody", null, 
+				                React.createElement("tr", {className: "row1"}, 
+				                    React.createElement("td", {className: "userPhotoHolder"}, 
+				                        React.createElement("div", {className: "photoHolder"}, 
+				                            React.createElement("div", {className: "circle"}, 
+				                                React.createElement(Avatar, {size: 120}, " ", studyGroup.host.slice(0,1), " ")
+				                            )
+				                        )
 
-			                    ), 
-			                    React.createElement("td", {colSpan: "2"}, 
-			                        React.createElement("span", {className: "subject"}, studyGroup.subject, ":"), 
-			                        React.createElement("span", {className: "title"}, studyGroup.title)
-			                    ), 
+				                    ), 
+				                    React.createElement("td", {colSpan: "2"}, 
+				                        React.createElement("span", {className: "subject"}, studyGroup.subject, ":"), 
+				                        React.createElement("span", {className: "title"}, studyGroup.title)
+				                    ), 
 
-			                    React.createElement("td", {colSpan: "2", align: "right", className: "dateTimeHolder"}, 
-			                        React.createElement("div", {className: "date"}, date), 
-			                        React.createElement("div", {className: "time"}, time)
-			                    )
-			                ), 
+				                    React.createElement("td", {colSpan: "2", align: "right", className: "dateTimeHolder"}, 
+				                        React.createElement("div", {className: "date"}, date), 
+				                        React.createElement("div", {className: "time"}, time)
+				                    )
+				                ), 
 
-			                React.createElement("tr", {className: "row2"}, 
-			                    React.createElement("td", {className: "exclamationHolder"}, 
-			                        React.createElement("div", {className: "exclamation"})
-			                    ), 
-			                    React.createElement("td", {colSpan: "3"}, 
-			                        React.createElement("div", {className: "description"}, studyGroup.description), 
-			                        React.createElement("div", {className: "seeMore", onClick: this.openGroupDetailDialog}, "See more...")
-			                    )
-			                ), 
+				                React.createElement("tr", {className: "row2"}, 
+				                    React.createElement("td", {className: "exclamationHolder"}, 
+				                        React.createElement("div", {className: "exclamation"})
+				                    ), 
+				                    React.createElement("td", {colSpan: "3"}, 
+				                        React.createElement("div", {className: "description"}, studyGroup.description), 
+				                        React.createElement("div", {className: "seeMore", onClick: this.openGroupDetailDialog}, "See more...")
+				                    )
+				                ), 
 
-			                React.createElement("tr", {className: "row3"}, 
-			                    React.createElement("td", {className: "pinHolder"}, 
-			                        React.createElement("div", {className: "pin"})
-			                    ), 
-			                    React.createElement("td", {colSpan: "2"}, 
-			                        React.createElement("div", {className: "location"}, studyGroup.location)
-			                    )
-			                ), 
+				                React.createElement("tr", {className: "row3"}, 
+				                    React.createElement("td", {className: "pinHolder"}, 
+				                        React.createElement("div", {className: "pin"})
+				                    ), 
+				                    React.createElement("td", {colSpan: "2"}, 
+				                        React.createElement("div", {className: "location"}, studyGroup.location)
+				                    )
+				                ), 
 
-			                React.createElement("tr", {className: "row4"}, 
-			                    React.createElement("td", null), 
-			                    React.createElement("td", {colSpan: "1"}, React.createElement("span", {className: "host"}, "@", studyGroup.host)
-			                    ), 
-			                    React.createElement("td", {colSpan: "2"}, 
-			                        React.createElement("div", {style: {textAlign:"right"}, className: "joinButtonContainer"}, 
-			                            React.createElement(RaisedButton, {onClick: this.joinLeaveGroup.bind(this, {joinText:joinText}), label: joinText})
-			                        )
-			                    ), 
-			                    React.createElement("td", null, 
-			                        React.createElement("div", {className: "capacityHolder"}, 
-			                            React.createElement("div", {className: "capacity"}, studyGroup.guestlist, "/", studyGroup.capacity)
-			                        )
-			                    )
-			                )
-			            )
+				                React.createElement("tr", {className: "row4"}, 
+				                    React.createElement("td", null), 
+				                    React.createElement("td", {colSpan: "1"}, React.createElement("span", {className: "host"}, "@", studyGroup.host)
+				                    ), 
+				                    React.createElement("td", {colSpan: "2"}, 
+				                        React.createElement("div", {style: {textAlign:"right"}, className: "joinButtonContainer"}, 
+				                            React.createElement(RaisedButton, {onClick: this.joinLeaveGroup.bind(this, {joinText:joinText}), label: joinText})
+				                        )
+				                    ), 
+				                    React.createElement("td", null, 
+				                        React.createElement("div", {className: "capacityHolder"}, 
+				                            React.createElement("div", {className: "capacity"}, studyGroup.guestlist, "/", studyGroup.capacity)
+				                        )
+				                    )
+				                )
+				        	)
+				        )
 			        )
 		        )
 	    	)
@@ -49685,8 +49687,6 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 		if (time.getTime() && date.getDate()) {
 			var time_epoch = this.calculateTimeEpoch(time.getTime(), date.getDate());
 			var time_now = new Date().getTime() / 1000;
-			console.log('time epoch', time_epoch);
-			console.log('time now', time_now);
 			if (time_epoch > time_now){
 				return true;
 			} else {
@@ -50218,8 +50218,6 @@ var NewGroupDialog = React.createClass({displayName: "NewGroupDialog",
 		if (time.getTime() && date.getDate()) {
 			var time_epoch = this.calculateTimeEpoch(time.getTime(), date.getDate());
 			var time_now = new Date().getTime() / 1000;
-			console.log('time epoch', time_epoch);
-			console.log('time now', time_now);
 			if (time_epoch > time_now){
 				return true;
 			} else {
@@ -50805,11 +50803,9 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 	                options: masonryOptions, 
 	                disableImagesLoaded: false}, 
 					this.props.studyGroups.map(function(studyGroup, i)  {
-					    return ( 
-					    		React.createElement(Card_MainGroupView, {studyGroup: studyGroup, user: this.props.user})
-					    		);
+					    return ( React.createElement(Card_MainGroupView, {studyGroup: studyGroup, user: this.props.user, key: studyGroup.id}));
 					}.bind(this))
-				)			
+				)		
 			);
 		}
 	}
