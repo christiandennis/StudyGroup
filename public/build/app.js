@@ -49716,14 +49716,14 @@ var AllComments = React.createClass({displayName: "AllComments",
 		}
 
 		if (this.props.studyGroup.comments){
-			var comments = this.props.studyGroup.comments;
+			var comments = this.props.studyGroup.commentsData;
+			console.log('the comments', comments);
 			return (
 				React.createElement("div", null, 
 					comments.map(function(comment, i)  {
 						return (
 
-							React.createElement(Paper, {zDepth: 2, 
-						    style: {paddingTop:"20px", marginTop:"30px"}}, 
+							React.createElement(Paper, {zDepth: 2, style: {paddingTop:"20px", marginTop:"30px"}, key: comment.id}, 
 
 						    	React.createElement("div", {ref: "commentBox", className: "groupdesc-comment"}, comment.content)
 						    
@@ -49739,18 +49739,17 @@ var AllComments = React.createClass({displayName: "AllComments",
 
 var Comments = React.createClass ({displayName: "Comments",
 	componentDidMount: function() {
-		StudyGroupStore.fetchComments(studyGroup.id);	
-		setInterval(function() {StudyGroupStore.fetchStudyGroups();} , refreshInterval);
+		StudyGroupStore.fetchComments(this.props.studyGroup.id);	
 	},
 
 	render:function(){
-		if (this.props.studyGroup.comments!=null) {
+		if (this.props.studyGroup && this.props.studyGroup.commentsData!=null) {
 			return (
 				React.createElement("div", null, 
 					React.createElement(AltContainer, {store: StudyGroupStore}, 
 
 						React.createElement("div", {ref: "commentTitle", className: "groupdesc-comment-title", style: {paddingBottom:"20px"}}, "Comments"), 
-						React.createElement(AllComments, null), 
+						React.createElement(AllComments, {studyGroup: this.props.studyGroup}), 
 						React.createElement(TextField, {
 					    hintText: "New Comment"})
 
@@ -50048,7 +50047,9 @@ var GroupDetailDialog = React.createClass({displayName: "GroupDetailDialog",
 
 		var date = this.getDateString(studyGroup.date);
 		var time = this.getTimeString(studyGroup.date);
-
+		if(!this.props.studyGroup) {
+			return (React.createElement("div", null));
+		}
 		if (user.nickname === studyGroup.host) {
 			return (
 				React.createElement("div", null, 
@@ -50085,11 +50086,9 @@ var GroupDetailDialog = React.createClass({displayName: "GroupDetailDialog",
 
 					    	React.createElement(FlatButton, {label: "Edit", onClick: this.openEditGroupDialog})
 
-					    )
-					), 
-
-					React.createElement(Comments, {studyGroup: studyGroup})
-					
+					    ), 
+					    React.createElement(Comments, {studyGroup: studyGroup})
+					)
 				)
 			);
 		} else {
@@ -50123,12 +50122,9 @@ var GroupDetailDialog = React.createClass({displayName: "GroupDetailDialog",
 
 					    	React.createElement("div", {className: "groupdesc-title"}, "Description"), 
 					    	React.createElement("div", {ref: "groupdetailDescription", className: "groupdesc-subtitle"}, studyGroup.description)
-					    )
-
-					), 
-
-					React.createElement(Comments, {studyGroup: studyGroup})
-
+					    ), 
+					    React.createElement(Comments, {studyGroup: studyGroup})
+					)
 				)
 			)
 		}
@@ -51468,7 +51464,7 @@ var StudyGroupSource = {
 		return {
 			remote:function(state, groupID){
 				return new Promise(function(resolve, reject){
-					// console.log('--------------JOIN OR LEAVE GROUP--------------');
+					console.log('--------------COMMENTS--------------');
 				    $.ajax({ url: '/comments/' + groupID.toString(),
 				        type: 'GET',
 				        headers: {
@@ -51478,14 +51474,15 @@ var StudyGroupSource = {
 		  						},
 				        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
 				        success: function(data, status, xhr) {
-				        	// console.log('__SUCCESS__');
-					        // console.log('data' ,data);
+				        	console.log('__SUCCESS__');
+					        console.log('data' ,data);
 					        var comment = {
 					        					"comments": data.comments,
 					        					"groupID": groupID,
 					        				};
+					        console.log('comments', comment);
 					        resolve(comment);
-					        // console.log('**************ENDJOIN OR LEAVE GROUP**************');
+					        console.log('**************ENDJOIN OR LEAVE GROUP**************');
 				        },
 				        error: function(response) {
 				        	// console.log('__FAILED__');
@@ -51565,8 +51562,10 @@ const moment = require('moment');
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleFetchComments",{writable:true,configurable:true,value:function(data) {"use strict";
-
-		this.studyGroups[data.groupID].comments = data.comments;
+		console.log('data', data);
+		console.log('studygroup before', this.studyGroups[data.groupID]);
+		this.studyGroups[data.groupID].commentsData = data.comments;
+		console.log('studygroup after', this.studyGroups[data.groupID]);
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleFetchMyGroups",{writable:true,configurable:true,value:function(myGroups) {"use strict";

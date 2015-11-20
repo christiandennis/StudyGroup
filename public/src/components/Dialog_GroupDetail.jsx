@@ -39,7 +39,9 @@ var GroupDetailDialog = React.createClass({
 
 		var date = this.getDateString(studyGroup.date);
 		var time = this.getTimeString(studyGroup.date);
-
+		if(!this.props.studyGroup) {
+			return (<div></div>);
+		}
 		if (user.nickname === studyGroup.host) {
 			return (
 				<div>
@@ -77,10 +79,8 @@ var GroupDetailDialog = React.createClass({
 					    	<FlatButton label="Edit" onClick={this.openEditGroupDialog}/>
 
 					    </Paper>
+					    <Comments studyGroup={studyGroup}/>
 					</Dialog>
-
-					<Comments studyGroup={studyGroup}/>
-					
 				</div>
 			);
 		} else {
@@ -115,11 +115,8 @@ var GroupDetailDialog = React.createClass({
 					    	<div className="groupdesc-title">Description</div>
 					    	<div ref="groupdetailDescription" className="groupdesc-subtitle">{studyGroup.description}</div>
 					    </Paper>
-
+					    <Comments studyGroup={studyGroup}/>
 					</Dialog>
-
-					<Comments studyGroup={studyGroup}/>
-
 				</div>
 			)
 		}

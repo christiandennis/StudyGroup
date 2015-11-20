@@ -56,14 +56,14 @@ var AllComments = React.createClass({
 		}
 
 		if (this.props.studyGroup.comments){
-			var comments = this.props.studyGroup.comments;
+			var comments = this.props.studyGroup.commentsData;
+			console.log('the comments', comments);
 			return (
 				<div>
 					{comments.map((comment, i) => {
 						return (
 
-							<Paper zDepth={2}
-						    style = {{paddingTop:"20px", marginTop:"30px"}}>
+							<Paper zDepth={2} style = {{paddingTop:"20px", marginTop:"30px"}} key={comment.id}>
 
 						    	<div ref="commentBox" className="groupdesc-comment">{comment.content}</div>
 						    
@@ -79,18 +79,17 @@ var AllComments = React.createClass({
 
 var Comments = React.createClass ({
 	componentDidMount: function() {
-		StudyGroupStore.fetchComments(studyGroup.id);	
-		setInterval(function() {StudyGroupStore.fetchStudyGroups();} , refreshInterval);
+		StudyGroupStore.fetchComments(this.props.studyGroup.id);	
 	},
 
 	render(){
-		if (this.props.studyGroup.comments!=null) {
+		if (this.props.studyGroup && this.props.studyGroup.commentsData!=null) {
 			return (
 				<div>
 					<AltContainer store = {StudyGroupStore}>
 
 						<div ref="commentTitle" className="groupdesc-comment-title" style={{paddingBottom:"20px"}}>Comments</div>
-						<AllComments/>
+						<AllComments studyGroup={this.props.studyGroup}/>
 						<TextField
 					    hintText="New Comment"/>
 
