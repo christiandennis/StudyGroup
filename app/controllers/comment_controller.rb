@@ -42,11 +42,12 @@ class CommentController < ApplicationController
 			render json: {'status'=>-1,'errors'=>error_messages}, status: 400
 		else
 			@comment = Comment.new(comment_params.merge(:userid=> current_user.id))
-			
+			@group.comments << @comment
+			current_user.comments << @comment
+			current_user.save
 			if @comment.save
-				@group.comments.append(@comment.id)
 				@group.save
-				render json: {'status' => 1, 'comment' => @comment}
+				render json: {'status' => 1, 'comment' => @comment, 'current_user' => current_user}
 				return
 			end
 			render json: {'status'=> -1, 'errors' => error_messages}, status: 400

@@ -23,6 +23,12 @@ before_filter :configure_sign_up_params, only: [:create]
       error_messages << 'Please enter an email'
     end
 
+    @user = User.find_by_email(email)
+      if !@user.nil?
+        status = -1
+        error_messages << "Email is already taken."
+      end
+
     if password.nil? || password.length==0
       status = -1
       error_messages << 'Please enter a password'
