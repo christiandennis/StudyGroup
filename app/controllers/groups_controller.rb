@@ -88,6 +88,27 @@ class GroupsController < ApplicationController
 		render json: {'status'=>1,'groups' => @groups}
 	end
 
+	def deletewithid
+		#based on school/user
+		# what to initially show
+		status = 1 #intially set status to OK
+		error_messages = [] #List of all errors
+		groupid = params[:id]
+		@group = Group.find(groupid)
+		if @group.host != current_user.nickname
+			status = -1
+			error_messages << "You are not the host"
+		end
+
+		if not @group.nil?
+			render json: {'status'=>-1,'errors' => ['group not found']}
+		end
+
+		if status ==1
+			render json: {'status' ==> status}
+
+	end
+
 	#TODO: Order displayed_groups by date
 	def usergroups
 		render json: {'status'=>1,'groups' => current_user.groups} 
