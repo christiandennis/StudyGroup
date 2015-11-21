@@ -50075,6 +50075,7 @@ const SideBar = require('material-ui/lib/left-nav');
 const MenuItem = require('material-ui/lib/menu/menu-item');
 const Avatar = require('material-ui/lib/avatar');
 const Snackbar = require('material-ui/lib/snackbar');
+const IconButton = require('material-ui/lib/icon-button');
 
 // custom material ui theme
 const ThemeManager = require('material-ui/lib/styles/theme-manager');
@@ -50177,6 +50178,11 @@ var TopBar = React.createClass({displayName: "TopBar",
         }
     },
 
+    refresh:function() {
+    	StudyGroupStore.fetchStudyGroups();	
+    	StudyGroupStore.fetchMyGroups();
+    },
+
 	render:function() {
 		if (this.props.user) {
 			return (
@@ -50184,12 +50190,22 @@ var TopBar = React.createClass({displayName: "TopBar",
                 	React.createElement("div", {style: {zIndex:"1000", paddingBottom:"64px"}}, 
 						React.createElement(Sticky, null, 
 							React.createElement(AppBar, {
-							  title: "StudyGroup", 
-							  style: {
-							    backgroundColor: '#0D47A1 !important',
-							  }, 
-							  iconElementRight: React.createElement(FlatButton, {label: "New StudyGroup", onClick: this.dialogNewGroup}), 
-							  onLeftIconButtonTouchTap: this.openLeft})
+							  	title: "StudyGroup", 
+							  	style: {
+							    	backgroundColor: '#0D47A1 !important',
+							  	}, 
+							  	onLeftIconButtonTouchTap: this.openLeft}, 
+							  		React.createElement(IconButton, {iconClassName: "material-icons", 
+							  					style: {height:'inherit'}, 
+							  					iconStyle: {fontSize:'24px', color:'rgba(255, 255, 255, 1)'}, 
+							  					tooltip: "Refresh", 
+							  					onClick: this.refresh}, "refresh"), 
+							  		React.createElement(IconButton, {iconClassName: "material-icons", 
+							  					style: {height:'inherit'}, 
+							  					iconStyle: {fontSize:'24px', color:'rgba(255, 255, 255, 1)'}, 
+							  					tooltip: "Create New Group", 
+							  					onClick: this.dialogNewGroup}, "add")
+							  	)
 						)
                 	), 
                     
@@ -50228,7 +50244,7 @@ var TopBar = React.createClass({displayName: "TopBar",
 
 module.exports = TopBar;
 
-},{"../stores/StudyGroupStore":409,"../themes/AppBarTheme.js":410,"../themes/LeftBarTheme.js":411,"./Dialog_LogIn.jsx":401,"./Dialog_MyGroups.jsx":402,"./Dialog_NewGroup.jsx":403,"./Dialog_Profile.jsx":404,"./Dialog_SignUp.jsx":405,"./LandingPage.jsx":406,"alt/AltContainer":1,"material-ui/lib/app-bar":56,"material-ui/lib/avatar":57,"material-ui/lib/flat-button":81,"material-ui/lib/left-nav":84,"material-ui/lib/menu/menu-item":90,"material-ui/lib/snackbar":105,"material-ui/lib/styles/theme-manager":113,"react":389,"react-addons-test-utils":163,"react-dom":166,"react-router":203,"react-sticky":210}],397:[function(require,module,exports){
+},{"../stores/StudyGroupStore":409,"../themes/AppBarTheme.js":410,"../themes/LeftBarTheme.js":411,"./Dialog_LogIn.jsx":401,"./Dialog_MyGroups.jsx":402,"./Dialog_NewGroup.jsx":403,"./Dialog_Profile.jsx":404,"./Dialog_SignUp.jsx":405,"./LandingPage.jsx":406,"alt/AltContainer":1,"material-ui/lib/app-bar":56,"material-ui/lib/avatar":57,"material-ui/lib/flat-button":81,"material-ui/lib/icon-button":83,"material-ui/lib/left-nav":84,"material-ui/lib/menu/menu-item":90,"material-ui/lib/snackbar":105,"material-ui/lib/styles/theme-manager":113,"react":389,"react-addons-test-utils":163,"react-dom":166,"react-router":203,"react-sticky":210}],397:[function(require,module,exports){
 // React, react-reouter, alt
 var React = require('react');
 var render = require('react-dom').render;

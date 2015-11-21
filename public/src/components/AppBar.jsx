@@ -23,6 +23,7 @@ const SideBar = require('material-ui/lib/left-nav');
 const MenuItem = require('material-ui/lib/menu/menu-item');
 const Avatar = require('material-ui/lib/avatar');
 const Snackbar = require('material-ui/lib/snackbar');
+const IconButton = require('material-ui/lib/icon-button');
 
 // custom material ui theme
 const ThemeManager = require('material-ui/lib/styles/theme-manager');
@@ -125,6 +126,11 @@ var TopBar = React.createClass({
         }
     },
 
+    refresh() {
+    	StudyGroupStore.fetchStudyGroups();	
+    	StudyGroupStore.fetchMyGroups();
+    },
+
 	render() {
 		if (this.props.user) {
 			return (
@@ -132,12 +138,22 @@ var TopBar = React.createClass({
                 	<div style={{zIndex:"1000", paddingBottom:"64px"}}>
 						<Sticky>
 							<AppBar
-							  title="StudyGroup" 
-							  style = {{
-							    backgroundColor: '#0D47A1 !important',
-							  }}
-							  iconElementRight={<FlatButton label="New StudyGroup" onClick={this.dialogNewGroup}/>}
-							  onLeftIconButtonTouchTap={this.openLeft}/>
+							  	title="StudyGroup" 
+							  	style = {{
+							    	backgroundColor: '#0D47A1 !important',
+							  	}}
+							  	onLeftIconButtonTouchTap={this.openLeft}>
+							  		<IconButton iconClassName="material-icons" 
+							  					style={{height:'inherit'}}
+							  					iconStyle={{fontSize:'24px', color:'rgba(255, 255, 255, 1)'}} 
+							  					tooltip="Refresh"
+							  					onClick={this.refresh}>refresh</IconButton>
+							  		<IconButton iconClassName="material-icons" 
+							  					style={{height:'inherit'}}
+							  					iconStyle={{fontSize:'24px', color:'rgba(255, 255, 255, 1)'}} 
+							  					tooltip="Create New Group"
+							  					onClick={this.dialogNewGroup}>add</IconButton>
+							  	</AppBar>
 						</Sticky>
                 	</div>
                     
