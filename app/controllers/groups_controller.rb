@@ -64,7 +64,7 @@ class GroupsController < ApplicationController
 		if status == 1
 			@group = Group.new(group_params.merge(:school=> current_user.school))
 			@group.guestlist+=1
-			@group.going = @group.going + ' '+@name.nickname.to_s + ' '
+			@group.users << current_user
 			if @group.save
 				render json: {'status' => 1, 'group' => @group}
 			end
@@ -85,30 +85,20 @@ class GroupsController < ApplicationController
 		#based on school/user
 		# what to initially show
 		@groups = Group.where("lower(school) = ? ", current_user.school.downcase).order("date")
-		@user = current_user
-
 		render json: {'status'=>1,'groups' => @groups}
 	end
 
 	#TODO: Order displayed_groups by date
 	def usergroups
-		@groups = Group.all.order("date")
-		@user = current_user
-		
-		id_formatted = ' '+@user.nickname.to_s+' '
-		displayed_groups = []
-
-		for group in @groups
-			if group.going.include? id_formatted
-				displayed_groups.push(group)
-			end 
-		end 
-		render json: {'status'=>1,'groups' => displayed_groups} 
+		render json: {'status'=>1,'groups' => current_user.groups} 
 	end
 
-	def delete
+
+	#TODO only host can destroy own group
+	def destroy
 		@group = Group.find(params[:id])
 		@group.destroy
+		render json: {'status'=>1,'group'=>'Destroyed group'}
 	end
 
 
@@ -122,8 +112,6 @@ class GroupsController < ApplicationController
 
 		@group = nil
 		@user = current_user
-
-		id_formatted = id_formatted = ' '+@user.nickname.to_s+' '
 
 		if act.nil?
 			status = -1
@@ -147,18 +135,15 @@ class GroupsController < ApplicationController
 		end
 
 		if act == 'add'
-			if not @group.going.include? id_formatted
-				@group.going = @group.going+id_formatted
+			if not @group.users.include? current_user
+				@group.users << current_user
 				@group.guestlist+=1
 			end	
 		else #remove
-			going = @group.going
-
-			if going.include? id_formatted and @group.guestlist>0
+			if @group.users.include? current_user and @group.guestlist>0 and current_user.nickname!=@group.host
 				@group.guestlist-=1
 			end
-			going.slice! id_formatted
-			@group.going = going
+			@group.users.delete(current_user)
 		end
 
 		@group.save
