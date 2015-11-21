@@ -11,7 +11,6 @@ const Dialog = require('material-ui/lib/dialog');
 const FlatButton = require('material-ui/lib/flat-button');
 const DatePicker = require('material-ui/lib/date-picker/date-picker');
 const TimePicker = require('material-ui/lib/time-picker/time-picker');
-const Checkbox = require('material-ui/lib/checkbox');
 const Snackbar = require('material-ui/lib/snackbar');
 const moment = require('moment');
 
@@ -36,10 +35,6 @@ var NewGroupDialog = React.createClass({
 		var location = this.refs.createGroupLocation;
 		var capacity = 	this.refs.createGroupCapacity;
 		var privacy = 0;
-
-		if (this.refs.createGroupPrivacy.isChecked()){
-			privacy = 1;
-		}
 
 		var newGroupDialog = this.refs.newGroupDialog;
 		var failedSnackbar = this.refs.createGroupFailedSnackbar;

@@ -113,12 +113,12 @@ var MainGroupViewCard = React.createClass({
 					        </div>
 					        <div className='row2'>
 					        	<div className='column11 noBlur'>
-					        		<FontIcon className="material-icons centerVertical" style={{fontSize:'48px', color:'grey'}}>bookmark_border</FontIcon>
+					        		<FontIcon className="material-icons centerVertical" style={{fontSize:'48px', color:'grey'}}>info_outline</FontIcon>
 					        	</div>
 					        	<div className='column22 noBlur'>
 					        		<div className="description centerVertical">
 						        		{studyGroup.description}
-						        		<div className="seeMore" onClick={this.openGroupDetailDialog} >See more...</div>
+						        		<div className="seeMore" onClick={this.openGroupDetailDialog} >See More...</div>
 					        		</div>
 					        	</div>
 					        </div>
