@@ -50073,12 +50073,12 @@ const AppBar = require('material-ui/lib/app-bar');
 const FlatButton = require('material-ui/lib/flat-button');
 const SideBar = require('material-ui/lib/left-nav');
 const MenuItem = require('material-ui/lib/menu/menu-item');
-const ThemeManager = require('material-ui/lib/styles/theme-manager');
 const Avatar = require('material-ui/lib/avatar');
 const Snackbar = require('material-ui/lib/snackbar');
 
 // custom material ui theme
-const MyRawTheme = require('material-ui/lib/styles/raw-themes/light-raw-theme.js');
+const ThemeManager = require('material-ui/lib/styles/theme-manager');
+const LeftBarTheme = require('../themes/LeftBarTheme.js');
 const AppBarTheme = require('../themes/AppBarTheme.js');
 
 // sticky headers
@@ -50134,6 +50134,15 @@ var LeftBar = React.createClass({displayName: "LeftBar",
 
 var TopBar = React.createClass({displayName: "TopBar",
 	mixins: [History],
+	childContextTypes : {
+	    muiTheme: React.PropTypes.object,
+	},
+
+	getChildContext:function() {
+	    return {
+	      	muiTheme: ThemeManager.getMuiTheme(LeftBarTheme),
+	    };
+	},
 	
 	dialogLogin:function() {
 		// this.refs.loginDialog.refs.loginDialog.show();
@@ -50167,19 +50176,6 @@ var TopBar = React.createClass({displayName: "TopBar",
 
         }
     },
-
-    // THEME
-	childContextTypes : {
-	    muiTheme: React.PropTypes.object,
-	  },
-
-	  getChildContext:function() {
-	    return {
-	      muiTheme: ThemeManager.getMuiTheme(MyRawTheme),
-	    };
-	  },
-
-// END THEME
 
 	render:function() {
 		if (this.props.user) {
@@ -50232,7 +50228,7 @@ var TopBar = React.createClass({displayName: "TopBar",
 
 module.exports = TopBar;
 
-},{"../stores/StudyGroupStore":409,"../themes/AppBarTheme.js":410,"./Dialog_LogIn.jsx":401,"./Dialog_MyGroups.jsx":402,"./Dialog_NewGroup.jsx":403,"./Dialog_Profile.jsx":404,"./Dialog_SignUp.jsx":405,"./LandingPage.jsx":406,"alt/AltContainer":1,"material-ui/lib/app-bar":56,"material-ui/lib/avatar":57,"material-ui/lib/flat-button":81,"material-ui/lib/left-nav":84,"material-ui/lib/menu/menu-item":90,"material-ui/lib/snackbar":105,"material-ui/lib/styles/raw-themes/light-raw-theme.js":110,"material-ui/lib/styles/theme-manager":113,"react":389,"react-addons-test-utils":163,"react-dom":166,"react-router":203,"react-sticky":210}],397:[function(require,module,exports){
+},{"../stores/StudyGroupStore":409,"../themes/AppBarTheme.js":410,"../themes/LeftBarTheme.js":411,"./Dialog_LogIn.jsx":401,"./Dialog_MyGroups.jsx":402,"./Dialog_NewGroup.jsx":403,"./Dialog_Profile.jsx":404,"./Dialog_SignUp.jsx":405,"./LandingPage.jsx":406,"alt/AltContainer":1,"material-ui/lib/app-bar":56,"material-ui/lib/avatar":57,"material-ui/lib/flat-button":81,"material-ui/lib/left-nav":84,"material-ui/lib/menu/menu-item":90,"material-ui/lib/snackbar":105,"material-ui/lib/styles/theme-manager":113,"react":389,"react-addons-test-utils":163,"react-dom":166,"react-router":203,"react-sticky":210}],397:[function(require,module,exports){
 // React, react-reouter, alt
 var React = require('react');
 var render = require('react-dom').render;
@@ -50809,7 +50805,7 @@ var GroupDetailDialog = React.createClass({displayName: "GroupDetailDialog",
 					  		autoDetectWindowHeight: true, 
 					  		autoScrollBodyContent: true}, 
 					    React.createElement(Paper, {zDepth: 2, 
-					    style: {paddingTop:"20px"}}, 
+					    style: {padding:"30px"}}, 
 					    	React.createElement("div", {className: "groupdesc-title"}, "Class"), 
 					    	React.createElement("div", {ref: "groupdetailClass", className: "groupdesc-subtitle"}, studyGroup.subject), 
 
@@ -50848,7 +50844,7 @@ var GroupDetailDialog = React.createClass({displayName: "GroupDetailDialog",
 					  		autoDetectWindowHeight: true, 
 					  		autoScrollBodyContent: true}, 
 					    React.createElement(Paper, {zDepth: 2, 
-					    style: {paddingTop:"20px", paddingBottom:"20px"}}, 
+					    style: {padding:"30px"}}, 
 					    	React.createElement("div", {className: "groupdesc-title"}, "Class"), 
 					    	React.createElement("div", {ref: "groupdetailClass", className: "groupdesc-subtitle"}, studyGroup.subject), 
 
@@ -50964,7 +50960,12 @@ var ReactTestUtils = require('react-addons-test-utils');
 const Paper = require('material-ui/lib/paper');
 const Dialog = require('material-ui/lib/dialog');
 const FlatButton = require('material-ui/lib/flat-button');
+const List = require('material-ui/lib/lists/list');
+const ListItem = require('material-ui/lib/lists/list-item');
+const ListDivider = require('material-ui/lib/lists/list-divider');
+
 const moment = require('moment');
+
 
 var injectTapEventPlugin = require("react-tap-event-plugin");
 injectTapEventPlugin();
@@ -50992,8 +50993,8 @@ var AllSimpleGroup = React.createClass({displayName: "AllSimpleGroup",
 				  	var date = this.getDateString(myGroup.date);
 					var time = this.getTimeString(myGroup.date);
 				    return (
-				    	React.createElement("div", {key: myGroup.id}, 
-		    		        React.createElement(Paper, null, 
+				    	React.createElement("div", {key: myGroup.id, 
+		    		        style: {backgroundColor:"rgba(0, 0, 0, .5)", marginBottom:"30px"}}, 
 		    		        	React.createElement("div", {className: "groupdesc-title"}, "Class"), 
 		    		        	React.createElement("div", {className: "groupdesc-subtitle"}, myGroup.subject), 
 
@@ -51008,13 +51009,12 @@ var AllSimpleGroup = React.createClass({displayName: "AllSimpleGroup",
 
 		    		        	React.createElement("div", {className: "groupdesc-title"}, "Location"), 
 		    		        	React.createElement("div", {className: "groupdesc-subtitle"}, myGroup.location)
-		    		        )
 				    	)
 				    );
 				}.bind(this))
 			  	
 			)
-		)
+		);
 	}
 });
 
@@ -51034,15 +51034,10 @@ var MyGroups = React.createClass ({displayName: "MyGroups",
 			return (
 				React.createElement("div", null, 
 					React.createElement(Dialog, {ref: "myGroupsDialog", 
+							bodyStyle: {background:"linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('campanile.jpg') no-repeat",
+										backgroundSize:'cover'}, 
 							autoDetectWindowHeight: true, 
-	  						autoScrollBodyContent: true, 
-	  						modal: true, 
-	  						actions: [
-									  React.createElement(FlatButton, {
-									    label: "Dismiss", 
-									    secondary: true, 
-									    onTouchTap: this.closeMygroupsDialog}),
-								  	]}, 
+	  						autoScrollBodyContent: true}, 
 						React.createElement(AltContainer, {store: StudyGroupStore}, 
 							React.createElement(AllSimpleGroup, null)
 						)
@@ -51059,7 +51054,7 @@ var MyGroups = React.createClass ({displayName: "MyGroups",
 
 module.exports = MyGroups;
 
-},{"../actions/StudyGroupActions":393,"../stores/StudyGroupStore":409,"alt/AltContainer":1,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/paper":99,"moment":160,"react":389,"react-addons-test-utils":163,"react-dom":166,"react-tap-event-plugin":214}],403:[function(require,module,exports){
+},{"../actions/StudyGroupActions":393,"../stores/StudyGroupStore":409,"alt/AltContainer":1,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/lists/list":87,"material-ui/lib/lists/list-divider":85,"material-ui/lib/lists/list-item":86,"material-ui/lib/paper":99,"moment":160,"react":389,"react-addons-test-utils":163,"react-dom":166,"react-tap-event-plugin":214}],403:[function(require,module,exports){
 // React, react-reouter, alt
 var React = require('react');
 var render = require('react-dom').render;
@@ -51312,7 +51307,20 @@ const Dialog = require('material-ui/lib/dialog');
 const FlatButton = require('material-ui/lib/flat-button');
 const Paper = require('material-ui/lib/paper');
 
+const ThemeManager = require('material-ui/lib/styles/theme-manager');
+const MyProfileTheme = require('../themes/MyProfileTheme.js');
+
 var ProfileDialog = React.createClass({displayName: "ProfileDialog",
+	childContextTypes : {
+	    muiTheme: React.PropTypes.object,
+	},
+
+	getChildContext:function() {
+	    return {
+	      	muiTheme: ThemeManager.getMuiTheme(MyProfileTheme),
+	    };
+	},
+
 	cancelProfile:function() {
 		this.refs.profileDialog.dismiss();
 	},
@@ -51320,28 +51328,17 @@ var ProfileDialog = React.createClass({displayName: "ProfileDialog",
 	render:function() {
 		return (
 			React.createElement(Dialog, {ref: "profileDialog", 
-					title: "My Profile", 
-					actions: [
-						  React.createElement(FlatButton, {
-						    label: "Dismiss", 
-						    secondary: true, 
-						    onTouchTap: this.cancelProfile}),
-						  ], 
+					bodyStyle: {background:"linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('books.jpg') no-repeat"}, 
 					onShow: this.viewProfileShow, 
 					style: {textAlign:"center"}, 
 			  		autoDetectWindowHeight: true, 
 			  		autoScrollBodyContent: true}, 
-			    React.createElement(Paper, {
-			    zDepth: 2, 
-			    rounded: true, 
-			    style: {backgroundColor:"white"}}, 
 			    	React.createElement("div", {className: "profile-box", 
 			    	style: {paddingTop:"50px", paddingBottom:"50px"}}, 
-				    	React.createElement("div", {style: {fontWeight:"bold", fontSize:"30px", paddingBottom:"20px"}, ref: "profileName"}, this.props.user.name), 
-				    	React.createElement("div", {ref: "profileEmail", className: "prof-email", style: {paddingBottom:"20px"}}, this.props.user.email), 
-				    	React.createElement("div", {style: {fontWeight:"100", fontSize:"15px", textAlign:"right", paddingRight:"20px", bottom:"0"}, ref: "profileClass", className: "prof-class"}, this.props.user.school)
+				    	React.createElement("div", {style: {fontWeight:"bold", fontSize:"30px", paddingBottom:"20px", color:"#FFFFFF"}, ref: "profileName"}, this.props.user.name), 
+				    	React.createElement("div", {ref: "profileEmail", className: "prof-email", style: {paddingBottom:"20px", color:"#FFFFFF"}}, this.props.user.email), 
+				    	React.createElement("div", {style: {fontWeight:"100", fontSize:"15px", textAlign:"right", paddingRight:"20px", bottom:"0", color:"#FFFFFF"}, ref: "profileClass", className: "prof-class"}, this.props.user.school)
 			    	)
-			    )
 			)
 		)
 	}
@@ -51349,7 +51346,7 @@ var ProfileDialog = React.createClass({displayName: "ProfileDialog",
 
 module.exports = ProfileDialog;
 
-},{"../stores/StudyGroupStore":409,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/paper":99,"material-ui/lib/text-field":126,"react":389,"react-dom":166,"react-router":203}],405:[function(require,module,exports){
+},{"../stores/StudyGroupStore":409,"../themes/MyProfileTheme.js":412,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/paper":99,"material-ui/lib/styles/theme-manager":113,"material-ui/lib/text-field":126,"react":389,"react-dom":166,"react-router":203}],405:[function(require,module,exports){
 // React, react-reouter, alt
 var React = require('react');
 var render = require('react-dom').render;
@@ -52498,6 +52495,64 @@ module.exports = {
     accent2Color: Colors.grey100,
     accent3Color: Colors.grey500,
     textColor: Colors.darkBlack,
+    alternateTextColor: Colors.white,
+    canvasColor: '#D9E7FC',
+    borderColor: Colors.grey300,
+    disabledColor: ColorManipulator.fade(Colors.darkBlack, 0.3)
+  }
+};
+
+},{"material-ui/lib/styles/colors":107,"material-ui/lib/styles/spacing":111,"material-ui/lib/utils/color-manipulator":145}],411:[function(require,module,exports){
+'use strict';
+
+let Colors = require('material-ui/lib/styles/colors');
+let ColorManipulator = require('material-ui/lib/utils/color-manipulator');
+let Spacing = require('material-ui/lib/styles/spacing');
+
+/*
+ *  Light Theme is the default theme used in material-ui. It is guaranteed to
+ *  have all theme variables needed for every component. Variables not defined
+ *  in a custom theme will default to these values.
+ */
+
+module.exports = {
+  spacing: Spacing,
+  fontFamily: 'Roboto, sans-serif',
+  palette: {
+    primary1Color: Colors.cyan500,
+    primary2Color: Colors.cyan700,
+    primary3Color: Colors.lightBlack,
+    accent1Color: Colors.pinkA200,
+    accent2Color: Colors.grey100,
+    accent3Color: Colors.grey500,
+    textColor: Colors.darkBlack,
+    alternateTextColor: Colors.white,
+    canvasColor: Colors.white,
+    borderColor: Colors.grey300,
+    disabledColor: ColorManipulator.fade(Colors.darkBlack, 0.3)
+  }
+};
+
+},{"material-ui/lib/styles/colors":107,"material-ui/lib/styles/spacing":111,"material-ui/lib/utils/color-manipulator":145}],412:[function(require,module,exports){
+'use strict';
+
+let Colors = require('material-ui/lib/styles/colors');
+let ColorManipulator = require('material-ui/lib/utils/color-manipulator');
+let Spacing = require('material-ui/lib/styles/spacing');
+
+//#0D47A1 !important
+
+module.exports = {
+  spacing: Spacing,
+  fontFamily: 'Roboto, sans-serif',
+  palette: {
+    primary1Color: Colors.cyan500,
+    primary2Color: Colors.cyan700,
+    primary3Color: Colors.lightBlack,
+    accent1Color: Colors.pinkA200,
+    accent2Color: Colors.grey100,
+    accent3Color: Colors.grey500,
+    textColor: Colors.white,
     alternateTextColor: Colors.white,
     canvasColor: '#D9E7FC',
     borderColor: Colors.grey300,

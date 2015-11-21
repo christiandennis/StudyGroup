@@ -10,7 +10,12 @@ var ReactTestUtils = require('react-addons-test-utils');
 const Paper = require('material-ui/lib/paper');
 const Dialog = require('material-ui/lib/dialog');
 const FlatButton = require('material-ui/lib/flat-button');
+const List = require('material-ui/lib/lists/list');
+const ListItem = require('material-ui/lib/lists/list-item');
+const ListDivider = require('material-ui/lib/lists/list-divider');
+
 const moment = require('moment');
+
 
 var injectTapEventPlugin = require("react-tap-event-plugin");
 injectTapEventPlugin();
@@ -38,8 +43,8 @@ var AllSimpleGroup = React.createClass({
 				  	var date = this.getDateString(myGroup.date);
 					var time = this.getTimeString(myGroup.date);
 				    return (
-				    	<div key={myGroup.id}>
-		    		        <Paper>
+				    	<div key={myGroup.id}
+		    		        style={{backgroundColor:"rgba(0, 0, 0, .5)", marginBottom:"30px"}}>
 		    		        	<div className="groupdesc-title">Class</div>
 		    		        	<div className="groupdesc-subtitle">{myGroup.subject}</div>
 
@@ -54,13 +59,12 @@ var AllSimpleGroup = React.createClass({
 
 		    		        	<div className="groupdesc-title">Location</div>
 		    		        	<div className="groupdesc-subtitle">{myGroup.location}</div>
-		    		        </Paper>
 				    	</div>
 				    );
 				})
 			  	}
 			</div>
-		)
+		);
 	}
 });
 
@@ -80,15 +84,10 @@ var MyGroups = React.createClass ({
 			return (
 				<div>
 					<Dialog ref="myGroupsDialog"
+							bodyStyle={{background:"linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('campanile.jpg') no-repeat",
+										backgroundSize:'cover'}}
 							autoDetectWindowHeight={true}
-	  						autoScrollBodyContent={true}
-	  						modal={true}
-	  						actions={[
-									  <FlatButton
-									    label="Dismiss"
-									    secondary={true}
-									    onTouchTap={this.closeMygroupsDialog} />,
-								  	]}>
+	  						autoScrollBodyContent={true}>
 						<AltContainer store = {StudyGroupStore}>
 							<AllSimpleGroup/>
 						</AltContainer>

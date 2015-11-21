@@ -21,12 +21,12 @@ const AppBar = require('material-ui/lib/app-bar');
 const FlatButton = require('material-ui/lib/flat-button');
 const SideBar = require('material-ui/lib/left-nav');
 const MenuItem = require('material-ui/lib/menu/menu-item');
-const ThemeManager = require('material-ui/lib/styles/theme-manager');
 const Avatar = require('material-ui/lib/avatar');
 const Snackbar = require('material-ui/lib/snackbar');
 
 // custom material ui theme
-const MyRawTheme = require('material-ui/lib/styles/raw-themes/light-raw-theme.js');
+const ThemeManager = require('material-ui/lib/styles/theme-manager');
+const LeftBarTheme = require('../themes/LeftBarTheme.js');
 const AppBarTheme = require('../themes/AppBarTheme.js');
 
 // sticky headers
@@ -82,6 +82,15 @@ var LeftBar = React.createClass({
 
 var TopBar = React.createClass({
 	mixins: [History],
+	childContextTypes : {
+	    muiTheme: React.PropTypes.object,
+	},
+
+	getChildContext() {
+	    return {
+	      	muiTheme: ThemeManager.getMuiTheme(LeftBarTheme),
+	    };
+	},
 	
 	dialogLogin() {
 		// this.refs.loginDialog.refs.loginDialog.show();
@@ -115,19 +124,6 @@ var TopBar = React.createClass({
 
         }
     },
-
-    // THEME
-	childContextTypes : {
-	    muiTheme: React.PropTypes.object,
-	  },
-
-	  getChildContext() {
-	    return {
-	      muiTheme: ThemeManager.getMuiTheme(MyRawTheme),
-	    };
-	  },
-
-// END THEME
 
 	render() {
 		if (this.props.user) {
