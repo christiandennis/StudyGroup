@@ -27,7 +27,7 @@ const Snackbar = require('material-ui/lib/snackbar');
 
 // custom material ui theme
 const MyRawTheme = require('material-ui/lib/styles/raw-themes/light-raw-theme.js');
-const MyRawTheme2 = require('material-ui/lib/styles/raw-themes/sidebar-theme.js');
+const AppBarTheme = require('../themes/AppBarTheme.js');
 
 // sticky headers
 const Sticky = require('react-sticky');
@@ -41,7 +41,7 @@ var LeftBar = React.createClass({
 
 	getChildContext() {
 		return {
-		  muiTheme: ThemeManager.getMuiTheme(MyRawTheme2)
+		  muiTheme: ThemeManager.getMuiTheme(AppBarTheme)
 		};
 	},
 
