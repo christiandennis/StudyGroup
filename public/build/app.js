@@ -14187,9 +14187,9 @@ module.exports = {
     accent1Color: Colors.pinkA200,
     accent2Color: Colors.grey100,
     accent3Color: Colors.grey500,
-    textColor: Colors.white,
-    alternateTextColor: Colors.white,
-    canvasColor: '#0D47A1 !important',
+    textColor: Colors.lightBlack,
+    alternateTextColor: Colors.lightBlack,
+    canvasColor: '#D9E7FC',
     borderColor: Colors.grey300,
     disabledColor: ColorManipulator.fade(Colors.darkBlack, 0.3)
   }
@@ -50140,7 +50140,7 @@ var LeftBar = React.createClass({displayName: "LeftBar",
 	},
 
 	logout:function() {
-		StudyGroupStore.signOut(this.props.user.uid, this.props.user.accesstoken, this.props.user.client, this.history);
+		StudyGroupStore.signOut(this.history);
 	},
 
 	render:function() {
@@ -50166,9 +50166,9 @@ var TopBar = React.createClass({displayName: "TopBar",
 	mixins: [History],
 	
 	dialogLogin:function() {
-		// this.refs.loginDialog.refs.loginDialog.show();
+		this.refs.loginDialog.refs.loginDialog.show();
 		// BYPASS LOGIN FOR TESTING
-		StudyGroupStore.fetchUser( 'papa@gmail.com', 'iopiopiop', this.history, this.refs.loginDialog);
+		// StudyGroupStore.fetchUser( 'papa@gmail.com', 'iopiopiop', this.history, this.refs.loginDialog);
 	},
 
 	dialogSignUp:function() {
@@ -50335,6 +50335,9 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 		// }
 		else if (studyGroup.guestlist === studyGroup.capacity) {
 			return 'Full';
+		}
+		else {
+			return 'Join';
 		}
 	},
 
@@ -50836,7 +50839,7 @@ var GroupDetailDialog = React.createClass({displayName: "GroupDetailDialog",
 					  		autoDetectWindowHeight: true, 
 					  		autoScrollBodyContent: true}, 
 					    React.createElement(Paper, {zDepth: 2, 
-					    style: {paddingTop:"20px"}}, 
+					    style: {padding:"30px"}}, 
 					    	React.createElement("div", {className: "groupdesc-title"}, "Class"), 
 					    	React.createElement("div", {ref: "groupdetailClass", className: "groupdesc-subtitle"}, studyGroup.subject), 
 
@@ -50875,7 +50878,7 @@ var GroupDetailDialog = React.createClass({displayName: "GroupDetailDialog",
 					  		autoDetectWindowHeight: true, 
 					  		autoScrollBodyContent: true}, 
 					    React.createElement(Paper, {zDepth: 2, 
-					    style: {paddingTop:"20px", paddingBottom:"20px"}}, 
+					    style: {padding:"30px"}}, 
 					    	React.createElement("div", {className: "groupdesc-title"}, "Class"), 
 					    	React.createElement("div", {ref: "groupdetailClass", className: "groupdesc-subtitle"}, studyGroup.subject), 
 
@@ -50991,7 +50994,12 @@ var ReactTestUtils = require('react-addons-test-utils');
 const Paper = require('material-ui/lib/paper');
 const Dialog = require('material-ui/lib/dialog');
 const FlatButton = require('material-ui/lib/flat-button');
+const List = require('material-ui/lib/lists/list');
+const ListItem = require('material-ui/lib/lists/list-item');
+const ListDivider = require('material-ui/lib/lists/list-divider');
+
 const moment = require('moment');
+
 
 var injectTapEventPlugin = require("react-tap-event-plugin");
 injectTapEventPlugin();
@@ -51014,13 +51022,14 @@ var AllSimpleGroup = React.createClass({displayName: "AllSimpleGroup",
 
 	render:function() {
 		return 	(
-			React.createElement("div", null, 
+			React.createElement(List, null, 
 			  	this.props.myGroups.map(function(myGroup, i)  {
 				  	var date = this.getDateString(myGroup.date);
 					var time = this.getTimeString(myGroup.date);
 				    return (
 				    	React.createElement("div", {key: myGroup.id}, 
-		    		        React.createElement(Paper, null, 
+		    		        React.createElement(ListItem, {
+		    		        style: {backgroundColor:"white", marginBottom:"30px"}}, 
 		    		        	React.createElement("div", {className: "groupdesc-title"}, "Class"), 
 		    		        	React.createElement("div", {className: "groupdesc-subtitle"}, myGroup.subject), 
 
@@ -51086,7 +51095,7 @@ var MyGroups = React.createClass ({displayName: "MyGroups",
 
 module.exports = MyGroups;
 
-},{"../actions/StudyGroupActions":394,"../stores/StudyGroupStore":410,"alt/AltContainer":1,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/paper":99,"moment":161,"react":390,"react-addons-test-utils":164,"react-dom":167,"react-tap-event-plugin":215}],404:[function(require,module,exports){
+},{"../actions/StudyGroupActions":394,"../stores/StudyGroupStore":410,"alt/AltContainer":1,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/lists/list":87,"material-ui/lib/lists/list-divider":85,"material-ui/lib/lists/list-item":86,"material-ui/lib/paper":99,"moment":161,"react":390,"react-addons-test-utils":164,"react-dom":167,"react-tap-event-plugin":215}],404:[function(require,module,exports){
 // React, react-reouter, alt
 var React = require('react');
 var render = require('react-dom').render;
@@ -51347,7 +51356,6 @@ var ProfileDialog = React.createClass({displayName: "ProfileDialog",
 	render:function() {
 		return (
 			React.createElement(Dialog, {ref: "profileDialog", 
-					title: "My Profile", 
 					actions: [
 						  React.createElement(FlatButton, {
 						    label: "Dismiss", 
@@ -51915,9 +51923,9 @@ var StudyGroupSource = {
 	// ==================================================
 	signOut:function() {
 		return {
-		  remote:function(state, uid, accesstoken, client, history) { 
+		  remote:function(state, history) { 
 		    return new Promise(function (resolve, reject) {
-		    		console.log('--------------SIGN OUT--------------');
+		    		// console.log('--------------SIGN OUT--------------');
 		      	$.ajax({ url: '/auth/sign_out',
       	      type: 'DELETE',
       	      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
@@ -52271,7 +52279,7 @@ var StudyGroupSource = {
 		return {
 			remote:function(state, groupID, content){
 				return new Promise(function(resolve, reject){
-					console.log('--------------POST COMMENTS--------------');
+					// console.log('--------------POST COMMENTS--------------');
 				    $.ajax({ url: '/comment',
 				        type: 'POST',
 				        headers: {
@@ -52291,13 +52299,13 @@ var StudyGroupSource = {
 					        // console.log('comments', comment);
 					        resolve(data.comment);
 					        content.setValue("");
-					        console.log('**************END POST COMMENTS**************');
+					        // console.log('**************END POST COMMENTS**************');
 				        },
 				        error: function(response) {
 				        	// console.log('__FAILED__');
 				          	// console.log('response' ,response);
 				          	// reject('fetch group FAILED');
-				          	console.log('**************END POST COMMENTS**************');
+				          	// console.log('**************END POST COMMENTS**************');
 				        }
 				    })
 				})

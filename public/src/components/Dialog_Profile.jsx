@@ -19,7 +19,6 @@ var ProfileDialog = React.createClass({
 	render() {
 		return (
 			<Dialog ref="profileDialog" 
-					title="My Profile" 
 					actions={[
 						  <FlatButton
 						    label="Dismiss"

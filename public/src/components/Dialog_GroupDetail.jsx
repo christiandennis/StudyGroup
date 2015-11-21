@@ -54,7 +54,7 @@ var GroupDetailDialog = React.createClass({
 					  		autoDetectWindowHeight={true} 
 					  		autoScrollBodyContent={true}>
 					    <Paper zDepth={2}
-					    style = {{paddingTop:"20px"}}>
+					    style = {{padding:"30px"}}>
 					    	<div className="groupdesc-title">Class</div>
 					    	<div ref="groupdetailClass" className="groupdesc-subtitle">{studyGroup.subject}</div>
 
@@ -93,7 +93,7 @@ var GroupDetailDialog = React.createClass({
 					  		autoDetectWindowHeight={true} 
 					  		autoScrollBodyContent={true}>
 					    <Paper zDepth={2}
-					    style = {{paddingTop:"20px", paddingBottom:"20px"}}>
+					    style = {{padding:"30px"}}>
 					    	<div className="groupdesc-title">Class</div>
 					    	<div ref="groupdetailClass" className="groupdesc-subtitle">{studyGroup.subject}</div>
 

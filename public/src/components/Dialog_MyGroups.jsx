@@ -10,7 +10,12 @@ var ReactTestUtils = require('react-addons-test-utils');
 const Paper = require('material-ui/lib/paper');
 const Dialog = require('material-ui/lib/dialog');
 const FlatButton = require('material-ui/lib/flat-button');
+const List = require('material-ui/lib/lists/list');
+const ListItem = require('material-ui/lib/lists/list-item');
+const ListDivider = require('material-ui/lib/lists/list-divider');
+
 const moment = require('moment');
+
 
 var injectTapEventPlugin = require("react-tap-event-plugin");
 injectTapEventPlugin();
@@ -33,13 +38,14 @@ var AllSimpleGroup = React.createClass({
 
 	render() {
 		return 	(
-			<div>
+			<List>
 			  	{this.props.myGroups.map((myGroup, i) => {
 				  	var date = this.getDateString(myGroup.date);
 					var time = this.getTimeString(myGroup.date);
 				    return (
 				    	<div key={myGroup.id}>
-		    		        <Paper>
+		    		        <ListItem
+		    		        style={{backgroundColor:"white", marginBottom:"30px"}}>
 		    		        	<div className="groupdesc-title">Class</div>
 		    		        	<div className="groupdesc-subtitle">{myGroup.subject}</div>
 
@@ -54,12 +60,12 @@ var AllSimpleGroup = React.createClass({
 
 		    		        	<div className="groupdesc-title">Location</div>
 		    		        	<div className="groupdesc-subtitle">{myGroup.location}</div>
-		    		        </Paper>
+		    		        </ListItem>
 				    	</div>
 				    );
 				})
 			  	}
-			</div>
+			</List>
 		)
 	}
 });
