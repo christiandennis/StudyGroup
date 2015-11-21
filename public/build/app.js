@@ -49919,9 +49919,9 @@ var TopBar = React.createClass({displayName: "TopBar",
 	},
 	
 	dialogLogin:function() {
-		// this.refs.loginDialog.refs.loginDialog.show();
+		this.refs.loginDialog.refs.loginDialog.show();
 		// BYPASS LOGIN FOR TESTING
-		StudyGroupStore.fetchUser( 'papa@gmail.com', 'iopiopiop', this.history, this.refs.loginDialog);
+		// StudyGroupStore.fetchUser( 'papa@gmail.com', 'iopiopiop', this.history, this.refs.loginDialog);
 	},
 
 	dialogSignUp:function() {
@@ -50238,7 +50238,7 @@ var AllComments = React.createClass({displayName: "AllComments",
 		}
 
 		if (this.props.studyGroup.comments){
-			var comments = this.props.studyGroup.commentsData;
+			var comments = this.props.studyGroup.comments;
 			return (
 				React.createElement("div", null, 
 					comments.map(function(comment, i)  {
@@ -50269,7 +50269,7 @@ var Comments = React.createClass ({displayName: "Comments",
 	},
 
 	render:function(){
-		if (this.props.studyGroup && this.props.studyGroup.commentsData!=null) {
+		if (this.props.studyGroup && this.props.studyGroup.comments!=null) {
 			return (
 				React.createElement("div", null, 
 						React.createElement("div", {ref: "commentTitle", className: "groupdesc-comment-title", style: {marginTop:"20px"}}, "Comments"), 
@@ -51498,7 +51498,7 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 var StudyGroups = React.createClass ({displayName: "StudyGroups",
 	componentDidMount: function() {
 		StudyGroupStore.fetchStudyGroups();	
-		// setInterval(function() {StudyGroupStore.fetchStudyGroups();} , refreshInterval);
+		setInterval(function() {StudyGroupStore.fetchStudyGroups();} , 3000);
 	},
 
 	render:function(){

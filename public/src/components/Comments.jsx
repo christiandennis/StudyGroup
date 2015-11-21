@@ -59,7 +59,7 @@ var AllComments = React.createClass({
 		}
 
 		if (this.props.studyGroup.comments){
-			var comments = this.props.studyGroup.commentsData;
+			var comments = this.props.studyGroup.comments;
 			return (
 				<div>
 					{comments.map((comment, i) => {
@@ -90,7 +90,7 @@ var Comments = React.createClass ({
 	},
 
 	render(){
-		if (this.props.studyGroup && this.props.studyGroup.commentsData!=null) {
+		if (this.props.studyGroup && this.props.studyGroup.comments!=null) {
 			return (
 				<div>
 						<div ref="commentTitle" className="groupdesc-comment-title" style={{marginTop:"20px"}}>Comments</div>
