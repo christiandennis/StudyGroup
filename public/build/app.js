@@ -51814,7 +51814,7 @@ var StudyGroupSource = {
       	  	  		        	data.data.uid = xhr.getResponseHeader('uid');
       	  	  		          	// console.log('data' ,data.data);
       	  	  	          	resolve(data.data);
-      	  	  	          	setTimeout(function() {history.pushState(null, '/studygroupapp');}, 15);
+      	  	  	          	setTimeout(function() {history.pushState(null, '/studygroupapp');}, 50);
       	  	  	          	// loginDialog.dismiss();
       	  	  	          	// console.log('**************END LOGIN**************');
       	  	  		        },
@@ -51929,7 +51929,7 @@ var StudyGroupSource = {
       	      success: function(response) {
       	      	// console.log('__SUCCESS__');
 	      	  	  // console.log('response:' ,response);
-      	        window.location.href = URL;
+      	        window.location.href = '/';
       	        // history.pushState(null, '/');
       	        // console.log('**************END SIGN OUT**************');
       	      },
@@ -51938,7 +51938,7 @@ var StudyGroupSource = {
       	      	// User was not found or was not logged in.
 	      	  	  // console.log('response:' ,response.responseJSON);
 	      	  	  if (response.responseJSON.errors[0] === 'User was not found or was not logged in.') {
-	      	  	  	window.location.href = URL;
+	      	  	  	window.location.href = '/';
 	      	  	  }
 	      	  	  // console.log('**************END SIGN OUT**************');
       	      }

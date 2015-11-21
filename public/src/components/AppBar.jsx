@@ -58,7 +58,7 @@ var LeftBar = React.createClass({
 	},
 
 	logout() {
-		StudyGroupStore.signOut(this.props.user.uid, this.props.user.accesstoken, this.props.user.client, this.history);
+		StudyGroupStore.signOut(this.history);
 	},
 
 	render() {

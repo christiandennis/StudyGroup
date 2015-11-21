@@ -54,7 +54,7 @@ var StudyGroupSource = {
       	  	  		        	data.data.uid = xhr.getResponseHeader('uid');
       	  	  		          	// console.log('data' ,data.data);
       	  	  	          	resolve(data.data);
-      	  	  	          	setTimeout(function() {history.pushState(null, '/studygroupapp');}, 15);
+      	  	  	          	setTimeout(function() {history.pushState(null, '/studygroupapp');}, 50);
       	  	  	          	// loginDialog.dismiss();
       	  	  	          	// console.log('**************END LOGIN**************');
       	  	  		        },
@@ -155,9 +155,9 @@ var StudyGroupSource = {
 	// ==================================================
 	signOut() {
 		return {
-		  remote(state, uid, accesstoken, client, history) { 
+		  remote(state, history) { 
 		    return new Promise(function (resolve, reject) {
-		    		console.log('--------------SIGN OUT--------------');
+		    		// console.log('--------------SIGN OUT--------------');
 		      	$.ajax({ url: '/auth/sign_out',
       	      type: 'DELETE',
       	      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
@@ -169,7 +169,7 @@ var StudyGroupSource = {
       	      success: function(response) {
       	      	// console.log('__SUCCESS__');
 	      	  	  // console.log('response:' ,response);
-      	        window.location.href = URL;
+      	        window.location.href = '/';
       	        // history.pushState(null, '/');
       	        // console.log('**************END SIGN OUT**************');
       	      },
@@ -178,7 +178,7 @@ var StudyGroupSource = {
       	      	// User was not found or was not logged in.
 	      	  	  // console.log('response:' ,response.responseJSON);
 	      	  	  if (response.responseJSON.errors[0] === 'User was not found or was not logged in.') {
-	      	  	  	window.location.href = URL;
+	      	  	  	window.location.href = '/';
 	      	  	  }
 	      	  	  // console.log('**************END SIGN OUT**************');
       	      }
@@ -511,7 +511,7 @@ var StudyGroupSource = {
 		return {
 			remote(state, groupID, content){
 				return new Promise(function(resolve, reject){
-					console.log('--------------POST COMMENTS--------------');
+					// console.log('--------------POST COMMENTS--------------');
 				    $.ajax({ url: '/comment',
 				        type: 'POST',
 				        headers: {
@@ -531,13 +531,13 @@ var StudyGroupSource = {
 					        // console.log('comments', comment);
 					        resolve(data.comment);
 					        content.setValue("");
-					        console.log('**************END POST COMMENTS**************');
+					        // console.log('**************END POST COMMENTS**************');
 				        },
 				        error: function(response) {
 				        	// console.log('__FAILED__');
 				          	// console.log('response' ,response);
 				          	// reject('fetch group FAILED');
-				          	console.log('**************END POST COMMENTS**************');
+				          	// console.log('**************END POST COMMENTS**************');
 				        }
 				    })
 				})
