@@ -170,53 +170,62 @@ var LoginDialog = React.createClass({
 		        		autoDetectWindowHeight={true} 
 		        		autoScrollBodyContent={true}>
 		          	<div>
-			         	<TextField
-			         		onEnterKeyDown = {this.submitEditGroupDetail}
-			         		onChange={this.validateGroupSubject}
-			         		ref = "editGroupSubject"
-			         	  	hintText="CS169"
-			         	  	defaultValue={studyGroup.subject}
-			         	  	floatingLabelText="Class" />
-			         	<TextField
-			         		onEnterKeyDown = {this.submitEditGroupDetail}
-				    		onChange={this.validateGroupTitle}
-			         		ref = "editGroupTitle"
-			         	  	hintText="Learn React together"
-			         	  	defaultValue={studyGroup.title}
-			         	  	floatingLabelText="Title" />
-			         	<TextField
-			         		onEnterKeyDown = {this.submitEditGroupDetail}
-				    		onChange={this.validateGroupDescription}
-			         		ref = "editGroupDescription"
-			         	  	hintText="Come and learn the basic (and some advanced) React together! REACT IS THE FUTURE!!!"
-			         	  	floatingLabelText="Description"
-			         	  	defaultValue={studyGroup.description}
-			         	  	fullWidth={true}
-			         	  	multiLine={true}/>
-			         	<DatePicker
-			         		ref = "editGroupDate"
-			         	  	hintText="Nov 22, 2015"
-			         	  	defaultDate={date}
-			         	  	floatingLabelText="Date"/>
-			         	<TimePicker
-			         		ref = "editGroupTime"
-			         	  	hintText="9:00 pm"
-			         	  	defaultTime={date}
-			         	  	floatingLabelText="Time"/>
-			         	<TextField
-			         		onEnterKeyDown = {this.submitEditGroupDetail}
-				    		onChange={this.validateGroupLocation}
-			         		ref = "editGroupLocation"
-			         	  	hintText="Wozniak Longue, Soda Hall"
-			         	  	defaultValue={studyGroup.location}
-			         	  	floatingLabelText="Location"/>
-			         	<TextField
-			         		onEnterKeyDown = {this.submitEditGroupDetail}
-				    		onChange={this.validateGroupCapacity}
-			         		ref = "editGroupCapacity"
-			         	  	hintText="20"
-			         	  	defaultValue={studyGroup.capacity}
-			         	  	floatingLabelText="Capacity"/>
+	         	    	<div style={{width:'35%', float:'left'}}><TextField
+	         	    		onEnterKeyDown = {this.submitNewGroup}
+	         	    		ref = "editGroupSubject"
+	         	    		onChange={this.validateGroupSubject}
+	         		    	hintText="CS169"
+	         		    	fullWidth={true}
+	         		    	defaultValue={studyGroup.subject}
+	         		    	floatingLabelText="Class" /></div>
+	         	    	<div style={{width:'65%', float:'left'}}><TextField
+	         	    		onEnterKeyDown = {this.submitNewGroup}
+	         	    		ref = "editGroupTitle"
+	         	    		onChange={this.validateGroupTitle}
+	         	    	  	hintText="Learn React together"
+	         	    	  	fullWidth={true}
+	         	    	  	defaultValue={studyGroup.title}
+	         	    	  	floatingLabelText="Title" /></div>
+	         	    	<TextField
+	         	    		onEnterKeyDown = {this.submitNewGroup}
+	         	    		onChange={this.validateGroupDescription}
+	         	    		ref = "editGroupDescription"
+	         	    	  	hintText="Come and learn the basic (and some advanced) React together! REACT IS THE FUTURE!!!"
+	         	    	  	floatingLabelText="Description"
+	         	    	  	fullWidth={true}
+	         	    	  	defaultValue={studyGroup.description}
+	         	    	  	multiLine={true}/>
+	         	    	<div style={{width:'35%', float:'left'}}><TimePicker
+	         	    		ref = "editGroupTime"
+	         	    	  	hintText="9:00 pm"
+	         	    	  	fullWidth={true}
+	         	    	  	autoOk={true}
+	         	    	  	defaultTime={date}
+	         	    	  	floatingLabelText="Time"/></div>
+	         	    	<div style={{width:'65%', float:'left'}}><DatePicker
+	         	    		ref = "editGroupDate"
+	         	    	  	hintText="Nov 22, 2015"
+	         	    	  	fullWidth={true}
+	         	    	  	autoOk={true}
+	         	    	  	defaultDate={date}
+	         	    	  	onDismiss={this.openTimePicker}
+	         	    	  	floatingLabelText="Date"/></div>
+	         	    	<div style={{width:'80%', float:'left'}}><TextField
+	         	    		onEnterKeyDown = {this.submitNewGroup}
+	         	    		onChange={this.validateGroupLocation}
+	         	    		ref = "editGroupLocation"
+	         	    	  	hintText="Wozniak Longue, Soda Hall"
+	         	    	  	fullWidth={true}
+	         	    	  	defaultValue={studyGroup.location}
+	         	    	  	floatingLabelText="Location"/></div>
+	         	    	<div style={{width:'20%', float:'left'}}><TextField
+	         	    		onEnterKeyDown = {this.submitNewGroup}
+	         	    		onChange={this.validateGroupCapacity}
+	         	    		ref = "editGroupCapacity"
+	         	    	  	hintText="20"
+	         	    	  	fullWidth={true}
+	         	    	  	defaultValue={studyGroup.capacity}
+	         	    	  	floatingLabelText="Capacity"/></div>
 		        	</div>
 		        </Dialog>
 

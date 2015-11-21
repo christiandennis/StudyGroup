@@ -171,18 +171,20 @@ var NewGroupDialog = React.createClass({
 				  		autoDetectWindowHeight={true} 
 				  		autoScrollBodyContent={true}>
 				    <div>
-				    	<TextField
+				    	<div style={{width:'35%', float:'left'}}><TextField
 				    		onEnterKeyDown = {this.submitNewGroup}
 				    		ref = "createGroupSubject"
 				    		onChange={this.validateGroupSubject}
 					    	hintText="CS169"
-					    	floatingLabelText="Class" />
-				    	<TextField
+					    	fullWidth={true}
+					    	floatingLabelText="Class" /></div>
+				    	<div style={{width:'65%', float:'left'}}><TextField
 				    		onEnterKeyDown = {this.submitNewGroup}
 				    		ref = "createGroupTitle"
 				    		onChange={this.validateGroupTitle}
 				    	  	hintText="Learn React together"
-				    	  	floatingLabelText="Title" />
+				    	  	fullWidth={true}
+				    	  	floatingLabelText="Title" /></div>
 				    	<TextField
 				    		onEnterKeyDown = {this.submitNewGroup}
 				    		onChange={this.validateGroupDescription}
@@ -191,32 +193,33 @@ var NewGroupDialog = React.createClass({
 				    	  	floatingLabelText="Description"
 				    	  	fullWidth={true}
 				    	  	multiLine={true}/>
-				    	<DatePicker
-				    		ref = "createGroupDate"
-				    	  	hintText="Nov 22, 2015"
-				    	  	onDismiss={this.openTimePicker}
-				    	  	floatingLabelText="Date"/>
-				    	<TimePicker
+				    	<div style={{width:'35%', float:'left'}}><TimePicker
 				    		ref = "createGroupTime"
 				    	  	hintText="9:00 pm"
-				    	  	floatingLabelText="Time"/>
-				    	<TextField
+				    	  	fullWidth={true}
+				    	  	autoOk={true}
+				    	  	floatingLabelText="Time"/></div>
+				    	<div style={{width:'65%', float:'left'}}><DatePicker
+				    		ref = "createGroupDate"
+				    	  	hintText="Nov 22, 2015"
+				    	  	fullWidth={true}
+				    	  	autoOk={true}
+				    	  	onDismiss={this.openTimePicker}
+				    	  	floatingLabelText="Date"/></div>
+				    	<div style={{width:'80%', float:'left'}}><TextField
 				    		onEnterKeyDown = {this.submitNewGroup}
 				    		onChange={this.validateGroupLocation}
 				    		ref = "createGroupLocation"
 				    	  	hintText="Wozniak Longue, Soda Hall"
-				    	  	floatingLabelText="Location"/>
-				    	<TextField
+				    	  	fullWidth={true}
+				    	  	floatingLabelText="Location"/></div>
+				    	<div style={{width:'20%', float:'left'}}><TextField
 				    		onEnterKeyDown = {this.submitNewGroup}
 				    		onChange={this.validateGroupCapacity}
 				    		ref = "createGroupCapacity"
 				    	  	hintText="20"
-				    	  	floatingLabelText="Capacity"/>
-				    	<Checkbox
-				    		ref = "createGroupPrivacy"
-				    	  	name="privacy"
-				    	  	value="private"
-				    	  	label="private"/>
+				    	  	fullWidth={true}
+				    	  	floatingLabelText="Capacity"/></div>
 				    </div>
 				</Dialog>
 
