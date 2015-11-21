@@ -71,6 +71,9 @@ var MainGroupViewCard = React.createClass({
 		else if (studyGroup.guestlist === studyGroup.capacity) {
 			return 'Full';
 		}
+		else {
+			return 'Join';
+		}
 	},
 
 	render() {
