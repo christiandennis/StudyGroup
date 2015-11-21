@@ -36,6 +36,9 @@ const CardHeader = require('material-ui/lib/card/card-header');
 const CardTitle = require('material-ui/lib/card/card-title');
 const CardActions = require('material-ui/lib/card/card-actions');
 const CardText = require('material-ui/lib/card/card-text');
+const List = require('material-ui/lib/lists/list');
+const ListItem = require('material-ui/lib/lists/list-item');
+const ListDivider = require('material-ui/lib/lists/list-divider');
 
 const moment = require('moment');
 
@@ -61,12 +64,13 @@ var AllComments = React.createClass({
 				<div>
 					{comments.map((comment, i) => {
 						return (
-
-							<Paper zDepth={2} style = {{paddingTop:"20px", marginTop:"30px"}} key={comment.id}>
-
-						    	<div ref="commentBox" className="groupdesc-comment">{comment.content}</div>
-						    
-						    </Paper>
+							<div>
+								<ListItem
+								    leftAvatar={<Avatar> {comment.title.slice(0,1)} </Avatar>}
+								    primaryText={comment.title}
+								    secondaryText={<p>{comment.content}</p>} />
+								<ListDivider/>
+							</div>
 						)
 					})}
 				</div>
@@ -85,9 +89,13 @@ var Comments = React.createClass ({
 		if (this.props.studyGroup && this.props.studyGroup.commentsData!=null) {
 			return (
 				<div>
-						<div ref="commentTitle" className="groupdesc-comment-title" style={{paddingBottom:"20px"}}>Comments</div>
-						<AllComments studyGroup={this.props.studyGroup}/>
-						<TextField hintText="New Comment"/>
+						<div ref="commentTitle" className="groupdesc-comment-title" style={{marginTop:"20px"}}>Comments</div>
+						<Paper>
+							<List>
+								<AllComments studyGroup={this.props.studyGroup}/>
+							</List>
+						</Paper>
+						<TextField hintText="New Comment"/> <FlatButton label="post"/>
 				</div>
 			);
 		}
