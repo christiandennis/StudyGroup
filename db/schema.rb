@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151121103655) do
+ActiveRecord::Schema.define(version: 20151121104356) do
 
   create_table "comments", force: :cascade do |t|
     t.string   "userid"
@@ -25,6 +25,11 @@ ActiveRecord::Schema.define(version: 20151121103655) do
   create_table "comments_groups", id: false, force: :cascade do |t|
     t.integer "comment_id", null: false
     t.integer "group_id",   null: false
+  end
+
+  create_table "comments_users", id: false, force: :cascade do |t|
+    t.integer "comment_id", null: false
+    t.integer "user_id",    null: false
   end
 
   create_table "groups", force: :cascade do |t|
