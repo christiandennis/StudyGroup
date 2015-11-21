@@ -62,17 +62,23 @@ var MainGroupViewCard = React.createClass({
 		return moment(d).format("ddd, MMM D").toString();
 	},
 
+	checkUserGoing(studyGroup, user) {
+		for (var i in studyGroup.users) {
+	     	if (studyGroup.users[i].id === user.id) {
+	       		return true;
+	     	}
+	   	}
+	   	return false;
+	},
+
 	getJoinText(studyGroup, user) {
 		if (studyGroup.host === user.nickname) {
 			return 'Dismiss';
-		} 
-		//else if(user.nickname in studyGroup.going) {
-		// 	joinText = 'Leave';
-		// }
-		else if (studyGroup.guestlist === studyGroup.capacity) {
+		} else if(this.checkUserGoing(studyGroup, user)) {
+			return 'Leave';
+		} else if (studyGroup.guestlist === studyGroup.capacity) {
 			return 'Full';
-		}
-		else {
+		} else {
 			return 'Join';
 		}
 	},

@@ -49919,9 +49919,9 @@ var TopBar = React.createClass({displayName: "TopBar",
 	},
 	
 	dialogLogin:function() {
-		// this.refs.loginDialog.refs.loginDialog.show();
+		this.refs.loginDialog.refs.loginDialog.show();
 		// BYPASS LOGIN FOR TESTING
-		StudyGroupStore.fetchUser( 'papa@gmail.com', 'iopiopiop', this.history, this.refs.loginDialog);
+		// StudyGroupStore.fetchUser( 'papa@gmail.com', 'iopiopiop', this.history, this.refs.loginDialog);
 	},
 
 	dialogSignUp:function() {
@@ -50082,17 +50082,23 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 		return moment(d).format("ddd, MMM D").toString();
 	},
 
+	checkUserGoing:function(studyGroup, user) {
+		for (var i in studyGroup.users) {
+	     	if (studyGroup.users[i].id === user.id) {
+	       		return true;
+	     	}
+	   	}
+	   	return false;
+	},
+
 	getJoinText:function(studyGroup, user) {
 		if (studyGroup.host === user.nickname) {
 			return 'Dismiss';
-		} 
-		//else if(user.nickname in studyGroup.going) {
-		// 	joinText = 'Leave';
-		// }
-		else if (studyGroup.guestlist === studyGroup.capacity) {
+		} else if(this.checkUserGoing(studyGroup, user)) {
+			return 'Leave';
+		} else if (studyGroup.guestlist === studyGroup.capacity) {
 			return 'Full';
-		}
-		else {
+		} else {
 			return 'Join';
 		}
 	},
