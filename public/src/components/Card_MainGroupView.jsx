@@ -13,6 +13,7 @@ const Dialog = require('material-ui/lib/dialog');
 const RaisedButton = require('material-ui/lib/raised-button');
 const Paper = require('material-ui/lib/paper');
 const Avatar = require('material-ui/lib/avatar');
+const FontIcon = require('material-ui/lib/font-icon');
 
 const moment = require('moment');
 
@@ -92,64 +93,60 @@ var MainGroupViewCard = React.createClass({
 		        <Paper zDepth={3} className="card-container">
 			        <div className="card studyGroup">
 			            <div className={color}></div>
-				            <table>
-				            	<tbody>
-				                <tr className="row1">
-				                    <td className="userPhotoHolder">
-				                        <div className="photoHolder">
-				                            <div className="circle">
-				                                <Avatar size={120}> {studyGroup.host.slice(0,1).toUpperCase()} </Avatar>
-				                            </div>
-				                        </div>
+			            <div className='cardContent'>
+					        <div className='row1'>
+					        	<div className='column11 noBlur'>
+					        		<Avatar size={70} className='centerVertical'> {studyGroup.host.slice(0,1).toUpperCase()} </Avatar>
+					        	</div>
+					        	<div className='column12'>
+					        		<div className='column121'>
+					        			<div className="subject">{studyGroup.subject}</div>
+					        		</div>
+					        		<div className='column122'>
+					        			<div className="title">{studyGroup.title}</div>
+					        		</div>
+					        	</div>
+					        	<div className='column13'>
+					        		<div className="date">{date}</div>
+                    				<div className="time">{time}</div>
+					        	</div>
+					        </div>
+					        <div className='row2'>
+					        	<div className='column11 noBlur'>
+					        		<FontIcon className="material-icons centerVertical" style={{fontSize:'48px', color:'grey'}}>info_outline</FontIcon>
+					        	</div>
+					        	<div className='column22 noBlur'>
+					        		<div className="description centerVertical">
+						        		{studyGroup.description}
+						        		<div className="seeMore" onClick={this.openGroupDetailDialog} >See More...</div>
+					        		</div>
+					        	</div>
+					        </div>
+					        <div className='row3'>
+					        	<div className='column11 noBlur'>
+					        		<FontIcon className="material-icons centerVertical" style={{fontSize:'48px', color:'grey'}} >map</FontIcon>
+					        	</div>
+					        	<div className='column32 noBlur'>
+					        		<div className="location centerVertical">{studyGroup.location}</div>
+					        	</div>
+					        </div>
+					        <div className='row4'>
+					        	<div className='column11'>
 
-				                    </td>
-				                    <td colSpan="2">
-				                        <span className="subject">{studyGroup.subject}:</span>
-				                        <span className="title">{studyGroup.title}</span>
-				                    </td>
-
-				                    <td colSpan="2" align="right" className="dateTimeHolder">
-				                        <div className="date">{date}</div>
-				                        <div className="time">{time}</div>
-				                    </td>
-				                </tr>
-
-				                <tr className="row2">
-				                    <td className="exclamationHolder">
-				                        <div className="exclamation"></div>
-				                    </td>
-				                    <td colSpan="3">
-				                        <div className="description">{studyGroup.description}</div>
-				                        <div className="seeMore" onClick={this.openGroupDetailDialog} >See more...</div>
-				                    </td>
-				                </tr>
-
-				                <tr className="row3">
-				                    <td className="pinHolder">
-				                        <div className="pin"></div>
-				                    </td>
-				                    <td colSpan="2">
-				                        <div className="location">{studyGroup.location}</div>
-				                    </td>
-				                </tr>
-
-				                <tr className="row4">
-				                    <td></td>
-				                    <td colSpan="1"><span className="host">@{studyGroup.host}</span>
-				                    </td>
-				                    <td colSpan="2">
-				                        <div style={{textAlign:"right"}} className="joinButtonContainer">
-				                            <RaisedButton onClick={this.joinLeaveGroup.bind(this, {joinText})} label={joinText}/>
-				                        </div>
-				                    </td>
-				                    <td>
-				                        <div className="capacityHolder">
-				                            <div className="capacity">{studyGroup.guestlist}/{studyGroup.capacity}</div>
-				                        </div>
-				                    </td>
-				                </tr>
-				        	</tbody>
-				        </table>
+					        	</div>
+					        	<div className='column42 noBlur'>
+					        		<div className="host centerVertical">@{studyGroup.host}</div>
+					        	</div>
+					        	<div className='column43 noBlur'>
+					        		<div className='centerVertical alignRight'>
+					        			<RaisedButton onClick={this.joinLeaveGroup.bind(this, {joinText})} label={joinText}/>
+					        		</div>
+					        	</div>
+					        	<div className='column44 noBlur'>
+					        		<div className="capacity centerVertical">{studyGroup.guestlist}/{studyGroup.capacity}</div>
+					        	</div>
+					        </div>
+					    </div>
 			        </div>
 		        </Paper>
 	    	</div>
