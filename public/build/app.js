@@ -50244,7 +50244,7 @@ var TopBar = React.createClass({displayName: "TopBar",
 		                position: 'fixed',
 		                marginBottom: '64px'
 		              }, 
-		              zDepth: "100", 
+		              zDepth: 5, 
 					  showMenuIconButton: false, 
 					  iconElementRight: React.createElement(FlatButton, {label: "Log In", onClick: this.dialogLogin})})
 				), 
@@ -50523,7 +50523,11 @@ var Comments = React.createClass ({displayName: "Comments",
 								React.createElement(AllComments, {studyGroup: this.props.studyGroup})
 							)
 						), 
-						React.createElement(TextField, {ref: "commentText", hintText: "New Comment", onEnterKeyDown: this.postComment}), " ", React.createElement(FlatButton, {label: "post", onClick: this.postComment})
+						React.createElement(TextField, {	ref: "commentText", 
+									hintText: "New Comment", 
+									onEnterKeyDown: this.postComment, 
+									multiLine: true, 
+									fullWidth: true}), " ", React.createElement(FlatButton, {label: "post", onClick: this.postComment})
 				)
 			);
 		}
@@ -50762,12 +50766,12 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
     			React.createElement(Snackbar, {
                		ref: "editGroupFailedSnackbar", 
                  	message: "Failed to edit group", 
-                 	autoHideDuration: "5000"}), 
+                 	autoHideDuration: 5000}), 
 
         		React.createElement(Snackbar, {
                		ref: "editGroupSuccessSnackbar", 
                  	message: "Group Edited", 
-                 	autoHideDuration: "5000"})
+                 	autoHideDuration: 5000})
 			)
 		)
 	}
@@ -50966,7 +50970,7 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 	    		React.createElement(Snackbar, {
 	           		ref: "loginFailedSnackbar", 
 	             	message: "Invalid login credentials", 
-	             	autoHideDuration: "5000"})
+	             	autoHideDuration: 5000})
             )
 		)
 	}
@@ -51012,8 +51016,8 @@ var AllSimpleGroup = React.createClass({displayName: "AllSimpleGroup",
 		return 	(
 			React.createElement("div", null, 
 			  	this.props.myGroups.map(function(myGroup, i)  {
-				  	var date = this.getDateString(studyGroup.date);
-					var time = this.getTimeString(studyGroup.date);
+				  	var date = this.getDateString(myGroup.date);
+					var time = this.getTimeString(myGroup.date);
 				    return (
 				    	React.createElement("div", {key: myGroup.id}, 
 		    		        React.createElement(Paper, null, 
@@ -51564,19 +51568,19 @@ var SignUpDialog = React.createClass({displayName: "SignUpDialog",
 				React.createElement(Snackbar, {
 		       		ref: "unavailableEmailSnackbar", 
 		         	message: "Email is registered", 
-		         	autoHideDuration: "5000"}), 
+		         	autoHideDuration: 5000}), 
 		        React.createElement(Snackbar, {
 		       		ref: "invalidEmailSnackbar", 
 		         	message: "Invalid email", 
-		         	autoHideDuration: "5000"}), 
+		         	autoHideDuration: 5000}), 
 		        React.createElement(Snackbar, {
 		       		ref: "unavailableUsernameSnackbar", 
 		         	message: "Username not available", 
-		         	autoHideDuration: "5000"}), 
+		         	autoHideDuration: 5000}), 
 		        React.createElement(Snackbar, {
 		       		ref: "failedSnackbar", 
 		         	message: "Signup failed", 
-		         	autoHideDuration: "5000"})
+		         	autoHideDuration: 5000})
 	        )
 		)
 	}
@@ -51587,12 +51591,6 @@ module.exports = SignUpDialog;
 },{"../stores/StudyGroupStore":410,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/snackbar":105,"material-ui/lib/text-field":127,"react":390,"react-dom":167,"react-router":204}],407:[function(require,module,exports){
 var React = require('react');
 var render = require('react-dom').render;
-var axios = require('axios');
-
-
-var AltContainer = require('alt/AltContainer');
-
-var AppBar = require('./AppBar.jsx');
 
 var LandingPage = React.createClass({displayName: "LandingPage",
 	render:function() {
@@ -51661,7 +51659,7 @@ var LandingPage = React.createClass({displayName: "LandingPage",
 
 module.exports = LandingPage;
 
-},{"./AppBar.jsx":397,"alt/AltContainer":1,"axios":17,"react":390,"react-dom":167}],408:[function(require,module,exports){
+},{"react":390,"react-dom":167}],408:[function(require,module,exports){
 // import react, react-router, alt
 var React = require('react');
 var render = require('react-dom').render;

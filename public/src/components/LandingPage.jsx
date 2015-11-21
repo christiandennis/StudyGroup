@@ -1,11 +1,5 @@
 var React = require('react');
 var render = require('react-dom').render;
-var axios = require('axios');
-
-
-var AltContainer = require('alt/AltContainer');
-
-var AppBar = require('./AppBar.jsx');
 
 var LandingPage = React.createClass({
 	render() {

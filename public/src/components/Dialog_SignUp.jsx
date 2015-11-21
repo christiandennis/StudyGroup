@@ -189,19 +189,19 @@ var SignUpDialog = React.createClass({
 				<Snackbar
 		       		ref = "unavailableEmailSnackbar"
 		         	message="Email is registered"
-		         	autoHideDuration="5000"/>
+		         	autoHideDuration={5000}/>
 		        <Snackbar
 		       		ref = "invalidEmailSnackbar"
 		         	message="Invalid email"
-		         	autoHideDuration="5000"/>
+		         	autoHideDuration={5000}/>
 		        <Snackbar
 		       		ref = "unavailableUsernameSnackbar"
 		         	message="Username not available"
-		         	autoHideDuration="5000"/>
+		         	autoHideDuration={5000}/>
 		        <Snackbar
 		       		ref = "failedSnackbar"
 		         	message="Signup failed"
-		         	autoHideDuration="5000"/>
+		         	autoHideDuration={5000}/>
 	        </div>
 		)
 	}

@@ -99,7 +99,11 @@ var Comments = React.createClass ({
 								<AllComments studyGroup={this.props.studyGroup}/>
 							</List>
 						</Paper>
-						<TextField ref="commentText" hintText="New Comment" onEnterKeyDown = {this.postComment}/> <FlatButton label="post" onClick={this.postComment}/>
+						<TextField 	ref="commentText" 
+									hintText="New Comment" 
+									onEnterKeyDown = {this.postComment}
+									multiLine={true}
+									fullWidth={true}/> <FlatButton label="post" onClick={this.postComment}/>
 				</div>
 			);
 		}

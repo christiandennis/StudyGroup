@@ -35,8 +35,8 @@ var AllSimpleGroup = React.createClass({
 		return 	(
 			<div>
 			  	{this.props.myGroups.map((myGroup, i) => {
-				  	var date = this.getDateString(studyGroup.date);
-					var time = this.getTimeString(studyGroup.date);
+				  	var date = this.getDateString(myGroup.date);
+					var time = this.getTimeString(myGroup.date);
 				    return (
 				    	<div key={myGroup.id}>
 		    		        <Paper>

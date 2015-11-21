@@ -162,7 +162,7 @@ var TopBar = React.createClass({
 		                position: 'fixed',
 		                marginBottom: '64px'
 		              }}
-		              zDepth="100"
+		              zDepth={5}
 					  showMenuIconButton={false}
 					  iconElementRight={<FlatButton label="Log In" onClick={this.dialogLogin}/>} />
 				</Sticky>

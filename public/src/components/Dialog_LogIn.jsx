@@ -59,7 +59,7 @@ var LoginDialog = React.createClass({
 	    		<Snackbar
 	           		ref = "loginFailedSnackbar"
 	             	message="Invalid login credentials"
-	             	autoHideDuration="5000"/>
+	             	autoHideDuration={5000}/>
             </div>
 		)
 	}

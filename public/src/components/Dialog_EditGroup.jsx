@@ -223,12 +223,12 @@ var LoginDialog = React.createClass({
     			<Snackbar
                		ref = "editGroupFailedSnackbar"
                  	message="Failed to edit group"
-                 	autoHideDuration="5000"/>
+                 	autoHideDuration={5000}/>
 
         		<Snackbar
                		ref = "editGroupSuccessSnackbar"
                  	message="Group Edited"
-                 	autoHideDuration="5000"/>
+                 	autoHideDuration={5000}/>
 			</div>
 		)
 	}
