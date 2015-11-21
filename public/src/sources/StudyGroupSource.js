@@ -505,7 +505,48 @@ var StudyGroupSource = {
 			},
 			success: CommentsActions.fetchComments
 		}
+	},
 
+	postComment() {
+		return {
+			remote(state, groupID, content){
+				return new Promise(function(resolve, reject){
+					console.log('--------------POST COMMENTS--------------');
+				    $.ajax({ url: '/comment',
+				        type: 'POST',
+				        headers: {
+					  				"access-token": state.user.accesstoken,
+		    	      				"client": state.user.client,
+		    	      				"uid": state.user.uid
+		  						},
+		  				data: {
+		  							"groupid": groupID,
+		  							"title": "Default title",
+		  							"content": content.getValue()
+		  						},
+				        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+				        success: function(data, status, xhr) {
+				        	// console.log('__SUCCESS__');
+					        // console.log('data' ,data);
+					        // console.log('comments', comment);
+					        resolve(data.comment);
+					        content.setValue("");
+					        console.log('**************END POST COMMENTS**************');
+				        },
+				        error: function(response) {
+				        	// console.log('__FAILED__');
+				          	// console.log('response' ,response);
+				          	// reject('fetch group FAILED');
+				          	console.log('**************END POST COMMENTS**************');
+				        }
+				    })
+				})
+			},
+			local() {
+				return null;
+			},
+			success: CommentsActions.postComment
+		}
 	}
 
 	

@@ -49992,6 +49992,10 @@ function CommentsActions(){"use strict";}
 		this.dispatch(comments);
 	}});
 
+	Object.defineProperty(CommentsActions.prototype,"postComment",{writable:true,configurable:true,value:function(comments) {"use strict";
+		this.dispatch(comments);
+	}});
+
 
 
 module.exports = alt.createActions(CommentsActions);
@@ -50144,7 +50148,7 @@ var LeftBar = React.createClass({displayName: "LeftBar",
 			React.createElement("div", null, 
 				React.createElement(SideBar, {ref: "leftNav", docked: false}, 
 					React.createElement(MenuItem, {index: 0, style: {textAlign:"center"}}, "Hi, ", this.props.user.name, "!"), 
-					React.createElement(MenuItem, {index: 1, style: {textAlign:"center", marginBottom:"20px"} }, React.createElement("span", {onClick: this.myProfile}, React.createElement(Avatar, {size: 120}, " ", this.props.user.name.slice(0,1), " "))), 
+					React.createElement(MenuItem, {index: 1, style: {textAlign:"center", marginBottom:"20px"} }, React.createElement("span", {onClick: this.myProfile}, React.createElement(Avatar, {size: 120}, " ", this.props.user.name.slice(0,1).toUpperCase(), " "))), 
 					React.createElement("span", {onClick: this.myGroups}, "  ", React.createElement(MenuItem, {index: 2}, "My Groups"), " "), 
 	  				React.createElement("span", {onClick: this.editProfile}, " ", React.createElement(MenuItem, {index: 3}, "Edit Profile"), " "), 
 	  				React.createElement("span", {onClick: this.logout}, "  ", React.createElement(MenuItem, {index: 4}, "Log Out"), "  ")
@@ -50271,7 +50275,6 @@ var Dialog_GroupDetail = require('./Dialog_GroupDetail.jsx');
 // Matertial UI components
 const TextField = require('material-ui/lib/text-field');
 const Dialog = require('material-ui/lib/dialog');
-const FlatButton = require('material-ui/lib/flat-button');
 const RaisedButton = require('material-ui/lib/raised-button');
 const Paper = require('material-ui/lib/paper');
 const Avatar = require('material-ui/lib/avatar');
@@ -50293,8 +50296,10 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 			return 'colorBarGreen';
 		} else if (time_diff >= 86400) {
 			return 'colorBarYellow';
-		} else {
+		} else if (time_diff >= 0) {
 			return 'colorBarRed';
+		} else {
+			return 'colorBarBlack';
 		}
 	},
 
@@ -50355,7 +50360,7 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 				                    React.createElement("td", {className: "userPhotoHolder"}, 
 				                        React.createElement("div", {className: "photoHolder"}, 
 				                            React.createElement("div", {className: "circle"}, 
-				                                React.createElement(Avatar, {size: 120}, " ", studyGroup.host.slice(0,1), " ")
+				                                React.createElement(Avatar, {size: 120}, " ", studyGroup.host.slice(0,1).toUpperCase(), " ")
 				                            )
 				                        )
 
@@ -50416,7 +50421,7 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 
 module.exports = MainGroupViewCard;
 
-},{"../stores/StudyGroupStore":410,"./Dialog_GroupDetail.jsx":401,"material-ui/lib/avatar":57,"material-ui/lib/dialog":77,"material-ui/lib/flat-button":81,"material-ui/lib/paper":99,"material-ui/lib/raised-button":100,"material-ui/lib/text-field":127,"moment":161,"react":390,"react-dom":167,"react-router":204}],399:[function(require,module,exports){
+},{"../stores/StudyGroupStore":410,"./Dialog_GroupDetail.jsx":401,"material-ui/lib/avatar":57,"material-ui/lib/dialog":77,"material-ui/lib/paper":99,"material-ui/lib/raised-button":100,"material-ui/lib/text-field":127,"moment":161,"react":390,"react-dom":167,"react-router":204}],399:[function(require,module,exports){
 // import react, react-router, alt
 var React = require('react');
 var render = require('react-dom').render;
@@ -50485,7 +50490,7 @@ var AllComments = React.createClass({displayName: "AllComments",
 						return (
 							React.createElement("div", null, 
 								React.createElement(ListItem, {
-								    leftAvatar: React.createElement(Avatar, null, " ", comment.title.slice(0,1), " "), 
+								    leftAvatar: React.createElement(Avatar, null, " ", comment.title.slice(0,1).toUpperCase(), " "), 
 								    primaryText: comment.title, 
 								    secondaryText: React.createElement("p", null, comment.content)}), 
 								React.createElement(ListDivider, null)
@@ -50504,6 +50509,10 @@ var Comments = React.createClass ({displayName: "Comments",
 		StudyGroupStore.fetchComments(this.props.studyGroup.id);	
 	},
 
+	postComment:function() {
+		StudyGroupStore.postComment(this.props.studyGroup.id, this.refs.commentText);
+	},
+
 	render:function(){
 		if (this.props.studyGroup && this.props.studyGroup.commentsData!=null) {
 			return (
@@ -50514,7 +50523,7 @@ var Comments = React.createClass ({displayName: "Comments",
 								React.createElement(AllComments, {studyGroup: this.props.studyGroup})
 							)
 						), 
-						React.createElement(TextField, {hintText: "New Comment"}), " ", React.createElement(FlatButton, {label: "post"})
+						React.createElement(TextField, {ref: "commentText", hintText: "New Comment", onEnterKeyDown: this.postComment}), " ", React.createElement(FlatButton, {label: "post", onClick: this.postComment})
 				)
 			);
 		}
@@ -52258,7 +52267,48 @@ var StudyGroupSource = {
 			},
 			success: CommentsActions.fetchComments
 		}
+	},
 
+	postComment:function() {
+		return {
+			remote:function(state, groupID, content){
+				return new Promise(function(resolve, reject){
+					console.log('--------------POST COMMENTS--------------');
+				    $.ajax({ url: '/comment',
+				        type: 'POST',
+				        headers: {
+					  				"access-token": state.user.accesstoken,
+		    	      				"client": state.user.client,
+		    	      				"uid": state.user.uid
+		  						},
+		  				data: {
+		  							"groupid": groupID,
+		  							"title": "Default title",
+		  							"content": content.getValue()
+		  						},
+				        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+				        success: function(data, status, xhr) {
+				        	// console.log('__SUCCESS__');
+					        // console.log('data' ,data);
+					        // console.log('comments', comment);
+					        resolve(data.comment);
+					        content.setValue("");
+					        console.log('**************END POST COMMENTS**************');
+				        },
+				        error: function(response) {
+				        	// console.log('__FAILED__');
+				          	// console.log('response' ,response);
+				          	// reject('fetch group FAILED');
+				          	console.log('**************END POST COMMENTS**************');
+				        }
+				    })
+				})
+			},
+			local:function() {
+				return null;
+			},
+			success: CommentsActions.postComment
+		}
 	}
 
 	
@@ -52303,7 +52353,8 @@ const moment = require('moment');
 			handleFetchMyGroups: MyGroupsActions.FETCH_MY_GROUPS,
 			handleJoinOrLeaveGroup: MyGroupsActions.JOIN_OR_LEAVE_GROUP,
 
-			handleFetchComments: CommentsActions.FETCH_COMMENTS
+			handleFetchComments: CommentsActions.FETCH_COMMENTS,
+			handlePostComment: CommentsActions.POST_COMMENT
 		});
 
 
@@ -52325,6 +52376,15 @@ const moment = require('moment');
 		for (var i in this.studyGroups) {
 	     	if (this.studyGroups[i].id === data.groupID) {
 	       		this.studyGroups[i].commentsData = data.comments;
+	        	break;
+	     	}
+	   	}
+	}});
+
+	Object.defineProperty(StudyGroupStore.prototype,"handlePostComment",{writable:true,configurable:true,value:function(comment) {"use strict";
+		for (var i in this.studyGroups) {
+	     	if (this.studyGroups[i].id === comment.groupid) {
+	       		this.studyGroups[i].commentsData.push(comment);
 	        	break;
 	     	}
 	   	}

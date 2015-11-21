@@ -10,7 +10,6 @@ var Dialog_GroupDetail = require('./Dialog_GroupDetail.jsx');
 // Matertial UI components
 const TextField = require('material-ui/lib/text-field');
 const Dialog = require('material-ui/lib/dialog');
-const FlatButton = require('material-ui/lib/flat-button');
 const RaisedButton = require('material-ui/lib/raised-button');
 const Paper = require('material-ui/lib/paper');
 const Avatar = require('material-ui/lib/avatar');
@@ -32,8 +31,10 @@ var MainGroupViewCard = React.createClass({
 			return 'colorBarGreen';
 		} else if (time_diff >= 86400) {
 			return 'colorBarYellow';
-		} else {
+		} else if (time_diff >= 0) {
 			return 'colorBarRed';
+		} else {
+			return 'colorBarBlack';
 		}
 	},
 
@@ -94,7 +95,7 @@ var MainGroupViewCard = React.createClass({
 				                    <td className="userPhotoHolder">
 				                        <div className="photoHolder">
 				                            <div className="circle">
-				                                <Avatar size={120}> {studyGroup.host.slice(0,1)} </Avatar>
+				                                <Avatar size={120}> {studyGroup.host.slice(0,1).toUpperCase()} </Avatar>
 				                            </div>
 				                        </div>
 

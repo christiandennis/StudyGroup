@@ -19,12 +19,12 @@ table {
 	margin-bottom: 0px;
 }
 
-.colorBar {
+.colorBarBlack {
 	left: 0px;
 	height: 100%;
 	width: 10px;
 	float: left;
-	background-color: #F50000;
+	background-color: #000000;
 }
 
 .colorBarRed {

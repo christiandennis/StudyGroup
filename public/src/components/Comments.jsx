@@ -66,7 +66,7 @@ var AllComments = React.createClass({
 						return (
 							<div>
 								<ListItem
-								    leftAvatar={<Avatar> {comment.title.slice(0,1)} </Avatar>}
+								    leftAvatar={<Avatar> {comment.title.slice(0,1).toUpperCase()} </Avatar>}
 								    primaryText={comment.title}
 								    secondaryText={<p>{comment.content}</p>} />
 								<ListDivider/>
@@ -85,6 +85,10 @@ var Comments = React.createClass ({
 		StudyGroupStore.fetchComments(this.props.studyGroup.id);	
 	},
 
+	postComment() {
+		StudyGroupStore.postComment(this.props.studyGroup.id, this.refs.commentText);
+	},
+
 	render(){
 		if (this.props.studyGroup && this.props.studyGroup.commentsData!=null) {
 			return (
@@ -95,7 +99,7 @@ var Comments = React.createClass ({
 								<AllComments studyGroup={this.props.studyGroup}/>
 							</List>
 						</Paper>
-						<TextField hintText="New Comment"/> <FlatButton label="post"/>
+						<TextField ref="commentText" hintText="New Comment" onEnterKeyDown = {this.postComment}/> <FlatButton label="post" onClick={this.postComment}/>
 				</div>
 			);
 		}

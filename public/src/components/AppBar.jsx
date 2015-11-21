@@ -66,7 +66,7 @@ var LeftBar = React.createClass({
 			<div>
 				<SideBar ref="leftNav" docked={false}  >
 					<MenuItem index={0} style={{textAlign:"center"}}>Hi, {this.props.user.name}!</MenuItem>
-					<MenuItem index={1} style={{textAlign:"center", marginBottom:"20px"} }><span onClick={this.myProfile}><Avatar size={120}> {this.props.user.name.slice(0,1)} </Avatar></span></MenuItem>
+					<MenuItem index={1} style={{textAlign:"center", marginBottom:"20px"} }><span onClick={this.myProfile}><Avatar size={120}> {this.props.user.name.slice(0,1).toUpperCase()} </Avatar></span></MenuItem>
 					<span onClick={this.myGroups}>		<MenuItem index={2}>My Groups</MenuItem>	</span>
 	  				<span onClick={this.editProfile}>	<MenuItem index={3}>Edit Profile</MenuItem>	</span>
 	  				<span onClick={this.logout}>		<MenuItem index={4}>Log Out</MenuItem>		</span>

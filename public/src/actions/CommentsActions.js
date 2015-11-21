@@ -5,6 +5,10 @@ class CommentsActions {
 		this.dispatch(comments);
 	}
 
+	postComment(comments) {
+		this.dispatch(comments);
+	}
+
 }
 
 module.exports = alt.createActions(CommentsActions);
