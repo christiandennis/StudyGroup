@@ -44,21 +44,21 @@ var AllSimpleGroup = React.createClass({
 					var time = this.getTimeString(myGroup.date);
 				    return (
 				    	<div key={myGroup.id}
-		    		        style={{backgroundColor:"rgba(0, 0, 0, .5)", marginBottom:"30px"}}>
-		    		        	<div className="groupdesc-title">Class</div>
-		    		        	<div className="groupdesc-subtitle">{myGroup.subject}</div>
+		    		        style={{backgroundColor:"rgba(0, 0, 0, .3)", marginBottom:"30px"}}>
+		    		        	<div className="mygroupdesc-title">Class</div>
+		    		        	<div className="mygroupdesc-subtitle">{myGroup.subject}</div>
 
-		    		        	<div className="groupdesc-title">Title</div>
-		    		        	<div className="groupdesc-subtitle">{myGroup.title}</div>
+		    		        	<div className="mygroupdesc-title">Title</div>
+		    		        	<div className="mygroupdesc-subtitle">{myGroup.title}</div>
 
-		    		        	<div className="groupdesc-title">Time</div>
-		    		        	<div className="groupdesc-subtitle">{time}</div>
+		    		        	<div className="mygroupdesc-title">Time</div>
+		    		        	<div className="mygroupdesc-subtitle">{time}</div>
 
-		    		        	<div className="groupdesc-title">Date</div>
-		    		        	<div className="groupdesc-subtitle">{date}</div>
+		    		        	<div className="mygroupdesc-title">Date</div>
+		    		        	<div className="mygroupdesc-subtitle">{date}</div>
 
-		    		        	<div className="groupdesc-title">Location</div>
-		    		        	<div className="groupdesc-subtitle">{myGroup.location}</div>
+		    		        	<div className="mygroupdesc-title">Location</div>
+		    		        	<div className="mygroupdesc-subtitle">{myGroup.location}</div>
 				    	</div>
 				    );
 				})
@@ -84,7 +84,7 @@ var MyGroups = React.createClass ({
 			return (
 				<div>
 					<Dialog ref="myGroupsDialog"
-							bodyStyle={{background:"linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('campanile.jpg') no-repeat",
+							bodyStyle={{background:"linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url('abstract.jpg') no-repeat",
 										backgroundSize:'cover'}}
 							autoDetectWindowHeight={true}
 	  						autoScrollBodyContent={true}>

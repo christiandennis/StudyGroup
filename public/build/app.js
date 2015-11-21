@@ -49892,7 +49892,7 @@ var LeftBar = React.createClass({displayName: "LeftBar",
 			React.createElement("div", null, 
 				React.createElement(SideBar, {ref: "leftNav", docked: false}, 
 					React.createElement(MenuItem, {index: 0, style: {textAlign:"center"}}, "Hi, ", this.props.user.name, "!"), 
-					React.createElement(MenuItem, {index: 1, style: {textAlign:"center", marginBottom:"20px"} }, React.createElement("span", {onClick: this.myProfile}, React.createElement(Avatar, {size: 120}, " ", this.props.user.name.slice(0,1).toUpperCase(), " "))), 
+					React.createElement(MenuItem, {index: 1, style: {textAlign:"center", marginBottom:"20px"} }, React.createElement("span", {onClick: this.myProfile}, React.createElement(Avatar, {size: 120, backgroundColor: "#0D47A1"}, " ", this.props.user.name.slice(0,1).toUpperCase(), " "))), 
 					React.createElement("span", {onClick: this.myGroups}, "  ", React.createElement(MenuItem, {index: 2}, "My Groups"), " "), 
 	  				React.createElement("span", {onClick: this.editProfile}, " ", React.createElement(MenuItem, {index: 3}, "Edit Profile"), " "), 
 	  				React.createElement("span", {onClick: this.logout}, "  ", React.createElement(MenuItem, {index: 4}, "Log Out"), "  ")
@@ -50789,21 +50789,21 @@ var AllSimpleGroup = React.createClass({displayName: "AllSimpleGroup",
 					var time = this.getTimeString(myGroup.date);
 				    return (
 				    	React.createElement("div", {key: myGroup.id, 
-		    		        style: {backgroundColor:"rgba(0, 0, 0, .5)", marginBottom:"30px"}}, 
-		    		        	React.createElement("div", {className: "groupdesc-title"}, "Class"), 
-		    		        	React.createElement("div", {className: "groupdesc-subtitle"}, myGroup.subject), 
+		    		        style: {backgroundColor:"rgba(0, 0, 0, .3)", marginBottom:"30px"}}, 
+		    		        	React.createElement("div", {className: "mygroupdesc-title"}, "Class"), 
+		    		        	React.createElement("div", {className: "mygroupdesc-subtitle"}, myGroup.subject), 
 
-		    		        	React.createElement("div", {className: "groupdesc-title"}, "Title"), 
-		    		        	React.createElement("div", {className: "groupdesc-subtitle"}, myGroup.title), 
+		    		        	React.createElement("div", {className: "mygroupdesc-title"}, "Title"), 
+		    		        	React.createElement("div", {className: "mygroupdesc-subtitle"}, myGroup.title), 
 
-		    		        	React.createElement("div", {className: "groupdesc-title"}, "Time"), 
-		    		        	React.createElement("div", {className: "groupdesc-subtitle"}, time), 
+		    		        	React.createElement("div", {className: "mygroupdesc-title"}, "Time"), 
+		    		        	React.createElement("div", {className: "mygroupdesc-subtitle"}, time), 
 
-		    		        	React.createElement("div", {className: "groupdesc-title"}, "Date"), 
-		    		        	React.createElement("div", {className: "groupdesc-subtitle"}, date), 
+		    		        	React.createElement("div", {className: "mygroupdesc-title"}, "Date"), 
+		    		        	React.createElement("div", {className: "mygroupdesc-subtitle"}, date), 
 
-		    		        	React.createElement("div", {className: "groupdesc-title"}, "Location"), 
-		    		        	React.createElement("div", {className: "groupdesc-subtitle"}, myGroup.location)
+		    		        	React.createElement("div", {className: "mygroupdesc-title"}, "Location"), 
+		    		        	React.createElement("div", {className: "mygroupdesc-subtitle"}, myGroup.location)
 				    	)
 				    );
 				}.bind(this))
@@ -50829,7 +50829,7 @@ var MyGroups = React.createClass ({displayName: "MyGroups",
 			return (
 				React.createElement("div", null, 
 					React.createElement(Dialog, {ref: "myGroupsDialog", 
-							bodyStyle: {background:"linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('campanile.jpg') no-repeat",
+							bodyStyle: {background:"linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url('abstract.jpg') no-repeat",
 										backgroundSize:'cover'}, 
 							autoDetectWindowHeight: true, 
 	  						autoScrollBodyContent: true}, 
@@ -51498,7 +51498,7 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 var StudyGroups = React.createClass ({displayName: "StudyGroups",
 	componentDidMount: function() {
 		StudyGroupStore.fetchStudyGroups();	
-		setInterval(function() {StudyGroupStore.fetchStudyGroups();} , 3000);
+		setInterval(function() {StudyGroupStore.fetchStudyGroups();} , refreshInterval);
 	},
 
 	render:function(){
