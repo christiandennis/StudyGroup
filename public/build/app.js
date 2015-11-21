@@ -50260,6 +50260,7 @@ const Dialog = require('material-ui/lib/dialog');
 const RaisedButton = require('material-ui/lib/raised-button');
 const Paper = require('material-ui/lib/paper');
 const Avatar = require('material-ui/lib/avatar');
+const FontIcon = require('material-ui/lib/font-icon');
 
 const moment = require('moment');
 
@@ -50339,64 +50340,60 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 		        React.createElement(Paper, {zDepth: 3, className: "card-container"}, 
 			        React.createElement("div", {className: "card studyGroup"}, 
 			            React.createElement("div", {className: color}), 
-				            React.createElement("table", null, 
-				            	React.createElement("tbody", null, 
-				                React.createElement("tr", {className: "row1"}, 
-				                    React.createElement("td", {className: "userPhotoHolder"}, 
-				                        React.createElement("div", {className: "photoHolder"}, 
-				                            React.createElement("div", {className: "circle"}, 
-				                                React.createElement(Avatar, {size: 120}, " ", studyGroup.host.slice(0,1).toUpperCase(), " ")
-				                            )
-				                        )
+			            React.createElement("div", {className: "cardContent"}, 
+					        React.createElement("div", {className: "row1"}, 
+					        	React.createElement("div", {className: "column11 noBlur"}, 
+					        		React.createElement(Avatar, {size: 70, className: "centerVertical"}, " ", studyGroup.host.slice(0,1).toUpperCase(), " ")
+					        	), 
+					        	React.createElement("div", {className: "column12"}, 
+					        		React.createElement("div", {className: "column121"}, 
+					        			React.createElement("div", {className: "subject"}, studyGroup.subject)
+					        		), 
+					        		React.createElement("div", {className: "column122"}, 
+					        			React.createElement("div", {className: "title"}, studyGroup.title)
+					        		)
+					        	), 
+					        	React.createElement("div", {className: "column13"}, 
+					        		React.createElement("div", {className: "date"}, date), 
+                    				React.createElement("div", {className: "time"}, time)
+					        	)
+					        ), 
+					        React.createElement("div", {className: "row2"}, 
+					        	React.createElement("div", {className: "column11 noBlur"}, 
+					        		React.createElement(FontIcon, {className: "material-icons centerVertical", style: {fontSize:'48px', color:'grey'}}, "bookmark_border")
+					        	), 
+					        	React.createElement("div", {className: "column22 noBlur"}, 
+					        		React.createElement("div", {className: "description centerVertical"}, 
+						        		studyGroup.description, 
+						        		React.createElement("div", {className: "seeMore", onClick: this.openGroupDetailDialog}, "See more...")
+					        		)
+					        	)
+					        ), 
+					        React.createElement("div", {className: "row3"}, 
+					        	React.createElement("div", {className: "column11 noBlur"}, 
+					        		React.createElement(FontIcon, {className: "material-icons centerVertical", style: {fontSize:'48px', color:'grey'}}, "map")
+					        	), 
+					        	React.createElement("div", {className: "column32 noBlur"}, 
+					        		React.createElement("div", {className: "location centerVertical"}, studyGroup.location)
+					        	)
+					        ), 
+					        React.createElement("div", {className: "row4"}, 
+					        	React.createElement("div", {className: "column11"}
 
-				                    ), 
-				                    React.createElement("td", {colSpan: "2"}, 
-				                        React.createElement("span", {className: "subject"}, studyGroup.subject, ":"), 
-				                        React.createElement("span", {className: "title"}, studyGroup.title)
-				                    ), 
-
-				                    React.createElement("td", {colSpan: "2", align: "right", className: "dateTimeHolder"}, 
-				                        React.createElement("div", {className: "date"}, date), 
-				                        React.createElement("div", {className: "time"}, time)
-				                    )
-				                ), 
-
-				                React.createElement("tr", {className: "row2"}, 
-				                    React.createElement("td", {className: "exclamationHolder"}, 
-				                        React.createElement("div", {className: "exclamation"})
-				                    ), 
-				                    React.createElement("td", {colSpan: "3"}, 
-				                        React.createElement("div", {className: "description"}, studyGroup.description), 
-				                        React.createElement("div", {className: "seeMore", onClick: this.openGroupDetailDialog}, "See more...")
-				                    )
-				                ), 
-
-				                React.createElement("tr", {className: "row3"}, 
-				                    React.createElement("td", {className: "pinHolder"}, 
-				                        React.createElement("div", {className: "pin"})
-				                    ), 
-				                    React.createElement("td", {colSpan: "2"}, 
-				                        React.createElement("div", {className: "location"}, studyGroup.location)
-				                    )
-				                ), 
-
-				                React.createElement("tr", {className: "row4"}, 
-				                    React.createElement("td", null), 
-				                    React.createElement("td", {colSpan: "1"}, React.createElement("span", {className: "host"}, "@", studyGroup.host)
-				                    ), 
-				                    React.createElement("td", {colSpan: "2"}, 
-				                        React.createElement("div", {style: {textAlign:"right"}, className: "joinButtonContainer"}, 
-				                            React.createElement(RaisedButton, {onClick: this.joinLeaveGroup.bind(this, {joinText:joinText}), label: joinText})
-				                        )
-				                    ), 
-				                    React.createElement("td", null, 
-				                        React.createElement("div", {className: "capacityHolder"}, 
-				                            React.createElement("div", {className: "capacity"}, studyGroup.guestlist, "/", studyGroup.capacity)
-				                        )
-				                    )
-				                )
-				        	)
-				        )
+					        	), 
+					        	React.createElement("div", {className: "column42 noBlur"}, 
+					        		React.createElement("div", {className: "host centerVertical"}, "@", studyGroup.host)
+					        	), 
+					        	React.createElement("div", {className: "column43 noBlur"}, 
+					        		React.createElement("div", {className: "centerVertical alignRight"}, 
+					        			React.createElement(RaisedButton, {onClick: this.joinLeaveGroup.bind(this, {joinText:joinText}), label: joinText})
+					        		)
+					        	), 
+					        	React.createElement("div", {className: "column44 noBlur"}, 
+					        		React.createElement("div", {className: "capacity centerVertical"}, studyGroup.guestlist, "/", studyGroup.capacity)
+					        	)
+					        )
+					    )
 			        )
 		        )
 	    	)
@@ -50406,7 +50403,7 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 
 module.exports = MainGroupViewCard;
 
-},{"../stores/StudyGroupStore":409,"./Dialog_GroupDetail.jsx":400,"material-ui/lib/avatar":57,"material-ui/lib/dialog":77,"material-ui/lib/paper":99,"material-ui/lib/raised-button":100,"material-ui/lib/text-field":126,"moment":160,"react":389,"react-dom":166,"react-router":203}],398:[function(require,module,exports){
+},{"../stores/StudyGroupStore":409,"./Dialog_GroupDetail.jsx":400,"material-ui/lib/avatar":57,"material-ui/lib/dialog":77,"material-ui/lib/font-icon":82,"material-ui/lib/paper":99,"material-ui/lib/raised-button":100,"material-ui/lib/text-field":126,"moment":160,"react":389,"react-dom":166,"react-router":203}],398:[function(require,module,exports){
 // import react, react-router, alt
 var React = require('react');
 var render = require('react-dom').render;
