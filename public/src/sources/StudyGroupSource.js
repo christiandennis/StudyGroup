@@ -468,11 +468,10 @@ var StudyGroupSource = {
 	// ****************************************************************************
 
 	fetchComments() {
-
 		return {
 			remote(state, groupID){
 				return new Promise(function(resolve, reject){
-					console.log('--------------COMMENTS--------------');
+					// console.log('--------------COMMENTS--------------');
 				    $.ajax({ url: '/comments/' + groupID.toString(),
 				        type: 'GET',
 				        headers: {
@@ -482,21 +481,21 @@ var StudyGroupSource = {
 		  						},
 				        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
 				        success: function(data, status, xhr) {
-				        	console.log('__SUCCESS__');
-					        console.log('data' ,data);
+				        	// console.log('__SUCCESS__');
+					        // console.log('data' ,data);
 					        var comment = {
 					        					"comments": data.comments,
 					        					"groupID": groupID,
 					        				};
-					        console.log('comments', comment);
+					        // console.log('comments', comment);
 					        resolve(comment);
-					        console.log('**************ENDJOIN OR LEAVE GROUP**************');
+					        // console.log('**************END COMMENTS**************');
 				        },
 				        error: function(response) {
 				        	// console.log('__FAILED__');
 				          	// console.log('response' ,response);
 				          	// reject('fetch group FAILED');
-				          	// console.log('**************END JOIN OR LEAVE GROUP**************');
+				          	// console.log('**************END COMMENTS**************');
 				        }
 				    })
 				})

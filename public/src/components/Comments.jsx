@@ -57,7 +57,6 @@ var AllComments = React.createClass({
 
 		if (this.props.studyGroup.comments){
 			var comments = this.props.studyGroup.commentsData;
-			console.log('the comments', comments);
 			return (
 				<div>
 					{comments.map((comment, i) => {
@@ -86,14 +85,9 @@ var Comments = React.createClass ({
 		if (this.props.studyGroup && this.props.studyGroup.commentsData!=null) {
 			return (
 				<div>
-					<AltContainer store = {StudyGroupStore}>
-
 						<div ref="commentTitle" className="groupdesc-comment-title" style={{paddingBottom:"20px"}}>Comments</div>
 						<AllComments studyGroup={this.props.studyGroup}/>
-						<TextField
-					    hintText="New Comment"/>
-
-					</AltContainer>
+						<TextField hintText="New Comment"/>
 				</div>
 			);
 		}

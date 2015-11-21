@@ -53,15 +53,12 @@ class StudyGroupStore {
 	}
 
 	handleFetchComments(data) {
-		console.log('data', data);
-		console.log('studygroup before', this.studyGroups[data.groupID]);
 		for (var i in this.studyGroups) {
 	     	if (this.studyGroups[i].id === data.groupID) {
 	       		this.studyGroups[i].commentsData = data.comments;
 	        	break;
 	     	}
 	   	}
-		console.log('studygroup after', this.studyGroups[data.groupID]);
 	}
 
 	handleFetchMyGroups(myGroups) {

@@ -49402,10 +49402,12 @@ var LeftBar = React.createClass({displayName: "LeftBar",
 
 
 var TopBar = React.createClass({displayName: "TopBar",
+	mixins: [History],
+	
 	dialogLogin:function() {
-		this.refs.loginDialog.refs.loginDialog.show();
+		// this.refs.loginDialog.refs.loginDialog.show();
 		// BYPASS LOGIN FOR TESTING
-		// StudyGroupStore.fetchUser( 'papa@gmail.com', 'iopiopiop', this.history, this.refs.loginDialog);
+		StudyGroupStore.fetchUser( 'papa@gmail.com', 'iopiopiop', this.history, this.refs.loginDialog);
 	},
 
 	dialogSignUp:function() {
@@ -49717,7 +49719,6 @@ var AllComments = React.createClass({displayName: "AllComments",
 
 		if (this.props.studyGroup.comments){
 			var comments = this.props.studyGroup.commentsData;
-			console.log('the comments', comments);
 			return (
 				React.createElement("div", null, 
 					comments.map(function(comment, i)  {
@@ -49746,14 +49747,9 @@ var Comments = React.createClass ({displayName: "Comments",
 		if (this.props.studyGroup && this.props.studyGroup.commentsData!=null) {
 			return (
 				React.createElement("div", null, 
-					React.createElement(AltContainer, {store: StudyGroupStore}, 
-
 						React.createElement("div", {ref: "commentTitle", className: "groupdesc-comment-title", style: {paddingBottom:"20px"}}, "Comments"), 
 						React.createElement(AllComments, {studyGroup: this.props.studyGroup}), 
-						React.createElement(TextField, {
-					    hintText: "New Comment"})
-
-					)
+						React.createElement(TextField, {hintText: "New Comment"})
 				)
 			);
 		}
@@ -50274,7 +50270,7 @@ var AllSimpleGroup = React.createClass({displayName: "AllSimpleGroup",
 var MyGroups = React.createClass ({displayName: "MyGroups",
 	componentDidMount:function() {
 		StudyGroupStore.fetchMyGroups();
-		setInterval(function() {StudyGroupStore.fetchMyGroups();} , refreshInterval);
+		// setInterval(function() {StudyGroupStore.fetchMyGroups();} , refreshInterval);
 	},
 
 	closeMygroupsDialog:function() {
@@ -50967,7 +50963,7 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 var StudyGroups = React.createClass ({displayName: "StudyGroups",
 	componentDidMount: function() {
 		StudyGroupStore.fetchStudyGroups();	
-		setInterval(function() {StudyGroupStore.fetchStudyGroups();} , refreshInterval);
+		// setInterval(function() {StudyGroupStore.fetchStudyGroups();} , refreshInterval);
 	},
 
 	render:function(){
@@ -51562,15 +51558,12 @@ const moment = require('moment');
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleFetchComments",{writable:true,configurable:true,value:function(data) {"use strict";
-		console.log('data', data);
-		console.log('studygroup before', this.studyGroups[data.groupID]);
 		for (var i in this.studyGroups) {
 	     	if (this.studyGroups[i].id === data.groupID) {
 	       		this.studyGroups[i].commentsData = data.comments;
 	        	break;
 	     	}
 	   	}
-		console.log('studygroup after', this.studyGroups[data.groupID]);
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleFetchMyGroups",{writable:true,configurable:true,value:function(myGroups) {"use strict";
