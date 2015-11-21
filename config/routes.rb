@@ -22,6 +22,9 @@ Rails.application.routes.draw do
 
   put '/groups/user/update', to: 'groups#addremoveuser'
 
+  delete '/groups/delete', to: 'groups#deletewithid'
+
+
 
   #comments
   get '/comments/:id', to: 'comment#commentsInGroup'
