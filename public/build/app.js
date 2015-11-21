@@ -49919,9 +49919,9 @@ var TopBar = React.createClass({displayName: "TopBar",
 	},
 	
 	dialogLogin:function() {
-		this.refs.loginDialog.refs.loginDialog.show();
+		// this.refs.loginDialog.refs.loginDialog.show();
 		// BYPASS LOGIN FOR TESTING
-		// StudyGroupStore.fetchUser( 'papa@gmail.com', 'iopiopiop', this.history, this.refs.loginDialog);
+		StudyGroupStore.fetchUser( 'papa@gmail.com', 'iopiopiop', this.history, this.refs.loginDialog);
 	},
 
 	dialogSignUp:function() {
@@ -50243,10 +50243,10 @@ var AllComments = React.createClass({displayName: "AllComments",
 				React.createElement("div", null, 
 					comments.map(function(comment, i)  {
 						return (
-							React.createElement("div", null, 
+							React.createElement("div", {key: comment.id}, 
 								React.createElement(ListItem, {
-								    leftAvatar: React.createElement(Avatar, null, " ", comment.title.slice(0,1).toUpperCase(), " "), 
-								    primaryText: comment.title, 
+								    leftAvatar: React.createElement(Avatar, null, " ", comment.users[0].nickname.slice(0,1).toUpperCase(), " "), 
+								    primaryText: comment.users[0].nickname, 
 								    secondaryText: React.createElement("p", null, comment.content)}), 
 								React.createElement(ListDivider, null)
 							)
@@ -50261,7 +50261,7 @@ var AllComments = React.createClass({displayName: "AllComments",
 
 var Comments = React.createClass ({displayName: "Comments",
 	componentDidMount: function() {
-		StudyGroupStore.fetchComments(this.props.studyGroup.id);	
+		// StudyGroupStore.fetchComments(this.props.studyGroup.id);	
 	},
 
 	postComment:function() {
@@ -50269,7 +50269,7 @@ var Comments = React.createClass ({displayName: "Comments",
 	},
 
 	render:function(){
-		if (this.props.studyGroup && this.props.studyGroup.comments!=null) {
+		if (this.props.studyGroup) {
 			return (
 				React.createElement("div", null, 
 						React.createElement("div", {ref: "commentTitle", className: "groupdesc-comment-title", style: {marginTop:"20px"}}, "Comments"), 
@@ -52145,7 +52145,7 @@ const moment = require('moment');
 	Object.defineProperty(StudyGroupStore.prototype,"handlePostComment",{writable:true,configurable:true,value:function(comment) {"use strict";
 		for (var i in this.studyGroups) {
 	     	if (this.studyGroups[i].id === comment.groupid) {
-	       		this.studyGroups[i].commentsData.push(comment);
+	       		this.studyGroups[i].comments.push(comment);
 	        	break;
 	     	}
 	   	}

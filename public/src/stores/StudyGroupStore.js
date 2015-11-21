@@ -65,7 +65,7 @@ class StudyGroupStore {
 	handlePostComment(comment) {
 		for (var i in this.studyGroups) {
 	     	if (this.studyGroups[i].id === comment.groupid) {
-	       		this.studyGroups[i].commentsData.push(comment);
+	       		this.studyGroups[i].comments.push(comment);
 	        	break;
 	     	}
 	   	}

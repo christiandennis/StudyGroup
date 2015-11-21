@@ -64,10 +64,10 @@ var AllComments = React.createClass({
 				<div>
 					{comments.map((comment, i) => {
 						return (
-							<div>
+							<div key={comment.id}>
 								<ListItem
-								    leftAvatar={<Avatar> {comment.title.slice(0,1).toUpperCase()} </Avatar>}
-								    primaryText={comment.title}
+								    leftAvatar={<Avatar> {comment.users[0].nickname.slice(0,1).toUpperCase()} </Avatar>}
+								    primaryText={comment.users[0].nickname}
 								    secondaryText={<p>{comment.content}</p>} />
 								<ListDivider/>
 							</div>
@@ -82,7 +82,7 @@ var AllComments = React.createClass({
 
 var Comments = React.createClass ({
 	componentDidMount: function() {
-		StudyGroupStore.fetchComments(this.props.studyGroup.id);	
+		// StudyGroupStore.fetchComments(this.props.studyGroup.id);	
 	},
 
 	postComment() {
@@ -90,7 +90,7 @@ var Comments = React.createClass ({
 	},
 
 	render(){
-		if (this.props.studyGroup && this.props.studyGroup.comments!=null) {
+		if (this.props.studyGroup) {
 			return (
 				<div>
 						<div ref="commentTitle" className="groupdesc-comment-title" style={{marginTop:"20px"}}>Comments</div>
