@@ -103,7 +103,7 @@ class GroupsController < ApplicationController
 		groupid = params[:id]
 		@group = Group.find_by_id(groupid)
 		if @group.nil?
-			render json: {'status'=>-1,'errors' => ['group not found']}
+			render json: {'status'=>-1,'errors' => ['group not found']},status: 400
 			return
 		end
 
@@ -119,7 +119,7 @@ class GroupsController < ApplicationController
 			return
 		end
 		
-		render json: {'status' => status, 'erros' => error_messages}
+		render json: {'status' => -1, 'erros' => error_messages}, status: 400
 		
 
 	end
