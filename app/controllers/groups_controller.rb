@@ -3,6 +3,11 @@ class GroupsController < ApplicationController
 	before_action :authenticate_user!
   	clear_respond_to
   	respond_to :json
+  	rescue_from ActiveRecord::RecordNotFound, with: :handle_weird_error
+
+  	def handle_weird_error
+    render json: {'status'=> -1, 'errors' => ["weird error can't process"]}, status: 400
+  end
 
 	def create
 		status = 1 #intially set status to OK
@@ -93,33 +98,35 @@ class GroupsController < ApplicationController
 		# what to initially show
 		status = 1 #intially set status to OK
 		error_messages = [] #List of all errors
+		@group = nil
+		
 		groupid = params[:id]
-		@group = Group.find(groupid)
+		@group = Group.find_by_id(groupid)
+		if @group.nil?
+			render json: {'status'=>-1,'errors' => ['group not found']}
+			return
+		end
+
 		if @group.host != current_user.nickname
 			status = -1
 			error_messages << "You are not the host"
 		end
 
-		if not @group.nil?
-			render json: {'status'=>-1,'errors' => ['group not found']}
-		end
-
+		
 		if status ==1
-			render json: {'status' ==> status}
+			@group.destroy
+			render json: {'status' => status}
+			return
+		end
+		
+		render json: {'status' => status, 'erros' => error_messages}
+		
 
 	end
 
 	#TODO: Order displayed_groups by date
 	def usergroups
 		render json: {'status'=>1,'groups' => current_user.groups} 
-	end
-
-
-	#TODO only host can destroy own group
-	def destroy
-		@group = Group.find(params[:id])
-		@group.destroy
-		render json: {'status'=>1,'group'=>'Destroyed group'}
 	end
 
 
