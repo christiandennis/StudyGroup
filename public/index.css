@@ -30,6 +30,16 @@ body {
 	font-size: 18px;
 }
 
+.mygroupdesc-title { 
+	color: white;
+	font-size: 12px;
+}
+
+.mygroupdesc-subtitle {
+	color: white;
+	font-size: 18px;
+}
+
 .prof-name {
 	color: grey;
 	font-size: 30px;
