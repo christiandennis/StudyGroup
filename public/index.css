@@ -20,7 +20,7 @@ body {
 }
 
 
-.groupdesc-title {
+.groupdesc-title { 
 	color: grey;
 	font-size: 12px;
 }
@@ -38,4 +38,9 @@ body {
 .profile-box {
 	padding-top: 20px;
 	padding-bottom: 20px;
+}
+
+.seeMore {
+	color: #3366BB;
+	cursor: pointer;
 }
