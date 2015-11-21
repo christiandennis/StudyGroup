@@ -150,11 +150,17 @@ class GroupsController < ApplicationController
 			status = -1
 			err << 'Please pass in a group id'
 		else
-			@group = Group.find(groupid)
+			@group = Group.find_by_id(groupid)
 			if @group.nil?
 				status = -1
-				err << 'Could not find groupd with id'
+				err << 'Could not find group with id'
 			end
+		end
+
+		if @group.host == current_user.nickname
+			status = -1
+			err << "Host cant be kicked or added to a study group"
+
 		end
 
 		if status == -1

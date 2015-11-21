@@ -100,7 +100,7 @@ PUT
 DeleteGroup: /groups/delete
 DELETE
 {
-	id: (group id)
+	id: (group groupId)
 }
 --------------------------------------------
 COMMENT
