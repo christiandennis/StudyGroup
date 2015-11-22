@@ -4,7 +4,7 @@ class CreateGroups < ActiveRecord::Migration
       t.string :title
       t.string :subject
       t.text :description
-      t.float :date
+      t.datetime :date
       t.string :location
       t.string :school
       t.integer :capacity

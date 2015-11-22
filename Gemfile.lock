@@ -51,6 +51,8 @@ GEM
       execjs
     coffee-script-source (1.9.1.1)
     daemons (1.2.3)
+    date_validator (0.8.1)
+      activemodel
     debug_inspector (0.0.2)
     devise (3.5.2)
       bcrypt (~> 3.0)
@@ -188,6 +190,7 @@ DEPENDENCIES
   bcrypt (~> 3.1.7)
   byebug
   coffee-rails (~> 4.1.0)
+  date_validator
   devise_token_auth
   jbuilder (~> 2.0)
   jquery-rails
