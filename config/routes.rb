@@ -24,7 +24,7 @@ Rails.application.routes.draw do
 
   delete '/groups/delete', to: 'groups#deletewithid'
 
-
+  get '/groups/search', to: 'groups#search'
 
   #comments
   get '/comments/:id', to: 'comment#commentsInGroup'
