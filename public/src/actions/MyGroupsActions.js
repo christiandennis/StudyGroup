@@ -8,6 +8,10 @@ class MyGroupsActions {
 	joinOrLeaveGroup(myGroups) {
 		this.dispatch(myGroups);
 	}
+
+	dismissGroup(studyGroups) {
+		this.dispatch(studyGroups);
+	}
 }
 
 module.exports = alt.createActions(MyGroupsActions);

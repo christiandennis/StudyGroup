@@ -33,6 +33,7 @@ class StudyGroupStore {
 
 			handleFetchMyGroups: MyGroupsActions.FETCH_MY_GROUPS,
 			handleJoinOrLeaveGroup: MyGroupsActions.JOIN_OR_LEAVE_GROUP,
+			handleDismissGroup: MyGroupsActions.DISMISS_GROUP,
 
 			handleFetchComments: CommentsActions.FETCH_COMMENTS,
 			handlePostComment: CommentsActions.POST_COMMENT
@@ -60,6 +61,21 @@ class StudyGroupStore {
 	        	break;
 	     	}
 	   	}
+	}
+
+	handleDismissGroup(studyGroupID) {
+		for (var i in this.myGroups) {
+	     	if (this.myGroups[i].id === studyGroupID) {
+	       		this.myGroups.splice(i, 1);
+	       		break;
+	     	}
+	   	}
+   		for (var i in this.studyGroups) {
+   	     	if (this.studyGroups[i].id === studyGroupID) {
+   	       		this.studyGroups.splice(i, 1);
+   	       		break;
+   	     	}
+   	   	}
 	}
 
 	handlePostComment(comment) {

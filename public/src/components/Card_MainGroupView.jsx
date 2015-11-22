@@ -42,7 +42,7 @@ var MainGroupViewCard = React.createClass({
 	joinLeaveGroup(joinOrLeave) {
 		// some logic to determine whether to join or to leave
 		if (joinOrLeave.joinText === 'Dismiss') {
-			console.log('TO DO: delete group');
+			this.refs.dismissConfirmation.show();
 		} else if (joinOrLeave.joinText === 'Leave') {
 			StudyGroupStore.joinOrLeaveGroup(this.props.studyGroup.id, 'remove');
 		} else if (joinOrLeave.joinText === 'Join'){
@@ -83,6 +83,10 @@ var MainGroupViewCard = React.createClass({
 		}
 	},
 
+	confirmDismiss() {
+		StudyGroupStore.dismissGroup(this.props.studyGroup.id);
+	},
+
 	render() {
 		var studyGroup = this.props.studyGroup;
 		var user = this.props.user;
@@ -95,6 +99,17 @@ var MainGroupViewCard = React.createClass({
 		return (
 			<div key={studyGroup.id}>
 				<Dialog_GroupDetail ref='groupDetailDialog' studyGroup={studyGroup} user={user}/>
+				<Dialog
+					ref="dismissConfirmation"
+				  	title="Are you sure you want to delete this group?"
+				  	actions={[
+							  	{ text: 'Cancel' },
+							  	{ text: 'Yes', onTouchTap: this.confirmDismiss }
+							]}
+				  	actionFocus="submit"
+				  	onRequestClose={this._handleRequestClose}>
+				  	This action cannot be undone.
+				</Dialog>
 
 		        <Paper zDepth={3} className="card-container">
 			        <div className="card studyGroup">

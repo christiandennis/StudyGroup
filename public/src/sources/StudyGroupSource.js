@@ -455,6 +455,44 @@ var StudyGroupSource = {
 		}
 	},
 
+	dismissGroup() {
+		return {
+			remote(state, groupID){
+				return new Promise(function(resolve, reject){
+					// console.log('--------------DISMISS GROUP--------------');
+				    $.ajax({ url: '/groups/delete',
+				        type: 'DELETE',
+				        headers: {
+					  				"access-token": state.user.accesstoken,
+		    	      				"client": state.user.client,
+		    	      				"uid": state.user.uid
+		  						},
+		  				data: 	{
+		  							"id": groupID
+		  						},
+				        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+				        success: function(data, status, xhr) {
+				        	// console.log('__SUCCESS__');
+					        // console.log('data' ,data);
+					        resolve(groupID);
+					        // console.log('**************DISMISS GROUP**************');
+				        },
+				        error: function(response) {
+				        	// console.log('__FAILED__');
+				          	// console.log('response' ,response);
+				          	// reject('fetch group FAILED');
+				          	// console.log('**************DISMISS GROUP**************');
+				        }
+				    })
+				})
+			},
+			local() {
+				return null;
+			},
+			success: MyGroupsActions.dismissGroup
+		}
+	},
+
 	// ****************************************************************************
 	// ****************************************************************************
 	// ****************************************************************************

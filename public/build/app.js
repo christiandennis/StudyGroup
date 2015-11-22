@@ -49755,6 +49755,10 @@ function MyGroupsActions(){"use strict";}
 		this.dispatch(myGroups);
 	}});
 
+	Object.defineProperty(MyGroupsActions.prototype,"dismissGroup",{writable:true,configurable:true,value:function(studyGroups) {"use strict";
+		this.dispatch(studyGroups);
+	}});
+
 
 module.exports = alt.createActions(MyGroupsActions);
 
@@ -50062,7 +50066,7 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 	joinLeaveGroup:function(joinOrLeave) {
 		// some logic to determine whether to join or to leave
 		if (joinOrLeave.joinText === 'Dismiss') {
-			console.log('TO DO: delete group');
+			this.refs.dismissConfirmation.show();
 		} else if (joinOrLeave.joinText === 'Leave') {
 			StudyGroupStore.joinOrLeaveGroup(this.props.studyGroup.id, 'remove');
 		} else if (joinOrLeave.joinText === 'Join'){
@@ -50103,6 +50107,10 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 		}
 	},
 
+	confirmDismiss:function() {
+		StudyGroupStore.dismissGroup(this.props.studyGroup.id);
+	},
+
 	render:function() {
 		var studyGroup = this.props.studyGroup;
 		var user = this.props.user;
@@ -50115,6 +50123,17 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 		return (
 			React.createElement("div", {key: studyGroup.id}, 
 				React.createElement(Dialog_GroupDetail, {ref: "groupDetailDialog", studyGroup: studyGroup, user: user}), 
+				React.createElement(Dialog, {
+					ref: "dismissConfirmation", 
+				  	title: "Are you sure you want to delete this group?", 
+				  	actions: [
+							  	{ text: 'Cancel' },
+							  	{ text: 'Yes', onTouchTap: this.confirmDismiss, ref: 'submit' }
+							], 
+				  	actionFocus: "submit", 
+				  	onRequestClose: this._handleRequestClose}, 
+				  	"This action cannot be undone."
+				), 
 
 		        React.createElement(Paper, {zDepth: 3, className: "card-container"}, 
 			        React.createElement("div", {className: "card studyGroup"}, 
@@ -51984,6 +52003,44 @@ var StudyGroupSource = {
 		}
 	},
 
+	dismissGroup:function() {
+		return {
+			remote:function(state, groupID){
+				return new Promise(function(resolve, reject){
+					// console.log('--------------DISMISS GROUP--------------');
+				    $.ajax({ url: '/groups/delete',
+				        type: 'DELETE',
+				        headers: {
+					  				"access-token": state.user.accesstoken,
+		    	      				"client": state.user.client,
+		    	      				"uid": state.user.uid
+		  						},
+		  				data: 	{
+		  							"id": groupID
+		  						},
+				        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+				        success: function(data, status, xhr) {
+				        	// console.log('__SUCCESS__');
+					        // console.log('data' ,data);
+					        resolve(groupID);
+					        // console.log('**************DISMISS GROUP**************');
+				        },
+				        error: function(response) {
+				        	// console.log('__FAILED__');
+				          	// console.log('response' ,response);
+				          	// reject('fetch group FAILED');
+				          	// console.log('**************DISMISS GROUP**************');
+				        }
+				    })
+				})
+			},
+			local:function() {
+				return null;
+			},
+			success: MyGroupsActions.dismissGroup
+		}
+	},
+
 	// ****************************************************************************
 	// ****************************************************************************
 	// ****************************************************************************
@@ -52119,6 +52176,7 @@ const moment = require('moment');
 
 			handleFetchMyGroups: MyGroupsActions.FETCH_MY_GROUPS,
 			handleJoinOrLeaveGroup: MyGroupsActions.JOIN_OR_LEAVE_GROUP,
+			handleDismissGroup: MyGroupsActions.DISMISS_GROUP,
 
 			handleFetchComments: CommentsActions.FETCH_COMMENTS,
 			handlePostComment: CommentsActions.POST_COMMENT
@@ -52146,6 +52204,21 @@ const moment = require('moment');
 	        	break;
 	     	}
 	   	}
+	}});
+
+	Object.defineProperty(StudyGroupStore.prototype,"handleDismissGroup",{writable:true,configurable:true,value:function(studyGroupID) {"use strict";
+		for (var i in this.myGroups) {
+	     	if (this.myGroups[i].id === studyGroupID) {
+	       		this.myGroups.splice(i, 1);
+	       		break;
+	     	}
+	   	}
+   		for (var i in this.studyGroups) {
+   	     	if (this.studyGroups[i].id === studyGroupID) {
+   	       		this.studyGroups.splice(i, 1);
+   	       		break;
+   	     	}
+   	   	}
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handlePostComment",{writable:true,configurable:true,value:function(comment) {"use strict";
