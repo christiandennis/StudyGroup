@@ -144,10 +144,6 @@ var NewGroupDialog = React.createClass({
 		}
 	},
 
-	openTimePicker() {
-			this.refs.createGroupTime.openDialog();
-	},
-
 	render() {
 		return (
 			<div>
@@ -198,8 +194,6 @@ var NewGroupDialog = React.createClass({
 				    		ref = "createGroupDate"
 				    	  	hintText="Nov 22, 2015"
 				    	  	fullWidth={true}
-				    	  	autoOk={true}
-				    	  	onDismiss={this.openTimePicker}
 				    	  	floatingLabelText="Date"/></div>
 				    	<div style={{width:'80%', float:'left'}}><TextField
 				    		onEnterKeyDown = {this.submitNewGroup}

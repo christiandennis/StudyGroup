@@ -50561,6 +50561,11 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 		StudyGroupStore.dismissGroup(this.props.studyGroup.id);
 	},
 
+	checkDisabled:function(studyGroup) {
+		var curr_epoch = moment(new Date().toString()).unix();
+		return (studyGroup.date < curr_epoch);
+	},
+
 	render:function() {
 		var studyGroup = this.props.studyGroup;
 		var user = this.props.user;
@@ -50569,10 +50574,11 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 		var time = this.getTimeString(studyGroup.date);
 		var color = this.calculateTimeColor(studyGroup.date);	
 		var joinText = this.getJoinText(studyGroup, user);
+		var disabled = this.checkDisabled(studyGroup);
 
 		return (
 			React.createElement("div", {key: studyGroup.id}, 
-				React.createElement(Dialog_GroupDetail, {ref: "groupDetailDialog", studyGroup: studyGroup, user: user}), 
+				React.createElement(Dialog_GroupDetail, {ref: "groupDetailDialog", studyGroup: studyGroup, user: user, disabled: disabled}), 
 				React.createElement(Dialog, {
 					ref: "dismissConfirmation", 
 				  	title: "Are you sure you want to delete this group?", 
@@ -50634,7 +50640,7 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 					        	), 
 					        	React.createElement("div", {className: "column43 noBlur"}, 
 					        		React.createElement("div", {className: "centerVertical alignRight"}, 
-					        			React.createElement(RaisedButton, {onClick: this.joinLeaveGroup.bind(this, {joinText:joinText}), label: joinText})
+					        			React.createElement(RaisedButton, {onClick: this.joinLeaveGroup.bind(this, {joinText:joinText}), label: joinText, disabled: disabled})
 					        		)
 					        	), 
 					        	React.createElement("div", {className: "column44 noBlur"}, 
@@ -50979,9 +50985,7 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 	         	    		ref: "editGroupDate", 
 	         	    	  	hintText: "Nov 22, 2015", 
 	         	    	  	fullWidth: true, 
-	         	    	  	autoOk: true, 
 	         	    	  	defaultDate: date, 
-	         	    	  	onDismiss: this.openTimePicker, 
 	         	    	  	floatingLabelText: "Date"})), 
 	         	    	React.createElement("div", {style: {width:'80%', float:'left'}}, React.createElement(TextField, {
 	         	    		onEnterKeyDown: this.submitNewGroup, 
@@ -51097,7 +51101,7 @@ var GroupDetailDialog = React.createClass({displayName: "GroupDetailDialog",
 					    	React.createElement("div", {className: "groupdesc-title"}, "Description"), 
 					    	React.createElement("div", {ref: "groupdetailDescription", className: "groupdesc-subtitle"}, studyGroup.description), 
 
-					    	React.createElement(FlatButton, {label: "Edit", onClick: this.openEditGroupDialog})
+					    	React.createElement(FlatButton, {label: "Edit", onClick: this.openEditGroupDialog, disabled: this.props.disabled})
 
 					    ), 
 					    React.createElement(Comments, {studyGroup: studyGroup})
@@ -51471,10 +51475,6 @@ var NewGroupDialog = React.createClass({displayName: "NewGroupDialog",
 		}
 	},
 
-	openTimePicker:function() {
-			this.refs.createGroupTime.openDialog();
-	},
-
 	render:function() {
 		return (
 			React.createElement("div", null, 
@@ -51525,8 +51525,6 @@ var NewGroupDialog = React.createClass({displayName: "NewGroupDialog",
 				    		ref: "createGroupDate", 
 				    	  	hintText: "Nov 22, 2015", 
 				    	  	fullWidth: true, 
-				    	  	autoOk: true, 
-				    	  	onDismiss: this.openTimePicker, 
 				    	  	floatingLabelText: "Date"})), 
 				    	React.createElement("div", {style: {width:'80%', float:'left'}}, React.createElement(TextField, {
 				    		onEnterKeyDown: this.submitNewGroup, 
@@ -52745,13 +52743,19 @@ const moment = require('moment');
 		for (var i in this.studyGroups) {
 	     	if (this.studyGroups[i].id === comment.groupid) {
 	       		this.studyGroups[i].comments.push(comment);
-	        	break;
 	     	}
 	   	}
 
 	   	for (var i in this.upcomingGroups) {
 	     	if (this.upcomingGroups[i].id === comment.groupid) {
 	       		this.upcomingGroups[i].comments.push(comment);
+	        	break;
+	     	}
+	   	}
+
+	   	for (var i in this.pastGroups) {
+	     	if (this.pastGroups[i].id === comment.groupid) {
+	       		this.pastGroups[i].comments.push(comment);
 	        	break;
 	     	}
 	   	}

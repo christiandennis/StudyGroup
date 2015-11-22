@@ -83,13 +83,19 @@ class StudyGroupStore {
 		for (var i in this.studyGroups) {
 	     	if (this.studyGroups[i].id === comment.groupid) {
 	       		this.studyGroups[i].comments.push(comment);
-	        	break;
 	     	}
 	   	}
 
 	   	for (var i in this.upcomingGroups) {
 	     	if (this.upcomingGroups[i].id === comment.groupid) {
 	       		this.upcomingGroups[i].comments.push(comment);
+	        	break;
+	     	}
+	   	}
+
+	   	for (var i in this.pastGroups) {
+	     	if (this.pastGroups[i].id === comment.groupid) {
+	       		this.pastGroups[i].comments.push(comment);
 	        	break;
 	     	}
 	   	}
