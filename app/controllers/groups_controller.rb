@@ -70,8 +70,11 @@ class GroupsController < ApplicationController
 			error_messages << "Please pass in a date"
 		else
 			#VALIDATE here that date has not already happened
-			date_proposed = date.to_date
-			if date_proposed <= DateTime.now.to_date
+			date_proposed = date
+			puts 'Date----------------'
+			puts date
+			puts DateTime.now
+			if date_proposed <= DateTime.now
 				status = -1
 				error_messages << "You must pass in a date in the future"
 			end
