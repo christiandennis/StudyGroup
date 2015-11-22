@@ -14,7 +14,7 @@ var Card_MainGroupView = require('./Card_MainGroupView.jsx');
 var Masonry = require('react-masonry-component')(React);
 var masonryOptions = {
 	columnWidth: 550,
-    transitionDuration: 0
+    transitionDuration: '0.8s'
 };
 
 var injectTapEventPlugin = require("react-tap-event-plugin");
@@ -35,6 +35,8 @@ const CardHeader = require('material-ui/lib/card/card-header');
 const CardTitle = require('material-ui/lib/card/card-title');
 const CardActions = require('material-ui/lib/card/card-actions');
 const CardText = require('material-ui/lib/card/card-text');
+const Tabs = require('material-ui/lib/tabs/tabs');
+const Tab = require('material-ui/lib/tabs/tab');
 
 const moment = require('moment');
 
@@ -70,20 +72,87 @@ var AllStudyGroups = React.createClass({
 	}
 });
 
+var UpcomingGroups = React.createClass({
+	render() {
+		if (this.props.errorMessage) {
+			return (
+				<div>{this.props.errorMessage}</div>
+			);
+		}
+
+		if (this.props.upcomingGroups){
+			return (
+				<Masonry
+	                className={'my-gallery-class'}
+	                elementType={'ul'}
+	                options={masonryOptions}
+	                disableImagesLoaded={false}>
+					{this.props.upcomingGroups.map((studyGroup, i) => {
+					    return ( <Card_MainGroupView studyGroup={studyGroup} user={this.props.user} key={studyGroup.id}/>);
+					})}
+				</Masonry>		
+			);
+		} else {
+			return (<div>Loading...</div>);
+		}
+	}
+});
+
+var PastGroups = React.createClass({
+	render() {
+		if (this.props.errorMessage) {
+			return (
+				<div>{this.props.errorMessage}</div>
+			);
+		}
+
+		if (this.props.pastGroups){
+			return (
+				<Masonry
+	                className={'my-gallery-class'}
+	                elementType={'ul'}
+	                options={masonryOptions}
+	                disableImagesLoaded={false}>
+					{this.props.pastGroups.map((studyGroup, i) => {
+					    return ( <Card_MainGroupView studyGroup={studyGroup} user={this.props.user} key={studyGroup.id}/>);
+					})}
+				</Masonry>		
+			);
+		} else {
+			return (<div>Loading...</div>);
+		}
+	}
+});
+
 var StudyGroups = React.createClass ({
 	componentDidMount: function() {
 		StudyGroupStore.fetchStudyGroups();	
+		StudyGroupStore.fetchMyGroups();
+		setInterval(function() {StudyGroupStore.fetchMyGroups();} , refreshInterval);
 		setInterval(function() {StudyGroupStore.fetchStudyGroups();} , refreshInterval);
 	},
 
 	render(){
 		if (this.props.studyGroups!=null) {
 			return (
-				<div>
-					<AltContainer store = {StudyGroupStore}>
-						<AllStudyGroups/>
-					</AltContainer>
-				</div>
+				<Tabs tabItemContainerStyle={{backgroundColor:"#0D47A1"}}
+						inkBarStyle={{backgroundColor:"#FFC107"}}>
+					<Tab label="Home">
+						<AltContainer store={StudyGroupStore}>
+							<AllStudyGroups />
+						</AltContainer>
+					</Tab>
+					<Tab label="Upcoming">
+						<AltContainer store={StudyGroupStore}>
+							<UpcomingGroups />
+						</AltContainer>
+					</Tab>
+					<Tab label="Past">
+						<AltContainer store={StudyGroupStore}>
+							<PastGroups />
+						</AltContainer>
+					</Tab>
+				</Tabs>
 			);
 		}
 		return (

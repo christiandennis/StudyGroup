@@ -26,6 +26,12 @@ var NewGroupDialog = React.createClass({
 		return moment(date_str + time_str).unix();
 	},
 
+	calculateTime(time, date) {
+		date_str = date.toString().slice(0,15);
+		time_str = time.toString().slice(15);
+		return date_str + time_str;
+	},
+
 	submitNewGroup() {
 		var title = this.refs.createGroupTitle;
 		var subject = this.refs.createGroupSubject;
@@ -41,7 +47,7 @@ var NewGroupDialog = React.createClass({
 		var successSnackbar = this.refs.createGroupSuccessSnackbar;
 
 		if (this.validateGroupSubject() & this.validateGroupTitle() & this.validateGroupDescription() & this.validateGroupLocation() & this.validateGroupCapacity() & this.validateGroupDateTime()) {
-			StudyGroupStore.postNewGroup(title, subject, description, this.calculateTimeEpoch(time.getTime(), date.getDate()), location, capacity, privacy, newGroupDialog, failedSnackbar, successSnackbar);
+			StudyGroupStore.postNewGroup(title, subject, description, this.calculateTime(time.getTime(), date.getDate()), location, capacity, privacy, newGroupDialog, failedSnackbar, successSnackbar);
 		}
 	},
 
@@ -144,10 +150,6 @@ var NewGroupDialog = React.createClass({
 		}
 	},
 
-	openTimePicker() {
-			this.refs.createGroupTime.openDialog();
-	},
-
 	render() {
 		return (
 			<div>
@@ -198,8 +200,6 @@ var NewGroupDialog = React.createClass({
 				    		ref = "createGroupDate"
 				    	  	hintText="Nov 22, 2015"
 				    	  	fullWidth={true}
-				    	  	autoOk={true}
-				    	  	onDismiss={this.openTimePicker}
 				    	  	floatingLabelText="Date"/></div>
 				    	<div style={{width:'80%', float:'left'}}><TextField
 				    		onEnterKeyDown = {this.submitNewGroup}

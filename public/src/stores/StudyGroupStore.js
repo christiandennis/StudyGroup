@@ -12,7 +12,8 @@ class StudyGroupStore {
 		this.user = null;
 		this.errorMessageUser = null;
 		this.studyGroups = null;
-		this.myGroups = null;
+		this.upcomingGroups = null;
+		this.pastGroups = null;
 
 
 		this.bindListeners({
@@ -47,9 +48,9 @@ class StudyGroupStore {
 	}
 	
 	compare(a,b) {
-		if (Number(a.date) < Number(b.date))
+		if (new Date(a.date) < new Date(b.date))
 		    return -1;
-		if (Number(a.date) > Number(b.date))
+		if (new Date(a.date) > new Date(b.date))
 		    return 1;
 		return 0;
 	}
@@ -64,9 +65,9 @@ class StudyGroupStore {
 	}
 
 	handleDismissGroup(studyGroupID) {
-		for (var i in this.myGroups) {
-	     	if (this.myGroups[i].id === studyGroupID) {
-	       		this.myGroups.splice(i, 1);
+		for (var i in this.upcomingGroups) {
+	     	if (this.upcomingGroups[i].id === studyGroupID) {
+	       		this.upcomingGroups.splice(i, 1);
 	       		break;
 	     	}
 	   	}
@@ -82,33 +83,59 @@ class StudyGroupStore {
 		for (var i in this.studyGroups) {
 	     	if (this.studyGroups[i].id === comment.groupid) {
 	       		this.studyGroups[i].comments.push(comment);
+	     	}
+	   	}
+
+	   	for (var i in this.upcomingGroups) {
+	     	if (this.upcomingGroups[i].id === comment.groupid) {
+	       		this.upcomingGroups[i].comments.push(comment);
+	        	break;
+	     	}
+	   	}
+
+	   	for (var i in this.pastGroups) {
+	     	if (this.pastGroups[i].id === comment.groupid) {
+	       		this.pastGroups[i].comments.push(comment);
 	        	break;
 	     	}
 	   	}
 	}
 
 	handleFetchMyGroups(myGroups) {
-		this.myGroups = myGroups;
-		this.myGroups.sort(this.compare);
+		this.pastGroups = [];
+		this.upcomingGroups = [];
+
+		var curr_epoch = moment(new Date().toString()).unix();
+
+		for (var i in myGroups) {
+	     	if (myGroups[i].date < curr_epoch) {
+	       		this.pastGroups.push(myGroups[i]);
+	     	} else {
+	     		this.upcomingGroups.push(myGroups[i]);
+	     	}
+	   	}
+	   	this.upcomingGroups.sort(this.compare);
+	   	this.pastGroups.sort(this.compare);
+	   	this.pastGroups.reverse();
 	}
 
 	handleJoinOrLeaveGroup(myGroup) {
 		// add the joined group to mygroups
 		if(myGroup.joinOrLeave === 'add'){
 			var found = false;
-			for (var i in this.myGroups) {
-		     	if (this.myGroups[i].id === myGroup.groupID) {
+			for (var i in this.upcomingGroups) {
+		     	if (this.upcomingGroups[i].id === myGroup.groupID) {
 		       		found = true
 		        	break;
 		     	}
 		   	}
 		   	if (!found){
-		   		this.myGroups.push(myGroup.group);
+		   		this.upcomingGroups.push(myGroup.group);
 		   	}
 		} else { // remove the left group from mygroups
-			for (var i in this.myGroups) {
-		     	if (this.myGroups[i].id === myGroup.groupID) {
-		       		this.myGroups.splice(i, 1);
+			for (var i in this.upcomingGroups) {
+		     	if (this.upcomingGroups[i].id === myGroup.groupID) {
+		       		this.upcomingGroups.splice(i, 1);
 		       		break;
 		     	}
 		   	}
@@ -122,7 +149,7 @@ class StudyGroupStore {
 	     	}
 	   	}
 
-	   	this.myGroups.sort(this.compare);
+	   	this.upcomingGroups.sort(this.compare);
 	}
 
 	handleEditGroup(studyGroup) {
@@ -132,16 +159,17 @@ class StudyGroupStore {
 	        	break;
 	     	}
 	   	}
-
+	   	console.log('start');
 		this.studyGroups.sort(this.compare);
+		console.log('done');
 	}
 
 	handlePostNewGroup(studyGroup) {
 		this.studyGroups.unshift(studyGroup);
 		this.studyGroups.sort(this.compare);
 
-		this.myGroups.unshift(studyGroup);
-		this.myGroups.sort(this.compare);
+		this.upcomingGroups.unshift(studyGroup);
+		this.upcomingGroups.sort(this.compare);
 
 		this.errorMessage = null;
 	}
@@ -159,6 +187,15 @@ class StudyGroupStore {
 	handleUpdateStudyGroups(studyGroups){
 		this.studyGroups = studyGroups;
 		this.studyGroups.sort(this.compare);
+		var curr_epoch = moment(new Date().toString()).unix();
+		var index;
+		for (var i in this.studyGroups) {
+	     	if (this.studyGroups[i].date >= curr_epoch) {
+	       		index = i;
+	        	break;
+	     	}
+	   	}
+	   	this.studyGroups.splice(0, index);
 		this.errorMessage = null;
 	}
 

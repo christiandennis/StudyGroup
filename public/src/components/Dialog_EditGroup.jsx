@@ -25,6 +25,12 @@ var LoginDialog = React.createClass({
 		return moment(date_str + time_str).unix();
 	},
 
+	calculateTime(time, date) {
+		date_str = date.toString().slice(0,15);
+		time_str = time.toString().slice(15);
+		return date_str + time_str
+	},
+
 	submitEditGroupDetail() {
 		var id = this.props.studyGroup.id;
 		var title = this.refs.editGroupTitle;
@@ -40,7 +46,7 @@ var LoginDialog = React.createClass({
 		var successSnackbar = this.refs.editGroupSuccessSnackbar;
 
 		if (this.validateGroupSubject() & this.validateGroupTitle() & this.validateGroupDescription() & this.validateGroupLocation() & this.validateGroupCapacity() & this.validateGroupDateTime()) {
-			StudyGroupStore.editGroup(id, title, subject, description, this.calculateTimeEpoch(time.getTime(), date.getDate()), location, capacity, editGroupDialog, failedSnackbar, successSnackbar);
+			StudyGroupStore.editGroup(id, title, subject, description, this.calculateTime(time.getTime(), date.getDate()), location, capacity, editGroupDialog, failedSnackbar, successSnackbar);
 		}
 	},
 
@@ -151,7 +157,8 @@ var LoginDialog = React.createClass({
 
 	render() {
 		var studyGroup = this.props.studyGroup;
-		var date = this.getDateEpoch(studyGroup.date);
+		// var date = this.getDateEpoch(studyGroup.date);
+		var date = new Date(studyGroup.date);
 		return (
 			<div>
 				<Dialog ref="editGroupDialog"
@@ -206,9 +213,7 @@ var LoginDialog = React.createClass({
 	         	    		ref = "editGroupDate"
 	         	    	  	hintText="Nov 22, 2015"
 	         	    	  	fullWidth={true}
-	         	    	  	autoOk={true}
 	         	    	  	defaultDate={date}
-	         	    	  	onDismiss={this.openTimePicker}
 	         	    	  	floatingLabelText="Date"/></div>
 	         	    	<div style={{width:'80%', float:'left'}}><TextField
 	         	    		onEnterKeyDown = {this.submitNewGroup}

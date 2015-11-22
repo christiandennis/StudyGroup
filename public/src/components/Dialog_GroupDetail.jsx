@@ -76,7 +76,7 @@ var GroupDetailDialog = React.createClass({
 					    	<div className="groupdesc-title">Description</div>
 					    	<div ref="groupdetailDescription" className="groupdesc-subtitle">{studyGroup.description}</div>
 
-					    	<FlatButton label="Edit" onClick={this.openEditGroupDialog}/>
+					    	<FlatButton label="Edit" onClick={this.openEditGroupDialog} disabled={this.props.disabled}/>
 
 					    </Paper>
 					    <Comments studyGroup={studyGroup}/>

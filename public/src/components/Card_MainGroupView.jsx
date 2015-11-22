@@ -23,7 +23,7 @@ var MainGroupViewCard = React.createClass({
 	},
 
 	calculateTimeColor(card_date) {
-		var card_epoch = Number(card_date);
+		var card_epoch = moment(card_date).unix();
 		var curr_time = new Date().toString();
 		var curr_epoch = moment(curr_time).unix();
 		var time_diff = card_epoch - curr_epoch;
@@ -48,18 +48,6 @@ var MainGroupViewCard = React.createClass({
 		} else if (joinOrLeave.joinText === 'Join'){
 			StudyGroupStore.joinOrLeaveGroup(this.props.studyGroup.id, 'add');
 		}
-	},
-
-	getTimeString(time) {
-		var d = new Date(0);
-		d.setUTCSeconds(Number(time));
-		return moment(d).format("h:mm a").toString();
-	},
-
-	getDateString(date) {
-		var d = new Date(0);
-		d.setUTCSeconds(Number(date));
-		return moment(d).format("ddd, MMM D").toString();
 	},
 
 	checkUserGoing(studyGroup, user) {
@@ -87,6 +75,23 @@ var MainGroupViewCard = React.createClass({
 		StudyGroupStore.dismissGroup(this.props.studyGroup.id);
 	},
 
+	checkDisabled(studyGroup) {
+		var curr_epoch = moment(new Date().toString()).unix();
+		return (studyGroup.date < curr_epoch);
+	},
+
+	getTimeString(time) {
+		// var d = new Date(0);
+		// d.setUTCSeconds(Number(time));
+		return moment(time).format("h:mm a").toString();
+	},
+
+	getDateString(date) {
+		// var d = new Date(0);
+		// d.setUTCSeconds(Number(date));
+		return moment(date).format("ddd, MMM D").toString();
+	},
+
 	render() {
 		var studyGroup = this.props.studyGroup;
 		var user = this.props.user;
@@ -95,10 +100,11 @@ var MainGroupViewCard = React.createClass({
 		var time = this.getTimeString(studyGroup.date);
 		var color = this.calculateTimeColor(studyGroup.date);	
 		var joinText = this.getJoinText(studyGroup, user);
+		var disabled = this.checkDisabled(studyGroup);
 
 		return (
 			<div key={studyGroup.id}>
-				<Dialog_GroupDetail ref='groupDetailDialog' studyGroup={studyGroup} user={user}/>
+				<Dialog_GroupDetail ref='groupDetailDialog' studyGroup={studyGroup} user={user} disabled={disabled}/>
 				<Dialog
 					ref="dismissConfirmation"
 				  	title="Are you sure you want to delete this group?"
@@ -160,7 +166,7 @@ var MainGroupViewCard = React.createClass({
 					        	</div>
 					        	<div className='column43 noBlur'>
 					        		<div className='centerVertical alignRight'>
-					        			<RaisedButton onClick={this.joinLeaveGroup.bind(this, {joinText})} label={joinText}/>
+					        			<RaisedButton onClick={this.joinLeaveGroup.bind(this, {joinText})} label={joinText} disabled={disabled}/>
 					        		</div>
 					        	</div>
 					        	<div className='column44 noBlur'>
