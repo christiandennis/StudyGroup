@@ -14,7 +14,7 @@ var Card_MainGroupView = require('./Card_MainGroupView.jsx');
 var Masonry = require('react-masonry-component')(React);
 var masonryOptions = {
 	columnWidth: 550,
-    transitionDuration: 0
+    transitionDuration: '0.8s'
 };
 
 var injectTapEventPlugin = require("react-tap-event-plugin");

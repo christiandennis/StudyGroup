@@ -48,9 +48,9 @@ class StudyGroupStore {
 	}
 	
 	compare(a,b) {
-		if (Number(a.date) < Number(b.date))
+		if (new Date(a.date) < new Date(b.date))
 		    return -1;
-		if (Number(a.date) > Number(b.date))
+		if (new Date(a.date) > new Date(b.date))
 		    return 1;
 		return 0;
 	}
@@ -159,8 +159,9 @@ class StudyGroupStore {
 	        	break;
 	     	}
 	   	}
-
+	   	console.log('start');
 		this.studyGroups.sort(this.compare);
+		console.log('done');
 	}
 
 	handlePostNewGroup(studyGroup) {

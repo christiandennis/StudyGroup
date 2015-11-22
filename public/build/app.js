@@ -50497,7 +50497,7 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 	},
 
 	calculateTimeColor:function(card_date) {
-		var card_epoch = Number(card_date);
+		var card_epoch = moment(card_date).unix();
 		var curr_time = new Date().toString();
 		var curr_epoch = moment(curr_time).unix();
 		var time_diff = card_epoch - curr_epoch;
@@ -50522,18 +50522,6 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 		} else if (joinOrLeave.joinText === 'Join'){
 			StudyGroupStore.joinOrLeaveGroup(this.props.studyGroup.id, 'add');
 		}
-	},
-
-	getTimeString:function(time) {
-		var d = new Date(0);
-		d.setUTCSeconds(Number(time));
-		return moment(d).format("h:mm a").toString();
-	},
-
-	getDateString:function(date) {
-		var d = new Date(0);
-		d.setUTCSeconds(Number(date));
-		return moment(d).format("ddd, MMM D").toString();
 	},
 
 	checkUserGoing:function(studyGroup, user) {
@@ -50564,6 +50552,18 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 	checkDisabled:function(studyGroup) {
 		var curr_epoch = moment(new Date().toString()).unix();
 		return (studyGroup.date < curr_epoch);
+	},
+
+	getTimeString:function(time) {
+		// var d = new Date(0);
+		// d.setUTCSeconds(Number(time));
+		return moment(time).format("h:mm a").toString();
+	},
+
+	getDateString:function(date) {
+		// var d = new Date(0);
+		// d.setUTCSeconds(Number(date));
+		return moment(date).format("ddd, MMM D").toString();
 	},
 
 	render:function() {
@@ -50804,6 +50804,12 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 		return moment(date_str + time_str).unix();
 	},
 
+	calculateTime:function(time, date) {
+		date_str = date.toString().slice(0,15);
+		time_str = time.toString().slice(15);
+		return date_str + time_str
+	},
+
 	submitEditGroupDetail:function() {
 		var id = this.props.studyGroup.id;
 		var title = this.refs.editGroupTitle;
@@ -50819,7 +50825,7 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 		var successSnackbar = this.refs.editGroupSuccessSnackbar;
 
 		if (this.validateGroupSubject() & this.validateGroupTitle() & this.validateGroupDescription() & this.validateGroupLocation() & this.validateGroupCapacity() & this.validateGroupDateTime()) {
-			StudyGroupStore.editGroup(id, title, subject, description, this.calculateTimeEpoch(time.getTime(), date.getDate()), location, capacity, editGroupDialog, failedSnackbar, successSnackbar);
+			StudyGroupStore.editGroup(id, title, subject, description, this.calculateTime(time.getTime(), date.getDate()), location, capacity, editGroupDialog, failedSnackbar, successSnackbar);
 		}
 	},
 
@@ -50930,7 +50936,8 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 
 	render:function() {
 		var studyGroup = this.props.studyGroup;
-		var date = this.getDateEpoch(studyGroup.date);
+		// var date = this.getDateEpoch(studyGroup.date);
+		var date = new Date(studyGroup.date);
 		return (
 			React.createElement("div", null, 
 				React.createElement(Dialog, {ref: "editGroupDialog", 
@@ -51357,6 +51364,12 @@ var NewGroupDialog = React.createClass({displayName: "NewGroupDialog",
 		return moment(date_str + time_str).unix();
 	},
 
+	calculateTime:function(time, date) {
+		date_str = date.toString().slice(0,15);
+		time_str = time.toString().slice(15);
+		return date_str + time_str;
+	},
+
 	submitNewGroup:function() {
 		var title = this.refs.createGroupTitle;
 		var subject = this.refs.createGroupSubject;
@@ -51372,7 +51385,7 @@ var NewGroupDialog = React.createClass({displayName: "NewGroupDialog",
 		var successSnackbar = this.refs.createGroupSuccessSnackbar;
 
 		if (this.validateGroupSubject() & this.validateGroupTitle() & this.validateGroupDescription() & this.validateGroupLocation() & this.validateGroupCapacity() & this.validateGroupDateTime()) {
-			StudyGroupStore.postNewGroup(title, subject, description, this.calculateTimeEpoch(time.getTime(), date.getDate()), location, capacity, privacy, newGroupDialog, failedSnackbar, successSnackbar);
+			StudyGroupStore.postNewGroup(title, subject, description, this.calculateTime(time.getTime(), date.getDate()), location, capacity, privacy, newGroupDialog, failedSnackbar, successSnackbar);
 		}
 	},
 
@@ -51912,7 +51925,7 @@ var Card_MainGroupView = require('./Card_MainGroupView.jsx');
 var Masonry = require('react-masonry-component')(React);
 var masonryOptions = {
 	columnWidth: 550,
-    transitionDuration: 0
+    transitionDuration: '0.8s'
 };
 
 var injectTapEventPlugin = require("react-tap-event-plugin");
@@ -52708,9 +52721,9 @@ const moment = require('moment');
 	}
 	
 	Object.defineProperty(StudyGroupStore.prototype,"compare",{writable:true,configurable:true,value:function(a,b) {"use strict";
-		if (Number(a.date) < Number(b.date))
+		if (new Date(a.date) < new Date(b.date))
 		    return -1;
-		if (Number(a.date) > Number(b.date))
+		if (new Date(a.date) > new Date(b.date))
 		    return 1;
 		return 0;
 	}});
@@ -52819,8 +52832,9 @@ const moment = require('moment');
 	        	break;
 	     	}
 	   	}
-
+	   	console.log('start');
 		this.studyGroups.sort(this.compare);
+		console.log('done');
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handlePostNewGroup",{writable:true,configurable:true,value:function(studyGroup) {"use strict";
