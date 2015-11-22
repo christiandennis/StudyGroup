@@ -36,7 +36,7 @@ ActiveRecord::Schema.define(version: 20151121104356) do
     t.string   "title"
     t.string   "subject"
     t.text     "description"
-    t.string   "date"
+    t.datetime "date"
     t.string   "location"
     t.string   "school"
     t.integer  "capacity"

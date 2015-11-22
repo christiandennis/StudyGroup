@@ -6,8 +6,8 @@ class GroupsController < ApplicationController
   	rescue_from ActiveRecord::RecordNotFound, with: :handle_weird_error
 
   	def handle_weird_error
-    render json: {'status'=> -1, 'errors' => ["weird error can't process"]}, status: 400
-  end
+    	render json: {'status'=> -1, 'errors' => ["weird error can't process"]}, status: 400
+    end
 
 	def create
 		status = 1 #intially set status to OK
@@ -63,6 +63,18 @@ class GroupsController < ApplicationController
 		if privacy != '0' and privacy != '1'
 			status=-1
 			error_messages << "Please set privacy of 0 or 1"
+		end
+
+		if date.nil?
+			status = -1
+			error_messages << "Please pass in a date"
+		else
+			#VALIDATE here that date has not already happened
+			date_proposed = date.to_date
+			if date_proposed <= DateTime.now.to_date
+				status = -1
+				error_messages << "You must pass in a date in the future"
+			end
 		end
 
 

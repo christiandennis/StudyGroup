@@ -30,6 +30,8 @@ gem 'omniauth'
 
 gem 'devise_token_auth'
 
+gem 'date_validator'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
