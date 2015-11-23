@@ -39,6 +39,7 @@ const CardText = require('material-ui/lib/card/card-text');
 const List = require('material-ui/lib/lists/list');
 const ListItem = require('material-ui/lib/lists/list-item');
 const ListDivider = require('material-ui/lib/lists/list-divider');
+const Snackbar = require('material-ui/lib/snackbar');
 
 const moment = require('moment');
 
@@ -86,7 +87,7 @@ var Comments = React.createClass ({
 	},
 
 	postComment() {
-		StudyGroupStore.postComment(this.props.studyGroup.id, this.refs.commentText);
+		StudyGroupStore.postComment(this.props.studyGroup.id, this.refs.commentText, this.refs.success, this.refs.failed);
 	},
 
 	render(){
@@ -104,6 +105,14 @@ var Comments = React.createClass ({
 									onEnterKeyDown = {this.postComment}
 									multiLine={true}
 									fullWidth={true}/> <FlatButton label="post" onClick={this.postComment}/>
+						<Snackbar
+			           		ref = "success"
+			             	message="Comment posted"
+			             	autoHideDuration="5000"/>
+			             <Snackbar
+			           		ref = "failed"
+			             	message="Failed to post comment"
+			             	autoHideDuration="5000"/>
 				</div>
 			);
 		}

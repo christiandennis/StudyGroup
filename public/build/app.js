@@ -50281,6 +50281,10 @@ function UserActions(){"use strict";}
 		this.dispatch();
 	}});
 
+	Object.defineProperty(UserActions.prototype,"doNothing",{writable:true,configurable:true,value:function() {"use strict";
+		
+	}});
+
 
 module.exports = alt.createActions(UserActions);
 
@@ -50547,6 +50551,7 @@ const RaisedButton = require('material-ui/lib/raised-button');
 const Paper = require('material-ui/lib/paper');
 const Avatar = require('material-ui/lib/avatar');
 const FontIcon = require('material-ui/lib/font-icon');
+const Snackbar = require('material-ui/lib/snackbar');
 
 const moment = require('moment');
 
@@ -50577,9 +50582,9 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 		if (joinOrLeave.joinText === 'Dismiss') {
 			this.refs.dismissConfirmation.show();
 		} else if (joinOrLeave.joinText === 'Leave') {
-			StudyGroupStore.joinOrLeaveGroup(this.props.studyGroup.id, 'remove');
+			StudyGroupStore.joinOrLeaveGroup(this.props.studyGroup.id, 'remove', successLeave, failedLeave);
 		} else if (joinOrLeave.joinText === 'Join'){
-			StudyGroupStore.joinOrLeaveGroup(this.props.studyGroup.id, 'add');
+			StudyGroupStore.joinOrLeaveGroup(this.props.studyGroup.id, 'add', successJoin, failedLeave);
 		}
 	},
 
@@ -50710,7 +50715,27 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 					        )
 					    )
 			        )
-		        )
+		        ), 
+
+		        React.createElement(Snackbar, {
+	           		ref: "successJoin", 
+	             	message: "Joined the group", 
+	             	autoHideDuration: "5000"}), 
+
+	            React.createElement(Snackbar, {
+	           		ref: "failedJoin", 
+	             	message: "Failed to join group", 
+	             	autoHideDuration: "5000"}), 
+
+	             React.createElement(Snackbar, {
+	           		ref: "successLeave", 
+	             	message: "Left the group", 
+	             	autoHideDuration: "5000"}), 
+
+	            React.createElement(Snackbar, {
+	           		ref: "failedLeave", 
+	             	message: "Failed to leave group", 
+	             	autoHideDuration: "5000"})
 	    	)
 		)
 	}
@@ -50718,7 +50743,7 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 
 module.exports = MainGroupViewCard;
 
-},{"../stores/StudyGroupStore":411,"./Dialog_GroupDetail.jsx":402,"material-ui/lib/avatar":57,"material-ui/lib/dialog":76,"material-ui/lib/font-icon":81,"material-ui/lib/paper":100,"material-ui/lib/raised-button":101,"material-ui/lib/text-field":128,"moment":162,"react":391,"react-dom":168,"react-router":205}],400:[function(require,module,exports){
+},{"../stores/StudyGroupStore":411,"./Dialog_GroupDetail.jsx":402,"material-ui/lib/avatar":57,"material-ui/lib/dialog":76,"material-ui/lib/font-icon":81,"material-ui/lib/paper":100,"material-ui/lib/raised-button":101,"material-ui/lib/snackbar":106,"material-ui/lib/text-field":128,"moment":162,"react":391,"react-dom":168,"react-router":205}],400:[function(require,module,exports){
 // import react, react-router, alt
 var React = require('react');
 var render = require('react-dom').render;
@@ -50760,6 +50785,7 @@ const CardText = require('material-ui/lib/card/card-text');
 const List = require('material-ui/lib/lists/list');
 const ListItem = require('material-ui/lib/lists/list-item');
 const ListDivider = require('material-ui/lib/lists/list-divider');
+const Snackbar = require('material-ui/lib/snackbar');
 
 const moment = require('moment');
 
@@ -50807,7 +50833,7 @@ var Comments = React.createClass ({displayName: "Comments",
 	},
 
 	postComment:function() {
-		StudyGroupStore.postComment(this.props.studyGroup.id, this.refs.commentText);
+		StudyGroupStore.postComment(this.props.studyGroup.id, this.refs.commentText, this.refs.success, this.refs.failed);
 	},
 
 	render:function(){
@@ -50824,7 +50850,15 @@ var Comments = React.createClass ({displayName: "Comments",
 									hintText: "New Comment", 
 									onEnterKeyDown: this.postComment, 
 									multiLine: true, 
-									fullWidth: true}), " ", React.createElement(FlatButton, {label: "post", onClick: this.postComment})
+									fullWidth: true}), " ", React.createElement(FlatButton, {label: "post", onClick: this.postComment}), 
+						React.createElement(Snackbar, {
+			           		ref: "success", 
+			             	message: "Comment posted", 
+			             	autoHideDuration: "5000"}), 
+			             React.createElement(Snackbar, {
+			           		ref: "failed", 
+			             	message: "Failed to post comment", 
+			             	autoHideDuration: "5000"})
 				)
 			);
 		}
@@ -50837,7 +50871,7 @@ var Comments = React.createClass ({displayName: "Comments",
 
 module.exports = Comments;
 
-},{"../actions/CommentsActions":393,"../actions/StudyGroupActions":395,"../stores/StudyGroupStore":411,"./Card_MainGroupView.jsx":399,"alt/AltContainer":1,"axios":17,"material-ui/lib/avatar":57,"material-ui/lib/card/card":65,"material-ui/lib/card/card-actions":60,"material-ui/lib/card/card-header":62,"material-ui/lib/card/card-text":63,"material-ui/lib/card/card-title":64,"material-ui/lib/date-picker/date-picker":73,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/lists/list":87,"material-ui/lib/lists/list-divider":85,"material-ui/lib/lists/list-item":86,"material-ui/lib/paper":100,"material-ui/lib/raised-button":101,"material-ui/lib/refresh-indicator":102,"material-ui/lib/text-field":128,"material-ui/lib/time-picker/time-picker":137,"moment":162,"react":391,"react-addons-test-utils":165,"react-dom":168,"react-masonry-component":169,"react-tap-event-plugin":216}],401:[function(require,module,exports){
+},{"../actions/CommentsActions":393,"../actions/StudyGroupActions":395,"../stores/StudyGroupStore":411,"./Card_MainGroupView.jsx":399,"alt/AltContainer":1,"axios":17,"material-ui/lib/avatar":57,"material-ui/lib/card/card":65,"material-ui/lib/card/card-actions":60,"material-ui/lib/card/card-header":62,"material-ui/lib/card/card-text":63,"material-ui/lib/card/card-title":64,"material-ui/lib/date-picker/date-picker":73,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/lists/list":87,"material-ui/lib/lists/list-divider":85,"material-ui/lib/lists/list-item":86,"material-ui/lib/paper":100,"material-ui/lib/raised-button":101,"material-ui/lib/refresh-indicator":102,"material-ui/lib/snackbar":106,"material-ui/lib/text-field":128,"material-ui/lib/time-picker/time-picker":137,"moment":162,"react":391,"react-addons-test-utils":165,"react-dom":168,"react-masonry-component":169,"react-tap-event-plugin":216}],401:[function(require,module,exports){
 // React, react-reouter, alt
 var React = require('react');
 var render = require('react-dom').render;
@@ -52207,7 +52241,7 @@ var UserActions = require('../actions/UserActions');
 var MyGroupsActions = require('../actions/MyGroupsActions');
 var CommentsActions = require('../actions/CommentsActions');
 
-
+ 
 var StudyGroupSource = {
 	// ****************************************************************************
 	// ****************************************************************************
@@ -52283,6 +52317,7 @@ var StudyGroupSource = {
 		      	  		} else {
 		      	  			failedSnackbar.show();
 		      	  		}
+		      	  		reject(null);
 		      	  		// console.log('**************END SIGN UP**************');
 		      	}
 		      })
@@ -52294,8 +52329,7 @@ var StudyGroupSource = {
 		    return null;
 		  },
 		  success: UserActions.updateUser,
-		  error: UserActions.userFailed,
-		  loading: UserActions.fetchUser
+		  error: UserActions.doNothing
 		}
 	},
 
@@ -52350,8 +52384,7 @@ var StudyGroupSource = {
 		  },
 
 		  success: UserActions.updateUser,
-		  error: UserActions.userFailed,
-		  loading: UserActions.fetchUser
+		  error: UserActions.doNothing
 		}
 	},
 
@@ -52378,6 +52411,7 @@ var StudyGroupSource = {
       	      	// console.log('__SUCCESS__');
 	      	  	  // console.log('response:' ,response);
       	        window.location.href = '/';
+      	        resolve(null);
       	        // history.pushState(null, '/');
       	        // console.log('**************END SIGN OUT**************');
       	      },
@@ -52388,6 +52422,7 @@ var StudyGroupSource = {
 	      	  	  if (response.responseJSON.errors[0] === 'User was not found or was not logged in.') {
 	      	  	  	window.location.href = '/';
 	      	  	  }
+	      	  	  reject(null);
 	      	  	  // console.log('**************END SIGN OUT**************');
       	      }
       	    });
@@ -52458,6 +52493,7 @@ var StudyGroupSource = {
       	      	// User was not found or was not logged in.
 	      	  	  // console.log('response:' ,response.responseJSON);
 	      	  	  failedSnackbar.show();
+	      	  	  reject(null);
 	      	  	  // console.log('**************END POST NEW GROUP**************');
       	      }
       	    }); 
@@ -52470,7 +52506,7 @@ var StudyGroupSource = {
 		  },
 		  
 		  success: StudyGroupActions.postNewGroup,
-		  error: StudyGroupActions.studyGroupsFailed
+		  error: UserActions.doNothing
 		}
 	},
 
@@ -52511,6 +52547,7 @@ var StudyGroupSource = {
 			      	    //   	console.log('__FAILED__');
 				      	  	// console.log('response:' ,response.responseJSON);
 				      	  	failedSnackbar.show();
+				      	  	reject(null);
 				      	  	// console.log('**************END EDIT GROUP**************');
 		      	      	}
 	      	    	});
@@ -52523,7 +52560,7 @@ var StudyGroupSource = {
 		  },
 		  
 		  success: StudyGroupActions.editGroup,
-		  error: StudyGroupActions.studyGroupsFailed
+		  error: UserActions.doNothing
 		}
 	},
 	
@@ -52554,7 +52591,7 @@ var StudyGroupSource = {
 				        error: function(response) {
 				        	// console.log('__FAILED__');
 				         //  	console.log('response' ,response);
-				          	reject('fetch group FAILED');
+				         reject(null);
 				          	// console.log('**************END FETCH GROUP**************');
 				        }
 			      	});
@@ -52567,7 +52604,7 @@ var StudyGroupSource = {
 			},
 
 			success: StudyGroupActions.updateStudyGroups,
-			error: StudyGroupActions.studyGroupsFailed
+		  error: UserActions.doNothing
 
 		}
 	}, 
@@ -52598,7 +52635,7 @@ var StudyGroupSource = {
 					        error: function(response) {
 					        	// console.log('__FAILED__');
 					         //  	console.log('response' ,response);
-					          	// reject('fetch group FAILED');
+					         reject(null);
 					          	// console.log('**************SEARCH GROUP**************');
 					        }
 				      	});
@@ -52611,7 +52648,8 @@ var StudyGroupSource = {
 			    return null;
 			},
 
-			success: StudyGroupActions.searchGroups
+			success: StudyGroupActions.searchGroups,
+		  error: UserActions.doNothing
 
 		}
 	},
@@ -52650,7 +52688,7 @@ var StudyGroupSource = {
 				        error: function(response) {
 				        	// console.log('__FAILED__');
 				          // console.log('response' ,response);
-				          reject('fetch group FAILED');
+				          reject(null);
 				          // console.log('**************END FETCH MY GROUPS**************');
 				        }
 				    })
@@ -52659,13 +52697,14 @@ var StudyGroupSource = {
 			local:function() {
 				return null;
 			},
-			success: MyGroupsActions.fetchMyGroups
+			success: MyGroupsActions.fetchMyGroups,
+		  error: UserActions.doNothing
 		}
 	},
 
 	joinOrLeaveGroup:function() {
 		return {
-			remote:function(state, groupID, joinOrLeave){
+			remote:function(state, groupID, joinOrLeave, success, failed){
 				return new Promise(function(resolve, reject){
 					// console.log('--------------JOIN OR LEAVE GROUP--------------');
 				    $.ajax({ url: '/groups/user/update',
@@ -52688,13 +52727,15 @@ var StudyGroupSource = {
 					        					"groupID": groupID,
 					        					"joinOrLeave": joinOrLeave
 					        				};
+					        success.show();
 					        resolve(groupData);
 					        // console.log('**************ENDJOIN OR LEAVE GROUP**************');
 				        },
 				        error: function(response) {
 				        	// console.log('__FAILED__');
 				          	// console.log('response' ,response);
-				          	// reject('fetch group FAILED');
+				          	failed.show();
+				          	reject(null);
 				          	// console.log('**************END JOIN OR LEAVE GROUP**************');
 				        }
 				    })
@@ -52703,7 +52744,8 @@ var StudyGroupSource = {
 			local:function() {
 				return null;
 			},
-			success: MyGroupsActions.joinOrLeaveGroup
+			success: MyGroupsActions.joinOrLeaveGroup,
+		  error: UserActions.doNothing
 		}
 	},
 
@@ -52732,7 +52774,7 @@ var StudyGroupSource = {
 				        error: function(response) {
 				        	// console.log('__FAILED__');
 				          	// console.log('response' ,response);
-				          	// reject('fetch group FAILED');
+				          	reject(null);
 				          	// console.log('**************DISMISS GROUP**************');
 				        }
 				    })
@@ -52741,7 +52783,8 @@ var StudyGroupSource = {
 			local:function() {
 				return null;
 			},
-			success: MyGroupsActions.dismissGroup
+			success: MyGroupsActions.dismissGroup,
+		  error: UserActions.doNothing
 		}
 	},
 
@@ -52784,7 +52827,7 @@ var StudyGroupSource = {
 				        error: function(response) {
 				        	// console.log('__FAILED__');
 				          	// console.log('response' ,response);
-				          	// reject('fetch group FAILED');
+				          	reject(null);
 				          	// console.log('**************END COMMENTS**************');
 				        }
 				    })
@@ -52793,13 +52836,14 @@ var StudyGroupSource = {
 			local:function() {
 				return null;
 			},
-			success: CommentsActions.fetchComments
+			success: CommentsActions.fetchComments,
+		  error: UserActions.doNothing
 		}
 	},
 
 	postComment:function() {
 		return {
-			remote:function(state, groupID, content){
+			remote:function(state, groupID, content, success, failed){
 				return new Promise(function(resolve, reject){
 					// console.log('--------------POST COMMENTS--------------');
 				    $.ajax({ url: '/comment',
@@ -52821,12 +52865,14 @@ var StudyGroupSource = {
 					        // console.log('comments', comment);
 					        resolve(data.comment);
 					        content.setValue("");
+					        success.show();
 					        // console.log('**************END POST COMMENTS**************');
 				        },
 				        error: function(response) {
 				        	// console.log('__FAILED__');
 				          	// console.log('response' ,response);
-				          	// reject('fetch group FAILED');
+				          	failed.show();
+				          	reject(null);
 				          	// console.log('**************END POST COMMENTS**************');
 				        }
 				    })
@@ -52835,7 +52881,8 @@ var StudyGroupSource = {
 			local:function() {
 				return null;
 			},
-			success: CommentsActions.postComment
+			success: CommentsActions.postComment,
+		  error: UserActions.doNothing
 		}
 	}
 
@@ -53016,7 +53063,7 @@ const moment = require('moment');
 		   	}
 		}
 
-		// update the counter/capacity on the card
+		// update the card
 		for (var i in this.studyGroups) {
 	     	if (this.studyGroups[i].id == myGroup.groupID) {
 	       		this.studyGroups[i] = myGroup.group;

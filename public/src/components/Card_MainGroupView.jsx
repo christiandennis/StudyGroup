@@ -14,6 +14,7 @@ const RaisedButton = require('material-ui/lib/raised-button');
 const Paper = require('material-ui/lib/paper');
 const Avatar = require('material-ui/lib/avatar');
 const FontIcon = require('material-ui/lib/font-icon');
+const Snackbar = require('material-ui/lib/snackbar');
 
 const moment = require('moment');
 
@@ -44,9 +45,9 @@ var MainGroupViewCard = React.createClass({
 		if (joinOrLeave.joinText === 'Dismiss') {
 			this.refs.dismissConfirmation.show();
 		} else if (joinOrLeave.joinText === 'Leave') {
-			StudyGroupStore.joinOrLeaveGroup(this.props.studyGroup.id, 'remove');
+			StudyGroupStore.joinOrLeaveGroup(this.props.studyGroup.id, 'remove', successLeave, failedLeave);
 		} else if (joinOrLeave.joinText === 'Join'){
-			StudyGroupStore.joinOrLeaveGroup(this.props.studyGroup.id, 'add');
+			StudyGroupStore.joinOrLeaveGroup(this.props.studyGroup.id, 'add', successJoin, failedLeave);
 		}
 	},
 
@@ -72,7 +73,7 @@ var MainGroupViewCard = React.createClass({
 	},
 
 	confirmDismiss() {
-		StudyGroupStore.dismissGroup(this.props.studyGroup.id);
+		StudyGroupStore.dismissGroup(this.props.studyGroup.id, successDismiss, failedDismiss);
 	},
 
 	checkDisabled(studyGroup) {
@@ -178,6 +179,36 @@ var MainGroupViewCard = React.createClass({
 					    </div>
 			        </div>
 		        </Paper>
+
+		        <Snackbar
+	           		ref = "successJoin"
+	             	message="Joined the group"
+	             	autoHideDuration="5000"/>
+
+	            <Snackbar
+	           		ref = "failedJoin"
+	             	message="Failed to join group"
+	             	autoHideDuration="5000"/>
+
+	             <Snackbar
+	           		ref = "successLeave"
+	             	message="Left the group"
+	             	autoHideDuration="5000"/>
+
+	            <Snackbar
+	           		ref = "failedLeave"
+	             	message="Failed to leave group"
+	             	autoHideDuration="5000"/>
+
+	             <Snackbar
+	           		ref = "successDismiss"
+	             	message="Group dismissed"
+	             	autoHideDuration="5000"/>
+
+	            <Snackbar
+	           		ref = "failedDismiss"
+	             	message="Failed to dismiss group"
+	             	autoHideDuration="5000"/>
 	    	</div>
 		)
 	}

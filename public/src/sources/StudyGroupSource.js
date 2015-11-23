@@ -3,7 +3,7 @@ var UserActions = require('../actions/UserActions');
 var MyGroupsActions = require('../actions/MyGroupsActions');
 var CommentsActions = require('../actions/CommentsActions');
 
-
+ 
 var StudyGroupSource = {
 	// ****************************************************************************
 	// ****************************************************************************
@@ -79,6 +79,7 @@ var StudyGroupSource = {
 		      	  		} else {
 		      	  			failedSnackbar.show();
 		      	  		}
+		      	  		reject(null);
 		      	  		// console.log('**************END SIGN UP**************');
 		      	}
 		      })
@@ -90,8 +91,7 @@ var StudyGroupSource = {
 		    return null;
 		  },
 		  success: UserActions.updateUser,
-		  error: UserActions.userFailed,
-		  loading: UserActions.fetchUser
+		  error: UserActions.doNothing
 		}
 	},
 
@@ -146,8 +146,7 @@ var StudyGroupSource = {
 		  },
 
 		  success: UserActions.updateUser,
-		  error: UserActions.userFailed,
-		  loading: UserActions.fetchUser
+		  error: UserActions.doNothing
 		}
 	},
 
@@ -174,6 +173,7 @@ var StudyGroupSource = {
       	      	// console.log('__SUCCESS__');
 	      	  	  // console.log('response:' ,response);
       	        window.location.href = '/';
+      	        resolve(null);
       	        // history.pushState(null, '/');
       	        // console.log('**************END SIGN OUT**************');
       	      },
@@ -184,6 +184,7 @@ var StudyGroupSource = {
 	      	  	  if (response.responseJSON.errors[0] === 'User was not found or was not logged in.') {
 	      	  	  	window.location.href = '/';
 	      	  	  }
+	      	  	  reject(null);
 	      	  	  // console.log('**************END SIGN OUT**************');
       	      }
       	    });
@@ -254,6 +255,7 @@ var StudyGroupSource = {
       	      	// User was not found or was not logged in.
 	      	  	  // console.log('response:' ,response.responseJSON);
 	      	  	  failedSnackbar.show();
+	      	  	  reject(null);
 	      	  	  // console.log('**************END POST NEW GROUP**************');
       	      }
       	    }); 
@@ -266,7 +268,7 @@ var StudyGroupSource = {
 		  },
 		  
 		  success: StudyGroupActions.postNewGroup,
-		  error: StudyGroupActions.studyGroupsFailed
+		  error: UserActions.doNothing
 		}
 	},
 
@@ -307,6 +309,7 @@ var StudyGroupSource = {
 			      	    //   	console.log('__FAILED__');
 				      	  	// console.log('response:' ,response.responseJSON);
 				      	  	failedSnackbar.show();
+				      	  	reject(null);
 				      	  	// console.log('**************END EDIT GROUP**************');
 		      	      	}
 	      	    	});
@@ -319,7 +322,7 @@ var StudyGroupSource = {
 		  },
 		  
 		  success: StudyGroupActions.editGroup,
-		  error: StudyGroupActions.studyGroupsFailed
+		  error: UserActions.doNothing
 		}
 	},
 	
@@ -350,7 +353,7 @@ var StudyGroupSource = {
 				        error: function(response) {
 				        	// console.log('__FAILED__');
 				         //  	console.log('response' ,response);
-				          	reject('fetch group FAILED');
+				         reject(null);
 				          	// console.log('**************END FETCH GROUP**************');
 				        }
 			      	});
@@ -363,7 +366,7 @@ var StudyGroupSource = {
 			},
 
 			success: StudyGroupActions.updateStudyGroups,
-			error: StudyGroupActions.studyGroupsFailed
+		  error: UserActions.doNothing
 
 		}
 	}, 
@@ -394,7 +397,7 @@ var StudyGroupSource = {
 					        error: function(response) {
 					        	// console.log('__FAILED__');
 					         //  	console.log('response' ,response);
-					          	// reject('fetch group FAILED');
+					         reject(null);
 					          	// console.log('**************SEARCH GROUP**************');
 					        }
 				      	});
@@ -407,7 +410,8 @@ var StudyGroupSource = {
 			    return null;
 			},
 
-			success: StudyGroupActions.searchGroups
+			success: StudyGroupActions.searchGroups,
+		  error: UserActions.doNothing
 
 		}
 	},
@@ -446,7 +450,7 @@ var StudyGroupSource = {
 				        error: function(response) {
 				        	// console.log('__FAILED__');
 				          // console.log('response' ,response);
-				          reject('fetch group FAILED');
+				          reject(null);
 				          // console.log('**************END FETCH MY GROUPS**************');
 				        }
 				    })
@@ -455,13 +459,14 @@ var StudyGroupSource = {
 			local() {
 				return null;
 			},
-			success: MyGroupsActions.fetchMyGroups
+			success: MyGroupsActions.fetchMyGroups,
+		  error: UserActions.doNothing
 		}
 	},
 
 	joinOrLeaveGroup() {
 		return {
-			remote(state, groupID, joinOrLeave){
+			remote(state, groupID, joinOrLeave, success, failed){
 				return new Promise(function(resolve, reject){
 					// console.log('--------------JOIN OR LEAVE GROUP--------------');
 				    $.ajax({ url: '/groups/user/update',
@@ -484,13 +489,15 @@ var StudyGroupSource = {
 					        					"groupID": groupID,
 					        					"joinOrLeave": joinOrLeave
 					        				};
+					        success.show();
 					        resolve(groupData);
 					        // console.log('**************ENDJOIN OR LEAVE GROUP**************');
 				        },
 				        error: function(response) {
 				        	// console.log('__FAILED__');
 				          	// console.log('response' ,response);
-				          	// reject('fetch group FAILED');
+				          	failed.show();
+				          	reject(null);
 				          	// console.log('**************END JOIN OR LEAVE GROUP**************');
 				        }
 				    })
@@ -499,14 +506,15 @@ var StudyGroupSource = {
 			local() {
 				return null;
 			},
-			success: MyGroupsActions.joinOrLeaveGroup
+			success: MyGroupsActions.joinOrLeaveGroup,
+		  error: UserActions.doNothing
 		}
 	},
 
 	dismissGroup() {
 		return {
 			remote(state, groupID){
-				return new Promise(function(resolve, reject){
+				return new Promise(function(resolve, reject, success, failed){
 					// console.log('--------------DISMISS GROUP--------------');
 				    $.ajax({ url: '/groups/delete',
 				        type: 'DELETE',
@@ -522,13 +530,15 @@ var StudyGroupSource = {
 				        success: function(data, status, xhr) {
 				        	// console.log('__SUCCESS__');
 					        // console.log('data' ,data);
+					        success.show();
 					        resolve(groupID);
 					        // console.log('**************DISMISS GROUP**************');
 				        },
 				        error: function(response) {
 				        	// console.log('__FAILED__');
 				          	// console.log('response' ,response);
-				          	// reject('fetch group FAILED');
+				          	failed.show();
+				          	reject(null);
 				          	// console.log('**************DISMISS GROUP**************');
 				        }
 				    })
@@ -537,7 +547,8 @@ var StudyGroupSource = {
 			local() {
 				return null;
 			},
-			success: MyGroupsActions.dismissGroup
+			success: MyGroupsActions.dismissGroup,
+		  error: UserActions.doNothing
 		}
 	},
 
@@ -580,7 +591,7 @@ var StudyGroupSource = {
 				        error: function(response) {
 				        	// console.log('__FAILED__');
 				          	// console.log('response' ,response);
-				          	// reject('fetch group FAILED');
+				          	reject(null);
 				          	// console.log('**************END COMMENTS**************');
 				        }
 				    })
@@ -589,13 +600,14 @@ var StudyGroupSource = {
 			local() {
 				return null;
 			},
-			success: CommentsActions.fetchComments
+			success: CommentsActions.fetchComments,
+		  error: UserActions.doNothing
 		}
 	},
 
 	postComment() {
 		return {
-			remote(state, groupID, content){
+			remote(state, groupID, content, success, failed){
 				return new Promise(function(resolve, reject){
 					// console.log('--------------POST COMMENTS--------------');
 				    $.ajax({ url: '/comment',
@@ -617,12 +629,14 @@ var StudyGroupSource = {
 					        // console.log('comments', comment);
 					        resolve(data.comment);
 					        content.setValue("");
+					        success.show();
 					        // console.log('**************END POST COMMENTS**************');
 				        },
 				        error: function(response) {
 				        	// console.log('__FAILED__');
 				          	// console.log('response' ,response);
-				          	// reject('fetch group FAILED');
+				          	failed.show();
+				          	reject(null);
 				          	// console.log('**************END POST COMMENTS**************');
 				        }
 				    })
@@ -631,7 +645,8 @@ var StudyGroupSource = {
 			local() {
 				return null;
 			},
-			success: CommentsActions.postComment
+			success: CommentsActions.postComment,
+		  error: UserActions.doNothing
 		}
 	}
 

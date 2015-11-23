@@ -20,6 +20,10 @@ class UserActions {
 	signOut() {
 		this.dispatch();
 	}
+
+	doNothing() {
+		
+	}
 }
 
 module.exports = alt.createActions(UserActions);

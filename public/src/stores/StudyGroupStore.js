@@ -169,7 +169,7 @@ class StudyGroupStore {
 		   	}
 		}
 
-		// update the counter/capacity on the card
+		// update the card
 		for (var i in this.studyGroups) {
 	     	if (this.studyGroups[i].id == myGroup.groupID) {
 	       		this.studyGroups[i] = myGroup.group;
