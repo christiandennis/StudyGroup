@@ -45,7 +45,9 @@ var LoginDialog = React.createClass({
 		var failedSnackbar = this.refs.editGroupFailedSnackbar;
 		var successSnackbar = this.refs.editGroupSuccessSnackbar;
 
-		if (this.validateGroupSubject() & this.validateGroupTitle() & this.validateGroupDescription() & this.validateGroupLocation() & this.validateGroupCapacity() & this.validateGroupDateTime()) {
+		if(!this.validateGroupDateTime()) {
+			this.refs.dateSnackbar.show();
+		} else if (this.validateGroupSubject() & this.validateGroupTitle() & this.validateGroupDescription() & this.validateGroupLocation() & this.validateGroupCapacity() & this.validateGroupDateTime()) {
 			StudyGroupStore.editGroup(id, title, subject, description, this.calculateTime(time.getTime(), date.getDate()), location, capacity, editGroupDialog, failedSnackbar, successSnackbar);
 		}
 	},
@@ -246,6 +248,11 @@ var LoginDialog = React.createClass({
                		ref = "editGroupSuccessSnackbar"
                  	message="Group Edited"
                  	autoHideDuration={5000}/>
+
+                 <Snackbar
+	           		ref = "dateSnackbar"
+	             	message="Please enter a date/time in the future"
+	             	autoHideDuration="5000"/>
 			</div>
 		)
 	}

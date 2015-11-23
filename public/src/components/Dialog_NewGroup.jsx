@@ -46,7 +46,9 @@ var NewGroupDialog = React.createClass({
 		var failedSnackbar = this.refs.createGroupFailedSnackbar;
 		var successSnackbar = this.refs.createGroupSuccessSnackbar;
 
-		if (this.validateGroupSubject() & this.validateGroupTitle() & this.validateGroupDescription() & this.validateGroupLocation() & this.validateGroupCapacity() & this.validateGroupDateTime()) {
+		if(!this.validateGroupDateTime()) {
+			this.refs.dateSnackbar.show();
+		} else if (this.validateGroupSubject() & this.validateGroupTitle() & this.validateGroupDescription() & this.validateGroupLocation() & this.validateGroupCapacity() & this.validateGroupDateTime()) {
 			StudyGroupStore.postNewGroup(title, subject, description, this.calculateTime(time.getTime(), date.getDate()), location, capacity, privacy, newGroupDialog, failedSnackbar, successSnackbar);
 		}
 	},
@@ -226,6 +228,11 @@ var NewGroupDialog = React.createClass({
 	    		<Snackbar
 	           		ref = "createGroupSuccessSnackbar"
 	             	message="Group Created"
+	             	autoHideDuration="5000"/>
+
+	             <Snackbar
+	           		ref = "dateSnackbar"
+	             	message="Please enter a date/time in the future"
 	             	autoHideDuration="5000"/>
             </div>
 		)

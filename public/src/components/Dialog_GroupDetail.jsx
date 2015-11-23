@@ -22,15 +22,15 @@ var GroupDetailDialog = React.createClass({
 	},
 
 	getTimeString(time) {
-		var d = new Date(0);
-		d.setUTCSeconds(Number(time));
-		return moment(d).format("h:mm a").toString();
+		// var d = new Date(0);
+		// d.setUTCSeconds(Number(time));
+		return moment(time).format("h:mm a").toString();
 	},
 
 	getDateString(date) {
-		var d = new Date(0);
-		d.setUTCSeconds(Number(date));
-		return moment(d).format("ddd, MMM D").toString();
+		// var d = new Date(0);
+		// d.setUTCSeconds(Number(date));
+		return moment(date).format("ddd, MMM D").toString();
 	},
 
 	render() {
@@ -38,7 +38,7 @@ var GroupDetailDialog = React.createClass({
 		var user = this.props.user;
 
 		var date = this.getDateString(studyGroup.date);
-		var time = this.getTimeString(studyGroup.date);
+		var time = this.getTimeString(studyGroup.date); 
 		if(!this.props.studyGroup) {
 			return (<div></div>);
 		}

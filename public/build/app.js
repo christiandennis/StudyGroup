@@ -50826,7 +50826,9 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 		var failedSnackbar = this.refs.editGroupFailedSnackbar;
 		var successSnackbar = this.refs.editGroupSuccessSnackbar;
 
-		if (this.validateGroupSubject() & this.validateGroupTitle() & this.validateGroupDescription() & this.validateGroupLocation() & this.validateGroupCapacity() & this.validateGroupDateTime()) {
+		if(!this.validateGroupDateTime()) {
+			this.refs.dateSnackbar.show();
+		} else if (this.validateGroupSubject() & this.validateGroupTitle() & this.validateGroupDescription() & this.validateGroupLocation() & this.validateGroupCapacity() & this.validateGroupDateTime()) {
 			StudyGroupStore.editGroup(id, title, subject, description, this.calculateTime(time.getTime(), date.getDate()), location, capacity, editGroupDialog, failedSnackbar, successSnackbar);
 		}
 	},
@@ -51026,7 +51028,12 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
         		React.createElement(Snackbar, {
                		ref: "editGroupSuccessSnackbar", 
                  	message: "Group Edited", 
-                 	autoHideDuration: 5000})
+                 	autoHideDuration: 5000}), 
+
+                 React.createElement(Snackbar, {
+	           		ref: "dateSnackbar", 
+	             	message: "Please enter a date/time in the future", 
+	             	autoHideDuration: "5000"})
 			)
 		)
 	}
@@ -51059,15 +51066,15 @@ var GroupDetailDialog = React.createClass({displayName: "GroupDetailDialog",
 	},
 
 	getTimeString:function(time) {
-		var d = new Date(0);
-		d.setUTCSeconds(Number(time));
-		return moment(d).format("h:mm a").toString();
+		// var d = new Date(0);
+		// d.setUTCSeconds(Number(time));
+		return moment(time).format("h:mm a").toString();
 	},
 
 	getDateString:function(date) {
-		var d = new Date(0);
-		d.setUTCSeconds(Number(date));
-		return moment(d).format("ddd, MMM D").toString();
+		// var d = new Date(0);
+		// d.setUTCSeconds(Number(date));
+		return moment(date).format("ddd, MMM D").toString();
 	},
 
 	render:function() {
@@ -51075,7 +51082,7 @@ var GroupDetailDialog = React.createClass({displayName: "GroupDetailDialog",
 		var user = this.props.user;
 
 		var date = this.getDateString(studyGroup.date);
-		var time = this.getTimeString(studyGroup.date);
+		var time = this.getTimeString(studyGroup.date); 
 		if(!this.props.studyGroup) {
 			return (React.createElement("div", null));
 		}
@@ -51389,7 +51396,9 @@ var NewGroupDialog = React.createClass({displayName: "NewGroupDialog",
 		var failedSnackbar = this.refs.createGroupFailedSnackbar;
 		var successSnackbar = this.refs.createGroupSuccessSnackbar;
 
-		if (this.validateGroupSubject() & this.validateGroupTitle() & this.validateGroupDescription() & this.validateGroupLocation() & this.validateGroupCapacity() & this.validateGroupDateTime()) {
+		if(!this.validateGroupDateTime()) {
+			this.refs.dateSnackbar.show();
+		} else if (this.validateGroupSubject() & this.validateGroupTitle() & this.validateGroupDescription() & this.validateGroupLocation() & this.validateGroupCapacity() & this.validateGroupDateTime()) {
 			StudyGroupStore.postNewGroup(title, subject, description, this.calculateTime(time.getTime(), date.getDate()), location, capacity, privacy, newGroupDialog, failedSnackbar, successSnackbar);
 		}
 	},
@@ -51569,6 +51578,11 @@ var NewGroupDialog = React.createClass({displayName: "NewGroupDialog",
 	    		React.createElement(Snackbar, {
 	           		ref: "createGroupSuccessSnackbar", 
 	             	message: "Group Created", 
+	             	autoHideDuration: "5000"}), 
+
+	             React.createElement(Snackbar, {
+	           		ref: "dateSnackbar", 
+	             	message: "Please enter a date/time in the future", 
 	             	autoHideDuration: "5000"})
             )
 		)
