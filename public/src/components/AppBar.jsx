@@ -13,6 +13,7 @@ var Dialog_SignUp = require('./Dialog_SignUp.jsx');
 var Dialog_NewGroup = require('./Dialog_NewGroup.jsx');
 var Dialog_Profile = require('./Dialog_Profile.jsx');
 var Dialog_MyGroups = require('./Dialog_MyGroups.jsx');
+const TextField = require('material-ui/lib/text-field');
 
 var ReactTestUtils = require('react-addons-test-utils');
 
@@ -32,6 +33,8 @@ const AppBarTheme = require('../themes/AppBarTheme.js');
 
 // sticky headers
 const Sticky = require('react-sticky');
+
+var typingTimer;
 
 var LeftBar = React.createClass({
 	mixins: [History],
@@ -129,6 +132,23 @@ var TopBar = React.createClass({
     	StudyGroupStore.fetchMyGroups();
     },
 
+    startTypingTimer() {
+    	clearTimeout(typingTimer);
+    	var searchTerm = this.refs.searchField.getValue();
+    	typingTimer = setTimeout(function(){StudyGroupStore.searchGroups(searchTerm);}, 50);
+    },
+
+    clearTypingTimer() {
+    	clearTimeout(typingTimer);
+    },
+
+    directSearch() {
+    	// use this for non-direct search
+    	// onKeyDown={this.clearTypingTimer}
+		// onKeyUp={this.startTypingTimer}
+    	StudyGroupStore.searchGroups(this.refs.searchField.getValue());
+    },
+
 	render() {
 		if (this.props.user) {
 			return (
@@ -141,6 +161,28 @@ var TopBar = React.createClass({
 							    	backgroundColor: '#0D47A1 !important',
 							  	}}
 							  	onLeftIconButtonTouchTap={this.openLeft}>
+							  		<IconButton iconClassName="material-icons" 
+							  					disabled={true}
+							  					style={{
+							  						height:'inherit',
+							  						marginTop:'4px',
+							  						marginRight:'-10px'}}
+							  					iconStyle={{fontSize:'24px', color:'#CCCCCC'}}>search</IconButton>
+							  		<TextField
+							  			ref='searchField'
+							  		  	hintText="Search Study Groups" 
+						  		  		style = {{
+						  		  					marginTop:'8px', 
+						  		  					marginRight:'5px',
+						  		  					width:'150px'}}
+						  		  	  	inputStyle={{
+						  		  	  				color:'#D3D3D3',
+						  		  	  				fontSize:'12px'}}
+						  		  	  	underlineStyle={{color:'#FEFEFE'}}
+						  		  	  	hintStyle={{
+						  		  	  				color:'#CCCCCC',
+						  		  	  				fontSize:'12px'}}
+						  		  	  	onChange={this.directSearch}/>
 							  		<IconButton iconClassName="material-icons" 
 							  					style={{height:'inherit'}}
 							  					iconStyle={{fontSize:'24px', color:'rgba(255, 255, 255, 1)'}} 

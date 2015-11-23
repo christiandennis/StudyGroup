@@ -24,6 +24,10 @@ class StudyGroupActions {
 	editGroup(studyGroups) {
 		this.dispatch(studyGroups);
 	}
+
+	searchGroups(searchResults) {
+		this.dispatch(searchResults);
+	}
 }
 
 module.exports = alt.createActions(StudyGroupActions);

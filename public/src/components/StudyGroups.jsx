@@ -14,7 +14,7 @@ var Card_MainGroupView = require('./Card_MainGroupView.jsx');
 var Masonry = require('react-masonry-component')(React);
 var masonryOptions = {
 	columnWidth: 550,
-    transitionDuration: '0.8s'
+    transitionDuration: '0.4s'
 };
 
 var injectTapEventPlugin = require("react-tap-event-plugin");
@@ -56,7 +56,19 @@ var AllStudyGroups = React.createClass({
 			);
 		}
 
-		if (this.props.studyGroups){
+		if (this.props.searchResults){
+			return (
+				<Masonry
+	                className={'my-gallery-class'}
+	                elementType={'ul'}
+	                options={masonryOptions}
+	                disableImagesLoaded={false}>
+					{this.props.searchResults.map((studyGroup, i) => {
+					    return ( <Card_MainGroupView studyGroup={studyGroup} user={this.props.user} key={studyGroup.id}/>);
+					})}
+				</Masonry>		
+			);
+		} else if (this.props.studyGroups){
 			return (
 				<Masonry
 	                className={'my-gallery-class'}
@@ -80,7 +92,19 @@ var UpcomingGroups = React.createClass({
 			);
 		}
 
-		if (this.props.upcomingGroups){
+		if (this.props.searchResults){
+			return (
+				<Masonry
+	                className={'my-gallery-class'}
+	                elementType={'ul'}
+	                options={masonryOptions}
+	                disableImagesLoaded={false}>
+					{this.props.searchResults.map((studyGroup, i) => {
+					    return ( <Card_MainGroupView studyGroup={studyGroup} user={this.props.user} key={studyGroup.id}/>);
+					})}
+				</Masonry>		
+			);
+		} else if (this.props.upcomingGroups){
 			return (
 				<Masonry
 	                className={'my-gallery-class'}
@@ -106,7 +130,19 @@ var PastGroups = React.createClass({
 			);
 		}
 
-		if (this.props.pastGroups){
+		if (this.props.searchResults){
+			return (
+				<Masonry
+	                className={'my-gallery-class'}
+	                elementType={'ul'}
+	                options={masonryOptions}
+	                disableImagesLoaded={false}>
+					{this.props.searchResults.map((studyGroup, i) => {
+					    return ( <Card_MainGroupView studyGroup={studyGroup} user={this.props.user} key={studyGroup.id}/>);
+					})}
+				</Masonry>		
+			);
+		} else if (this.props.pastGroups){
 			return (
 				<Masonry
 	                className={'my-gallery-class'}

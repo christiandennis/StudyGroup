@@ -153,7 +153,7 @@ var MainGroupViewCard = React.createClass({
 					        </div>
 					        <div className='row3'>
 					        	<div className='column11 noBlur'>
-					        		<FontIcon className="material-icons centerVertical" style={{fontSize:'48px', color:'grey'}} >map</FontIcon>
+					        		<FontIcon className="material-icons centerVertical" style={{fontSize:'48px', color:'grey'}} >location_on</FontIcon>
 					        	</div>
 					        	<div className='column32 noBlur'>
 					        		<div className="location centerVertical">{studyGroup.location}</div>

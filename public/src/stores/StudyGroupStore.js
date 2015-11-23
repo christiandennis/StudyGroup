@@ -14,6 +14,7 @@ class StudyGroupStore {
 		this.studyGroups = null;
 		this.upcomingGroups = null;
 		this.pastGroups = null;
+		this.searchResults = null;
 
 
 		this.bindListeners({
@@ -31,6 +32,7 @@ class StudyGroupStore {
 			handlePostNewGroup: StudyGroupActions.POST_NEW_GROUP,
 			handleRefreshGroups: StudyGroupActions.REFRESH_GROUPS,
 			handleEditGroup: StudyGroupActions.EDIT_GROUP,
+			handleSearchGroups: StudyGroupActions.SEARCH_GROUPS,
 
 			handleFetchMyGroups: MyGroupsActions.FETCH_MY_GROUPS,
 			handleJoinOrLeaveGroup: MyGroupsActions.JOIN_OR_LEAVE_GROUP,
@@ -47,6 +49,10 @@ class StudyGroupStore {
 		this.exportAsync(StudyGroupSource);
 	}
 	
+	handleSearchGroups(groups) {
+		this.searchResults = groups;
+	}
+
 	compare(a,b) {
 		if (new Date(a.date) < new Date(b.date))
 		    return -1;
