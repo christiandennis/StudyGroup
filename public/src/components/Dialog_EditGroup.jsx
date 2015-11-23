@@ -132,7 +132,10 @@ var LoginDialog = React.createClass({
 		var capacity = this.refs.editGroupCapacity;
 		if (capacity.getValue()) {
 			if (/^\d+$/.test(capacity.getValue())) {
-				if (parseInt(capacity.getValue()) > 0){
+				if (parseInt(capacity.getValue()) < this.props.studyGroup.guestlist){
+					capacity.setErrorText("Capacity must be bigger than guest numer: "+ this.props.studyGroup.guestlist);
+					return false;
+				} else if (parseInt(capacity.getValue()) > 0){
 					capacity.setErrorText("");
 					return true;
 				} else {

@@ -190,7 +190,6 @@ class StudyGroupStore {
 		var index;
 		for (var i in this.studyGroups) {
 	     	if (new Date(this.studyGroups[i].date) >= new Date()) {
-	     		console.log('boom');
 	       		index = i;
 	        	break;
 	     	}

@@ -50913,7 +50913,10 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 		var capacity = this.refs.editGroupCapacity;
 		if (capacity.getValue()) {
 			if (/^\d+$/.test(capacity.getValue())) {
-				if (parseInt(capacity.getValue()) > 0){
+				if (parseInt(capacity.getValue()) < this.props.studyGroup.guestlist){
+					capacity.setErrorText("Capacity must be bigger than guest numer: "+ this.props.studyGroup.guestlist);
+					return false;
+				} else if (parseInt(capacity.getValue()) > 0){
 					capacity.setErrorText("");
 					return true;
 				} else {
@@ -52865,7 +52868,6 @@ const moment = require('moment');
 		var index;
 		for (var i in this.studyGroups) {
 	     	if (new Date(this.studyGroups[i].date) >= new Date()) {
-	     		console.log('boom');
 	       		index = i;
 	        	break;
 	     	}
