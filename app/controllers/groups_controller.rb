@@ -134,7 +134,7 @@ class GroupsController < ApplicationController
 			return
 		end
 		
-		render json: {'status' => -1, 'erros' => error_messages}, status: 400
+		render json: {'status' => -1, 'errors' => error_messages}, status: 400
 		
 
 	end
@@ -267,6 +267,34 @@ class GroupsController < ApplicationController
 		else
 			render json: {'status'=>-1,'errors'=>['Could not find group with id']}, status: 400
 		end
+	end
+
+	def search
+		#Check subject, title
+		if params[:search].nil?
+			render json: {'status'=>-1,'errors'=>['Please pass in a valid search']}
+			return
+		end
+
+		words = params[:search].split(' ')
+		@groups = []
+
+
+		for group in Group.all.order("date") do
+			sub = group.subject
+			t = group .title
+
+			for word in words do
+				if t.include? word or sub.include? word
+					@groups << group
+					break
+				end
+			end
+		end
+
+		render json: {'status'=>1, 'group'=>@groups}
+
+
 	end
 
 	private
