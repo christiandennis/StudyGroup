@@ -45,9 +45,9 @@ var MainGroupViewCard = React.createClass({
 		if (joinOrLeave.joinText === 'Dismiss') {
 			this.refs.dismissConfirmation.show();
 		} else if (joinOrLeave.joinText === 'Leave') {
-			StudyGroupStore.joinOrLeaveGroup(this.props.studyGroup.id, 'remove', successLeave, failedLeave);
+			StudyGroupStore.joinOrLeaveGroup(this.props.studyGroup.id, 'remove', this.refs.successLeave, this.refs.failedLeave);
 		} else if (joinOrLeave.joinText === 'Join'){
-			StudyGroupStore.joinOrLeaveGroup(this.props.studyGroup.id, 'add', successJoin, failedLeave);
+			StudyGroupStore.joinOrLeaveGroup(this.props.studyGroup.id, 'add', this.refs.successJoin, this.refs.failedLeave);
 		}
 	},
 
@@ -73,7 +73,7 @@ var MainGroupViewCard = React.createClass({
 	},
 
 	confirmDismiss() {
-		StudyGroupStore.dismissGroup(this.props.studyGroup.id, successDismiss, failedDismiss);
+		StudyGroupStore.dismissGroup(this.props.studyGroup.id, this.refs.successDismiss, this.refs.failedDismiss);
 	},
 
 	checkDisabled(studyGroup) {
