@@ -50582,9 +50582,9 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 		if (joinOrLeave.joinText === 'Dismiss') {
 			this.refs.dismissConfirmation.show();
 		} else if (joinOrLeave.joinText === 'Leave') {
-			StudyGroupStore.joinOrLeaveGroup(this.props.studyGroup.id, 'remove', successLeave, failedLeave);
+			StudyGroupStore.joinOrLeaveGroup(this.props.studyGroup.id, 'remove', this.refs.successLeave, this.refs.failedLeave);
 		} else if (joinOrLeave.joinText === 'Join'){
-			StudyGroupStore.joinOrLeaveGroup(this.props.studyGroup.id, 'add', successJoin, failedLeave);
+			StudyGroupStore.joinOrLeaveGroup(this.props.studyGroup.id, 'add', this.refs.successJoin, this.refs.failedLeave);
 		}
 	},
 
@@ -50610,7 +50610,7 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 	},
 
 	confirmDismiss:function() {
-		StudyGroupStore.dismissGroup(this.props.studyGroup.id);
+		StudyGroupStore.dismissGroup(this.props.studyGroup.id, this.refs.successDismiss, this.refs.failedDismiss);
 	},
 
 	checkDisabled:function(studyGroup) {
@@ -50735,6 +50735,16 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 	            React.createElement(Snackbar, {
 	           		ref: "failedLeave", 
 	             	message: "Failed to leave group", 
+	             	autoHideDuration: "5000"}), 
+
+	             React.createElement(Snackbar, {
+	           		ref: "successDismiss", 
+	             	message: "Group dismissed", 
+	             	autoHideDuration: "5000"}), 
+
+	            React.createElement(Snackbar, {
+	           		ref: "failedDismiss", 
+	             	message: "Failed to dismiss group", 
 	             	autoHideDuration: "5000"})
 	    	)
 		)
@@ -52752,7 +52762,7 @@ var StudyGroupSource = {
 	dismissGroup:function() {
 		return {
 			remote:function(state, groupID){
-				return new Promise(function(resolve, reject){
+				return new Promise(function(resolve, reject, success, failed){
 					// console.log('--------------DISMISS GROUP--------------');
 				    $.ajax({ url: '/groups/delete',
 				        type: 'DELETE',
@@ -52768,12 +52778,14 @@ var StudyGroupSource = {
 				        success: function(data, status, xhr) {
 				        	// console.log('__SUCCESS__');
 					        // console.log('data' ,data);
+					        success.show();
 					        resolve(groupID);
 					        // console.log('**************DISMISS GROUP**************');
 				        },
 				        error: function(response) {
 				        	// console.log('__FAILED__');
 				          	// console.log('response' ,response);
+				          	failed.show();
 				          	reject(null);
 				          	// console.log('**************DISMISS GROUP**************');
 				        }
