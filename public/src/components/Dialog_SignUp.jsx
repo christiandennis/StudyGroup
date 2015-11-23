@@ -29,7 +29,7 @@ var SignUpDialog = React.createClass({
 		var usernameSignUp =  this.refs.usernameSignUp;
 
 		if (this.validateUsername() & this.validateSchool() & this.validateEmail() & this.validateFullName() & this.validatePasswordMatch()) {
-			StudyGroupStore.signUp(this.history, fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog, this.refs.invalidEmailSnackbar, this.refs.unavailableEmailSnackbar, this.refs.unavailableUsernameSnackbar, this.refs.failedSnackbar);
+			StudyGroupStore.signUp(this.history, fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog, this.refs.unavailableEmailSnackbar, this.refs.unavailableUsernameSnackbar, this.refs.passwordNotMatchSnackbar, this.refs.failedSnackbar);
 		}
 	},
 
@@ -188,19 +188,19 @@ var SignUpDialog = React.createClass({
 
 				<Snackbar
 		       		ref = "unavailableEmailSnackbar"
-		         	message="Email is registered"
-		         	autoHideDuration={5000}/>
-		        <Snackbar
-		       		ref = "invalidEmailSnackbar"
-		         	message="Invalid email"
+		         	message="Email is already taken"
 		         	autoHideDuration={5000}/>
 		        <Snackbar
 		       		ref = "unavailableUsernameSnackbar"
-		         	message="Username not available"
+		         	message="Username is not available"
 		         	autoHideDuration={5000}/>
 		        <Snackbar
 		       		ref = "failedSnackbar"
 		         	message="Signup failed"
+		         	autoHideDuration={5000}/>
+		        <Snackbar
+		       		ref = "passwordNotMatchSnackbar"
+		         	message="Password doesn't match"
 		         	autoHideDuration={5000}/>
 	        </div>
 		)

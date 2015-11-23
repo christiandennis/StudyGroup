@@ -19,7 +19,7 @@ var LoginDialog = React.createClass({
 		// console.log("this.props", this.props);
 		var user = this.refs.email.getValue();
 		var password = this.refs.password.getValue();
-		StudyGroupStore.fetchUser( user, password, this.history, this.refs.loginDialog, this.refs.loginFailedSnackbar);
+		StudyGroupStore.fetchUser( user, password, this.history, this.refs.loginDialog, this.refs.loginFailedSnackbar, this.refs.loginErrorSnackbar);
 	},
 
 	cancelLogIn() {
@@ -59,6 +59,11 @@ var LoginDialog = React.createClass({
 	    		<Snackbar
 	           		ref = "loginFailedSnackbar"
 	             	message="Invalid login credentials"
+	             	autoHideDuration={5000}/>
+
+	             <Snackbar
+	           		ref = "loginErrorSnackbar"
+	             	message="Something went wrong. Please try again"
 	             	autoHideDuration={5000}/>
             </div>
 		)

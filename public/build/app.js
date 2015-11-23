@@ -50390,9 +50390,9 @@ var TopBar = React.createClass({displayName: "TopBar",
 	},
 	
 	dialogLogin:function() {
-		// this.refs.loginDialog.refs.loginDialog.show();
+		this.refs.loginDialog.refs.loginDialog.show();
 		// BYPASS LOGIN FOR TESTING
-		StudyGroupStore.fetchUser( 'papa@gmail.com', 'iopiopiop', this.history, this.refs.loginDialog);
+		// StudyGroupStore.fetchUser( 'papa@gmail.com', 'iopiopiop', this.history, this.refs.loginDialog);
 	},
 
 	dialogSignUp:function() {
@@ -51251,7 +51251,7 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 		// console.log("this.props", this.props);
 		var user = this.refs.email.getValue();
 		var password = this.refs.password.getValue();
-		StudyGroupStore.fetchUser( user, password, this.history, this.refs.loginDialog, this.refs.loginFailedSnackbar);
+		StudyGroupStore.fetchUser( user, password, this.history, this.refs.loginDialog, this.refs.loginFailedSnackbar, this.refs.loginErrorSnackbar);
 	},
 
 	cancelLogIn:function() {
@@ -51291,6 +51291,11 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 	    		React.createElement(Snackbar, {
 	           		ref: "loginFailedSnackbar", 
 	             	message: "Invalid login credentials", 
+	             	autoHideDuration: 5000}), 
+
+	             React.createElement(Snackbar, {
+	           		ref: "loginErrorSnackbar", 
+	             	message: "Something went wrong. Please try again", 
 	             	autoHideDuration: 5000})
             )
 		)
@@ -51735,7 +51740,7 @@ var SignUpDialog = React.createClass({displayName: "SignUpDialog",
 		var usernameSignUp =  this.refs.usernameSignUp;
 
 		if (this.validateUsername() & this.validateSchool() & this.validateEmail() & this.validateFullName() & this.validatePasswordMatch()) {
-			StudyGroupStore.signUp(this.history, fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog, this.refs.invalidEmailSnackbar, this.refs.unavailableEmailSnackbar, this.refs.unavailableUsernameSnackbar, this.refs.failedSnackbar);
+			StudyGroupStore.signUp(this.history, fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog, this.refs.unavailableEmailSnackbar, this.refs.unavailableUsernameSnackbar, this.refs.passwordNotMatchSnackbar, this.refs.failedSnackbar);
 		}
 	},
 
@@ -51894,19 +51899,19 @@ var SignUpDialog = React.createClass({displayName: "SignUpDialog",
 
 				React.createElement(Snackbar, {
 		       		ref: "unavailableEmailSnackbar", 
-		         	message: "Email is registered", 
-		         	autoHideDuration: 5000}), 
-		        React.createElement(Snackbar, {
-		       		ref: "invalidEmailSnackbar", 
-		         	message: "Invalid email", 
+		         	message: "Email is already taken", 
 		         	autoHideDuration: 5000}), 
 		        React.createElement(Snackbar, {
 		       		ref: "unavailableUsernameSnackbar", 
-		         	message: "Username not available", 
+		         	message: "Username is not available", 
 		         	autoHideDuration: 5000}), 
 		        React.createElement(Snackbar, {
 		       		ref: "failedSnackbar", 
 		         	message: "Signup failed", 
+		         	autoHideDuration: 5000}), 
+		        React.createElement(Snackbar, {
+		       		ref: "passwordNotMatchSnackbar", 
+		         	message: "Password doesn't match", 
 		         	autoHideDuration: 5000})
 	        )
 		)
@@ -52216,7 +52221,7 @@ var StudyGroupSource = {
 	// ==================================================
 	signUp:function() {
 		return {
-		  remote:function(state, history, fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog, invalidEmailSnackbar, unavailableEmailSnackbar, unavailableUsernameSnackbar, failedSnackbar) { 
+		  remote:function(state, history, fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog, unavailableEmailSnackbar, unavailableUsernameSnackbar, passwordSnackbar, failedSnackbar) { 
 		    return new Promise(function (resolve, reject) {
 		      	// console.log('--------------SIGN UP--------------');
 		      	var signUpData = {
@@ -52271,10 +52276,10 @@ var StudyGroupSource = {
 		      	  		// console.log('response:' ,response.responseJSON);
 		      	  		if(response.responseJSON.errors[0] === 'Username is taken.'){
 		      	  			unavailableUsernameSnackbar.show();
-		      	  		} else if(response.responseJSON.errors[0] === 'address is already in use'){
+		      	  		} else if(response.responseJSON.errors[0] === "Email is already taken."){
 		      	  			unavailableEmailSnackbar.show();
-		      	  		} else if (response.responseJSON.errors[0] === 'is not an email'){
-		      	  			invalidEmailSnackbar.show();
+		      	  		} else if (response.responseJSON.errors[0] === "password and password_confirmation does not match"){
+		      	  			passwordSnackbar.show();
 		      	  		} else {
 		      	  			failedSnackbar.show();
 		      	  		}
@@ -52300,7 +52305,7 @@ var StudyGroupSource = {
 	// ==================================================
 	fetchUser:function() {
 		return {
-		  remote:function(state,email,password, history, loginDialog, loginFailedSnackbar) { 
+		  remote:function(state,email,password, history, loginDialog, loginFailedSnackbar, somethingWrong) { 
 		    return new Promise(function (resolve, reject) {
 		      // console.log('--------------LOGIN--------------');
 		      var fata = {
@@ -52327,7 +52332,11 @@ var StudyGroupSource = {
 		        error: function(response) {
 		        	// console.log('__FAILED__');
 		          	// console.log('response' ,response);
-		          	loginFailedSnackbar.show();
+		          	if(response.responseJSON.errors[0] === "Invalid login credentials. Please try again."){
+		          		loginFailedSnackbar.show();	
+		          	} else {
+		          		somethingWrong.show();
+		          	}
 			        reject('login FAILED');
 			        // console.log('**************END LOGIN**************');
 		        }

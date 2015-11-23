@@ -17,7 +17,7 @@ var StudyGroupSource = {
 	// ==================================================
 	signUp() {
 		return {
-		  remote(state, history, fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog, invalidEmailSnackbar, unavailableEmailSnackbar, unavailableUsernameSnackbar, failedSnackbar) { 
+		  remote(state, history, fullname, fullnameSignUp, email, password, confirmPassword, schoolSignUp, usernameSignUp, signUpDialog, unavailableEmailSnackbar, unavailableUsernameSnackbar, passwordSnackbar, failedSnackbar) { 
 		    return new Promise(function (resolve, reject) {
 		      	// console.log('--------------SIGN UP--------------');
 		      	var signUpData = {
@@ -72,10 +72,10 @@ var StudyGroupSource = {
 		      	  		// console.log('response:' ,response.responseJSON);
 		      	  		if(response.responseJSON.errors[0] === 'Username is taken.'){
 		      	  			unavailableUsernameSnackbar.show();
-		      	  		} else if(response.responseJSON.errors[0] === 'address is already in use'){
+		      	  		} else if(response.responseJSON.errors[0] === "Email is already taken."){
 		      	  			unavailableEmailSnackbar.show();
-		      	  		} else if (response.responseJSON.errors[0] === 'is not an email'){
-		      	  			invalidEmailSnackbar.show();
+		      	  		} else if (response.responseJSON.errors[0] === "password and password_confirmation does not match"){
+		      	  			passwordSnackbar.show();
 		      	  		} else {
 		      	  			failedSnackbar.show();
 		      	  		}
@@ -101,7 +101,7 @@ var StudyGroupSource = {
 	// ==================================================
 	fetchUser() {
 		return {
-		  remote(state,email,password, history, loginDialog, loginFailedSnackbar) { 
+		  remote(state,email,password, history, loginDialog, loginFailedSnackbar, somethingWrong) { 
 		    return new Promise(function (resolve, reject) {
 		      // console.log('--------------LOGIN--------------');
 		      var fata = {
@@ -128,7 +128,11 @@ var StudyGroupSource = {
 		        error: function(response) {
 		        	// console.log('__FAILED__');
 		          	// console.log('response' ,response);
-		          	loginFailedSnackbar.show();
+		          	if(response.responseJSON.errors[0] === "Invalid login credentials. Please try again."){
+		          		loginFailedSnackbar.show();	
+		          	} else {
+		          		somethingWrong.show();
+		          	}
 			        reject('login FAILED');
 			        // console.log('**************END LOGIN**************');
 		        }
