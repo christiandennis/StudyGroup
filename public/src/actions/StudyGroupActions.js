@@ -28,6 +28,14 @@ class StudyGroupActions {
 	searchGroups(searchResults) {
 		this.dispatch(searchResults);
 	}
+
+	emptySearch(result) {
+		this.dispatch(result);
+	}
+
+	setSearchTerm(searchTerm) {
+		this.dispatch(searchTerm);
+	}
 }
 
 module.exports = alt.createActions(StudyGroupActions);

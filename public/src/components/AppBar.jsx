@@ -3,8 +3,10 @@ var React = require('react');
 var render = require('react-dom').render;
 var Router = require('react-router');
 var History = Router.History;
-var StudyGroupStore = require('../stores/StudyGroupStore');
 var AltContainer = require('alt/AltContainer');
+
+var StudyGroupStore = require('../stores/StudyGroupStore');
+var StudyGroupActions = require('../actions/StudyGroupActions');
 
 // import components
 var LandingPage = require('./LandingPage.jsx');
@@ -146,6 +148,7 @@ var TopBar = React.createClass({
     	// use this for non-direct search
     	// onKeyDown={this.clearTypingTimer}
 		// onKeyUp={this.startTypingTimer}
+		StudyGroupActions.setSearchTerm(this.refs.searchField.getValue());
     	StudyGroupStore.searchGroups(this.refs.searchField.getValue());
     },
 
@@ -170,6 +173,7 @@ var TopBar = React.createClass({
 							  					iconStyle={{fontSize:'24px', color:'#CCCCCC'}}>search</IconButton>
 							  		<TextField
 							  			ref='searchField'
+							  			value={this.props.searchTerm}
 							  		  	hintText="Search Study Groups" 
 						  		  		style = {{
 						  		  					marginTop:'8px', 
@@ -182,7 +186,8 @@ var TopBar = React.createClass({
 						  		  	  	hintStyle={{
 						  		  	  				color:'#CCCCCC',
 						  		  	  				fontSize:'12px'}}
-						  		  	  	onChange={this.directSearch}/>
+						  		  	  	onChange={this.directSearch}
+						  		  	  	onClick={this.directSearch}/>
 							  		<IconButton iconClassName="material-icons" 
 							  					style={{height:'inherit'}}
 							  					iconStyle={{fontSize:'24px', color:'rgba(255, 255, 255, 1)'}} 

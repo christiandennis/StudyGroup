@@ -371,28 +371,30 @@ var StudyGroupSource = {
 			    	// console.log('--------------SEARCH GROUP--------------');
 			    	if(searchTerm===''){
 			    		resolve(null);
-			    	}
-			      	$.ajax({ url: '/groups/search?search=' + searchTerm,
-				        type: 'GET',
-				        headers: {
-				  						"access-token": state.user.accesstoken,
-			    	      				"client": state.user.client,
-			    	      				"uid": state.user.uid
-			  								},
-				        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-				        success: function(data, status, xhr) {
-				        	// console.log('__SUCCESS__');
-					        // console.log('data' ,data);
-					        resolve(data.group);
-					        // console.log('**************SEARCH GROUP**************');
-				        },
-				        error: function(response) {
-				        	// console.log('__FAILED__');
-				         //  	console.log('response' ,response);
-				          	// reject('fetch group FAILED');
-				          	// console.log('**************SEARCH GROUP**************');
-				        }
-			      	});
+
+			    	} else {
+				      	$.ajax({ url: '/groups/search?search=' + searchTerm,
+					        type: 'GET',
+					        headers: {
+					  						"access-token": state.user.accesstoken,
+				    	      				"client": state.user.client,
+				    	      				"uid": state.user.uid
+				  								},
+					        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+					        success: function(data, status, xhr) {
+					        	// console.log('__SUCCESS__');
+						        // console.log('data' ,data);
+						        resolve(data.group);
+						        // console.log('**************SEARCH GROUP**************');
+					        },
+					        error: function(response) {
+					        	// console.log('__FAILED__');
+					         //  	console.log('response' ,response);
+					          	// reject('fetch group FAILED');
+					          	// console.log('**************SEARCH GROUP**************');
+					        }
+				      	});
+				    }
 			    });
 			},
 

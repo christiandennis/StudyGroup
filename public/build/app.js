@@ -50246,6 +50246,14 @@ function StudyGroupActions(){"use strict";}
 		this.dispatch(searchResults);
 	}});
 
+	Object.defineProperty(StudyGroupActions.prototype,"emptySearch",{writable:true,configurable:true,value:function(result) {"use strict";
+		this.dispatch(result);
+	}});
+
+	Object.defineProperty(StudyGroupActions.prototype,"setSearchTerm",{writable:true,configurable:true,value:function(searchTerm) {"use strict";
+		this.dispatch(searchTerm);
+	}});
+
 
 module.exports = alt.createActions(StudyGroupActions);
 
@@ -50288,8 +50296,10 @@ var React = require('react');
 var render = require('react-dom').render;
 var Router = require('react-router');
 var History = Router.History;
-var StudyGroupStore = require('../stores/StudyGroupStore');
 var AltContainer = require('alt/AltContainer');
+
+var StudyGroupStore = require('../stores/StudyGroupStore');
+var StudyGroupActions = require('../actions/StudyGroupActions');
 
 // import components
 var LandingPage = require('./LandingPage.jsx');
@@ -50431,6 +50441,7 @@ var TopBar = React.createClass({displayName: "TopBar",
     	// use this for non-direct search
     	// onKeyDown={this.clearTypingTimer}
 		// onKeyUp={this.startTypingTimer}
+		StudyGroupActions.setSearchTerm(this.refs.searchField.getValue());
     	StudyGroupStore.searchGroups(this.refs.searchField.getValue());
     },
 
@@ -50455,6 +50466,7 @@ var TopBar = React.createClass({displayName: "TopBar",
 							  					iconStyle: {fontSize:'24px', color:'#CCCCCC'}}, "search"), 
 							  		React.createElement(TextField, {
 							  			ref: "searchField", 
+							  			value: this.props.searchTerm, 
 							  		  	hintText: "Search Study Groups", 
 						  		  		style: {
 						  		  					marginTop:'8px', 
@@ -50467,7 +50479,8 @@ var TopBar = React.createClass({displayName: "TopBar",
 						  		  	  	hintStyle: {
 						  		  	  				color:'#CCCCCC',
 						  		  	  				fontSize:'12px'}, 
-						  		  	  	onChange: this.directSearch}), 
+						  		  	  	onChange: this.directSearch, 
+						  		  	  	onClick: this.directSearch}), 
 							  		React.createElement(IconButton, {iconClassName: "material-icons", 
 							  					style: {height:'inherit'}, 
 							  					iconStyle: {fontSize:'24px', color:'rgba(255, 255, 255, 1)'}, 
@@ -50517,7 +50530,7 @@ var TopBar = React.createClass({displayName: "TopBar",
 
 module.exports = TopBar;
 
-},{"../stores/StudyGroupStore":411,"../themes/AppBarTheme.js":412,"../themes/LeftBarTheme.js":413,"./Dialog_LogIn.jsx":403,"./Dialog_MyGroups.jsx":404,"./Dialog_NewGroup.jsx":405,"./Dialog_Profile.jsx":406,"./Dialog_SignUp.jsx":407,"./LandingPage.jsx":408,"alt/AltContainer":1,"material-ui/lib/app-bar":56,"material-ui/lib/avatar":57,"material-ui/lib/flat-button":80,"material-ui/lib/icon-button":82,"material-ui/lib/left-nav":84,"material-ui/lib/menu/menu-item":90,"material-ui/lib/snackbar":106,"material-ui/lib/styles/theme-manager":114,"material-ui/lib/text-field":128,"react":391,"react-addons-test-utils":165,"react-dom":168,"react-router":205,"react-sticky":212}],399:[function(require,module,exports){
+},{"../actions/StudyGroupActions":395,"../stores/StudyGroupStore":411,"../themes/AppBarTheme.js":412,"../themes/LeftBarTheme.js":413,"./Dialog_LogIn.jsx":403,"./Dialog_MyGroups.jsx":404,"./Dialog_NewGroup.jsx":405,"./Dialog_Profile.jsx":406,"./Dialog_SignUp.jsx":407,"./LandingPage.jsx":408,"alt/AltContainer":1,"material-ui/lib/app-bar":56,"material-ui/lib/avatar":57,"material-ui/lib/flat-button":80,"material-ui/lib/icon-button":82,"material-ui/lib/left-nav":84,"material-ui/lib/menu/menu-item":90,"material-ui/lib/snackbar":106,"material-ui/lib/styles/theme-manager":114,"material-ui/lib/text-field":128,"react":391,"react-addons-test-utils":165,"react-dom":168,"react-router":205,"react-sticky":212}],399:[function(require,module,exports){
 // React, react-reouter, alt
 var React = require('react');
 var render = require('react-dom').render;
@@ -52144,22 +52157,29 @@ var StudyGroups = React.createClass ({displayName: "StudyGroups",
 		setInterval(function() {StudyGroupStore.fetchStudyGroups();} , refreshInterval);
 	},
 
+	emptySearch:function() {
+		StudyGroupActions.emptySearch(null);
+	},
+
 	render:function(){
 		if (this.props.studyGroups!=null) {
 			return (
 				React.createElement(Tabs, {tabItemContainerStyle: {backgroundColor:"#0D47A1"}, 
 						inkBarStyle: {backgroundColor:"#FFC107"}}, 
-					React.createElement(Tab, {label: "Home"}, 
+					React.createElement(Tab, {label: "Home", 
+							onActive: this.emptySearch}, 
 						React.createElement(AltContainer, {store: StudyGroupStore}, 
 							React.createElement(AllStudyGroups, null)
 						)
 					), 
-					React.createElement(Tab, {label: "Upcoming"}, 
+					React.createElement(Tab, {label: "Upcoming", 
+							onActive: this.emptySearch}, 
 						React.createElement(AltContainer, {store: StudyGroupStore}, 
 							React.createElement(UpcomingGroups, null)
 						)
 					), 
-					React.createElement(Tab, {label: "Past"}, 
+					React.createElement(Tab, {label: "Past", 
+							onActive: this.emptySearch}, 
 						React.createElement(AltContainer, {store: StudyGroupStore}, 
 							React.createElement(PastGroups, null)
 						)
@@ -52550,28 +52570,30 @@ var StudyGroupSource = {
 			    	// console.log('--------------SEARCH GROUP--------------');
 			    	if(searchTerm===''){
 			    		resolve(null);
-			    	}
-			      	$.ajax({ url: '/groups/search?search=' + searchTerm,
-				        type: 'GET',
-				        headers: {
-				  						"access-token": state.user.accesstoken,
-			    	      				"client": state.user.client,
-			    	      				"uid": state.user.uid
-			  								},
-				        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-				        success: function(data, status, xhr) {
-				        	// console.log('__SUCCESS__');
-					        // console.log('data' ,data);
-					        resolve(data.group);
-					        // console.log('**************SEARCH GROUP**************');
-				        },
-				        error: function(response) {
-				        	// console.log('__FAILED__');
-				         //  	console.log('response' ,response);
-				          	// reject('fetch group FAILED');
-				          	// console.log('**************SEARCH GROUP**************');
-				        }
-			      	});
+
+			    	} else {
+				      	$.ajax({ url: '/groups/search?search=' + searchTerm,
+					        type: 'GET',
+					        headers: {
+					  						"access-token": state.user.accesstoken,
+				    	      				"client": state.user.client,
+				    	      				"uid": state.user.uid
+				  								},
+					        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+					        success: function(data, status, xhr) {
+					        	// console.log('__SUCCESS__');
+						        // console.log('data' ,data);
+						        resolve(data.group);
+						        // console.log('**************SEARCH GROUP**************');
+					        },
+					        error: function(response) {
+					        	// console.log('__FAILED__');
+					         //  	console.log('response' ,response);
+					          	// reject('fetch group FAILED');
+					          	// console.log('**************SEARCH GROUP**************');
+					        }
+				      	});
+				    }
 			    });
 			},
 
@@ -52831,6 +52853,7 @@ const moment = require('moment');
 		this.upcomingGroups = null;
 		this.pastGroups = null;
 		this.searchResults = null;
+		this.searchTerm = null;
 
 
 		this.bindListeners({
@@ -52849,6 +52872,8 @@ const moment = require('moment');
 			handleRefreshGroups: StudyGroupActions.REFRESH_GROUPS,
 			handleEditGroup: StudyGroupActions.EDIT_GROUP,
 			handleSearchGroups: StudyGroupActions.SEARCH_GROUPS,
+			handleEmptySearch: StudyGroupActions.EMPTY_SEARCH,
+			handleSetSearchTerm: StudyGroupActions.SET_SEARCH_TERM,
 
 			handleFetchMyGroups: MyGroupsActions.FETCH_MY_GROUPS,
 			handleJoinOrLeaveGroup: MyGroupsActions.JOIN_OR_LEAVE_GROUP,
@@ -52867,6 +52892,15 @@ const moment = require('moment');
 	
 	Object.defineProperty(StudyGroupStore.prototype,"handleSearchGroups",{writable:true,configurable:true,value:function(groups) {"use strict";
 		this.searchResults = groups;
+	}});
+
+	Object.defineProperty(StudyGroupStore.prototype,"handleEmptySearch",{writable:true,configurable:true,value:function(emptyResult) {"use strict";
+		this.searchResults = emptyResult;
+		this.searchTerm = null;
+	}});
+
+	Object.defineProperty(StudyGroupStore.prototype,"handleSetSearchTerm",{writable:true,configurable:true,value:function(searchTerm) {"use strict";
+		this.searchTerm = searchTerm;
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"compare",{writable:true,configurable:true,value:function(a,b) {"use strict";

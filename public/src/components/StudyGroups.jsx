@@ -168,22 +168,29 @@ var StudyGroups = React.createClass ({
 		setInterval(function() {StudyGroupStore.fetchStudyGroups();} , refreshInterval);
 	},
 
+	emptySearch() {
+		StudyGroupActions.emptySearch(null);
+	},
+
 	render(){
 		if (this.props.studyGroups!=null) {
 			return (
 				<Tabs tabItemContainerStyle={{backgroundColor:"#0D47A1"}}
 						inkBarStyle={{backgroundColor:"#FFC107"}}>
-					<Tab label="Home">
+					<Tab label="Home"
+							onActive={this.emptySearch}>
 						<AltContainer store={StudyGroupStore}>
 							<AllStudyGroups />
 						</AltContainer>
 					</Tab>
-					<Tab label="Upcoming">
+					<Tab label="Upcoming"
+							onActive={this.emptySearch}>
 						<AltContainer store={StudyGroupStore}>
 							<UpcomingGroups />
 						</AltContainer>
 					</Tab>
-					<Tab label="Past">
+					<Tab label="Past"
+							onActive={this.emptySearch}>
 						<AltContainer store={StudyGroupStore}>
 							<PastGroups />
 						</AltContainer>

@@ -15,6 +15,7 @@ class StudyGroupStore {
 		this.upcomingGroups = null;
 		this.pastGroups = null;
 		this.searchResults = null;
+		this.searchTerm = null;
 
 
 		this.bindListeners({
@@ -33,6 +34,8 @@ class StudyGroupStore {
 			handleRefreshGroups: StudyGroupActions.REFRESH_GROUPS,
 			handleEditGroup: StudyGroupActions.EDIT_GROUP,
 			handleSearchGroups: StudyGroupActions.SEARCH_GROUPS,
+			handleEmptySearch: StudyGroupActions.EMPTY_SEARCH,
+			handleSetSearchTerm: StudyGroupActions.SET_SEARCH_TERM,
 
 			handleFetchMyGroups: MyGroupsActions.FETCH_MY_GROUPS,
 			handleJoinOrLeaveGroup: MyGroupsActions.JOIN_OR_LEAVE_GROUP,
@@ -51,6 +54,15 @@ class StudyGroupStore {
 	
 	handleSearchGroups(groups) {
 		this.searchResults = groups;
+	}
+
+	handleEmptySearch(emptyResult) {
+		this.searchResults = emptyResult;
+		this.searchTerm = null;
+	}
+
+	handleSetSearchTerm(searchTerm) {
+		this.searchTerm = searchTerm;
 	}
 
 	compare(a,b) {
