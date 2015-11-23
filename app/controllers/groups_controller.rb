@@ -281,11 +281,11 @@ class GroupsController < ApplicationController
 
 
 		for group in Group.all.order("date") do
-			sub = group.subject
-			t = group .title
+			sub = group.subject.downcase
+			t = group.title.downcase
 
 			for word in words do
-				if t.include? word or sub.include? word
+				if t.include? word.downcase or sub.include? word.downcase
 					@groups << group
 					break
 				end
