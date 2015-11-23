@@ -76,8 +76,7 @@ var MainGroupViewCard = React.createClass({
 	},
 
 	checkDisabled(studyGroup) {
-		var curr_epoch = moment(new Date().toString()).unix();
-		return (studyGroup.date < curr_epoch);
+		return (new Date(studyGroup.date) < new Date());
 	},
 
 	getTimeString(time) {
@@ -101,6 +100,9 @@ var MainGroupViewCard = React.createClass({
 		var color = this.calculateTimeColor(studyGroup.date);	
 		var joinText = this.getJoinText(studyGroup, user);
 		var disabled = this.checkDisabled(studyGroup);
+		if (joinText==='Full'){
+			disabled = true;
+		}
 
 		return (
 			<div key={studyGroup.id}>

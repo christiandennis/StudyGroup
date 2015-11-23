@@ -153,7 +153,7 @@ var StudyGroups = React.createClass ({
 						</AltContainer>
 					</Tab>
 				</Tabs>
-			);
+			)
 		}
 		return (
 			<div>

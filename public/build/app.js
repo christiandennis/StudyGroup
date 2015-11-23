@@ -50550,8 +50550,7 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 	},
 
 	checkDisabled:function(studyGroup) {
-		var curr_epoch = moment(new Date().toString()).unix();
-		return (studyGroup.date < curr_epoch);
+		return (new Date(studyGroup.date) < new Date());
 	},
 
 	getTimeString:function(time) {
@@ -50575,6 +50574,9 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 		var color = this.calculateTimeColor(studyGroup.date);	
 		var joinText = this.getJoinText(studyGroup, user);
 		var disabled = this.checkDisabled(studyGroup);
+		if (joinText==='Full'){
+			disabled = true;
+		}
 
 		return (
 			React.createElement("div", {key: studyGroup.id}, 
@@ -52064,7 +52066,7 @@ var StudyGroups = React.createClass ({displayName: "StudyGroups",
 						)
 					)
 				)
-			);
+			)
 		}
 		return (
 			React.createElement("div", null
@@ -52728,6 +52730,7 @@ const moment = require('moment');
 		return 0;
 	}});
 
+	// unused
 	Object.defineProperty(StudyGroupStore.prototype,"handleFetchComments",{writable:true,configurable:true,value:function(data) {"use strict";
 		for (var i in this.studyGroups) {
 	     	if (this.studyGroups[i].id === data.groupID) {
@@ -52781,7 +52784,7 @@ const moment = require('moment');
 		var curr_epoch = moment(new Date().toString()).unix();
 
 		for (var i in myGroups) {
-	     	if (myGroups[i].date < curr_epoch) {
+	     	if (new Date(myGroups[i].date) < new Date()) {
 	       		this.pastGroups.push(myGroups[i]);
 	     	} else {
 	     		this.upcomingGroups.push(myGroups[i]);
@@ -52832,9 +52835,7 @@ const moment = require('moment');
 	        	break;
 	     	}
 	   	}
-	   	console.log('start');
 		this.studyGroups.sort(this.compare);
-		console.log('done');
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handlePostNewGroup",{writable:true,configurable:true,value:function(studyGroup) {"use strict";
@@ -52863,7 +52864,8 @@ const moment = require('moment');
 		var curr_epoch = moment(new Date().toString()).unix();
 		var index;
 		for (var i in this.studyGroups) {
-	     	if (this.studyGroups[i].date >= curr_epoch) {
+	     	if (new Date(this.studyGroups[i].date) >= new Date()) {
+	     		console.log('boom');
 	       		index = i;
 	        	break;
 	     	}

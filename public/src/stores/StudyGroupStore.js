@@ -55,6 +55,7 @@ class StudyGroupStore {
 		return 0;
 	}
 
+	// unused
 	handleFetchComments(data) {
 		for (var i in this.studyGroups) {
 	     	if (this.studyGroups[i].id === data.groupID) {
@@ -108,7 +109,7 @@ class StudyGroupStore {
 		var curr_epoch = moment(new Date().toString()).unix();
 
 		for (var i in myGroups) {
-	     	if (myGroups[i].date < curr_epoch) {
+	     	if (new Date(myGroups[i].date) < new Date()) {
 	       		this.pastGroups.push(myGroups[i]);
 	     	} else {
 	     		this.upcomingGroups.push(myGroups[i]);
@@ -159,9 +160,7 @@ class StudyGroupStore {
 	        	break;
 	     	}
 	   	}
-	   	console.log('start');
 		this.studyGroups.sort(this.compare);
-		console.log('done');
 	}
 
 	handlePostNewGroup(studyGroup) {
@@ -190,7 +189,8 @@ class StudyGroupStore {
 		var curr_epoch = moment(new Date().toString()).unix();
 		var index;
 		for (var i in this.studyGroups) {
-	     	if (this.studyGroups[i].date >= curr_epoch) {
+	     	if (new Date(this.studyGroups[i].date) >= new Date()) {
+	     		console.log('boom');
 	       		index = i;
 	        	break;
 	     	}
