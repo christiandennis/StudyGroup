@@ -52965,6 +52965,15 @@ const moment = require('moment');
 	        	break;
 	     	}
 	   	}
+
+	   	if(this.searchResults) {
+	   		for (var i in this.searchResults) {
+		     	if (this.searchResults[i].id === comment.groupid) {
+		       		this.searchResults[i].comments.push(comment);
+		        	break;
+		     	}
+	   	}
+	   	}
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleFetchMyGroups",{writable:true,configurable:true,value:function(myGroups) {"use strict";

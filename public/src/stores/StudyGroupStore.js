@@ -118,6 +118,15 @@ class StudyGroupStore {
 	        	break;
 	     	}
 	   	}
+
+	   	if(this.searchResults) {
+	   		for (var i in this.searchResults) {
+		     	if (this.searchResults[i].id === comment.groupid) {
+		       		this.searchResults[i].comments.push(comment);
+		        	break;
+		     	}
+	   	}
+	   	}
 	}
 
 	handleFetchMyGroups(myGroups) {
