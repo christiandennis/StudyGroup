@@ -166,6 +166,12 @@ var TopBar = React.createClass({
     },
 
 	render() {
+		var user = document.cookie.replace(/(?:(?:^|.*;\s*)user\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+		if (user != '' && !this.props.user){
+			UserActions.setUserFromCookie();
+			this.history.pushState(null, '/studygroupapp');
+		}
+
 		if (this.props.user) {
 			var hintText = this.getHintText();
 			return (

@@ -50467,6 +50467,12 @@ var TopBar = React.createClass({displayName: "TopBar",
     },
 
 	render:function() {
+		var user = document.cookie.replace(/(?:(?:^|.*;\s*)user\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+		if (user != '' && !this.props.user){
+			UserActions.setUserFromCookie();
+			this.history.pushState(null, '/studygroupapp');
+		}
+
 		if (this.props.user) {
 			var hintText = this.getHintText();
 			return (
@@ -52455,9 +52461,9 @@ var StudyGroupSource = {
       	      success: function(response) {
       	      	// console.log('__SUCCESS__');
 	      	  	  // console.log('response:' ,response);
-      	        window.location.href = '/';
-      	        document.cookie = "user=" + '';
+	      	  	document.cookie = "user=" + '';
       	        resolve(null);
+      	        window.location.href = '/';
       	        // history.pushState(null, '/');
       	        // console.log('**************END SIGN OUT**************');
       	      },
@@ -52654,16 +52660,16 @@ var StudyGroupSource = {
 			    window.location.href = '/';
 			}
 			return new Promise(function (resolve, reject) {
-			    	console.log('--------------FETCH GROUP--------------');
+			    	// console.log('--------------FETCH GROUP--------------');
 			      	$.ajax({ url: '/groups/user/index',
 				        type: 'GET',
 				        headers: header,
 				        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
 				        success: function(data, status, xhr) {
-				        	console.log('__SUCCESS__');
+				        	// console.log('__SUCCESS__');
 					        // console.log('groups' ,data.groups);
 					        resolve(data.groups);
-					        console.log('**************END FETCH GROUP**************');
+					        // console.log('**************END FETCH GROUP**************');
 				        },
 				        error: function(response) {
 				        	// console.log('__FAILED__');
