@@ -54,3 +54,7 @@ body {
 	color: #3366BB;
 	cursor: pointer;
 }
+
+.my-gallery-class {
+  margin: 0 auto;
+}
