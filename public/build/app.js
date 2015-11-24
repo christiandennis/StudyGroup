@@ -50453,7 +50453,7 @@ var TopBar = React.createClass({displayName: "TopBar",
     	if(this.props.searchResults){
     		return ""
     	}
-    	return "Search Study Groups"
+    	return "Search class/title"
     },
 
 	render:function() {
@@ -52229,19 +52229,19 @@ var StudyGroups = React.createClass ({displayName: "StudyGroups",
 			return (
 				React.createElement(Tabs, {tabItemContainerStyle: {backgroundColor:"#0D47A1"}, 
 						inkBarStyle: {backgroundColor:"#FFC107"}}, 
-					React.createElement(Tab, {label: "Home", 
+					React.createElement(Tab, {label: this.props.user.school, 
 							onActive: this.emptySearch}, 
 						React.createElement(AltContainer, {store: StudyGroupStore}, 
 							React.createElement(AllStudyGroups, null)
 						)
 					), 
-					React.createElement(Tab, {label: "Upcoming", 
+					React.createElement(Tab, {label: "My Upcoming Groups", 
 							onActive: this.emptySearch}, 
 						React.createElement(AltContainer, {store: StudyGroupStore}, 
 							React.createElement(UpcomingGroups, null)
 						)
 					), 
-					React.createElement(Tab, {label: "Past", 
+					React.createElement(Tab, {label: "My Past Groups", 
 							onActive: this.emptySearch}, 
 						React.createElement(AltContainer, {store: StudyGroupStore}, 
 							React.createElement(PastGroups, null)
