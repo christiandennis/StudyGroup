@@ -156,7 +156,7 @@ var TopBar = React.createClass({
     	if(this.props.searchResults){
     		return ""
     	}
-    	return "Search Study Groups"
+    	return "Search class/title"
     },
 
 	render() {

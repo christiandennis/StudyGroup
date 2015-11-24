@@ -183,13 +183,13 @@ var StudyGroups = React.createClass ({
 							<AllStudyGroups />
 						</AltContainer>
 					</Tab>
-					<Tab label="Upcoming"
+					<Tab label="My Upcoming Groups"
 							onActive={this.emptySearch}>
 						<AltContainer store={StudyGroupStore}>
 							<UpcomingGroups />
 						</AltContainer>
 					</Tab>
-					<Tab label="Past"
+					<Tab label="My Past Groups"
 							onActive={this.emptySearch}>
 						<AltContainer store={StudyGroupStore}>
 							<PastGroups />
