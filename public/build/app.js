@@ -50434,7 +50434,7 @@ var TopBar = React.createClass({displayName: "TopBar",
     startTypingTimer:function() {
     	clearTimeout(typingTimer);
     	var searchTerm = this.refs.searchField.getValue();
-    	typingTimer = setTimeout(function(){StudyGroupStore.searchGroups(searchTerm);}, 50);
+    	typingTimer = setTimeout(function(){StudyGroupStore.searchGroups(searchTerm);}, 500);
     },
 
     clearTypingTimer:function() {
@@ -50449,8 +50449,16 @@ var TopBar = React.createClass({displayName: "TopBar",
     	StudyGroupStore.searchGroups(this.refs.searchField.getValue());
     },
 
+    getHintText:function() {
+    	if(this.props.searchResults){
+    		return ""
+    	}
+    	return "Search Study Groups"
+    },
+
 	render:function() {
 		if (this.props.user) {
+			var hintText = this.getHintText();
 			return (
                 React.createElement("div", null, 
                 	React.createElement("div", {style: {zIndex:"1000", paddingBottom:"64px"}}, 
@@ -50471,7 +50479,7 @@ var TopBar = React.createClass({displayName: "TopBar",
 							  		React.createElement(TextField, {
 							  			ref: "searchField", 
 							  			value: this.props.searchTerm, 
-							  		  	hintText: "Search Study Groups", 
+							  		  	hintText: hintText, 
 						  		  		style: {
 						  		  					marginTop:'8px', 
 						  		  					marginRight:'5px',
@@ -50483,8 +50491,8 @@ var TopBar = React.createClass({displayName: "TopBar",
 						  		  	  	hintStyle: {
 						  		  	  				color:'#CCCCCC',
 						  		  	  				fontSize:'12px'}, 
-						  		  	  	onChange: this.directSearch, 
-						  		  	  	onClick: this.directSearch}), 
+						  		  	  	onKeyDown: this.clearTypingTimer, 
+										onKeyUp: this.startTypingTimer}), 
 							  		React.createElement(IconButton, {iconClassName: "material-icons", 
 							  					style: {height:'inherit'}, 
 							  					iconStyle: {fontSize:'24px', color:'rgba(255, 255, 255, 1)'}, 

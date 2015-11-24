@@ -137,7 +137,7 @@ var TopBar = React.createClass({
     startTypingTimer() {
     	clearTimeout(typingTimer);
     	var searchTerm = this.refs.searchField.getValue();
-    	typingTimer = setTimeout(function(){StudyGroupStore.searchGroups(searchTerm);}, 50);
+    	typingTimer = setTimeout(function(){StudyGroupStore.searchGroups(searchTerm);}, 500);
     },
 
     clearTypingTimer() {
@@ -152,8 +152,16 @@ var TopBar = React.createClass({
     	StudyGroupStore.searchGroups(this.refs.searchField.getValue());
     },
 
+    getHintText() {
+    	if(this.props.searchResults){
+    		return ""
+    	}
+    	return "Search Study Groups"
+    },
+
 	render() {
 		if (this.props.user) {
+			var hintText = this.getHintText();
 			return (
                 <div>
                 	<div style={{zIndex:"1000", paddingBottom:"64px"}}>
@@ -174,7 +182,7 @@ var TopBar = React.createClass({
 							  		<TextField
 							  			ref='searchField'
 							  			value={this.props.searchTerm}
-							  		  	hintText="Search Study Groups" 
+							  		  	hintText={hintText} 
 						  		  		style = {{
 						  		  					marginTop:'8px', 
 						  		  					marginRight:'5px',
@@ -186,8 +194,8 @@ var TopBar = React.createClass({
 						  		  	  	hintStyle={{
 						  		  	  				color:'#CCCCCC',
 						  		  	  				fontSize:'12px'}}
-						  		  	  	onChange={this.directSearch}
-						  		  	  	onClick={this.directSearch}/>
+						  		  	  	onKeyDown={this.clearTypingTimer}
+										onKeyUp={this.startTypingTimer}/>
 							  		<IconButton iconClassName="material-icons" 
 							  					style={{height:'inherit'}}
 							  					iconStyle={{fontSize:'24px', color:'rgba(255, 255, 255, 1)'}} 
