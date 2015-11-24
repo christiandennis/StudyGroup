@@ -51053,6 +51053,9 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 				React.createElement(Dialog, {ref: "editGroupDialog", 
 		        	title: "Edit StudyGroup", 
 		        	onShow: this.editGroupDetailOnShow, 
+		        	contentStyle: {
+								    top: '-65px'
+								  }, 
 		        	modal: true, 
 		        	actions: [
 		        		  React.createElement(FlatButton, {
@@ -51615,6 +51618,9 @@ var NewGroupDialog = React.createClass({displayName: "NewGroupDialog",
 			React.createElement("div", null, 
 				React.createElement(Dialog, {ref: "newGroupDialog", 
 						title: "Create a New StudyGroup", 
+						contentStyle: {
+									    top: '-65px'
+									  }, 
 						modal: true, 
 						actions: [
 							  React.createElement(FlatButton, {

@@ -157,6 +157,9 @@ var NewGroupDialog = React.createClass({
 			<div>
 				<Dialog ref="newGroupDialog" 
 						title="Create a New StudyGroup" 
+						contentStyle={{
+									    top: '-65px'
+									  }}
 						modal={true}
 						actions={[
 							  <FlatButton

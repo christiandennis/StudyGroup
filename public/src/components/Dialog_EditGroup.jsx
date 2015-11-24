@@ -169,6 +169,9 @@ var LoginDialog = React.createClass({
 				<Dialog ref="editGroupDialog"
 		        	title="Edit StudyGroup" 
 		        	onShow={this.editGroupDetailOnShow}
+		        	contentStyle={{
+								    top: '-65px'
+								  }}
 		        	modal={true}
 		        	actions={[
 		        		  <FlatButton
