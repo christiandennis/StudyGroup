@@ -53172,9 +53172,9 @@ module.exports = alt.createStore(StudyGroupStore, 'StudyGroupStore');
 },{"../actions/CommentsActions":393,"../actions/MyGroupsActions":394,"../actions/StudyGroupActions":395,"../actions/UserActions":396,"../alt":397,"../sources/StudyGroupSource":410,"moment":162}],412:[function(require,module,exports){
 'use strict';
 
-let Colors = require('material-ui/lib/styles/colors');
-let ColorManipulator = require('material-ui/lib/utils/color-manipulator');
-let Spacing = require('material-ui/lib/styles/spacing');
+var Colors = require('material-ui/lib/styles/colors');
+var ColorManipulator = require('material-ui/lib/utils/color-manipulator');
+var Spacing = require('material-ui/lib/styles/spacing');
 
 /*
  *  Light Theme is the default theme used in material-ui. It is guaranteed to
@@ -53203,9 +53203,9 @@ module.exports = {
 },{"material-ui/lib/styles/colors":108,"material-ui/lib/styles/spacing":112,"material-ui/lib/utils/color-manipulator":147}],413:[function(require,module,exports){
 'use strict';
 
-let Colors = require('material-ui/lib/styles/colors');
-let ColorManipulator = require('material-ui/lib/utils/color-manipulator');
-let Spacing = require('material-ui/lib/styles/spacing');
+var Colors = require('material-ui/lib/styles/colors');
+var ColorManipulator = require('material-ui/lib/utils/color-manipulator');
+var Spacing = require('material-ui/lib/styles/spacing');
 
 /*
  *  Light Theme is the default theme used in material-ui. It is guaranteed to
@@ -53234,9 +53234,9 @@ module.exports = {
 },{"material-ui/lib/styles/colors":108,"material-ui/lib/styles/spacing":112,"material-ui/lib/utils/color-manipulator":147}],414:[function(require,module,exports){
 'use strict';
 
-let Colors = require('material-ui/lib/styles/colors');
-let ColorManipulator = require('material-ui/lib/utils/color-manipulator');
-let Spacing = require('material-ui/lib/styles/spacing');
+var Colors = require('material-ui/lib/styles/colors');
+var ColorManipulator = require('material-ui/lib/utils/color-manipulator');
+var Spacing = require('material-ui/lib/styles/spacing');
 
 //#0D47A1 !important
 
