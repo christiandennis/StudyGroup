@@ -159,16 +159,23 @@ var StudyGroupSource = {
 	signOut() {
 		return {
 		  remote(state, history) { 
+		  	var header = null;
+		  	try {
+			    header ={
+		      				"access-token": state.user.accesstoken,
+		      				"client": state.user.client,
+		      				"uid": state.user.uid
+      					}
+			}
+			catch(err) {
+			    window.location.href = '/';
+			}
 		    return new Promise(function (resolve, reject) {
 		    		// console.log('--------------SIGN OUT--------------');
 		      	$.ajax({ url: '/auth/sign_out',
       	      type: 'DELETE',
       	      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-      	      headers: 	{
-		      	      				"access-token": state.user.accesstoken,
-		      	      				"client": state.user.client,
-		      	      				"uid": state.user.uid
-      	      					},
+      	      headers: 	header,
       	      success: function(response) {
       	      	// console.log('__SUCCESS__');
 	      	  	  // console.log('response:' ,response);
@@ -220,7 +227,18 @@ var StudyGroupSource = {
 	postNewGroup() {
 		return {
 		  remote(state, title, subject, description, date, location, capacity, privacy, newGroupDialog, failedSnackbar, successSnackbar) { 
-		    return new Promise(function (resolve, reject) {
+		    var header = null;
+		  	try {
+			    header ={
+		      				"access-token": state.user.accesstoken,
+		      				"client": state.user.client,
+		      				"uid": state.user.uid
+      					}
+			}
+			catch(err) {
+			    window.location.href = '/';
+			}
+			return new Promise(function (resolve, reject) {
 		      	// console.log('--------------POST NEW GROUP--------------');
 		      	// console.log("postnewgroupstate", state);
 		      	var groupData = {
@@ -236,11 +254,7 @@ var StudyGroupSource = {
 		      	$.ajax({ url: '/groups',
       	      type: 'POST',
       	      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-      	      headers: 	{
-      	      				"access-token": state.user.accesstoken,
-      	      				"client": state.user.client,
-      	      				"uid": state.user.uid
-      	      			},
+      	      headers: 	header,
       	      data: groupData,
       	      success: function(response) {
       	      	// console.log('__SUCCESS__');
@@ -275,7 +289,18 @@ var StudyGroupSource = {
 	editGroup() {
 		return {
 		  	remote(state, id, title, subject, description, date, location, capacity, editGroupDialog, failedSnackbar, successSnackbar) { 
-			    return new Promise(function (resolve, reject) {
+			    var header = null;
+		  	try {
+			    header ={
+		      				"access-token": state.user.accesstoken,
+		      				"client": state.user.client,
+		      				"uid": state.user.uid
+      					}
+			}
+			catch(err) {
+			    window.location.href = '/';
+			}
+			return new Promise(function (resolve, reject) {
 			      	// console.log('--------------EDIT GROUP--------------');
 			      	var groupData = {
 			      		"title": title.getValue(),
@@ -290,11 +315,7 @@ var StudyGroupSource = {
 			      	$.ajax({ url: URL,
 		      	      	type: 'PUT',
 		      	      	beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-		      	      	headers:{
-		      	      				"access-token": state.user.accesstoken,
-		      	      				"client": state.user.client,
-		      	      				"uid": state.user.uid
-		      	      			},
+		      	      	headers:header,
 			      	    data: groupData,
 			      	    success: function(response) {
 			      	      // 	console.log('__SUCCESS__');
@@ -334,15 +355,22 @@ var StudyGroupSource = {
 	fetchStudyGroups() {
 		return {
 			remote(state) { 
-			    return new Promise(function (resolve, reject) {
+			    var header = null;
+		  	try {
+			    header ={
+		      				"access-token": state.user.accesstoken,
+		      				"client": state.user.client,
+		      				"uid": state.user.uid
+      					}
+			}
+			catch(err) {
+			    window.location.href = '/';
+			}
+			return new Promise(function (resolve, reject) {
 			    	// console.log('--------------FETCH GROUP--------------');
 			      	$.ajax({ url: '/groups/user/index',
 				        type: 'GET',
-				        headers: {
-				  						"access-token": state.user.accesstoken,
-			    	      				"client": state.user.client,
-			    	      				"uid": state.user.uid
-			  								},
+				        headers: header,
 				        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
 				        success: function(data, status, xhr) {
 				        	// console.log('__SUCCESS__');
@@ -374,7 +402,18 @@ var StudyGroupSource = {
 	searchGroups() {
 		return {
 			remote(state, searchTerm) { 
-			    return new Promise(function (resolve, reject) {
+			    var header = null;
+		  	try {
+			    header ={
+		      				"access-token": state.user.accesstoken,
+		      				"client": state.user.client,
+		      				"uid": state.user.uid
+      					}
+			}
+			catch(err) {
+			    window.location.href = '/';
+			}
+			return new Promise(function (resolve, reject) {
 			    	// console.log('--------------SEARCH GROUP--------------');
 			    	if(searchTerm===''){
 			    		resolve(null);
@@ -382,11 +421,7 @@ var StudyGroupSource = {
 			    	} else {
 				      	$.ajax({ url: '/groups/search?search=' + searchTerm,
 					        type: 'GET',
-					        headers: {
-					  						"access-token": state.user.accesstoken,
-				    	      				"client": state.user.client,
-				    	      				"uid": state.user.uid
-				  								},
+					        headers: header,
 					        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
 					        success: function(data, status, xhr) {
 					        	// console.log('__SUCCESS__');
@@ -431,15 +466,22 @@ var StudyGroupSource = {
 	fetchMyGroups() {
 		return {
 			remote(state){
-				return new Promise(function(resolve, reject){
+				var header = null;
+		  	try {
+			    header ={
+		      				"access-token": state.user.accesstoken,
+		      				"client": state.user.client,
+		      				"uid": state.user.uid
+      					}
+			}
+			catch(err) {
+			    window.location.href = '/';
+			}
+			return new Promise(function(resolve, reject){
 					// console.log('--------------FETCH MY GROUPS--------------');
 				    $.ajax({ url: '/groups/user',
 				        type: 'GET',
-				        headers: {
-					  				"access-token": state.user.accesstoken,
-		    	      				"client": state.user.client,
-		    	      				"uid": state.user.uid
-		  						},
+				        headers: header,
 				        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
 				        success: function(data, status, xhr) {
 				        	// console.log('__SUCCESS__');
@@ -467,15 +509,22 @@ var StudyGroupSource = {
 	joinOrLeaveGroup() {
 		return {
 			remote(state, groupID, joinOrLeave, success, failed){
-				return new Promise(function(resolve, reject){
+				var header = null;
+		  	try {
+			    header ={
+		      				"access-token": state.user.accesstoken,
+		      				"client": state.user.client,
+		      				"uid": state.user.uid
+      					}
+			}
+			catch(err) {
+			    window.location.href = '/';
+			}
+			return new Promise(function(resolve, reject){
 					// console.log('--------------JOIN OR LEAVE GROUP--------------');
 				    $.ajax({ url: '/groups/user/update',
 				        type: 'PUT',
-				        headers: {
-					  				"access-token": state.user.accesstoken,
-		    	      				"client": state.user.client,
-		    	      				"uid": state.user.uid
-		  						},
+				        headers: header,
 		  				data: 	{
 		  							"groupid": groupID,
 		  							"command": joinOrLeave
@@ -514,15 +563,22 @@ var StudyGroupSource = {
 	dismissGroup() {
 		return {
 			remote(state, groupID){
-				return new Promise(function(resolve, reject, success, failed){
+				var header = null;
+		  	try {
+			    header ={
+		      				"access-token": state.user.accesstoken,
+		      				"client": state.user.client,
+		      				"uid": state.user.uid
+      					}
+			}
+			catch(err) {
+			    window.location.href = '/';
+			}
+			return new Promise(function(resolve, reject, success, failed){
 					// console.log('--------------DISMISS GROUP--------------');
 				    $.ajax({ url: '/groups/delete',
 				        type: 'DELETE',
-				        headers: {
-					  				"access-token": state.user.accesstoken,
-		    	      				"client": state.user.client,
-		    	      				"uid": state.user.uid
-		  						},
+				        headers: header,
 		  				data: 	{
 		  							"id": groupID
 		  						},
@@ -567,15 +623,22 @@ var StudyGroupSource = {
 	fetchComments() {
 		return {
 			remote(state, groupID){
-				return new Promise(function(resolve, reject){
+				var header = null;
+		  	try {
+			    header ={
+		      				"access-token": state.user.accesstoken,
+		      				"client": state.user.client,
+		      				"uid": state.user.uid
+      					}
+			}
+			catch(err) {
+			    window.location.href = '/';
+			}
+			return new Promise(function(resolve, reject){
 					// console.log('--------------COMMENTS--------------');
 				    $.ajax({ url: '/comments/' + groupID.toString(),
 				        type: 'GET',
-				        headers: {
-					  				"access-token": state.user.accesstoken,
-		    	      				"client": state.user.client,
-		    	      				"uid": state.user.uid
-		  						},
+				        headers: header,
 				        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
 				        success: function(data, status, xhr) {
 				        	// console.log('__SUCCESS__');
@@ -608,15 +671,22 @@ var StudyGroupSource = {
 	postComment() {
 		return {
 			remote(state, groupID, content, success, failed){
-				return new Promise(function(resolve, reject){
+				var header = null;
+		  	try {
+			    header ={
+		      				"access-token": state.user.accesstoken,
+		      				"client": state.user.client,
+		      				"uid": state.user.uid
+      					}
+			}
+			catch(err) {
+			    window.location.href = '/';
+			}
+			return new Promise(function(resolve, reject){
 					// console.log('--------------POST COMMENTS--------------');
 				    $.ajax({ url: '/comment',
 				        type: 'POST',
-				        headers: {
-					  				"access-token": state.user.accesstoken,
-		    	      				"client": state.user.client,
-		    	      				"uid": state.user.uid
-		  						},
+				        headers: header,
 		  				data: {
 		  							"groupid": groupID,
 		  							"title": "Default title",
