@@ -119,11 +119,14 @@ var StudyGroupSource = {
 		        	data.data.accesstoken = xhr.getResponseHeader('access-token');
 		        	data.data.uid = xhr.getResponseHeader('uid');
 		          	// console.log('data' ,data.data);
-	          	resolve(data.data);
-	          	// history.pushState(null, '/studygroupapp');
-	          	setTimeout(function() {history.pushState(null, '/studygroupapp');}, 10);
-	          	// loginDialog.dismiss();
-	          	// console.log('**************END LOGIN**************');
+		          	document.cookie = "user=" + JSON.stringify(data.data);
+		          	var userCookie = document.cookie.replace(/(?:(?:^|.*;\s*)user\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+		          	console.log('ngehe', userCookie);
+		          	resolve(data.data);
+		          	// history.pushState(null, '/studygroupapp');
+		          	setTimeout(function() {history.pushState(null, '/studygroupapp');}, 10);
+		          	// loginDialog.dismiss();
+		          	// console.log('**************END LOGIN**************');
 		        },
 		        error: function(response) {
 		        	// console.log('__FAILED__');
@@ -180,6 +183,7 @@ var StudyGroupSource = {
       	      	// console.log('__SUCCESS__');
 	      	  	  // console.log('response:' ,response);
       	        window.location.href = '/';
+      	        document.cookie = "user=" + '';
       	        resolve(null);
       	        // history.pushState(null, '/');
       	        // console.log('**************END SIGN OUT**************');
@@ -188,6 +192,7 @@ var StudyGroupSource = {
       	      	// console.log('__FAILED__');
       	      	// User was not found or was not logged in.
 	      	  	  // console.log('response:' ,response.responseJSON);
+	      	  	  document.cookie = "user=" + '';
 	      	  	  if (response.responseJSON.errors[0] === 'User was not found or was not logged in.') {
 	      	  	  	window.location.href = '/';
 	      	  	  }
@@ -356,6 +361,15 @@ var StudyGroupSource = {
 		return {
 			remote(state) { 
 			    var header = null;
+			    var userCookie = document.cookie.replace(/(?:(?:^|.*;\s*)user\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+			    var user = JSON.parse(userCookie);
+			    console.log('uki', user);
+			    header = {
+			    			'access-token': user.accesstoken,
+			    			'client': user.client,
+			    			'uid': user.uid
+
+			    }
 		  	try {
 			    header ={
 		      				"access-token": state.user.accesstoken,
@@ -367,16 +381,16 @@ var StudyGroupSource = {
 			    window.location.href = '/';
 			}
 			return new Promise(function (resolve, reject) {
-			    	// console.log('--------------FETCH GROUP--------------');
+			    	console.log('--------------FETCH GROUP--------------');
 			      	$.ajax({ url: '/groups/user/index',
 				        type: 'GET',
 				        headers: header,
 				        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
 				        success: function(data, status, xhr) {
-				        	// console.log('__SUCCESS__');
+				        	console.log('__SUCCESS__');
 					        // console.log('groups' ,data.groups);
 					        resolve(data.groups);
-					        // console.log('**************END FETCH GROUP**************');
+					        console.log('**************END FETCH GROUP**************');
 				        },
 				        error: function(response) {
 				        	// console.log('__FAILED__');

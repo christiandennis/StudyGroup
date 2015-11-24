@@ -7,6 +7,7 @@ var AltContainer = require('alt/AltContainer');
 
 var StudyGroupStore = require('../stores/StudyGroupStore');
 var StudyGroupActions = require('../actions/StudyGroupActions');
+var UserActions = require('../actions/UserActions');
 
 // import components
 var LandingPage = require('./LandingPage.jsx');
@@ -98,6 +99,11 @@ var TopBar = React.createClass({
 	
 	dialogLogin() {
 		this.refs.loginDialog.refs.loginDialog.show();
+		var user = document.cookie.replace(/(?:(?:^|.*;\s*)user\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+		if (user != ''){
+			UserActions.setUserFromCookie();
+			this.history.pushState(null, '/studygroupapp');
+		}
 		// BYPASS LOGIN FOR TESTING
 		// StudyGroupStore.fetchUser( 'papa@gmail.com', 'iopiopiop', this.history, this.refs.loginDialog);
 	},

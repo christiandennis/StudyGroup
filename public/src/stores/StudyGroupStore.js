@@ -26,6 +26,7 @@ class StudyGroupStore {
 			handleUpdateUser: UserActions.UPDATE_USER,
 			handleFetchUser: UserActions.FETCH_USER,
 			handleStudyUser: UserActions.USER_FAILED,
+			handleSetUserFromCookie: UserActions.SET_USER_FROM_COOKIE,
 
 			handleSignUp: UserActions.SIGN_UP,
 			handleSignOut: UserActions.SIGN_OUT,
@@ -50,6 +51,23 @@ class StudyGroupStore {
 			getStudyGroup: this.getStudyGroup
 		});
 		this.exportAsync(StudyGroupSource);
+	}
+
+	getCookie(cname) {
+	    var name = cname + "=";
+	    var ca = document.cookie.split(';');
+	    for(var i=0; i<ca.length; i++) {
+	        var c = ca[i];
+	        while (c.charAt(0)==' ') c = c.substring(1);
+	        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+	    }
+	    return "";
+	}
+
+	handleSetUserFromCookie() {
+		var userCookie = document.cookie.replace(/(?:(?:^|.*;\s*)user\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+		this.user = JSON.parse(userCookie);
+		console.log('kambeng', this.user);
 	}
 	
 	handleSearchGroups(groups) {

@@ -50285,6 +50285,10 @@ function UserActions(){"use strict";}
 		
 	}});
 
+	Object.defineProperty(UserActions.prototype,"setUserFromCookie",{writable:true,configurable:true,value:function() {"use strict";
+		this.dispatch();
+	}});
+
 
 module.exports = alt.createActions(UserActions);
 
@@ -50304,6 +50308,7 @@ var AltContainer = require('alt/AltContainer');
 
 var StudyGroupStore = require('../stores/StudyGroupStore');
 var StudyGroupActions = require('../actions/StudyGroupActions');
+var UserActions = require('../actions/UserActions');
 
 // import components
 var LandingPage = require('./LandingPage.jsx');
@@ -50395,6 +50400,11 @@ var TopBar = React.createClass({displayName: "TopBar",
 	
 	dialogLogin:function() {
 		this.refs.loginDialog.refs.loginDialog.show();
+		var user = document.cookie.replace(/(?:(?:^|.*;\s*)user\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+		if (user != ''){
+			UserActions.setUserFromCookie();
+			this.history.pushState(null, '/studygroupapp');
+		}
 		// BYPASS LOGIN FOR TESTING
 		// StudyGroupStore.fetchUser( 'papa@gmail.com', 'iopiopiop', this.history, this.refs.loginDialog);
 	},
@@ -50542,7 +50552,7 @@ var TopBar = React.createClass({displayName: "TopBar",
 
 module.exports = TopBar;
 
-},{"../actions/StudyGroupActions":395,"../stores/StudyGroupStore":411,"../themes/AppBarTheme.js":412,"../themes/LeftBarTheme.js":413,"./Dialog_LogIn.jsx":403,"./Dialog_MyGroups.jsx":404,"./Dialog_NewGroup.jsx":405,"./Dialog_Profile.jsx":406,"./Dialog_SignUp.jsx":407,"./LandingPage.jsx":408,"alt/AltContainer":1,"material-ui/lib/app-bar":56,"material-ui/lib/avatar":57,"material-ui/lib/flat-button":80,"material-ui/lib/icon-button":82,"material-ui/lib/left-nav":84,"material-ui/lib/menu/menu-item":90,"material-ui/lib/snackbar":106,"material-ui/lib/styles/theme-manager":114,"material-ui/lib/text-field":128,"react":391,"react-addons-test-utils":165,"react-dom":168,"react-router":205,"react-sticky":212}],399:[function(require,module,exports){
+},{"../actions/StudyGroupActions":395,"../actions/UserActions":396,"../stores/StudyGroupStore":411,"../themes/AppBarTheme.js":412,"../themes/LeftBarTheme.js":413,"./Dialog_LogIn.jsx":403,"./Dialog_MyGroups.jsx":404,"./Dialog_NewGroup.jsx":405,"./Dialog_Profile.jsx":406,"./Dialog_SignUp.jsx":407,"./LandingPage.jsx":408,"alt/AltContainer":1,"material-ui/lib/app-bar":56,"material-ui/lib/avatar":57,"material-ui/lib/flat-button":80,"material-ui/lib/icon-button":82,"material-ui/lib/left-nav":84,"material-ui/lib/menu/menu-item":90,"material-ui/lib/snackbar":106,"material-ui/lib/styles/theme-manager":114,"material-ui/lib/text-field":128,"react":391,"react-addons-test-utils":165,"react-dom":168,"react-router":205,"react-sticky":212}],399:[function(require,module,exports){
 // React, react-reouter, alt
 var React = require('react');
 var render = require('react-dom').render;
@@ -52382,11 +52392,14 @@ var StudyGroupSource = {
 		        	data.data.accesstoken = xhr.getResponseHeader('access-token');
 		        	data.data.uid = xhr.getResponseHeader('uid');
 		          	// console.log('data' ,data.data);
-	          	resolve(data.data);
-	          	// history.pushState(null, '/studygroupapp');
-	          	setTimeout(function() {history.pushState(null, '/studygroupapp');}, 10);
-	          	// loginDialog.dismiss();
-	          	// console.log('**************END LOGIN**************');
+		          	document.cookie = "user=" + JSON.stringify(data.data);
+		          	var userCookie = document.cookie.replace(/(?:(?:^|.*;\s*)user\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+		          	console.log('ngehe', userCookie);
+		          	resolve(data.data);
+		          	// history.pushState(null, '/studygroupapp');
+		          	setTimeout(function() {history.pushState(null, '/studygroupapp');}, 10);
+		          	// loginDialog.dismiss();
+		          	// console.log('**************END LOGIN**************');
 		        },
 		        error: function(response) {
 		        	// console.log('__FAILED__');
@@ -52443,6 +52456,7 @@ var StudyGroupSource = {
       	      	// console.log('__SUCCESS__');
 	      	  	  // console.log('response:' ,response);
       	        window.location.href = '/';
+      	        document.cookie = "user=" + '';
       	        resolve(null);
       	        // history.pushState(null, '/');
       	        // console.log('**************END SIGN OUT**************');
@@ -52451,6 +52465,7 @@ var StudyGroupSource = {
       	      	// console.log('__FAILED__');
       	      	// User was not found or was not logged in.
 	      	  	  // console.log('response:' ,response.responseJSON);
+	      	  	  document.cookie = "user=" + '';
 	      	  	  if (response.responseJSON.errors[0] === 'User was not found or was not logged in.') {
 	      	  	  	window.location.href = '/';
 	      	  	  }
@@ -52619,6 +52634,15 @@ var StudyGroupSource = {
 		return {
 			remote:function(state) { 
 			    var header = null;
+			    var userCookie = document.cookie.replace(/(?:(?:^|.*;\s*)user\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+			    var user = JSON.parse(userCookie);
+			    console.log('uki', user);
+			    header = {
+			    			'access-token': user.accesstoken,
+			    			'client': user.client,
+			    			'uid': user.uid
+
+			    }
 		  	try {
 			    header ={
 		      				"access-token": state.user.accesstoken,
@@ -52630,16 +52654,16 @@ var StudyGroupSource = {
 			    window.location.href = '/';
 			}
 			return new Promise(function (resolve, reject) {
-			    	// console.log('--------------FETCH GROUP--------------');
+			    	console.log('--------------FETCH GROUP--------------');
 			      	$.ajax({ url: '/groups/user/index',
 				        type: 'GET',
 				        headers: header,
 				        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
 				        success: function(data, status, xhr) {
-				        	// console.log('__SUCCESS__');
+				        	console.log('__SUCCESS__');
 					        // console.log('groups' ,data.groups);
 					        resolve(data.groups);
-					        // console.log('**************END FETCH GROUP**************');
+					        console.log('**************END FETCH GROUP**************');
 				        },
 				        error: function(response) {
 				        	// console.log('__FAILED__');
@@ -53017,6 +53041,7 @@ const moment = require('moment');
 			handleUpdateUser: UserActions.UPDATE_USER,
 			handleFetchUser: UserActions.FETCH_USER,
 			handleStudyUser: UserActions.USER_FAILED,
+			handleSetUserFromCookie: UserActions.SET_USER_FROM_COOKIE,
 
 			handleSignUp: UserActions.SIGN_UP,
 			handleSignOut: UserActions.SIGN_OUT,
@@ -53042,6 +53067,23 @@ const moment = require('moment');
 		});
 		this.exportAsync(StudyGroupSource);
 	}
+
+	Object.defineProperty(StudyGroupStore.prototype,"getCookie",{writable:true,configurable:true,value:function(cname) {"use strict";
+	    var name = cname + "=";
+	    var ca = document.cookie.split(';');
+	    for(var i=0; i<ca.length; i++) {
+	        var c = ca[i];
+	        while (c.charAt(0)==' ') c = c.substring(1);
+	        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+	    }
+	    return "";
+	}});
+
+	Object.defineProperty(StudyGroupStore.prototype,"handleSetUserFromCookie",{writable:true,configurable:true,value:function() {"use strict";
+		var userCookie = document.cookie.replace(/(?:(?:^|.*;\s*)user\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+		this.user = JSON.parse(userCookie);
+		console.log('kambeng', this.user);
+	}});
 	
 	Object.defineProperty(StudyGroupStore.prototype,"handleSearchGroups",{writable:true,configurable:true,value:function(groups) {"use strict";
 		this.searchResults = groups;
