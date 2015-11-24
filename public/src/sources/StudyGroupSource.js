@@ -121,7 +121,7 @@ var StudyGroupSource = {
 		          	// console.log('data' ,data.data);
 		          	document.cookie = "user=" + JSON.stringify(data.data);
 		          	var userCookie = document.cookie.replace(/(?:(?:^|.*;\s*)user\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-		          	console.log('ngehe', userCookie);
+		          	// console.log('ngehe', userCookie);
 		          	resolve(data.data);
 		          	// history.pushState(null, '/studygroupapp');
 		          	setTimeout(function() {history.pushState(null, '/studygroupapp');}, 10);

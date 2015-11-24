@@ -67,7 +67,6 @@ class StudyGroupStore {
 	handleSetUserFromCookie() {
 		var userCookie = document.cookie.replace(/(?:(?:^|.*;\s*)user\s*\=\s*([^;]*).*$)|^.*$/, "$1");
 		this.user = JSON.parse(userCookie);
-		console.log('kambeng', this.user);
 	}
 	
 	handleSearchGroups(groups) {

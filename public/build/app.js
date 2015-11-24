@@ -52400,7 +52400,7 @@ var StudyGroupSource = {
 		          	// console.log('data' ,data.data);
 		          	document.cookie = "user=" + JSON.stringify(data.data);
 		          	var userCookie = document.cookie.replace(/(?:(?:^|.*;\s*)user\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-		          	console.log('ngehe', userCookie);
+		          	// console.log('ngehe', userCookie);
 		          	resolve(data.data);
 		          	// history.pushState(null, '/studygroupapp');
 		          	setTimeout(function() {history.pushState(null, '/studygroupapp');}, 10);
@@ -53088,7 +53088,6 @@ const moment = require('moment');
 	Object.defineProperty(StudyGroupStore.prototype,"handleSetUserFromCookie",{writable:true,configurable:true,value:function() {"use strict";
 		var userCookie = document.cookie.replace(/(?:(?:^|.*;\s*)user\s*\=\s*([^;]*).*$)|^.*$/, "$1");
 		this.user = JSON.parse(userCookie);
-		console.log('kambeng', this.user);
 	}});
 	
 	Object.defineProperty(StudyGroupStore.prototype,"handleSearchGroups",{writable:true,configurable:true,value:function(groups) {"use strict";
