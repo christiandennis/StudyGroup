@@ -42,4 +42,9 @@ class CommentTest < ActiveSupport::TestCase
   	assert_not @comment.valid?
   end
 
+  test "groupid should be a number" do
+    @comment.groupid = "s"
+    assert_not @comment.valid?
+  end
+
 end
