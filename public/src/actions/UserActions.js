@@ -24,6 +24,10 @@ class UserActions {
 	doNothing() {
 		
 	}
+
+	setUserFromCookie() {
+		this.dispatch();
+	}
 }
 
 module.exports = alt.createActions(UserActions);

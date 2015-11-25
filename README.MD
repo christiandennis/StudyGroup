@@ -44,3 +44,30 @@
 - signup first
 - login using the id you create
 - dont forget for logout after use (read bug section)
+
+##THIRD ITERATION
+#Frontend:
+- Tabbed View (Upcoming)
+- Basic Profile View
+- Cookie
+- Refresh button
+- Comment View
+
+#Backend:
+- Login API
+- SignUp API
+- SignOut API
+- Group per user API
+- Comment API
+
+##Bugs:
+- Havent found any :)
+
+#INSTRUCTION:
+- rails s
+- localhost:3000
+
+#INSTRUCTION TO TEST:
+- npm install -g jasmine-node
+- cd to ../public/src/
+- jasmine-node spec

@@ -50179,7 +50179,7 @@ React.render((
   ), document.getElementById('ReactApp')
 );
 
-},{"./components/AppBar.jsx":398,"./components/StudyGroups.jsx":409,"./stores/StudyGroupStore":411,"alt/AltContainer":1,"react":391,"react-dom":168,"react-router":205}],393:[function(require,module,exports){
+},{"./components/AppBar.jsx":398,"./components/StudyGroups.jsx":409,"./stores/StudyGroupStore":415,"alt/AltContainer":1,"react":391,"react-dom":168,"react-router":205}],393:[function(require,module,exports){
 var alt = require('../alt');
 
 function CommentsActions(){"use strict";}
@@ -50285,6 +50285,10 @@ function UserActions(){"use strict";}
 		
 	}});
 
+	Object.defineProperty(UserActions.prototype,"setUserFromCookie",{writable:true,configurable:true,value:function() {"use strict";
+		this.dispatch();
+	}});
+
 
 module.exports = alt.createActions(UserActions);
 
@@ -50304,6 +50308,7 @@ var AltContainer = require('alt/AltContainer');
 
 var StudyGroupStore = require('../stores/StudyGroupStore');
 var StudyGroupActions = require('../actions/StudyGroupActions');
+var UserActions = require('../actions/UserActions');
 
 // import components
 var LandingPage = require('./LandingPage.jsx');
@@ -50370,7 +50375,6 @@ var LeftBar = React.createClass({displayName: "LeftBar",
 				React.createElement(SideBar, {ref: "leftNav", docked: false}, 
 					React.createElement(MenuItem, {index: 0, style: {textAlign:"center"}}, "Hi, ", this.props.user.name, "!"), 
 					React.createElement(MenuItem, {index: 1, style: {textAlign:"center", marginBottom:"20px"} }, React.createElement("span", {onClick: this.myProfile}, React.createElement(Avatar, {size: 120, backgroundColor: "#0D47A1"}, " ", this.props.user.name.slice(0,1).toUpperCase(), " "))), 
-	  				React.createElement("span", {onClick: this.editProfile}, " ", React.createElement(MenuItem, {index: 3}, "Edit Profile"), " "), 
 	  				React.createElement("span", {onClick: this.logout}, "  ", React.createElement(MenuItem, {index: 4}, "Log Out"), "  ")
 	  			), 
 
@@ -50395,6 +50399,11 @@ var TopBar = React.createClass({displayName: "TopBar",
 	
 	dialogLogin:function() {
 		this.refs.loginDialog.refs.loginDialog.show();
+		var user = document.cookie.replace(/(?:(?:^|.*;\s*)user\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+		if (user != ''){
+			UserActions.setUserFromCookie();
+			this.history.pushState(null, '/studygroupapp');
+		}
 		// BYPASS LOGIN FOR TESTING
 		// StudyGroupStore.fetchUser( 'papa@gmail.com', 'iopiopiop', this.history, this.refs.loginDialog);
 	},
@@ -50457,6 +50466,12 @@ var TopBar = React.createClass({displayName: "TopBar",
     },
 
 	render:function() {
+		var user = document.cookie.replace(/(?:(?:^|.*;\s*)user\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+		if (user != '' && !this.props.user){
+			UserActions.setUserFromCookie();
+			this.history.pushState(null, '/studygroupapp');
+		}
+
 		if (this.props.user) {
 			var hintText = this.getHintText();
 			return (
@@ -50542,7 +50557,7 @@ var TopBar = React.createClass({displayName: "TopBar",
 
 module.exports = TopBar;
 
-},{"../actions/StudyGroupActions":395,"../stores/StudyGroupStore":411,"../themes/AppBarTheme.js":412,"../themes/LeftBarTheme.js":413,"./Dialog_LogIn.jsx":403,"./Dialog_MyGroups.jsx":404,"./Dialog_NewGroup.jsx":405,"./Dialog_Profile.jsx":406,"./Dialog_SignUp.jsx":407,"./LandingPage.jsx":408,"alt/AltContainer":1,"material-ui/lib/app-bar":56,"material-ui/lib/avatar":57,"material-ui/lib/flat-button":80,"material-ui/lib/icon-button":82,"material-ui/lib/left-nav":84,"material-ui/lib/menu/menu-item":90,"material-ui/lib/snackbar":106,"material-ui/lib/styles/theme-manager":114,"material-ui/lib/text-field":128,"react":391,"react-addons-test-utils":165,"react-dom":168,"react-router":205,"react-sticky":212}],399:[function(require,module,exports){
+},{"../actions/StudyGroupActions":395,"../actions/UserActions":396,"../stores/StudyGroupStore":415,"../themes/AppBarTheme.js":416,"../themes/LeftBarTheme.js":417,"./Dialog_LogIn.jsx":403,"./Dialog_MyGroups.jsx":404,"./Dialog_NewGroup.jsx":405,"./Dialog_Profile.jsx":406,"./Dialog_SignUp.jsx":407,"./LandingPage.jsx":408,"alt/AltContainer":1,"material-ui/lib/app-bar":56,"material-ui/lib/avatar":57,"material-ui/lib/flat-button":80,"material-ui/lib/icon-button":82,"material-ui/lib/left-nav":84,"material-ui/lib/menu/menu-item":90,"material-ui/lib/snackbar":106,"material-ui/lib/styles/theme-manager":114,"material-ui/lib/text-field":128,"react":391,"react-addons-test-utils":165,"react-dom":168,"react-router":205,"react-sticky":212}],399:[function(require,module,exports){
 // React, react-reouter, alt
 var React = require('react');
 var render = require('react-dom').render;
@@ -50560,29 +50575,13 @@ const Paper = require('material-ui/lib/paper');
 const Avatar = require('material-ui/lib/avatar');
 const FontIcon = require('material-ui/lib/font-icon');
 const Snackbar = require('material-ui/lib/snackbar');
+const helper = require('../helper/Helper_Card');
 
 const moment = require('moment');
 
 var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 	openGroupDetailDialog:function() {
 		this.refs.groupDetailDialog.refs.groupDetailDialog.show();
-	},
-
-	calculateTimeColor:function(card_date) {
-		var card_epoch = moment(card_date).unix();
-		var curr_time = new Date().toString();
-		var curr_epoch = moment(curr_time).unix();
-		var time_diff = card_epoch - curr_epoch;
-
-		if (time_diff >= 259200) {
-			return 'colorBarGreen';
-		} else if (time_diff >= 86400) {
-			return 'colorBarYellow';
-		} else if (time_diff >= 0) {
-			return 'colorBarRed';
-		} else {
-			return 'colorBarBlack';
-		}
 	},
 
 	joinLeaveGroup:function(joinOrLeave) {
@@ -50596,56 +50595,19 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 		}
 	},
 
-	checkUserGoing:function(studyGroup, user) {
-		for (var i in studyGroup.users) {
-	     	if (studyGroup.users[i].id === user.id) {
-	       		return true;
-	     	}
-	   	}
-	   	return false;
-	},
-
-	getJoinText:function(studyGroup, user) {
-		if (studyGroup.host === user.nickname) {
-			return 'Dismiss';
-		} else if(this.checkUserGoing(studyGroup, user)) {
-			return 'Leave';
-		} else if (studyGroup.guestlist === studyGroup.capacity) {
-			return 'Full';
-		} else {
-			return 'Join';
-		}
-	},
-
 	confirmDismiss:function() {
 		StudyGroupStore.dismissGroup(this.props.studyGroup.id, this.refs.successDismiss, this.refs.failedDismiss);
-	},
-
-	checkDisabled:function(studyGroup) {
-		return (new Date(studyGroup.date) < new Date());
-	},
-
-	getTimeString:function(time) {
-		// var d = new Date(0);
-		// d.setUTCSeconds(Number(time));
-		return moment(time).format("h:mm a").toString();
-	},
-
-	getDateString:function(date) {
-		// var d = new Date(0);
-		// d.setUTCSeconds(Number(date));
-		return moment(date).format("ddd, MMM D").toString();
 	},
 
 	render:function() {
 		var studyGroup = this.props.studyGroup;
 		var user = this.props.user;
 
-		var date = this.getDateString(studyGroup.date);
-		var time = this.getTimeString(studyGroup.date);
-		var color = this.calculateTimeColor(studyGroup.date);	
-		var joinText = this.getJoinText(studyGroup, user);
-		var disabled = this.checkDisabled(studyGroup);
+		var date = helper.getDateString(studyGroup.date);
+		var time = helper.getTimeString(studyGroup.date);
+		var color = helper.calculateTimeColor(studyGroup.date);	
+		var joinText = helper.getJoinText(studyGroup, user);
+		var disabled = helper.checkDisabled(studyGroup);
 		if (joinText==='Full'){
 			disabled = true;
 		}
@@ -50761,7 +50723,7 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 
 module.exports = MainGroupViewCard;
 
-},{"../stores/StudyGroupStore":411,"./Dialog_GroupDetail.jsx":402,"material-ui/lib/avatar":57,"material-ui/lib/dialog":76,"material-ui/lib/font-icon":81,"material-ui/lib/paper":100,"material-ui/lib/raised-button":101,"material-ui/lib/snackbar":106,"material-ui/lib/text-field":128,"moment":162,"react":391,"react-dom":168,"react-router":205}],400:[function(require,module,exports){
+},{"../helper/Helper_Card":410,"../stores/StudyGroupStore":415,"./Dialog_GroupDetail.jsx":402,"material-ui/lib/avatar":57,"material-ui/lib/dialog":76,"material-ui/lib/font-icon":81,"material-ui/lib/paper":100,"material-ui/lib/raised-button":101,"material-ui/lib/snackbar":106,"material-ui/lib/text-field":128,"moment":162,"react":391,"react-dom":168,"react-router":205}],400:[function(require,module,exports){
 // import react, react-router, alt
 var React = require('react');
 var render = require('react-dom').render;
@@ -50889,7 +50851,7 @@ var Comments = React.createClass ({displayName: "Comments",
 
 module.exports = Comments;
 
-},{"../actions/CommentsActions":393,"../actions/StudyGroupActions":395,"../stores/StudyGroupStore":411,"./Card_MainGroupView.jsx":399,"alt/AltContainer":1,"axios":17,"material-ui/lib/avatar":57,"material-ui/lib/card/card":65,"material-ui/lib/card/card-actions":60,"material-ui/lib/card/card-header":62,"material-ui/lib/card/card-text":63,"material-ui/lib/card/card-title":64,"material-ui/lib/date-picker/date-picker":73,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/lists/list":87,"material-ui/lib/lists/list-divider":85,"material-ui/lib/lists/list-item":86,"material-ui/lib/paper":100,"material-ui/lib/raised-button":101,"material-ui/lib/refresh-indicator":102,"material-ui/lib/snackbar":106,"material-ui/lib/text-field":128,"material-ui/lib/time-picker/time-picker":137,"moment":162,"react":391,"react-addons-test-utils":165,"react-dom":168,"react-masonry-component":169,"react-tap-event-plugin":216}],401:[function(require,module,exports){
+},{"../actions/CommentsActions":393,"../actions/StudyGroupActions":395,"../stores/StudyGroupStore":415,"./Card_MainGroupView.jsx":399,"alt/AltContainer":1,"axios":17,"material-ui/lib/avatar":57,"material-ui/lib/card/card":65,"material-ui/lib/card/card-actions":60,"material-ui/lib/card/card-header":62,"material-ui/lib/card/card-text":63,"material-ui/lib/card/card-title":64,"material-ui/lib/date-picker/date-picker":73,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/lists/list":87,"material-ui/lib/lists/list-divider":85,"material-ui/lib/lists/list-item":86,"material-ui/lib/paper":100,"material-ui/lib/raised-button":101,"material-ui/lib/refresh-indicator":102,"material-ui/lib/snackbar":106,"material-ui/lib/text-field":128,"material-ui/lib/time-picker/time-picker":137,"moment":162,"react":391,"react-addons-test-utils":165,"react-dom":168,"react-masonry-component":169,"react-tap-event-plugin":216}],401:[function(require,module,exports){
 // React, react-reouter, alt
 var React = require('react');
 var render = require('react-dom').render;
@@ -50903,25 +50865,27 @@ const FlatButton = require('material-ui/lib/flat-button');
 const DatePicker = require('material-ui/lib/date-picker/date-picker');
 const TimePicker = require('material-ui/lib/time-picker/time-picker');
 const Snackbar = require('material-ui/lib/snackbar');
+const helper = require('../helper/Helper_Form');
 
 const moment = require('moment');
 
 var LoginDialog = React.createClass({displayName: "LoginDialog",
 	cancelEditGroupDetail:function() {
+		// helper.test("aku","biji");
 		this.refs.editGroupDialog.dismiss();
 	},
 
-	calculateTimeEpoch:function(time, date) {
-		date_str = date.toString().slice(0,15);
-		time_str = time.toString().slice(15);
-		return moment(date_str + time_str).unix();
-	},
+	// calculateTimeEpoch(time, date) {
+	// 	date_str = date.toString().slice(0,15);
+	// 	time_str = time.toString().slice(15);
+	// 	return moment(date_str + time_str).unix();
+	// },
 
-	calculateTime:function(time, date) {
-		date_str = date.toString().slice(0,15);
-		time_str = time.toString().slice(15);
-		return date_str + time_str
-	},
+	// calculateTime(time, date) {
+	// 	date_str = date.toString().slice(0,15);
+	// 	time_str = time.toString().slice(15);
+	// 	return date_str + time_str
+	// },
 
 	submitEditGroupDetail:function() {
 		var id = this.props.studyGroup.id;
@@ -50937,112 +50901,157 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 		var failedSnackbar = this.refs.editGroupFailedSnackbar;
 		var successSnackbar = this.refs.editGroupSuccessSnackbar;
 
-		if(!this.validateGroupDateTime()) {
+		var isGroupDateTimeValid = helper.validateGroupDateTime(this.refs.editGroupTime.getTime(), this.refs.editGroupDate.getDate());
+
+		if(!isGroupDateTimeValid) {
 			this.refs.dateSnackbar.show();
-		} else if (this.validateGroupSubject() & this.validateGroupTitle() & this.validateGroupDescription() & this.validateGroupLocation() & this.validateGroupCapacity() & this.validateGroupDateTime()) {
-			StudyGroupStore.editGroup(id, title, subject, description, this.calculateTime(time.getTime(), date.getDate()), location, capacity, editGroupDialog, failedSnackbar, successSnackbar);
+		} else if (this.validateGroupSubject() & this.validateGroupTitle() & this.validateGroupDescription() & this.validateGroupLocation() & this.validateGroupCapacity() & helper.validateGroupDateTime(this.refs.editGroupTime.getTime(), this.refs.editGroupDate.getDate())) {
+			StudyGroupStore.editGroup(id, title, subject, description, helper.calculateTime(time.getTime(), date.getDate()), location, capacity, editGroupDialog, failedSnackbar, successSnackbar);
 		}
 	},
 
-	validateGroupDateTime:function() {
-		var time = this.refs.editGroupTime;
-		var date = this.refs.editGroupDate;
-		if (time.getTime() && date.getDate()) {
-			var time_epoch = this.calculateTimeEpoch(time.getTime(), date.getDate());
-			var time_now = new Date().getTime() / 1000;
-			if (time_epoch > time_now){
-				return true;
-			} else {
-				return false;
-			}
-		}
-	},
+	// validateGroupDateTime(time,date) {
+	// 	var time = this.refs.editGroupTime;
+	// 	var date = this.refs.editGroupDate;
+	// 	if (time.getTime() && date.getDate()) {
+	// 		var time_epoch = helper.calculateTimeEpoch(time.getTime(), date.getDate());
+	// 		var time_now = new Date().getTime() / 1000;
+	// 		if (time_epoch > time_now){
+	// 			return true;
+	// 		} else {
+	// 			return false;
+	// 		}
+	// 	} 
+	// },
 
 	validateGroupSubject:function() {
 		var subject = this.refs.editGroupSubject;
-		if (subject.getValue()) {
-			if (subject.getValue().length <= 10){
-				subject.setErrorText("");
+		var subjectString = subject.getValue();
+
+		switch (helper.isValidSubject(subjectString)) {
+			case 'valid':
+				subject.setErrorText('');
 				return true;
-			} else {
+				break;
+			case 'toomuch':
 				subject.setErrorText("Max 10 characters");
 				return false;
-			}
-		} else {
-			subject.setErrorText("This field is required");
-			return false;
+				break;
+			case 'empty':
+				subject.setErrorText("This field is required");
+				return false;
+				break;
 		}
+
+		// if (subject.getValue()) {
+		// 	if (subject.getValue().length <= 10){
+		// 		subject.setErrorText("");
+		// 		return true;
+		// 	} else {
+		// 		subject.setErrorText("Max 10 characters");
+		// 		return false;
+		// 	}
+		// } else {
+		// 	subject.setErrorText("This field is required");
+		// 	return false;
+		// }
 	},
 
 	validateGroupTitle:function() {
 		var title = this.refs.editGroupTitle;
-		if (title.getValue()) {
-			if (title.getValue().length <= 30){
-				title.setErrorText("");
-				return true;	
-			} else {
-				title.setErrorText("Max 30 character");
+		var titleString = title.getValue();
+		switch (helper.isValidTitle(titleString)) {
+			case 'valid':
+				title.setErrorText('');
+				return true;
+				break;
+			case 'toomuch':
+				title.setErrorText("Max 30 characters");
 				return false;
-			}
-		} else {
-			subject.setErrorText("This field is required");
-			return false;
-		}
+				break;
+			case 'empty':
+				title.setErrorText("This field is required");
+				return false;
+				break;
+		};
+		// if (title.getValue()) {
+		// 	if (title.getValue().length <= 30){
+		// 		title.setErrorText("");
+		// 		return true;	
+		// 	} else {
+		// 		title.setErrorText("Max 30 character");
+		// 		return false;
+		// 	}
+		// } else {
+		// 	subject.setErrorText("This field is required");
+		// 	return false;
+		// }
 	},
 
 	validateGroupDescription:function() {
 		var description = this.refs.editGroupDescription;
-		if (description.getValue()) {
-			if(description.getValue().length <= 256){
+		var descriptionString = description.getValue();
+		switch (helper.isValidDescription(descriptionString)) {
+			case 'valid':
 				description.setErrorText("");
 				return true;
-			} else {
+				break;
+			case 'toomuch':
 				description.setErrorText("Max 256 character");
 				return false;
-			}
-		} else {
-			description.setErrorText("This field is required");
-			return false;
-		}
+				break
+			case 'empty':
+				description.setErrorText("This field is required");
+				return false;
+				break;
+		};
 	},
 
 	validateGroupLocation:function() {
 		var location = this.refs.editGroupLocation;
-		if (location.getValue()) {
-			if (location.getValue().length <= 30){
-				location.setErrorText("");
+		var locationString = location.getValue();
+		switch (helper.isValidLocation(locationString)) {
+			case 'valid':
+				location.setErrorText('');
 				return true;
-			} else {
+				break;
+			case 'toomuch':
 				location.setErrorText("Max 30 characters");
 				return false;
-			}
-		} else {
-			location.setErrorText("This field is required");
-			return false;
+				break;
+			case 'empty':
+				location.setErrorText("This field is required");
+				return false;
+				break;
 		}
+		
 	},
 
 	validateGroupCapacity:function() {
 		var capacity = this.refs.editGroupCapacity;
-		if (capacity.getValue()) {
-			if (/^\d+$/.test(capacity.getValue())) {
-				if (parseInt(capacity.getValue()) < this.props.studyGroup.guestlist){
-					capacity.setErrorText("Capacity must be bigger than guest numer: "+ this.props.studyGroup.guestlist);
-					return false;
-				} else if (parseInt(capacity.getValue()) > 0){
-					capacity.setErrorText("");
-					return true;
-				} else {
-					capacity.setErrorText("Must be greater than 0");
-					return false;
-				}
-			} else {
+		var capacityString = capacity.getValue();
+		var guestList = this.props.studyGroup.guestlist;
+		switch (helper.isValidCapacity(capacityString,guestList)) {
+			case 'smallerThanGuest':
+				capacity.setErrorText("Capacity must be bigger than guest number: "+ this.props.studyGroup.guestlist);
+				return false;
+				break;
+			case 'valid':
+				capacity.setErrorText('');
+				return true;
+				break;
+			case 'lessThanZero':
+				capacity.setErrorText("Must be greater than 0");
+				return false;
+				break;
+			case 'notNumber':
 				capacity.setErrorText("Capacity must be a number");
 				return false;
-			}
-		} else {
-			capacity.setErrorText("This field is required");
-			return false;
+				break;
+			case 'empty':
+				capacity.setErrorText("This field is required");
+				return false;
+				break;
 		}
 	},
 
@@ -51078,7 +51087,7 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 		        		autoScrollBodyContent: true}, 
 		          	React.createElement("div", null, 
 	         	    	React.createElement("div", {style: {width:'35%', float:'left'}}, React.createElement(TextField, {
-	         	    		onEnterKeyDown: this.submitNewGroup, 
+	         	    		onEnterKeyDown: this.submitEditGroupDetail, 
 	         	    		ref: "editGroupSubject", 
 	         	    		onChange: this.validateGroupSubject, 
 	         		    	hintText: "CS169", 
@@ -51086,7 +51095,7 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 	         		    	defaultValue: studyGroup.subject, 
 	         		    	floatingLabelText: "Class"})), 
 	         	    	React.createElement("div", {style: {width:'65%', float:'left'}}, React.createElement(TextField, {
-	         	    		onEnterKeyDown: this.submitNewGroup, 
+	         	    		onEnterKeyDown: this.submitEditGroupDetail, 
 	         	    		ref: "editGroupTitle", 
 	         	    		onChange: this.validateGroupTitle, 
 	         	    	  	hintText: "Learn React together", 
@@ -51094,7 +51103,7 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 	         	    	  	defaultValue: studyGroup.title, 
 	         	    	  	floatingLabelText: "Title"})), 
 	         	    	React.createElement(TextField, {
-	         	    		onEnterKeyDown: this.submitNewGroup, 
+	         	    		onEnterKeyDown: this.submitEditGroupDetail, 
 	         	    		onChange: this.validateGroupDescription, 
 	         	    		ref: "editGroupDescription", 
 	         	    	  	hintText: "Come and learn the basic (and some advanced) React together! REACT IS THE FUTURE!!!", 
@@ -51116,7 +51125,7 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 	         	    	  	defaultDate: date, 
 	         	    	  	floatingLabelText: "Date"})), 
 	         	    	React.createElement("div", {style: {width:'80%', float:'left'}}, React.createElement(TextField, {
-	         	    		onEnterKeyDown: this.submitNewGroup, 
+	         	    		onEnterKeyDown: this.submitEditGroupDetail, 
 	         	    		onChange: this.validateGroupLocation, 
 	         	    		ref: "editGroupLocation", 
 	         	    	  	hintText: "Wozniak Longue, Soda Hall", 
@@ -51124,7 +51133,7 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 	         	    	  	defaultValue: studyGroup.location, 
 	         	    	  	floatingLabelText: "Location"})), 
 	         	    	React.createElement("div", {style: {width:'20%', float:'left'}}, React.createElement(TextField, {
-	         	    		onEnterKeyDown: this.submitNewGroup, 
+	         	    		onEnterKeyDown: this.submitEditGroupDetail, 
 	         	    		onChange: this.validateGroupCapacity, 
 	         	    		ref: "editGroupCapacity", 
 	         	    	  	hintText: "20", 
@@ -51155,7 +51164,7 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 
 module.exports = LoginDialog;
 
-},{"../stores/StudyGroupStore":411,"material-ui/lib/date-picker/date-picker":73,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/snackbar":106,"material-ui/lib/text-field":128,"material-ui/lib/time-picker/time-picker":137,"moment":162,"react":391,"react-dom":168,"react-router":205}],402:[function(require,module,exports){
+},{"../helper/Helper_Form":413,"../stores/StudyGroupStore":415,"material-ui/lib/date-picker/date-picker":73,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/snackbar":106,"material-ui/lib/text-field":128,"material-ui/lib/time-picker/time-picker":137,"moment":162,"react":391,"react-dom":168,"react-router":205}],402:[function(require,module,exports){
 // React, react-reouter, alt
 var React = require('react');
 var render = require('react-dom').render;
@@ -51172,6 +51181,7 @@ const FlatButton = require('material-ui/lib/flat-button');
 const Paper = require('material-ui/lib/paper');
 
 const moment = require('moment');
+const helper = require('../helper/Helper_Dialog_GroupDetail');
 
 var GroupDetailDialog = React.createClass({displayName: "GroupDetailDialog",
 	openEditGroupDialog:function() {
@@ -51179,24 +51189,12 @@ var GroupDetailDialog = React.createClass({displayName: "GroupDetailDialog",
 		this.refs.editGroupDialog.refs.editGroupDialog.show();
 	},
 
-	getTimeString:function(time) {
-		// var d = new Date(0);
-		// d.setUTCSeconds(Number(time));
-		return moment(time).format("h:mm a").toString();
-	},
-
-	getDateString:function(date) {
-		// var d = new Date(0);
-		// d.setUTCSeconds(Number(date));
-		return moment(date).format("ddd, MMM D").toString();
-	},
-
 	render:function() {
 		var studyGroup = this.props.studyGroup;
 		var user = this.props.user;
 
-		var date = this.getDateString(studyGroup.date);
-		var time = this.getTimeString(studyGroup.date); 
+		var date = helper.getDateString(studyGroup.date);
+		var time = helper.getTimeString(studyGroup.date); 
 		if(!this.props.studyGroup) {
 			return (React.createElement("div", null));
 		}
@@ -51284,7 +51282,7 @@ var GroupDetailDialog = React.createClass({displayName: "GroupDetailDialog",
 
 module.exports = GroupDetailDialog;
 
-},{"../stores/StudyGroupStore":411,"./Comments.jsx":400,"./Dialog_EditGroup.jsx":401,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/paper":100,"material-ui/lib/text-field":128,"moment":162,"react":391,"react-dom":168,"react-router":205}],403:[function(require,module,exports){
+},{"../helper/Helper_Dialog_GroupDetail":411,"../stores/StudyGroupStore":415,"./Comments.jsx":400,"./Dialog_EditGroup.jsx":401,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/paper":100,"material-ui/lib/text-field":128,"moment":162,"react":391,"react-dom":168,"react-router":205}],403:[function(require,module,exports){
 // React, react-reouter, alt
 var React = require('react');
 var render = require('react-dom').render;
@@ -51359,7 +51357,7 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 
 module.exports = LoginDialog;
 
-},{"../stores/StudyGroupStore":411,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/snackbar":106,"material-ui/lib/text-field":128,"react":391,"react-dom":168,"react-router":205}],404:[function(require,module,exports){
+},{"../stores/StudyGroupStore":415,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/snackbar":106,"material-ui/lib/text-field":128,"react":391,"react-dom":168,"react-router":205}],404:[function(require,module,exports){
 // var button = require('react-materialize').Button;
 var React = require('react');
 var render = require('react-dom').render;
@@ -51466,7 +51464,7 @@ var MyGroups = React.createClass ({displayName: "MyGroups",
 
 module.exports = MyGroups;
 
-},{"../actions/StudyGroupActions":395,"../stores/StudyGroupStore":411,"alt/AltContainer":1,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/lists/list":87,"material-ui/lib/lists/list-divider":85,"material-ui/lib/lists/list-item":86,"material-ui/lib/paper":100,"moment":162,"react":391,"react-addons-test-utils":165,"react-dom":168,"react-tap-event-plugin":216}],405:[function(require,module,exports){
+},{"../actions/StudyGroupActions":395,"../stores/StudyGroupStore":415,"alt/AltContainer":1,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/lists/list":87,"material-ui/lib/lists/list-divider":85,"material-ui/lib/lists/list-item":86,"material-ui/lib/paper":100,"moment":162,"react":391,"react-addons-test-utils":165,"react-dom":168,"react-tap-event-plugin":216}],405:[function(require,module,exports){
 // React, react-reouter, alt
 var React = require('react');
 var render = require('react-dom').render;
@@ -51482,23 +51480,12 @@ const DatePicker = require('material-ui/lib/date-picker/date-picker');
 const TimePicker = require('material-ui/lib/time-picker/time-picker');
 const Snackbar = require('material-ui/lib/snackbar');
 const moment = require('moment');
+const helper = require('../helper/Helper_Form');
 
 
 var NewGroupDialog = React.createClass({displayName: "NewGroupDialog",
 	cancelNewGroup:function() {
 		this.refs.newGroupDialog.dismiss();
-	},
-
-	calculateTimeEpoch:function(time, date) {
-		date_str = date.toString().slice(0,15);
-		time_str = time.toString().slice(15);
-		return moment(date_str + time_str).unix();
-	},
-
-	calculateTime:function(time, date) {
-		date_str = date.toString().slice(0,15);
-		time_str = time.toString().slice(15);
-		return date_str + time_str;
 	},
 
 	submitNewGroup:function() {
@@ -51515,109 +51502,118 @@ var NewGroupDialog = React.createClass({displayName: "NewGroupDialog",
 		var failedSnackbar = this.refs.createGroupFailedSnackbar;
 		var successSnackbar = this.refs.createGroupSuccessSnackbar;
 
-		if(!this.validateGroupDateTime()) {
+		var isGroupDateTimeValid = helper.validateGroupDateTime(this.refs.createGroupTime.getTime(), this.refs.createGroupDate.getDate());
+
+		if(!isGroupDateTimeValid) {
 			this.refs.dateSnackbar.show();
-		} else if (this.validateGroupSubject() & this.validateGroupTitle() & this.validateGroupDescription() & this.validateGroupLocation() & this.validateGroupCapacity() & this.validateGroupDateTime()) {
-			StudyGroupStore.postNewGroup(title, subject, description, this.calculateTime(time.getTime(), date.getDate()), location, capacity, privacy, newGroupDialog, failedSnackbar, successSnackbar);
+		} else if (this.validateGroupSubject() & this.validateGroupTitle() & this.validateGroupDescription() & this.validateGroupLocation() & this.validateGroupCapacity() & isGroupDateTimeValid) {
+			StudyGroupStore.postNewGroup(title, subject, description, helper.calculateTime(time.getTime(), date.getDate()), location, capacity, privacy, newGroupDialog, failedSnackbar, successSnackbar);
 		}
 	},
 
-	validateGroupDateTime:function() {
-		var time = this.refs.createGroupTime;
-		var date = this.refs.createGroupDate;
-		if (time.getTime() && date.getDate()) {
-			var time_epoch = this.calculateTimeEpoch(time.getTime(), date.getDate());
-			var time_now = new Date().getTime() / 1000;
-			if (time_epoch > time_now){
-				return true;
-			} else {
-				return false;
-			}
-		}
-	},
 
 	validateGroupSubject:function() {
 		var subject = this.refs.createGroupSubject;
-		if (subject.getValue()) {
-			if (subject.getValue().length <= 10){
-				subject.setErrorText("");
+		var subjectString = subject.getValue();
+
+		switch (helper.isValidSubject(subjectString)) {
+			case 'valid':
+				subject.setErrorText('');
 				return true;
-			} else {
+				break;
+			case 'toomuch':
 				subject.setErrorText("Max 10 characters");
 				return false;
-			}
-		} else {
-			subject.setErrorText("This field is required");
-			return false;
+				break;
+			case 'empty':
+				subject.setErrorText("This field is required");
+				return false;
+				break;
 		}
 	},
 
 	validateGroupTitle:function() {
 		var title = this.refs.createGroupTitle;
-		if (title.getValue()) {
-			if (title.getValue().length <= 30){
-				title.setErrorText("");
-				return true;	
-			} else {
-				title.setErrorText("Max 30 character");
+		var titleString = title.getValue();
+		switch (helper.isValidTitle(titleString)) {
+			case 'valid':
+				title.setErrorText('');
+				return true;
+				break;
+			case 'toomuch':
+				title.setErrorText("Max 30 characters");
 				return false;
-			}
-		} else {
-			title.setErrorText("This field is required");
-			return false;
-		}
+				break;
+			case 'empty':
+				title.setErrorText("This field is required");
+				return false;
+				break;
+		};
 	},
 
 	validateGroupDescription:function() {
 		var description = this.refs.createGroupDescription;
-		if (description.getValue()) {
-			if(description.getValue().length <= 256){
+		var descriptionString = description.getValue();
+		switch (helper.isValidDescription(descriptionString)) {
+			case 'valid':
 				description.setErrorText("");
 				return true;
-			} else {
+				break;
+			case 'toomuch':
 				description.setErrorText("Max 256 character");
 				return false;
-			}
-		} else {
-			description.setErrorText("This field is required");
-			return false;
-		}
+				break
+			case 'empty':
+				description.setErrorText("This field is required");
+				return false;
+				break;
+		};
 	},
 
 	validateGroupLocation:function() {
 		var location = this.refs.createGroupLocation;
-		if (location.getValue()) {
-			if (location.getValue().length <= 30){
-				location.setErrorText("");
+		var locationString = location.getValue();
+		switch (helper.isValidLocation(locationString)) {
+			case 'valid':
+				location.setErrorText('');
 				return true;
-			} else {
+				break;
+			case 'toomuch':
 				location.setErrorText("Max 30 characters");
 				return false;
-			}
-		} else {
-			location.setErrorText("This field is required");
-			return false;
+				break;
+			case 'empty':
+				location.setErrorText("This field is required");
+				return false;
+				break;
 		}
 	},
 
 	validateGroupCapacity:function() {
 		var capacity = this.refs.createGroupCapacity;
-		if (capacity.getValue()) {
-			if (/^\d+$/.test(capacity.getValue())) {
-				if (parseInt(capacity.getValue()) > 0){
-					capacity.setErrorText("");
-					return true;
-				} else {
-					capacity.setErrorText("Must be greater than 0");
-					return false;
-				}
-			} else {
+		var capacityString = capacity.getValue();
+		switch (helper.isValidCapacity(capacityString,-Infinity)) {
+			case 'smallerThanGuest':
+				capacity.setErrorText("Capacity must be bigger than guest number: "+ this.props.studyGroup.guestlist);
+				return false;
+				break;
+			case 'valid':
+				capacity.setErrorText('');
+				return true;
+				break;
+			case 'lessThanZero':
+				capacity.setErrorText("Must be greater than 0");
+				return false;
+				break;
+			case 'notNumber':
 				capacity.setErrorText("Capacity must be a number");
 				return false;
-			}
-		} else {
-			capacity.setErrorText("This field is required");
-			return false;
+				break;
+			case 'empty':
+				capacity.setErrorText("This field is required");
+				return false;
+				break;
+
 		}
 	},
 
@@ -51713,7 +51709,7 @@ var NewGroupDialog = React.createClass({displayName: "NewGroupDialog",
 
 module.exports = NewGroupDialog;
 
-},{"../stores/StudyGroupStore":411,"material-ui/lib/date-picker/date-picker":73,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/snackbar":106,"material-ui/lib/text-field":128,"material-ui/lib/time-picker/time-picker":137,"moment":162,"react":391,"react-dom":168,"react-router":205}],406:[function(require,module,exports){
+},{"../helper/Helper_Form":413,"../stores/StudyGroupStore":415,"material-ui/lib/date-picker/date-picker":73,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/snackbar":106,"material-ui/lib/text-field":128,"material-ui/lib/time-picker/time-picker":137,"moment":162,"react":391,"react-dom":168,"react-router":205}],406:[function(require,module,exports){
 // React, react-reouter, alt
 var React = require('react');
 var render = require('react-dom').render;
@@ -51766,7 +51762,7 @@ var ProfileDialog = React.createClass({displayName: "ProfileDialog",
 
 module.exports = ProfileDialog;
 
-},{"../stores/StudyGroupStore":411,"../themes/MyProfileTheme.js":414,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/paper":100,"material-ui/lib/styles/theme-manager":114,"material-ui/lib/text-field":128,"react":391,"react-dom":168,"react-router":205}],407:[function(require,module,exports){
+},{"../stores/StudyGroupStore":415,"../themes/MyProfileTheme.js":418,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/paper":100,"material-ui/lib/styles/theme-manager":114,"material-ui/lib/text-field":128,"react":391,"react-dom":168,"react-router":205}],407:[function(require,module,exports){
 // React, react-reouter, alt
 var React = require('react');
 var render = require('react-dom').render;
@@ -51779,6 +51775,8 @@ const TextField = require('material-ui/lib/text-field');
 const Dialog = require('material-ui/lib/dialog');
 const FlatButton = require('material-ui/lib/flat-button');
 const Snackbar = require('material-ui/lib/snackbar');
+
+const helper = require('../helper/Helper_Dialog_SignUp');
 
 var SignUpDialog = React.createClass({displayName: "SignUpDialog",
 	mixins: [History],
@@ -51804,57 +51802,62 @@ var SignUpDialog = React.createClass({displayName: "SignUpDialog",
 
 	validateFullName:function() {
 		var fullname = this.refs.fullNameSignUp;
-		if (fullname.getValue()){
-			fullname.setErrorText("");
-			return true;
-		} else {
-			fullname.setErrorText("This field is required");
-			return false;
+
+		switch (helper.validateFullName(fullname.getValue())) {
+			case true:
+				fullname.setErrorText('');
+				return true;
+				break;
+			case false:
+				fullname.setErrorText("This field is required");
+				return false;
+				break;
 		}
 	},
 
 	validateUsername:function() {
-		var fullname = this.refs.usernameSignUp;
-		if (fullname.getValue()){
-			fullname.setErrorText("");
-			return true;
-		} else {
-			fullname.setErrorText("This field is required");
-			return false;
+		var username = this.refs.usernameSignUp;
+		switch (helper.validateUsername(username.getValue())) {
+			case true:
+				username.setErrorText('');
+				return true;
+				break;
+			case false:
+				username.setErrorText("This field is required");
+				return false;
+				break;
 		}
 	},
 
 	validateSchool:function() {
-		var fullname = this.refs.schoolSignUp;
-		if (fullname.getValue()){
-			fullname.setErrorText("");
-			return true;
-		} else {
-			fullname.setErrorText("This field is required");
-			return false;
+		var school = this.refs.schoolSignUp;
+		switch (helper.validateSchool(school.getValue())) {
+			case true:
+				school.setErrorText('');
+				return true;
+				break;
+			case false:
+				school.setErrorText("This field is required");
+				return false;
+				break;
 		}
 	},
 
 	validateEmail:function() {
 		var email = this.refs.emailSignUp;
-		if (email.getValue()){
-			var at = email.getValue().indexOf("@");
-			if (at!=-1 && at===email.getValue().lastIndexOf("@")) {
-				var dot = email.getValue().lastIndexOf(".");
-				if (dot!=-1 && dot>at && dot!=email.getValue().length-1){
-					email.setErrorText("");
-					return true;
-				} else {
-					email.setErrorText("Invalid email");
-					return false;
-				}
-			} else {
+		switch (helper.validateEmail(email.getValue())) {
+			case 'valid':
+				email.setErrorText('');
+				return true;
+				break;
+			case 'empty':
+				email.setErrorText("This field is required");
+				return false;
+				break;
+			case 'invalid':
 				email.setErrorText("Invalid email");
 				return false;
-			}
-		} else {
-			email.setErrorText("Invalid email");
-			return false;
+				break;
 		}
 	},
 
@@ -51872,28 +51875,27 @@ var SignUpDialog = React.createClass({displayName: "SignUpDialog",
 			filled = false;
 		}
 
-
-		if (filled && password.getValue()===confirmPassword.getValue()) {
-			password.setErrorText("");
-			confirmPassword.setErrorText("");
-			if(password.getValue().length < 8){
+		switch (filled && helper.validatePasswordMatch(filled, password.getValue(), confirmPassword.getValue())) {
+			case 'tooshort':
 				password.setErrorText("Password must be at least 8 characters");
 				confirmPassword.setErrorText("Password must be at least 8 characters");
 				return false;
-			}
-			return true;
-		} else if (filled) {
-			if(password.getValue().length < 8){
-				password.setErrorText("Password must be at least 8 characters");
-				confirmPassword.setErrorText("Password must be at least 8 characters");
-				return false;
-			} else {
+				break;
+			case 'nomatch':
 				password.setErrorText("Password must match");
 				confirmPassword.setErrorText("Password must match");
 				return false;
-			}
-		} else {
-			return false;
+				break;
+			case 'empty':
+				password.setErrorText("This field is required");
+				confirmPassword.setErrorText("This field is required");
+				return false;
+				break;
+			case 'good':
+				password.setErrorText("");
+				confirmPassword.setErrorText("");
+				return true;
+				break;
 		}
 	},
 
@@ -51978,7 +51980,7 @@ var SignUpDialog = React.createClass({displayName: "SignUpDialog",
 
 module.exports = SignUpDialog;
 
-},{"../stores/StudyGroupStore":411,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/snackbar":106,"material-ui/lib/text-field":128,"react":391,"react-dom":168,"react-router":205}],408:[function(require,module,exports){
+},{"../helper/Helper_Dialog_SignUp":412,"../stores/StudyGroupStore":415,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/snackbar":106,"material-ui/lib/text-field":128,"react":391,"react-dom":168,"react-router":205}],408:[function(require,module,exports){
 var React = require('react');
 var render = require('react-dom').render;
 
@@ -52229,7 +52231,7 @@ var StudyGroups = React.createClass ({displayName: "StudyGroups",
 		if (this.props.studyGroups!=null) {
 			return (
 				React.createElement(Tabs, {tabItemContainerStyle: {backgroundColor:"#0D47A1"}, 
-						inkBarStyle: {backgroundColor:"#FFC107"}}, 
+						inkBarStyle: {backgroundColor:"#FFC107", color:'rgba(255, 255, 255, 0)'}}, 
 					React.createElement(Tab, {label: this.props.user.school, 
 							onActive: this.emptySearch}, 
 						React.createElement(AltContainer, {store: StudyGroupStore}, 
@@ -52260,7 +52262,243 @@ var StudyGroups = React.createClass ({displayName: "StudyGroups",
 
 module.exports = StudyGroups;
 
-},{"../actions/StudyGroupActions":395,"../stores/StudyGroupStore":411,"./Card_MainGroupView.jsx":399,"alt/AltContainer":1,"axios":17,"material-ui/lib/avatar":57,"material-ui/lib/card/card":65,"material-ui/lib/card/card-actions":60,"material-ui/lib/card/card-header":62,"material-ui/lib/card/card-text":63,"material-ui/lib/card/card-title":64,"material-ui/lib/date-picker/date-picker":73,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/paper":100,"material-ui/lib/raised-button":101,"material-ui/lib/refresh-indicator":102,"material-ui/lib/tabs/tab":125,"material-ui/lib/tabs/tabs":127,"material-ui/lib/text-field":128,"material-ui/lib/time-picker/time-picker":137,"moment":162,"react":391,"react-addons-test-utils":165,"react-dom":168,"react-masonry-component":169,"react-tap-event-plugin":216}],410:[function(require,module,exports){
+},{"../actions/StudyGroupActions":395,"../stores/StudyGroupStore":415,"./Card_MainGroupView.jsx":399,"alt/AltContainer":1,"axios":17,"material-ui/lib/avatar":57,"material-ui/lib/card/card":65,"material-ui/lib/card/card-actions":60,"material-ui/lib/card/card-header":62,"material-ui/lib/card/card-text":63,"material-ui/lib/card/card-title":64,"material-ui/lib/date-picker/date-picker":73,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/paper":100,"material-ui/lib/raised-button":101,"material-ui/lib/refresh-indicator":102,"material-ui/lib/tabs/tab":125,"material-ui/lib/tabs/tabs":127,"material-ui/lib/text-field":128,"material-ui/lib/time-picker/time-picker":137,"moment":162,"react":391,"react-addons-test-utils":165,"react-dom":168,"react-masonry-component":169,"react-tap-event-plugin":216}],410:[function(require,module,exports){
+const moment = require('moment');
+var exports = module.exports ={};
+
+exports.calculateTimeColor = function (card_date) {
+	var card_epoch = moment(card_date).unix();
+	var curr_time = new Date().toString();
+	var curr_epoch = moment(curr_time).unix();
+	var time_diff = card_epoch - curr_epoch;
+	if (time_diff >= 259200) {
+		return 'colorBarGreen';
+	} else if (time_diff >= 86400) {
+		return 'colorBarYellow';
+	} else if (time_diff >= 0) {
+		return 'colorBarRed';
+	} else {
+		return 'colorBarBlack';
+		}
+};
+
+exports.checkUserGoing = function(studyGroup, user) {
+	for (var i in studyGroup.users) {
+     	if (studyGroup.users[i].id === user.id) {
+       		return true;
+     	}
+   	}
+   	return false;
+};
+
+exports.getJoinText = function(studyGroup, user) {
+	if (studyGroup.host === user.nickname) {
+		return 'Dismiss';
+	} else if(exports.checkUserGoing(studyGroup, user)) {
+		return 'Leave';
+	} else if (studyGroup.guestlist === studyGroup.capacity) {
+		return 'Full';
+	} else {
+		return 'Join';
+	}
+};
+
+exports.checkDisabled = function(studyGroup) {
+		return (new Date(studyGroup.date) < new Date());
+};
+
+exports.getTimeString = function(time) {
+		// var d = new Date(0);
+		// d.setUTCSeconds(Number(time));
+		return moment(time).format("h:mm a").toString();
+};
+
+exports.getDateString = function(date) {
+		// var d = new Date(0);
+		// d.setUTCSeconds(Number(date));
+		return moment(date).format("ddd, MMM D").toString();
+};
+
+},{"moment":162}],411:[function(require,module,exports){
+const moment = require('moment');
+var exports = module.exports ={};
+
+exports.getTimeString = function(time) {
+	return moment(time).format("h:mm a").toString();
+};
+
+exports.getDateString = function(date) {
+	return moment(date).format("ddd, MMM D").toString();
+};
+
+},{"moment":162}],412:[function(require,module,exports){
+var exports = module.exports ={};
+
+exports.validateFullName = function(fullname) {
+	if (fullname!=''){
+		return true;
+	} else {
+		return false;
+	}
+};
+
+exports.validateUsername = function(username) {
+	if (username!=''){
+		return true;
+	} else {
+		return false;
+	}
+};
+
+exports.validateSchool = function(username) {
+	if (username!=''){
+		return true;
+	} else {
+		return false;
+	}
+};
+
+exports.validateEmail = function(email) {
+	if (email!=''){
+		var at = email.indexOf("@");
+		if (at!=-1 && at===email.lastIndexOf("@")) {
+			var dot = email.lastIndexOf(".");
+			if (dot!=-1 && dot>at && dot!=email.length-1){
+				return 'valid';
+			} else {
+				return 'invalid';
+			}
+		} else {
+			return 'invalid';
+		}
+	} else {
+		return 'empty';
+	}
+};
+
+exports.validatePasswordMatch = function(filled, password, confirmPassword) {
+	if (filled && password===confirmPassword) {
+		if(password.length <= 8){
+			return 'tooshort';
+		}
+		return 'good';
+	} else if (filled) {
+		if(password.length <= 8){
+			return 'tooshort';
+		} else {
+			return 'nomatch';
+		}
+	} else {
+		return 'empty';
+	}
+};
+
+},{}],413:[function(require,module,exports){
+const moment = require('moment');
+
+
+var exports = module.exports ={};
+
+exports.calculateTimeEpoch = function(time, date) {
+		date_str = date.toString().slice(0,15);
+		time_str = time.toString().slice(15);
+		return moment(date_str + time_str).unix();
+};
+
+exports.calculateTime = function(time, date) {
+		date_str = date.toString().slice(0,15);
+		time_str = time.toString().slice(15);
+		return date_str + time_str
+};
+
+exports.validateGroupDateTime = function(time, date) {
+		if (time && date) {
+			var time_epoch = exports.calculateTimeEpoch(time, date);
+			var time_now = new Date().getTime() / 1000;
+			if (time_epoch > time_now){
+				return true;
+			} else {
+				return false;
+			}
+		}
+	};
+
+exports.isValidSubject = function(subject) {
+	if (subject) {
+		if (subject.length <= 10) {
+			return 'valid';
+		}
+		else {
+			return 'toomuch';
+		}
+	}
+	else {
+		return 'empty'
+	}		
+};
+
+exports.isValidDescription = function(description) {
+	if (description) {
+		if (description.length <= 256) {
+			return 'valid';
+		}
+		else {
+			return 'toomuch';
+		}
+	}
+	else {
+		return 'empty'
+	}	
+};
+
+exports.isValidLocation = function(location) {
+	if (location) {
+		if (location.length <= 30) {
+			return 'valid';
+		}
+		else {
+			return 'toomuch';
+		}
+	}
+	else {
+		return 'empty'
+	}	
+};
+
+exports.isValidTitle = function(title) {
+	if (title) {
+		if (title.length <= 30) {
+			return 'valid';
+		}
+		else {
+			return 'toomuch';
+		}
+	}
+	else {
+		return 'empty'
+	}		
+};
+
+exports.isValidCapacity = function(capacity, guestList) {
+	if (capacity) {
+		if (/^\d+$/.test(capacity)) {
+			if (capacity < guestList) {
+				return 'smallerThanGuest'
+			} else if (capacity > 0) {
+				return 'valid'
+			} else {
+				return 'lessThanZero'
+			}
+		} else {
+			return 'notNumber'
+		}	
+	} else {
+		return 'empty'
+	}
+	
+};
+
+},{"moment":162}],414:[function(require,module,exports){
 var StudyGroupActions = require('../actions/StudyGroupActions');
 var UserActions = require('../actions/UserActions');
 var MyGroupsActions = require('../actions/MyGroupsActions');
@@ -52382,11 +52620,14 @@ var StudyGroupSource = {
 		        	data.data.accesstoken = xhr.getResponseHeader('access-token');
 		        	data.data.uid = xhr.getResponseHeader('uid');
 		          	// console.log('data' ,data.data);
-	          	resolve(data.data);
-	          	// history.pushState(null, '/studygroupapp');
-	          	setTimeout(function() {history.pushState(null, '/studygroupapp');}, 10);
-	          	// loginDialog.dismiss();
-	          	// console.log('**************END LOGIN**************');
+		          	document.cookie = "user=" + JSON.stringify(data.data);
+		          	var userCookie = document.cookie.replace(/(?:(?:^|.*;\s*)user\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+		          	// console.log('ngehe', userCookie);
+		          	resolve(data.data);
+		          	// history.pushState(null, '/studygroupapp');
+		          	setTimeout(function() {history.pushState(null, '/studygroupapp');}, 10);
+		          	// loginDialog.dismiss();
+		          	// console.log('**************END LOGIN**************');
 		        },
 		        error: function(response) {
 		        	// console.log('__FAILED__');
@@ -52442,8 +52683,9 @@ var StudyGroupSource = {
       	      success: function(response) {
       	      	// console.log('__SUCCESS__');
 	      	  	  // console.log('response:' ,response);
-      	        window.location.href = '/';
+	      	  	document.cookie = "user=" + '';
       	        resolve(null);
+      	        window.location.href = '/';
       	        // history.pushState(null, '/');
       	        // console.log('**************END SIGN OUT**************');
       	      },
@@ -52451,6 +52693,7 @@ var StudyGroupSource = {
       	      	// console.log('__FAILED__');
       	      	// User was not found or was not logged in.
 	      	  	  // console.log('response:' ,response.responseJSON);
+	      	  	  document.cookie = "user=" + '';
 	      	  	  if (response.responseJSON.errors[0] === 'User was not found or was not logged in.') {
 	      	  	  	window.location.href = '/';
 	      	  	  }
@@ -52825,7 +53068,7 @@ var StudyGroupSource = {
 
 	dismissGroup:function() {
 		return {
-			remote:function(state, groupID){
+			remote:function(state, groupID, success, failed){
 				var header = null;
 		  	try {
 			    header ={
@@ -52837,7 +53080,7 @@ var StudyGroupSource = {
 			catch(err) {
 			    window.location.href = '/';
 			}
-			return new Promise(function(resolve, reject, success, failed){
+			return new Promise(function(resolve, reject){
 					// console.log('--------------DISMISS GROUP--------------');
 				    $.ajax({ url: '/groups/delete',
 				        type: 'DELETE',
@@ -52988,7 +53231,7 @@ var StudyGroupSource = {
 
 module.exports = StudyGroupSource;
 
-},{"../actions/CommentsActions":393,"../actions/MyGroupsActions":394,"../actions/StudyGroupActions":395,"../actions/UserActions":396}],411:[function(require,module,exports){
+},{"../actions/CommentsActions":393,"../actions/MyGroupsActions":394,"../actions/StudyGroupActions":395,"../actions/UserActions":396}],415:[function(require,module,exports){
 var alt = require('../alt');
 var StudyGroupActions = require('../actions/StudyGroupActions');
 var MyGroupsActions = require('../actions/MyGroupsActions');
@@ -53017,6 +53260,7 @@ const moment = require('moment');
 			handleUpdateUser: UserActions.UPDATE_USER,
 			handleFetchUser: UserActions.FETCH_USER,
 			handleStudyUser: UserActions.USER_FAILED,
+			handleSetUserFromCookie: UserActions.SET_USER_FROM_COOKIE,
 
 			handleSignUp: UserActions.SIGN_UP,
 			handleSignOut: UserActions.SIGN_OUT,
@@ -53042,6 +53286,22 @@ const moment = require('moment');
 		});
 		this.exportAsync(StudyGroupSource);
 	}
+
+	Object.defineProperty(StudyGroupStore.prototype,"getCookie",{writable:true,configurable:true,value:function(cname) {"use strict";
+	    var name = cname + "=";
+	    var ca = document.cookie.split(';');
+	    for(var i=0; i<ca.length; i++) {
+	        var c = ca[i];
+	        while (c.charAt(0)==' ') c = c.substring(1);
+	        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+	    }
+	    return "";
+	}});
+
+	Object.defineProperty(StudyGroupStore.prototype,"handleSetUserFromCookie",{writable:true,configurable:true,value:function() {"use strict";
+		var userCookie = document.cookie.replace(/(?:(?:^|.*;\s*)user\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+		this.user = JSON.parse(userCookie);
+	}});
 	
 	Object.defineProperty(StudyGroupStore.prototype,"handleSearchGroups",{writable:true,configurable:true,value:function(groups) {"use strict";
 		this.searchResults = groups;
@@ -53254,7 +53514,7 @@ const moment = require('moment');
 
 module.exports = alt.createStore(StudyGroupStore, 'StudyGroupStore');
 
-},{"../actions/CommentsActions":393,"../actions/MyGroupsActions":394,"../actions/StudyGroupActions":395,"../actions/UserActions":396,"../alt":397,"../sources/StudyGroupSource":410,"moment":162}],412:[function(require,module,exports){
+},{"../actions/CommentsActions":393,"../actions/MyGroupsActions":394,"../actions/StudyGroupActions":395,"../actions/UserActions":396,"../alt":397,"../sources/StudyGroupSource":414,"moment":162}],416:[function(require,module,exports){
 'use strict';
 
 var Colors = require('material-ui/lib/styles/colors');
@@ -53285,7 +53545,7 @@ module.exports = {
   }
 };
 
-},{"material-ui/lib/styles/colors":108,"material-ui/lib/styles/spacing":112,"material-ui/lib/utils/color-manipulator":147}],413:[function(require,module,exports){
+},{"material-ui/lib/styles/colors":108,"material-ui/lib/styles/spacing":112,"material-ui/lib/utils/color-manipulator":147}],417:[function(require,module,exports){
 'use strict';
 
 var Colors = require('material-ui/lib/styles/colors');
@@ -53316,7 +53576,7 @@ module.exports = {
   }
 };
 
-},{"material-ui/lib/styles/colors":108,"material-ui/lib/styles/spacing":112,"material-ui/lib/utils/color-manipulator":147}],414:[function(require,module,exports){
+},{"material-ui/lib/styles/colors":108,"material-ui/lib/styles/spacing":112,"material-ui/lib/utils/color-manipulator":147}],418:[function(require,module,exports){
 'use strict';
 
 var Colors = require('material-ui/lib/styles/colors');

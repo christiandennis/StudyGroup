@@ -13,23 +13,12 @@ const DatePicker = require('material-ui/lib/date-picker/date-picker');
 const TimePicker = require('material-ui/lib/time-picker/time-picker');
 const Snackbar = require('material-ui/lib/snackbar');
 const moment = require('moment');
+const helper = require('../helper/Helper_Form');
 
 
 var NewGroupDialog = React.createClass({
 	cancelNewGroup() {
 		this.refs.newGroupDialog.dismiss();
-	},
-
-	calculateTimeEpoch(time, date) {
-		date_str = date.toString().slice(0,15);
-		time_str = time.toString().slice(15);
-		return moment(date_str + time_str).unix();
-	},
-
-	calculateTime(time, date) {
-		date_str = date.toString().slice(0,15);
-		time_str = time.toString().slice(15);
-		return date_str + time_str;
 	},
 
 	submitNewGroup() {
@@ -46,109 +35,118 @@ var NewGroupDialog = React.createClass({
 		var failedSnackbar = this.refs.createGroupFailedSnackbar;
 		var successSnackbar = this.refs.createGroupSuccessSnackbar;
 
-		if(!this.validateGroupDateTime()) {
+		var isGroupDateTimeValid = helper.validateGroupDateTime(this.refs.createGroupTime.getTime(), this.refs.createGroupDate.getDate());
+
+		if(!isGroupDateTimeValid) {
 			this.refs.dateSnackbar.show();
-		} else if (this.validateGroupSubject() & this.validateGroupTitle() & this.validateGroupDescription() & this.validateGroupLocation() & this.validateGroupCapacity() & this.validateGroupDateTime()) {
-			StudyGroupStore.postNewGroup(title, subject, description, this.calculateTime(time.getTime(), date.getDate()), location, capacity, privacy, newGroupDialog, failedSnackbar, successSnackbar);
+		} else if (this.validateGroupSubject() & this.validateGroupTitle() & this.validateGroupDescription() & this.validateGroupLocation() & this.validateGroupCapacity() & isGroupDateTimeValid) {
+			StudyGroupStore.postNewGroup(title, subject, description, helper.calculateTime(time.getTime(), date.getDate()), location, capacity, privacy, newGroupDialog, failedSnackbar, successSnackbar);
 		}
 	},
 
-	validateGroupDateTime() {
-		var time = this.refs.createGroupTime;
-		var date = this.refs.createGroupDate;
-		if (time.getTime() && date.getDate()) {
-			var time_epoch = this.calculateTimeEpoch(time.getTime(), date.getDate());
-			var time_now = new Date().getTime() / 1000;
-			if (time_epoch > time_now){
-				return true;
-			} else {
-				return false;
-			}
-		}
-	},
 
 	validateGroupSubject() {
 		var subject = this.refs.createGroupSubject;
-		if (subject.getValue()) {
-			if (subject.getValue().length <= 10){
-				subject.setErrorText("");
+		var subjectString = subject.getValue();
+
+		switch (helper.isValidSubject(subjectString)) {
+			case 'valid':
+				subject.setErrorText('');
 				return true;
-			} else {
+				break;
+			case 'toomuch':
 				subject.setErrorText("Max 10 characters");
 				return false;
-			}
-		} else {
-			subject.setErrorText("This field is required");
-			return false;
+				break;
+			case 'empty':
+				subject.setErrorText("This field is required");
+				return false;
+				break;
 		}
 	},
 
 	validateGroupTitle() {
 		var title = this.refs.createGroupTitle;
-		if (title.getValue()) {
-			if (title.getValue().length <= 30){
-				title.setErrorText("");
-				return true;	
-			} else {
-				title.setErrorText("Max 30 character");
+		var titleString = title.getValue();
+		switch (helper.isValidTitle(titleString)) {
+			case 'valid':
+				title.setErrorText('');
+				return true;
+				break;
+			case 'toomuch':
+				title.setErrorText("Max 30 characters");
 				return false;
-			}
-		} else {
-			title.setErrorText("This field is required");
-			return false;
-		}
+				break;
+			case 'empty':
+				title.setErrorText("This field is required");
+				return false;
+				break;
+		};
 	},
 
 	validateGroupDescription() {
 		var description = this.refs.createGroupDescription;
-		if (description.getValue()) {
-			if(description.getValue().length <= 256){
+		var descriptionString = description.getValue();
+		switch (helper.isValidDescription(descriptionString)) {
+			case 'valid':
 				description.setErrorText("");
 				return true;
-			} else {
+				break;
+			case 'toomuch':
 				description.setErrorText("Max 256 character");
 				return false;
-			}
-		} else {
-			description.setErrorText("This field is required");
-			return false;
-		}
+				break
+			case 'empty':
+				description.setErrorText("This field is required");
+				return false;
+				break;
+		};
 	},
 
 	validateGroupLocation() {
 		var location = this.refs.createGroupLocation;
-		if (location.getValue()) {
-			if (location.getValue().length <= 30){
-				location.setErrorText("");
+		var locationString = location.getValue();
+		switch (helper.isValidLocation(locationString)) {
+			case 'valid':
+				location.setErrorText('');
 				return true;
-			} else {
+				break;
+			case 'toomuch':
 				location.setErrorText("Max 30 characters");
 				return false;
-			}
-		} else {
-			location.setErrorText("This field is required");
-			return false;
+				break;
+			case 'empty':
+				location.setErrorText("This field is required");
+				return false;
+				break;
 		}
 	},
 
 	validateGroupCapacity() {
 		var capacity = this.refs.createGroupCapacity;
-		if (capacity.getValue()) {
-			if (/^\d+$/.test(capacity.getValue())) {
-				if (parseInt(capacity.getValue()) > 0){
-					capacity.setErrorText("");
-					return true;
-				} else {
-					capacity.setErrorText("Must be greater than 0");
-					return false;
-				}
-			} else {
+		var capacityString = capacity.getValue();
+		switch (helper.isValidCapacity(capacityString,-Infinity)) {
+			case 'smallerThanGuest':
+				capacity.setErrorText("Capacity must be bigger than guest number: "+ this.props.studyGroup.guestlist);
+				return false;
+				break;
+			case 'valid':
+				capacity.setErrorText('');
+				return true;
+				break;
+			case 'lessThanZero':
+				capacity.setErrorText("Must be greater than 0");
+				return false;
+				break;
+			case 'notNumber':
 				capacity.setErrorText("Capacity must be a number");
 				return false;
-			}
-		} else {
-			capacity.setErrorText("This field is required");
-			return false;
+				break;
+			case 'empty':
+				capacity.setErrorText("This field is required");
+				return false;
+				break;
+
 		}
 	},
 

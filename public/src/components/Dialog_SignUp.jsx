@@ -11,6 +11,8 @@ const Dialog = require('material-ui/lib/dialog');
 const FlatButton = require('material-ui/lib/flat-button');
 const Snackbar = require('material-ui/lib/snackbar');
 
+const helper = require('../helper/Helper_Dialog_SignUp');
+
 var SignUpDialog = React.createClass({
 	mixins: [History],
 
@@ -35,57 +37,62 @@ var SignUpDialog = React.createClass({
 
 	validateFullName() {
 		var fullname = this.refs.fullNameSignUp;
-		if (fullname.getValue()){
-			fullname.setErrorText("");
-			return true;
-		} else {
-			fullname.setErrorText("This field is required");
-			return false;
+
+		switch (helper.validateFullName(fullname.getValue())) {
+			case true:
+				fullname.setErrorText('');
+				return true;
+				break;
+			case false:
+				fullname.setErrorText("This field is required");
+				return false;
+				break;
 		}
 	},
 
 	validateUsername() {
-		var fullname = this.refs.usernameSignUp;
-		if (fullname.getValue()){
-			fullname.setErrorText("");
-			return true;
-		} else {
-			fullname.setErrorText("This field is required");
-			return false;
+		var username = this.refs.usernameSignUp;
+		switch (helper.validateUsername(username.getValue())) {
+			case true:
+				username.setErrorText('');
+				return true;
+				break;
+			case false:
+				username.setErrorText("This field is required");
+				return false;
+				break;
 		}
 	},
 
 	validateSchool() {
-		var fullname = this.refs.schoolSignUp;
-		if (fullname.getValue()){
-			fullname.setErrorText("");
-			return true;
-		} else {
-			fullname.setErrorText("This field is required");
-			return false;
+		var school = this.refs.schoolSignUp;
+		switch (helper.validateSchool(school.getValue())) {
+			case true:
+				school.setErrorText('');
+				return true;
+				break;
+			case false:
+				school.setErrorText("This field is required");
+				return false;
+				break;
 		}
 	},
 
 	validateEmail() {
 		var email = this.refs.emailSignUp;
-		if (email.getValue()){
-			var at = email.getValue().indexOf("@");
-			if (at!=-1 && at===email.getValue().lastIndexOf("@")) {
-				var dot = email.getValue().lastIndexOf(".");
-				if (dot!=-1 && dot>at && dot!=email.getValue().length-1){
-					email.setErrorText("");
-					return true;
-				} else {
-					email.setErrorText("Invalid email");
-					return false;
-				}
-			} else {
+		switch (helper.validateEmail(email.getValue())) {
+			case 'valid':
+				email.setErrorText('');
+				return true;
+				break;
+			case 'empty':
+				email.setErrorText("This field is required");
+				return false;
+				break;
+			case 'invalid':
 				email.setErrorText("Invalid email");
 				return false;
-			}
-		} else {
-			email.setErrorText("Invalid email");
-			return false;
+				break;
 		}
 	},
 
@@ -103,28 +110,27 @@ var SignUpDialog = React.createClass({
 			filled = false;
 		}
 
-
-		if (filled && password.getValue()===confirmPassword.getValue()) {
-			password.setErrorText("");
-			confirmPassword.setErrorText("");
-			if(password.getValue().length < 8){
+		switch (filled && helper.validatePasswordMatch(filled, password.getValue(), confirmPassword.getValue())) {
+			case 'tooshort':
 				password.setErrorText("Password must be at least 8 characters");
 				confirmPassword.setErrorText("Password must be at least 8 characters");
 				return false;
-			}
-			return true;
-		} else if (filled) {
-			if(password.getValue().length < 8){
-				password.setErrorText("Password must be at least 8 characters");
-				confirmPassword.setErrorText("Password must be at least 8 characters");
-				return false;
-			} else {
+				break;
+			case 'nomatch':
 				password.setErrorText("Password must match");
 				confirmPassword.setErrorText("Password must match");
 				return false;
-			}
-		} else {
-			return false;
+				break;
+			case 'empty':
+				password.setErrorText("This field is required");
+				confirmPassword.setErrorText("This field is required");
+				return false;
+				break;
+			case 'good':
+				password.setErrorText("");
+				confirmPassword.setErrorText("");
+				return true;
+				break;
 		}
 	},
 

@@ -7,6 +7,7 @@ var AltContainer = require('alt/AltContainer');
 
 var StudyGroupStore = require('../stores/StudyGroupStore');
 var StudyGroupActions = require('../actions/StudyGroupActions');
+var UserActions = require('../actions/UserActions');
 
 // import components
 var LandingPage = require('./LandingPage.jsx');
@@ -73,7 +74,6 @@ var LeftBar = React.createClass({
 				<SideBar ref="leftNav" docked={false}  >
 					<MenuItem index={0} style={{textAlign:"center"}}>Hi, {this.props.user.name}!</MenuItem>
 					<MenuItem index={1} style={{textAlign:"center", marginBottom:"20px"} }><span onClick={this.myProfile}><Avatar size={120} backgroundColor='#0D47A1'> {this.props.user.name.slice(0,1).toUpperCase()} </Avatar></span></MenuItem>
-	  				<span onClick={this.editProfile}>	<MenuItem index={3}>Edit Profile</MenuItem>	</span>
 	  				<span onClick={this.logout}>		<MenuItem index={4}>Log Out</MenuItem>		</span>
 	  			</SideBar>
 
@@ -98,6 +98,11 @@ var TopBar = React.createClass({
 	
 	dialogLogin() {
 		this.refs.loginDialog.refs.loginDialog.show();
+		var user = document.cookie.replace(/(?:(?:^|.*;\s*)user\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+		if (user != ''){
+			UserActions.setUserFromCookie();
+			this.history.pushState(null, '/studygroupapp');
+		}
 		// BYPASS LOGIN FOR TESTING
 		// StudyGroupStore.fetchUser( 'papa@gmail.com', 'iopiopiop', this.history, this.refs.loginDialog);
 	},
@@ -160,6 +165,12 @@ var TopBar = React.createClass({
     },
 
 	render() {
+		var user = document.cookie.replace(/(?:(?:^|.*;\s*)user\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+		if (user != '' && !this.props.user){
+			UserActions.setUserFromCookie();
+			this.history.pushState(null, '/studygroupapp');
+		}
+
 		if (this.props.user) {
 			var hintText = this.getHintText();
 			return (
