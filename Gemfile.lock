@@ -68,6 +68,7 @@ GEM
     erubis (2.7.0)
     eventmachine (1.0.8)
     execjs (2.6.0)
+    ffaker (2.1.0)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
     hashie (3.4.2)
@@ -192,6 +193,7 @@ DEPENDENCIES
   coffee-rails (~> 4.1.0)
   date_validator
   devise_token_auth
+  ffaker
   jbuilder (~> 2.0)
   jquery-rails
   omniauth
