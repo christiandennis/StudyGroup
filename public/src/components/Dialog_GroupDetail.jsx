@@ -14,6 +14,7 @@ const FlatButton = require('material-ui/lib/flat-button');
 const Paper = require('material-ui/lib/paper');
 
 const moment = require('moment');
+const helper = require('../helper/Helper_Dialog_GroupDetail');
 
 var GroupDetailDialog = React.createClass({
 	openEditGroupDialog() {
@@ -21,24 +22,12 @@ var GroupDetailDialog = React.createClass({
 		this.refs.editGroupDialog.refs.editGroupDialog.show();
 	},
 
-	getTimeString(time) {
-		// var d = new Date(0);
-		// d.setUTCSeconds(Number(time));
-		return moment(time).format("h:mm a").toString();
-	},
-
-	getDateString(date) {
-		// var d = new Date(0);
-		// d.setUTCSeconds(Number(date));
-		return moment(date).format("ddd, MMM D").toString();
-	},
-
 	render() {
 		var studyGroup = this.props.studyGroup;
 		var user = this.props.user;
 
-		var date = this.getDateString(studyGroup.date);
-		var time = this.getTimeString(studyGroup.date); 
+		var date = helper.getDateString(studyGroup.date);
+		var time = helper.getTimeString(studyGroup.date); 
 		if(!this.props.studyGroup) {
 			return (<div></div>);
 		}
