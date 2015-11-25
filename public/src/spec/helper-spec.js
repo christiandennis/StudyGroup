@@ -122,7 +122,7 @@ describe(" --* Time Testing *-- ", function() {
 
 	});
 
-	describe("Testing Function CalculateTimeEpoch", function () {
+	describe("Testing Function validateGroupDateTime", function () {
 
 
       	it("Should return a boolean", function() {
@@ -186,9 +186,62 @@ describe(" --* Time Testing *-- ", function() {
 
 //  TIME TESTING SECTION
 
-describe(" --* Subject Testing *-- ", function() {
+describe(" --* Card Testing *-- ", function() {
 
 
-  	
+	describe("Testing Function isValidSubject", function () {
+
+
+      	it("Should return a string", function() {
+
+     		//  YOUR CODE HERE
+
+     		var mock_subject = "laksdmaskldmsa";
+
+        	result = helper.isValidSubject(mock_subject);
+
+        	expect(typeof result).toBe(typeof "asda");
+
+      	});
+
+      	it("Should return 'empty' if the input subject is empty string '' ", function() {
+	        
+        	//  YOUR CODE HERE
+	
+        	var mock_subject = "";
+
+        	result = helper.isValidSubject(mock_subject);
+
+        	expect(result).toBe("empty");
+	
+      	});
+	
+      	it("Should return 'valid' if the subject is non empty and has no more than 10 characters", function() {
+	        
+        	// YOUR CODE HERE
+	
+			// 9 characters string
+        	var mock_subject = "asdfghjkl";
+
+        	result = helper.isValidSubject(mock_subject);
+
+        	expect(result).toBe("valid");
+
+      	});
+		
+		it("Should return 'toomuch' if the subject is non empty and has more than 10 characters", function() {
+	        
+        	// YOUR CODE HERE
+	
+			// 9 characters string
+        	var mock_subject = "asdfghjklajdalkdjalkdal";
+
+        	result = helper.isValidSubject(mock_subject);
+
+        	expect(result).toBe("toomuch");
+
+      	});
+		
+	});
 
 });
