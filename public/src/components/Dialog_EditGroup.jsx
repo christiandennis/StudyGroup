@@ -177,7 +177,6 @@ var LoginDialog = React.createClass({
 		var capacity = this.refs.editGroupCapacity;
 		var capacityString = capacity.getValue();
 		var guestList = this.props.studyGroup.guestlist;
-		console.log(guestList);
 		switch (helper.isValidCapacity(capacityString,guestList)) {
 			case 'smallerThanGuest':
 				capacity.setErrorText("Capacity must be bigger than guest number: "+ this.props.studyGroup.guestlist);
@@ -199,7 +198,6 @@ var LoginDialog = React.createClass({
 				capacity.setErrorText("This field is required");
 				return false;
 				break;
-
 		}
 	},
 
