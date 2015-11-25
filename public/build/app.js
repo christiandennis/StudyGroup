@@ -52268,7 +52268,7 @@ var StudyGroups = React.createClass ({displayName: "StudyGroups",
 		if (this.props.studyGroups!=null) {
 			return (
 				React.createElement(Tabs, {tabItemContainerStyle: {backgroundColor:"#0D47A1"}, 
-						inkBarStyle: {backgroundColor:"#FFC107"}}, 
+						inkBarStyle: {backgroundColor:"#FFC107", color:'rgba(255, 255, 255, 0)'}}, 
 					React.createElement(Tab, {label: this.props.user.school, 
 							onActive: this.emptySearch}, 
 						React.createElement(AltContainer, {store: StudyGroupStore}, 
