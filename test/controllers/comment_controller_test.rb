@@ -5,7 +5,22 @@ class CommentControllerTest < ActionController::TestCase
   #   assert true
   # end
 
-	test "should get index" do
+    def setup
+      @user = users(:confirmed_email_user)
+        @user.save!
+
+        @auth_headers = @user.create_new_auth_token
+
+        @token     = @auth_headers['access-token']
+        @client_id = @auth_headers['client']
+        @expiry    = @auth_headers['expiry']
+
+        @request.headers["access-token"] = @auth_headers['access-token']
+        @request.headers["client"] = @auth_headers['client']
+        @request.headers["uid"] = @auth_headers['uid']
+    end
+
+	  test "should get index" do
     	get :index
     	assert_response :success
   	end
