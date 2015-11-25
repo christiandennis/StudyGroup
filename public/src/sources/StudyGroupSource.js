@@ -361,15 +361,6 @@ var StudyGroupSource = {
 		return {
 			remote(state) { 
 			    var header = null;
-			    var userCookie = document.cookie.replace(/(?:(?:^|.*;\s*)user\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-			    var user = JSON.parse(userCookie);
-			    console.log('uki', user);
-			    header = {
-			    			'access-token': user.accesstoken,
-			    			'client': user.client,
-			    			'uid': user.uid
-
-			    }
 		  	try {
 			    header ={
 		      				"access-token": state.user.accesstoken,
