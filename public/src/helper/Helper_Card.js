@@ -45,13 +45,11 @@ exports.checkDisabled = function(studyGroup) {
 exports.getTimeString = function(time) {
 		// var d = new Date(0);
 		// d.setUTCSeconds(Number(time));
-		console.log("kerun");
 		return moment(time).format("h:mm a").toString();
 };
 
 exports.getDateString = function(date) {
 		// var d = new Date(0);
 		// d.setUTCSeconds(Number(date));
-		console.log("kerun");
 		return moment(date).format("ddd, MMM D").toString();
 };
