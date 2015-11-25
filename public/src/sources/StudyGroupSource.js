@@ -119,11 +119,14 @@ var StudyGroupSource = {
 		        	data.data.accesstoken = xhr.getResponseHeader('access-token');
 		        	data.data.uid = xhr.getResponseHeader('uid');
 		          	// console.log('data' ,data.data);
-	          	resolve(data.data);
-	          	// history.pushState(null, '/studygroupapp');
-	          	setTimeout(function() {history.pushState(null, '/studygroupapp');}, 10);
-	          	// loginDialog.dismiss();
-	          	// console.log('**************END LOGIN**************');
+		          	document.cookie = "user=" + JSON.stringify(data.data);
+		          	var userCookie = document.cookie.replace(/(?:(?:^|.*;\s*)user\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+		          	// console.log('ngehe', userCookie);
+		          	resolve(data.data);
+		          	// history.pushState(null, '/studygroupapp');
+		          	setTimeout(function() {history.pushState(null, '/studygroupapp');}, 10);
+		          	// loginDialog.dismiss();
+		          	// console.log('**************END LOGIN**************');
 		        },
 		        error: function(response) {
 		        	// console.log('__FAILED__');
@@ -179,8 +182,9 @@ var StudyGroupSource = {
       	      success: function(response) {
       	      	// console.log('__SUCCESS__');
 	      	  	  // console.log('response:' ,response);
-      	        window.location.href = '/';
+	      	  	document.cookie = "user=" + '';
       	        resolve(null);
+      	        window.location.href = '/';
       	        // history.pushState(null, '/');
       	        // console.log('**************END SIGN OUT**************');
       	      },
@@ -188,6 +192,7 @@ var StudyGroupSource = {
       	      	// console.log('__FAILED__');
       	      	// User was not found or was not logged in.
 	      	  	  // console.log('response:' ,response.responseJSON);
+	      	  	  document.cookie = "user=" + '';
 	      	  	  if (response.responseJSON.errors[0] === 'User was not found or was not logged in.') {
 	      	  	  	window.location.href = '/';
 	      	  	  }

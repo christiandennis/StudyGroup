@@ -47,11 +47,11 @@ var LoginDialog = React.createClass({
 		var failedSnackbar = this.refs.editGroupFailedSnackbar;
 		var successSnackbar = this.refs.editGroupSuccessSnackbar;
 
-		var isGroupDateTimeValid = helper.validateGroupDateTime(this.refs.editGroupTime, this.refs.editGroupDate);
+		var isGroupDateTimeValid = helper.validateGroupDateTime(this.refs.editGroupTime.getTime(), this.refs.editGroupDate.getDate());
 
 		if(!isGroupDateTimeValid) {
 			this.refs.dateSnackbar.show();
-		} else if (this.validateGroupSubject() & this.validateGroupTitle() & this.validateGroupDescription() & this.validateGroupLocation() & this.validateGroupCapacity() & helper.validateGroupDateTime(this.refs.editGroupTime, this.refs.editGroupDate)) {
+		} else if (this.validateGroupSubject() & this.validateGroupTitle() & this.validateGroupDescription() & this.validateGroupLocation() & this.validateGroupCapacity() & helper.validateGroupDateTime(this.refs.editGroupTime.getTime(), this.refs.editGroupDate.getDate())) {
 			StudyGroupStore.editGroup(id, title, subject, description, helper.calculateTime(time.getTime(), date.getDate()), location, capacity, editGroupDialog, failedSnackbar, successSnackbar);
 		}
 	},
@@ -67,7 +67,7 @@ var LoginDialog = React.createClass({
 	// 		} else {
 	// 			return false;
 	// 		}
-	// 	}
+	// 	} 
 	// },
 
 	validateGroupSubject() {
@@ -222,7 +222,7 @@ var LoginDialog = React.createClass({
 		        		autoScrollBodyContent={true}>
 		          	<div>
 	         	    	<div style={{width:'35%', float:'left'}}><TextField
-	         	    		onEnterKeyDown = {this.submitNewGroup}
+	         	    		onEnterKeyDown = {this.submitEditGroupDetail}
 	         	    		ref = "editGroupSubject"
 	         	    		onChange={this.validateGroupSubject}
 	         		    	hintText="CS169"
@@ -230,7 +230,7 @@ var LoginDialog = React.createClass({
 	         		    	defaultValue={studyGroup.subject}
 	         		    	floatingLabelText="Class" /></div>
 	         	    	<div style={{width:'65%', float:'left'}}><TextField
-	         	    		onEnterKeyDown = {this.submitNewGroup}
+	         	    		onEnterKeyDown = {this.submitEditGroupDetail}
 	         	    		ref = "editGroupTitle"
 	         	    		onChange={this.validateGroupTitle}
 	         	    	  	hintText="Learn React together"
@@ -238,7 +238,7 @@ var LoginDialog = React.createClass({
 	         	    	  	defaultValue={studyGroup.title}
 	         	    	  	floatingLabelText="Title" /></div>
 	         	    	<TextField
-	         	    		onEnterKeyDown = {this.submitNewGroup}
+	         	    		onEnterKeyDown = {this.submitEditGroupDetail}
 	         	    		onChange={this.validateGroupDescription}
 	         	    		ref = "editGroupDescription"
 	         	    	  	hintText="Come and learn the basic (and some advanced) React together! REACT IS THE FUTURE!!!"
@@ -260,7 +260,7 @@ var LoginDialog = React.createClass({
 	         	    	  	defaultDate={date}
 	         	    	  	floatingLabelText="Date"/></div>
 	         	    	<div style={{width:'80%', float:'left'}}><TextField
-	         	    		onEnterKeyDown = {this.submitNewGroup}
+	         	    		onEnterKeyDown = {this.submitEditGroupDetail}
 	         	    		onChange={this.validateGroupLocation}
 	         	    		ref = "editGroupLocation"
 	         	    	  	hintText="Wozniak Longue, Soda Hall"
@@ -268,7 +268,7 @@ var LoginDialog = React.createClass({
 	         	    	  	defaultValue={studyGroup.location}
 	         	    	  	floatingLabelText="Location"/></div>
 	         	    	<div style={{width:'20%', float:'left'}}><TextField
-	         	    		onEnterKeyDown = {this.submitNewGroup}
+	         	    		onEnterKeyDown = {this.submitEditGroupDetail}
 	         	    		onChange={this.validateGroupCapacity}
 	         	    		ref = "editGroupCapacity"
 	         	    	  	hintText="20"

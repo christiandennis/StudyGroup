@@ -45,8 +45,8 @@ exports.isValidTitle = function(title) {
 
 
 exports.validateGroupDateTime = function(time, date) {
-		if (time.getTime() && date.getDate()) {
-			var time_epoch = exports.calculateTimeEpoch(time.getTime(), date.getDate());
+		if (time && date) {
+			var time_epoch = exports.calculateTimeEpoch(time, date);
 			var time_now = new Date().getTime() / 1000;
 			if (time_epoch > time_now){
 				return true;
