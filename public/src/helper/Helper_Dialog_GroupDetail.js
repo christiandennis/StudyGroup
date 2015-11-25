@@ -8,5 +8,3 @@ exports.getTimeString = function(time) {
 exports.getDateString = function(date) {
 	return moment(date).format("ddd, MMM D").toString();
 };
-
-
