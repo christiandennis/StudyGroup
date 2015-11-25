@@ -47,11 +47,11 @@ var LoginDialog = React.createClass({
 		var failedSnackbar = this.refs.editGroupFailedSnackbar;
 		var successSnackbar = this.refs.editGroupSuccessSnackbar;
 
-		var isGroupDateTimeValid = helper.validateGroupDateTime(this.refs.editGroupTime, this.refs.editGroupDate);
+		var isGroupDateTimeValid = helper.validateGroupDateTime(this.refs.editGroupTime.getTime(), this.refs.editGroupDate.getDate());
 
 		if(!isGroupDateTimeValid) {
 			this.refs.dateSnackbar.show();
-		} else if (this.validateGroupSubject() & this.validateGroupTitle() & this.validateGroupDescription() & this.validateGroupLocation() & this.validateGroupCapacity() & helper.validateGroupDateTime(this.refs.editGroupTime, this.refs.editGroupDate)) {
+		} else if (this.validateGroupSubject() & this.validateGroupTitle() & this.validateGroupDescription() & this.validateGroupLocation() & this.validateGroupCapacity() & helper.validateGroupDateTime(this.refs.editGroupTime.getTime(), this.refs.editGroupDate.getDate())) {
 			StudyGroupStore.editGroup(id, title, subject, description, helper.calculateTime(time.getTime(), date.getDate()), location, capacity, editGroupDialog, failedSnackbar, successSnackbar);
 		}
 	},
@@ -67,7 +67,7 @@ var LoginDialog = React.createClass({
 	// 		} else {
 	// 			return false;
 	// 		}
-	// 	}
+	// 	} 
 	// },
 
 	validateGroupSubject() {

@@ -1,6 +1,4 @@
 const moment = require('moment');
-
-
 var exports = module.exports ={};
 
 exports.getTimeString = function(time) {

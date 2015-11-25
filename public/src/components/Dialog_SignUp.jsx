@@ -11,6 +11,8 @@ const Dialog = require('material-ui/lib/dialog');
 const FlatButton = require('material-ui/lib/flat-button');
 const Snackbar = require('material-ui/lib/snackbar');
 
+const helper = require('../helper/Helper_Dialog_SignUp');
+
 var SignUpDialog = React.createClass({
 	mixins: [History],
 
@@ -35,23 +37,30 @@ var SignUpDialog = React.createClass({
 
 	validateFullName() {
 		var fullname = this.refs.fullNameSignUp;
-		if (fullname.getValue()){
-			fullname.setErrorText("");
-			return true;
-		} else {
-			fullname.setErrorText("This field is required");
-			return false;
+
+		switch (helper.validateFullName(fullname.getValue())) {
+			case true:
+				fullname.setErrorText('');
+				return true;
+				break;
+			case false:
+				fullname.setErrorText("This field is required");
+				return false;
+				break;
 		}
 	},
 
 	validateUsername() {
-		var fullname = this.refs.usernameSignUp;
-		if (fullname.getValue()){
-			fullname.setErrorText("");
-			return true;
-		} else {
-			fullname.setErrorText("This field is required");
-			return false;
+		var username = this.refs.usernameSignUp;
+		switch (helper.validateUsername(username.getValue())) {
+			case true:
+				username.setErrorText('');
+				return true;
+				break;
+			case false:
+				username.setErrorText("This field is required");
+				return false;
+				break;
 		}
 	},
 
