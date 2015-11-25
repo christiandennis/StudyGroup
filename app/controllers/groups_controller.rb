@@ -19,7 +19,7 @@ class GroupsController < ApplicationController
 		date = params[:date]
 		time = params[:time]
 		capacity = params[:capacity]
-		privacy = params[:privacy]
+		#privacy = params[:privacy]
 		params[:host] = current_user.nickname
 		@name = current_user
 
@@ -60,10 +60,10 @@ class GroupsController < ApplicationController
 			error_messages << "Please enter capacity" 
 		end
 
-		if privacy != '0' and privacy != '1'
-			status=-1
-			error_messages << "Please set privacy of 0 or 1"
-		end
+		#if privacy != '0' and privacy != '1'
+		#	status=-1
+		#	error_messages << "Please set privacy of 0 or 1"
+		#end
 
 		if date.nil?
 			status = -1
