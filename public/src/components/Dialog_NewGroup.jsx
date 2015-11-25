@@ -13,7 +13,7 @@ const DatePicker = require('material-ui/lib/date-picker/date-picker');
 const TimePicker = require('material-ui/lib/time-picker/time-picker');
 const Snackbar = require('material-ui/lib/snackbar');
 const moment = require('moment');
-const helper = require('../helper');
+const helper = require('../helper/Helper_Form');
 
 
 var NewGroupDialog = React.createClass({

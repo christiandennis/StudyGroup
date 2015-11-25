@@ -50918,7 +50918,7 @@ const FlatButton = require('material-ui/lib/flat-button');
 const DatePicker = require('material-ui/lib/date-picker/date-picker');
 const TimePicker = require('material-ui/lib/time-picker/time-picker');
 const Snackbar = require('material-ui/lib/snackbar');
-const helper = require('../helper');
+const helper = require('../helper/Helper_Form');
 
 const moment = require('moment');
 
@@ -51217,7 +51217,7 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 
 module.exports = LoginDialog;
 
-},{"../helper":410,"../stores/StudyGroupStore":414,"material-ui/lib/date-picker/date-picker":73,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/snackbar":106,"material-ui/lib/text-field":128,"material-ui/lib/time-picker/time-picker":137,"moment":162,"react":391,"react-dom":168,"react-router":205}],402:[function(require,module,exports){
+},{"../helper/Helper_Form":412,"../stores/StudyGroupStore":414,"material-ui/lib/date-picker/date-picker":73,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/snackbar":106,"material-ui/lib/text-field":128,"material-ui/lib/time-picker/time-picker":137,"moment":162,"react":391,"react-dom":168,"react-router":205}],402:[function(require,module,exports){
 // React, react-reouter, alt
 var React = require('react');
 var render = require('react-dom').render;
@@ -51335,7 +51335,7 @@ var GroupDetailDialog = React.createClass({displayName: "GroupDetailDialog",
 
 module.exports = GroupDetailDialog;
 
-},{"../helper/Helper_Dialog_GroupDetail":411,"../stores/StudyGroupStore":414,"./Comments.jsx":400,"./Dialog_EditGroup.jsx":401,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/paper":100,"material-ui/lib/text-field":128,"moment":162,"react":391,"react-dom":168,"react-router":205}],403:[function(require,module,exports){
+},{"../helper/Helper_Dialog_GroupDetail":410,"../stores/StudyGroupStore":414,"./Comments.jsx":400,"./Dialog_EditGroup.jsx":401,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/paper":100,"material-ui/lib/text-field":128,"moment":162,"react":391,"react-dom":168,"react-router":205}],403:[function(require,module,exports){
 // React, react-reouter, alt
 var React = require('react');
 var render = require('react-dom').render;
@@ -51533,7 +51533,7 @@ const DatePicker = require('material-ui/lib/date-picker/date-picker');
 const TimePicker = require('material-ui/lib/time-picker/time-picker');
 const Snackbar = require('material-ui/lib/snackbar');
 const moment = require('moment');
-const helper = require('../helper');
+const helper = require('../helper/Helper_Form');
 
 
 var NewGroupDialog = React.createClass({displayName: "NewGroupDialog",
@@ -51762,7 +51762,7 @@ var NewGroupDialog = React.createClass({displayName: "NewGroupDialog",
 
 module.exports = NewGroupDialog;
 
-},{"../helper":410,"../stores/StudyGroupStore":414,"material-ui/lib/date-picker/date-picker":73,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/snackbar":106,"material-ui/lib/text-field":128,"material-ui/lib/time-picker/time-picker":137,"moment":162,"react":391,"react-dom":168,"react-router":205}],406:[function(require,module,exports){
+},{"../helper/Helper_Form":412,"../stores/StudyGroupStore":414,"material-ui/lib/date-picker/date-picker":73,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/snackbar":106,"material-ui/lib/text-field":128,"material-ui/lib/time-picker/time-picker":137,"moment":162,"react":391,"react-dom":168,"react-router":205}],406:[function(require,module,exports){
 // React, react-reouter, alt
 var React = require('react');
 var render = require('react-dom').render;
@@ -52033,7 +52033,7 @@ var SignUpDialog = React.createClass({displayName: "SignUpDialog",
 
 module.exports = SignUpDialog;
 
-},{"../helper/Helper_Dialog_SignUp":412,"../stores/StudyGroupStore":414,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/snackbar":106,"material-ui/lib/text-field":128,"react":391,"react-dom":168,"react-router":205}],408:[function(require,module,exports){
+},{"../helper/Helper_Dialog_SignUp":411,"../stores/StudyGroupStore":414,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/snackbar":106,"material-ui/lib/text-field":128,"react":391,"react-dom":168,"react-router":205}],408:[function(require,module,exports){
 var React = require('react');
 var render = require('react-dom').render;
 
@@ -52317,6 +52317,80 @@ module.exports = StudyGroups;
 
 },{"../actions/StudyGroupActions":395,"../stores/StudyGroupStore":414,"./Card_MainGroupView.jsx":399,"alt/AltContainer":1,"axios":17,"material-ui/lib/avatar":57,"material-ui/lib/card/card":65,"material-ui/lib/card/card-actions":60,"material-ui/lib/card/card-header":62,"material-ui/lib/card/card-text":63,"material-ui/lib/card/card-title":64,"material-ui/lib/date-picker/date-picker":73,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/paper":100,"material-ui/lib/raised-button":101,"material-ui/lib/refresh-indicator":102,"material-ui/lib/tabs/tab":125,"material-ui/lib/tabs/tabs":127,"material-ui/lib/text-field":128,"material-ui/lib/time-picker/time-picker":137,"moment":162,"react":391,"react-addons-test-utils":165,"react-dom":168,"react-masonry-component":169,"react-tap-event-plugin":216}],410:[function(require,module,exports){
 const moment = require('moment');
+var exports = module.exports ={};
+
+exports.getTimeString = function(time) {
+	return moment(time).format("h:mm a").toString();
+};
+
+exports.getDateString = function(date) {
+	return moment(date).format("ddd, MMM D").toString();
+};
+
+},{"moment":162}],411:[function(require,module,exports){
+var exports = module.exports ={};
+
+exports.validateFullName = function(fullname) {
+	if (fullname!=''){
+		return true;
+	} else {
+		return false;
+	}
+};
+
+exports.validateUsername = function(username) {
+	if (username!=''){
+		return true;
+	} else {
+		return false;
+	}
+};
+
+exports.validateSchool = function(username) {
+	if (username!=''){
+		return true;
+	} else {
+		return false;
+	}
+};
+
+exports.validateEmail = function(email) {
+	if (email!=''){
+		var at = email.indexOf("@");
+		if (at!=-1 && at===email.lastIndexOf("@")) {
+			var dot = email.lastIndexOf(".");
+			if (dot!=-1 && dot>at && dot!=email.length-1){
+				return 'valid';
+			} else {
+				return 'invalid';
+			}
+		} else {
+			return 'invalid';
+		}
+	} else {
+		return 'empty';
+	}
+};
+
+exports.validatePasswordMatch = function(filled, password, confirmPassword) {
+	if (filled && password===confirmPassword) {
+		if(password.length < 8){
+			return 'tooshort';
+		}
+		return 'good';
+	} else if (filled) {
+		if(password.length < 8){
+			return 'tooshort';
+		} else {
+			return 'nomatch';
+		}
+	} else {
+		return 'empty';
+	}
+};
+
+},{}],412:[function(require,module,exports){
+const moment = require('moment');
 
 
 var exports = module.exports ={};
@@ -52420,81 +52494,7 @@ exports.isValidCapacity = function(capacity, guestList) {
 	
 };
 
-},{"moment":162}],411:[function(require,module,exports){
-const moment = require('moment');
-var exports = module.exports ={};
-
-exports.getTimeString = function(time) {
-	return moment(time).format("h:mm a").toString();
-};
-
-exports.getDateString = function(date) {
-	return moment(date).format("ddd, MMM D").toString();
-};
-
-},{"moment":162}],412:[function(require,module,exports){
-var exports = module.exports ={};
-
-exports.validateFullName = function(fullname) {
-	if (fullname!=''){
-		return true;
-	} else {
-		return false;
-	}
-};
-
-exports.validateUsername = function(username) {
-	if (username!=''){
-		return true;
-	} else {
-		return false;
-	}
-};
-
-exports.validateSchool = function(username) {
-	if (username!=''){
-		return true;
-	} else {
-		return false;
-	}
-};
-
-exports.validateEmail = function(email) {
-	if (email!=''){
-		var at = email.indexOf("@");
-		if (at!=-1 && at===email.lastIndexOf("@")) {
-			var dot = email.lastIndexOf(".");
-			if (dot!=-1 && dot>at && dot!=email.length-1){
-				return 'valid';
-			} else {
-				return 'invalid';
-			}
-		} else {
-			return 'invalid';
-		}
-	} else {
-		return 'empty';
-	}
-};
-
-exports.validatePasswordMatch = function(filled, password, confirmPassword) {
-	if (filled && password===confirmPassword) {
-		if(password.length < 8){
-			return 'tooshort';
-		}
-		return 'good';
-	} else if (filled) {
-		if(password.length < 8){
-			return 'tooshort';
-		} else {
-			return 'nomatch';
-		}
-	} else {
-		return 'empty';
-	}
-};
-
-},{}],413:[function(require,module,exports){
+},{"moment":162}],413:[function(require,module,exports){
 var StudyGroupActions = require('../actions/StudyGroupActions');
 var UserActions = require('../actions/UserActions');
 var MyGroupsActions = require('../actions/MyGroupsActions');
