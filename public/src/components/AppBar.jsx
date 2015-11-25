@@ -74,7 +74,6 @@ var LeftBar = React.createClass({
 				<SideBar ref="leftNav" docked={false}  >
 					<MenuItem index={0} style={{textAlign:"center"}}>Hi, {this.props.user.name}!</MenuItem>
 					<MenuItem index={1} style={{textAlign:"center", marginBottom:"20px"} }><span onClick={this.myProfile}><Avatar size={120} backgroundColor='#0D47A1'> {this.props.user.name.slice(0,1).toUpperCase()} </Avatar></span></MenuItem>
-	  				<span onClick={this.editProfile}>	<MenuItem index={3}>Edit Profile</MenuItem>	</span>
 	  				<span onClick={this.logout}>		<MenuItem index={4}>Log Out</MenuItem>		</span>
 	  			</SideBar>
 
