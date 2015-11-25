@@ -51874,36 +51874,34 @@ var SignUpDialog = React.createClass({displayName: "SignUpDialog",
 	},
 
 	validateSchool:function() {
-		var fullname = this.refs.schoolSignUp;
-		if (fullname.getValue()){
-			fullname.setErrorText("");
-			return true;
-		} else {
-			fullname.setErrorText("This field is required");
-			return false;
+		var school = this.refs.schoolSignUp;
+		switch (helper.validateSchool(school.getValue())) {
+			case true:
+				school.setErrorText('');
+				return true;
+				break;
+			case false:
+				school.setErrorText("This field is required");
+				return false;
+				break;
 		}
 	},
 
 	validateEmail:function() {
 		var email = this.refs.emailSignUp;
-		if (email.getValue()){
-			var at = email.getValue().indexOf("@");
-			if (at!=-1 && at===email.getValue().lastIndexOf("@")) {
-				var dot = email.getValue().lastIndexOf(".");
-				if (dot!=-1 && dot>at && dot!=email.getValue().length-1){
-					email.setErrorText("");
-					return true;
-				} else {
-					email.setErrorText("Invalid email");
-					return false;
-				}
-			} else {
+		switch (helper.validateEmail(email.getValue())) {
+			case 'valid':
+				email.setErrorText('');
+				return true;
+				break;
+			case 'empty':
+				email.setErrorText("This field is required");
+				return false;
+				break;
+			case 'invalid':
 				email.setErrorText("Invalid email");
 				return false;
-			}
-		} else {
-			email.setErrorText("Invalid email");
-			return false;
+				break;
 		}
 	},
 
@@ -52400,6 +52398,32 @@ exports.validateUsername = function(username) {
 		return true;
 	} else {
 		return false;
+	}
+};
+
+exports.validateSchool = function(username) {
+	if (username!=''){
+		return true;
+	} else {
+		return false;
+	}
+};
+
+exports.validateEmail = function(email) {
+	if (email!=''){
+		var at = email.indexOf("@");
+		if (at!=-1 && at===email.lastIndexOf("@")) {
+			var dot = email.lastIndexOf(".");
+			if (dot!=-1 && dot>at && dot!=email.length-1){
+				return 'valid';
+			} else {
+				return 'invalid';
+			}
+		} else {
+			return 'invalid';
+		}
+	} else {
+		return 'empty';
 	}
 };
 

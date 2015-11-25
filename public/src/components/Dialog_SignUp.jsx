@@ -65,36 +65,34 @@ var SignUpDialog = React.createClass({
 	},
 
 	validateSchool() {
-		var fullname = this.refs.schoolSignUp;
-		if (fullname.getValue()){
-			fullname.setErrorText("");
-			return true;
-		} else {
-			fullname.setErrorText("This field is required");
-			return false;
+		var school = this.refs.schoolSignUp;
+		switch (helper.validateSchool(school.getValue())) {
+			case true:
+				school.setErrorText('');
+				return true;
+				break;
+			case false:
+				school.setErrorText("This field is required");
+				return false;
+				break;
 		}
 	},
 
 	validateEmail() {
 		var email = this.refs.emailSignUp;
-		if (email.getValue()){
-			var at = email.getValue().indexOf("@");
-			if (at!=-1 && at===email.getValue().lastIndexOf("@")) {
-				var dot = email.getValue().lastIndexOf(".");
-				if (dot!=-1 && dot>at && dot!=email.getValue().length-1){
-					email.setErrorText("");
-					return true;
-				} else {
-					email.setErrorText("Invalid email");
-					return false;
-				}
-			} else {
+		switch (helper.validateEmail(email.getValue())) {
+			case 'valid':
+				email.setErrorText('');
+				return true;
+				break;
+			case 'empty':
+				email.setErrorText("This field is required");
+				return false;
+				break;
+			case 'invalid':
 				email.setErrorText("Invalid email");
 				return false;
-			}
-		} else {
-			email.setErrorText("Invalid email");
-			return false;
+				break;
 		}
 	},
 
