@@ -14,8 +14,8 @@ class GroupTest < ActiveSupport::TestCase
   		location: "s",
   		school: "s",
   		capacity: 1,
-  		guestlist: "t",
-  		comments: "t",
+  		guestlist: 1,
+  		comments: ["t"],
   		privacy: 1,
   		host: 1
   		)
@@ -61,7 +61,7 @@ class GroupTest < ActiveSupport::TestCase
   end
 
   test "guestlist should be present" do
-  	@group.guestlist = "     "
+  	@group.guestlist = 1
   	assert_not @group.valid?
   end
 
@@ -90,6 +90,26 @@ class GroupTest < ActiveSupport::TestCase
   	assert_not @group.valid?
   end
 
+  test "capacity should be a number" do
+    @group.capacity = "s"
+    assert_not @group.valid?
+  end
+
+  test "guestlist should be nonnegative" do
+    @group.guestlist = -1
+    assert_not @group.valid?
+  end
+
+  test "guestlist should be nonzero" do
+    @group.guestlist = 0
+    assert_not @group.valid?
+  end
+
+  test "guestlist should be a number" do
+    @group.guestlist = "s"
+    assert_not @group.valid?
+  end
+
   test "host should be nonnegative" do
   	@group.host = -1
   	assert_not @group.valid?
@@ -98,6 +118,11 @@ class GroupTest < ActiveSupport::TestCase
   test "host should be nonzero" do
   	@group.host = 0
   	assert_not @group.valid?
+  end
+
+  test "host should be a number" do
+    @group.host = "s"
+    assert_not @group.valid?
   end
 
 end
