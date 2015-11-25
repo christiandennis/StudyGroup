@@ -44,12 +44,12 @@ exports.validateEmail = function(email) {
 
 exports.validatePasswordMatch = function(filled, password, confirmPassword) {
 	if (filled && password===confirmPassword) {
-		if(password.length < 8){
+		if(password.length <= 8){
 			return 'tooshort';
 		}
 		return 'good';
 	} else if (filled) {
-		if(password.length < 8){
+		if(password.length <= 8){
 			return 'tooshort';
 		} else {
 			return 'nomatch';
