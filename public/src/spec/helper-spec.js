@@ -233,10 +233,63 @@ describe(" --* Card Testing *-- ", function() {
 	        
         	// YOUR CODE HERE
 	
-			// 9 characters string
         	var mock_subject = "asdfghjklajdalkdjalkdal";
 
         	result = helper.isValidSubject(mock_subject);
+
+        	expect(result).toBe("toomuch");
+
+      	});
+		
+	});
+
+	describe("Testing Function isValidTitle", function () {
+
+
+      	it("Should return a string", function() {
+
+     		//  YOUR CODE HERE
+
+     		var mock_title = "laksdmaskldmsa";
+
+        	result = helper.isValidTitle(mock_title);
+
+        	expect(typeof result).toBe(typeof "asda");
+
+      	});
+
+      	it("Should return 'empty' if the input title is empty string '' ", function() {
+	        
+        	//  YOUR CODE HERE
+	
+        	var mock_title = "";
+
+        	result = helper.isValidTitle(mock_title);
+
+        	expect(result).toBe("empty");
+	
+      	});
+	
+      	it("Should return 'valid' if the title is non empty and has no more than 10 characters", function() {
+	        
+        	// YOUR CODE HERE
+	
+			// 9 characters string
+        	var mock_title = "asdfghjkl";
+
+        	result = helper.isValidTitle(mock_title);
+
+        	expect(result).toBe("valid");
+
+      	});
+		
+		it("Should return 'toomuch' if the title is non empty and has more than 10 characters", function() {
+	        
+        	// YOUR CODE HERE
+	
+        	var mock_title = "asdfghjklajdalkdjalkdalaskjnaskjdnasjdasjkdnajkdnasjdknasdkjndkjandkjasndksajdnaksjdnaksjndaskjdn";
+
+        	result = helper.isValidTitle(mock_title);
 
         	expect(result).toBe("toomuch");
 
