@@ -1070,49 +1070,6 @@
         null,
         null
       ],
-      "C:/Users/Patrick/studygroup/app/controllers/main_controller.rb": [
-        1,
-        1,
-        1,
-        1,
-        null,
-        null
-      ],
-      "C:/Users/Patrick/studygroup/app/controllers/application_controller.rb": [
-        1,
-        1,
-        1,
-        null,
-        null,
-        null,
-        null,
-        1,
-        null
-      ],
-      "C:/Users/Patrick/studygroup/app/helpers/application_helper.rb": [
-        1,
-        null
-      ],
-      "C:/Users/Patrick/studygroup/app/helpers/authorization_helper.rb": [
-        1,
-        null
-      ],
-      "C:/Users/Patrick/studygroup/app/helpers/comment_helper.rb": [
-        1,
-        null
-      ],
-      "C:/Users/Patrick/studygroup/app/helpers/groups_helper.rb": [
-        1,
-        null
-      ],
-      "C:/Users/Patrick/studygroup/app/helpers/landing_helper.rb": [
-        1,
-        null
-      ],
-      "C:/Users/Patrick/studygroup/app/helpers/main_helper.rb": [
-        1,
-        null
-      ],
       "C:/Users/Patrick/studygroup/app/controllers/comment_controller.rb": [
         1,
         1,
@@ -1203,14 +1160,39 @@
         null,
         null
       ],
-      "C:/Users/Patrick/studygroup/app/controllers/landing_controller.rb": [
+      "C:/Users/Patrick/studygroup/app/controllers/application_controller.rb": [
+        1,
         1,
         1,
         null,
         null,
-        1,
-        0,
         null,
+        null,
+        1,
+        null
+      ],
+      "C:/Users/Patrick/studygroup/app/helpers/application_helper.rb": [
+        1,
+        null
+      ],
+      "C:/Users/Patrick/studygroup/app/helpers/authorization_helper.rb": [
+        1,
+        null
+      ],
+      "C:/Users/Patrick/studygroup/app/helpers/comment_helper.rb": [
+        1,
+        null
+      ],
+      "C:/Users/Patrick/studygroup/app/helpers/groups_helper.rb": [
+        1,
+        null
+      ],
+      "C:/Users/Patrick/studygroup/app/helpers/landing_helper.rb": [
+        1,
+        null
+      ],
+      "C:/Users/Patrick/studygroup/app/helpers/main_helper.rb": [
+        1,
         null
       ],
       "C:/Users/Patrick/studygroup/app/controllers/groups_controller.rb": [
@@ -1522,8 +1504,26 @@
         null,
         null,
         null
+      ],
+      "C:/Users/Patrick/studygroup/app/controllers/main_controller.rb": [
+        1,
+        1,
+        1,
+        1,
+        null,
+        null
+      ],
+      "C:/Users/Patrick/studygroup/app/controllers/landing_controller.rb": [
+        1,
+        1,
+        null,
+        null,
+        1,
+        0,
+        null,
+        null
       ]
     },
-    "timestamp": 1448402296
+    "timestamp": 1448402483
   }
 }
