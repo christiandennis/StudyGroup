@@ -15,29 +15,13 @@ const Paper = require('material-ui/lib/paper');
 const Avatar = require('material-ui/lib/avatar');
 const FontIcon = require('material-ui/lib/font-icon');
 const Snackbar = require('material-ui/lib/snackbar');
+const helper = require('../helper/Helper_Card');
 
 const moment = require('moment');
 
 var MainGroupViewCard = React.createClass({
 	openGroupDetailDialog() {
 		this.refs.groupDetailDialog.refs.groupDetailDialog.show();
-	},
-
-	calculateTimeColor(card_date) {
-		var card_epoch = moment(card_date).unix();
-		var curr_time = new Date().toString();
-		var curr_epoch = moment(curr_time).unix();
-		var time_diff = card_epoch - curr_epoch;
-
-		if (time_diff >= 259200) {
-			return 'colorBarGreen';
-		} else if (time_diff >= 86400) {
-			return 'colorBarYellow';
-		} else if (time_diff >= 0) {
-			return 'colorBarRed';
-		} else {
-			return 'colorBarBlack';
-		}
 	},
 
 	joinLeaveGroup(joinOrLeave) {
@@ -51,56 +35,19 @@ var MainGroupViewCard = React.createClass({
 		}
 	},
 
-	checkUserGoing(studyGroup, user) {
-		for (var i in studyGroup.users) {
-	     	if (studyGroup.users[i].id === user.id) {
-	       		return true;
-	     	}
-	   	}
-	   	return false;
-	},
-
-	getJoinText(studyGroup, user) {
-		if (studyGroup.host === user.nickname) {
-			return 'Dismiss';
-		} else if(this.checkUserGoing(studyGroup, user)) {
-			return 'Leave';
-		} else if (studyGroup.guestlist === studyGroup.capacity) {
-			return 'Full';
-		} else {
-			return 'Join';
-		}
-	},
-
 	confirmDismiss() {
 		StudyGroupStore.dismissGroup(this.props.studyGroup.id, this.refs.successDismiss, this.refs.failedDismiss);
-	},
-
-	checkDisabled(studyGroup) {
-		return (new Date(studyGroup.date) < new Date());
-	},
-
-	getTimeString(time) {
-		// var d = new Date(0);
-		// d.setUTCSeconds(Number(time));
-		return moment(time).format("h:mm a").toString();
-	},
-
-	getDateString(date) {
-		// var d = new Date(0);
-		// d.setUTCSeconds(Number(date));
-		return moment(date).format("ddd, MMM D").toString();
 	},
 
 	render() {
 		var studyGroup = this.props.studyGroup;
 		var user = this.props.user;
 
-		var date = this.getDateString(studyGroup.date);
-		var time = this.getTimeString(studyGroup.date);
-		var color = this.calculateTimeColor(studyGroup.date);	
-		var joinText = this.getJoinText(studyGroup, user);
-		var disabled = this.checkDisabled(studyGroup);
+		var date = helper.getDateString(studyGroup.date);
+		var time = helper.getTimeString(studyGroup.date);
+		var color = helper.calculateTimeColor(studyGroup.date);	
+		var joinText = helper.getJoinText(studyGroup, user);
+		var disabled = helper.checkDisabled(studyGroup);
 		if (joinText==='Full'){
 			disabled = true;
 		}
