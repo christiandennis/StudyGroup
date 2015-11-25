@@ -110,28 +110,23 @@ var SignUpDialog = React.createClass({
 			filled = false;
 		}
 
-
-		if (filled && password.getValue()===confirmPassword.getValue()) {
-			password.setErrorText("");
-			confirmPassword.setErrorText("");
-			if(password.getValue().length < 8){
+		switch (filled && helper.validatePasswordMatch(filled, password.getValue(), confirmPassword.getValue())) {
+			case 'tooshort':
 				password.setErrorText("Password must be at least 8 characters");
 				confirmPassword.setErrorText("Password must be at least 8 characters");
-				return false;
-			}
-			return true;
-		} else if (filled) {
-			if(password.getValue().length < 8){
-				password.setErrorText("Password must be at least 8 characters");
-				confirmPassword.setErrorText("Password must be at least 8 characters");
-				return false;
-			} else {
+				break;
+			case 'nomatch':
 				password.setErrorText("Password must match");
 				confirmPassword.setErrorText("Password must match");
-				return false;
-			}
-		} else {
-			return false;
+				break;
+			case 'empty':
+				password.setErrorText("This field is required");
+				confirmPassword.setErrorText("This field is required");
+				break;
+			case 'good':
+				password.setErrorText("");
+				confirmPassword.setErrorText("");
+				break;
 		}
 	},
 
