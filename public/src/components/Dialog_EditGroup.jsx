@@ -11,25 +11,27 @@ const FlatButton = require('material-ui/lib/flat-button');
 const DatePicker = require('material-ui/lib/date-picker/date-picker');
 const TimePicker = require('material-ui/lib/time-picker/time-picker');
 const Snackbar = require('material-ui/lib/snackbar');
+const helper = require('../helper');
 
 const moment = require('moment');
 
 var LoginDialog = React.createClass({
 	cancelEditGroupDetail() {
+		// helper.test("aku","biji");
 		this.refs.editGroupDialog.dismiss();
 	},
 
-	calculateTimeEpoch(time, date) {
-		date_str = date.toString().slice(0,15);
-		time_str = time.toString().slice(15);
-		return moment(date_str + time_str).unix();
-	},
+	// calculateTimeEpoch(time, date) {
+	// 	date_str = date.toString().slice(0,15);
+	// 	time_str = time.toString().slice(15);
+	// 	return moment(date_str + time_str).unix();
+	// },
 
-	calculateTime(time, date) {
-		date_str = date.toString().slice(0,15);
-		time_str = time.toString().slice(15);
-		return date_str + time_str
-	},
+	// calculateTime(time, date) {
+	// 	date_str = date.toString().slice(0,15);
+	// 	time_str = time.toString().slice(15);
+	// 	return date_str + time_str
+	// },
 
 	submitEditGroupDetail() {
 		var id = this.props.studyGroup.id;
@@ -45,57 +47,91 @@ var LoginDialog = React.createClass({
 		var failedSnackbar = this.refs.editGroupFailedSnackbar;
 		var successSnackbar = this.refs.editGroupSuccessSnackbar;
 
-		if(!this.validateGroupDateTime()) {
+		var isGroupDateTimeValid = helper.validateGroupDateTime(this.refs.editGroupTime, this.refs.editGroupDate);
+
+		if(!isGroupDateTimeValid) {
 			this.refs.dateSnackbar.show();
-		} else if (this.validateGroupSubject() & this.validateGroupTitle() & this.validateGroupDescription() & this.validateGroupLocation() & this.validateGroupCapacity() & this.validateGroupDateTime()) {
-			StudyGroupStore.editGroup(id, title, subject, description, this.calculateTime(time.getTime(), date.getDate()), location, capacity, editGroupDialog, failedSnackbar, successSnackbar);
+		} else if (this.validateGroupSubject() & this.validateGroupTitle() & this.validateGroupDescription() & this.validateGroupLocation() & this.validateGroupCapacity() & helper.validateGroupDateTime(this.refs.editGroupTime, this.refs.editGroupDate)) {
+			StudyGroupStore.editGroup(id, title, subject, description, helper.calculateTime(time.getTime(), date.getDate()), location, capacity, editGroupDialog, failedSnackbar, successSnackbar);
 		}
 	},
 
-	validateGroupDateTime() {
-		var time = this.refs.editGroupTime;
-		var date = this.refs.editGroupDate;
-		if (time.getTime() && date.getDate()) {
-			var time_epoch = this.calculateTimeEpoch(time.getTime(), date.getDate());
-			var time_now = new Date().getTime() / 1000;
-			if (time_epoch > time_now){
-				return true;
-			} else {
-				return false;
-			}
-		}
-	},
+	// validateGroupDateTime(time,date) {
+	// 	var time = this.refs.editGroupTime;
+	// 	var date = this.refs.editGroupDate;
+	// 	if (time.getTime() && date.getDate()) {
+	// 		var time_epoch = helper.calculateTimeEpoch(time.getTime(), date.getDate());
+	// 		var time_now = new Date().getTime() / 1000;
+	// 		if (time_epoch > time_now){
+	// 			return true;
+	// 		} else {
+	// 			return false;
+	// 		}
+	// 	}
+	// },
 
 	validateGroupSubject() {
 		var subject = this.refs.editGroupSubject;
-		if (subject.getValue()) {
-			if (subject.getValue().length <= 10){
-				subject.setErrorText("");
+		var subjectString = subject.getValue();
+
+		switch (helper.isValidSubject(subjectString)) {
+			case 'valid':
+				subject.setErrorText('');
 				return true;
-			} else {
+				break;
+			case 'toomuch':
 				subject.setErrorText("Max 10 characters");
 				return false;
-			}
-		} else {
-			subject.setErrorText("This field is required");
-			return false;
+				break;
+			case 'empty':
+				subject.setErrorText("This field is required");
+				return false;
+				break;
 		}
+
+		// if (subject.getValue()) {
+		// 	if (subject.getValue().length <= 10){
+		// 		subject.setErrorText("");
+		// 		return true;
+		// 	} else {
+		// 		subject.setErrorText("Max 10 characters");
+		// 		return false;
+		// 	}
+		// } else {
+		// 	subject.setErrorText("This field is required");
+		// 	return false;
+		// }
 	},
 
 	validateGroupTitle() {
 		var title = this.refs.editGroupTitle;
-		if (title.getValue()) {
-			if (title.getValue().length <= 30){
-				title.setErrorText("");
-				return true;	
-			} else {
-				title.setErrorText("Max 30 character");
+		var titleString = title.getValue();
+		switch (helper.isValidTitle(titleString)) {
+			case 'valid':
+				title.setErrorText('');
+				return true;
+				break;
+			case 'toomuch':
+				title.setErrorText("Max 30 characters");
 				return false;
-			}
-		} else {
-			subject.setErrorText("This field is required");
-			return false;
+				break;
+			case 'empty':
+				title.setErrorText("This field is required");
+				return false;
+				break;
 		}
+		// if (title.getValue()) {
+		// 	if (title.getValue().length <= 30){
+		// 		title.setErrorText("");
+		// 		return true;	
+		// 	} else {
+		// 		title.setErrorText("Max 30 character");
+		// 		return false;
+		// 	}
+		// } else {
+		// 	subject.setErrorText("This field is required");
+		// 	return false;
+		// }
 	},
 
 	validateGroupDescription() {
