@@ -15,35 +15,6 @@ exports.calculateTime = function(time, date) {
 		return date_str + time_str
 };
 
-exports.isValidSubject = function(subject) {
-		if (subject) {
-			if (subject.length <= 10) {
-				return 'valid';
-			}
-			else {
-				return 'toomuch';
-			}
-		}
-		else {
-			return 'empty'
-		}		
-};
-
-exports.isValidTitle = function(title) {
-		if (title) {
-			if (title.length <= 30) {
-				return 'valid';
-			}
-			else {
-				return 'toomuch';
-			}
-		}
-		else {
-			return 'empty'
-		}		
-};
-
-
 exports.validateGroupDateTime = function(time, date) {
 		if (time && date) {
 			var time_epoch = exports.calculateTimeEpoch(time, date);
@@ -55,7 +26,78 @@ exports.validateGroupDateTime = function(time, date) {
 			}
 		}
 	};
-exports.test = function (a,b) {
-	console.log("a");
-	console.log("b");
-}
+
+exports.isValidSubject = function(subject) {
+	if (subject) {
+		if (subject.length <= 10) {
+			return 'valid';
+		}
+		else {
+			return 'toomuch';
+		}
+	}
+	else {
+		return 'empty'
+	}		
+};
+
+exports.isValidDescription = function(description) {
+	if (description) {
+		if (description.length <= 256) {
+			return 'valid';
+		}
+		else {
+			return 'toomuch';
+		}
+	}
+	else {
+		return 'empty'
+	}	
+};
+
+exports.isValidLocation = function(location) {
+	if (location) {
+		if (location.length <= 30) {
+			return 'valid';
+		}
+		else {
+			return 'toomuch';
+		}
+	}
+	else {
+		return 'empty'
+	}	
+};
+
+exports.isValidTitle = function(title) {
+	if (title) {
+		if (title.length <= 30) {
+			return 'valid';
+		}
+		else {
+			return 'toomuch';
+		}
+	}
+	else {
+		return 'empty'
+	}		
+};
+
+exports.isValidCapacity = function(capacity, guestList) {
+	if (capacity) {
+		if (/^\d+$/.test(capacity)) {
+			if (capacity < guestList) {
+				return 'smallerThanGuest'
+			} else if (capacity > 0) {
+				return 'valid'
+			} else {
+				return 'lessThanZero'
+			}
+		} else {
+			return 'notNumber'
+		}	
+	} else {
+		return 'empty'
+	}
+	
+};

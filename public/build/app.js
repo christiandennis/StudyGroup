@@ -51026,7 +51026,7 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 				title.setErrorText("This field is required");
 				return false;
 				break;
-		}
+		};
 		// if (title.getValue()) {
 		// 	if (title.getValue().length <= 30){
 		// 		title.setErrorText("");
@@ -51043,58 +51043,91 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 
 	validateGroupDescription:function() {
 		var description = this.refs.editGroupDescription;
-		if (description.getValue()) {
-			if(description.getValue().length <= 256){
+		var descriptionString = description.getValue();
+		switch (helper.isValidDescription(descriptionString)) {
+			case 'valid':
 				description.setErrorText("");
 				return true;
-			} else {
+				break;
+			case 'toomuch':
 				description.setErrorText("Max 256 character");
 				return false;
-			}
-		} else {
-			description.setErrorText("This field is required");
-			return false;
-		}
+				break
+			case 'empty':
+				description.setErrorText("This field is required");
+				return false;
+				break;
+		};
 	},
 
 	validateGroupLocation:function() {
 		var location = this.refs.editGroupLocation;
-		if (location.getValue()) {
-			if (location.getValue().length <= 30){
-				location.setErrorText("");
+		var locationString = location.getValue();
+		switch (helper.isValidLocation(locationString)) {
+			case 'valid':
+				location.setErrorText('');
 				return true;
-			} else {
+				break;
+			case 'toomuch':
 				location.setErrorText("Max 30 characters");
 				return false;
-			}
-		} else {
-			location.setErrorText("This field is required");
-			return false;
+				break;
+			case 'empty':
+				location.setErrorText("This field is required");
+				return false;
+				break;
 		}
+		
 	},
 
 	validateGroupCapacity:function() {
 		var capacity = this.refs.editGroupCapacity;
-		if (capacity.getValue()) {
-			if (/^\d+$/.test(capacity.getValue())) {
-				if (parseInt(capacity.getValue()) < this.props.studyGroup.guestlist){
-					capacity.setErrorText("Capacity must be bigger than guest numer: "+ this.props.studyGroup.guestlist);
-					return false;
-				} else if (parseInt(capacity.getValue()) > 0){
-					capacity.setErrorText("");
-					return true;
-				} else {
-					capacity.setErrorText("Must be greater than 0");
-					return false;
-				}
-			} else {
+		var capacityString = capacity.getValue();
+		var guestList = this.props.studyGroup.guestlist;
+		console.log(guestList);
+		switch (helper.isValidCapacity(capacityString,guestList)) {
+			case 'smallerThanGuest':
+				capacity.setErrorText("Capacity must be bigger than guest number: "+ this.props.studyGroup.guestlist);
+				return false;
+				break;
+			case 'valid':
+				capacity.setErrorText('');
+				return true;
+				break;
+			case 'lessThanZero':
+				capacity.setErrorText("Must be greater than 0");
+				return false;
+				break;
+			case 'notNumber':
 				capacity.setErrorText("Capacity must be a number");
 				return false;
-			}
-		} else {
-			capacity.setErrorText("This field is required");
-			return false;
+				break;
+			case 'empty':
+				capacity.setErrorText("This field is required");
+				return false;
+				break;
+
 		}
+		// if (capacity.getValue()) {
+		// 	if (/^\d+$/.test(capacity.getValue())) {
+		// 		if (parseInt(capacity.getValue()) < this.props.studyGroup.guestlist){
+		// 			capacity.setErrorText("Capacity must be bigger than guest numer: "+ this.props.studyGroup.guestlist);
+		// 			return false;
+		// 		} else if (parseInt(capacity.getValue()) > 0){
+		// 			capacity.setErrorText("");
+		// 			return true;
+		// 		} else {
+		// 			capacity.setErrorText("Must be greater than 0");
+		// 			return false;
+		// 		}
+		// 	} else {
+		// 		capacity.setErrorText("Capacity must be a number");
+		// 		return false;
+		// 	}
+		// } else {
+		// 	capacity.setErrorText("This field is required");
+		// 	return false;
+		// }
 	},
 
 	getDateEpoch:function(date){
@@ -52324,35 +52357,6 @@ exports.calculateTime = function(time, date) {
 		return date_str + time_str
 };
 
-exports.isValidSubject = function(subject) {
-		if (subject) {
-			if (subject.length <= 10) {
-				return 'valid';
-			}
-			else {
-				return 'toomuch';
-			}
-		}
-		else {
-			return 'empty'
-		}		
-};
-
-exports.isValidTitle = function(title) {
-		if (title) {
-			if (title.length <= 30) {
-				return 'valid';
-			}
-			else {
-				return 'toomuch';
-			}
-		}
-		else {
-			return 'empty'
-		}		
-};
-
-
 exports.validateGroupDateTime = function(time, date) {
 		if (time && date) {
 			var time_epoch = exports.calculateTimeEpoch(time, date);
@@ -52364,10 +52368,81 @@ exports.validateGroupDateTime = function(time, date) {
 			}
 		}
 	};
-exports.test = function (a,b) {
-	console.log("a");
-	console.log("b");
-}
+
+exports.isValidSubject = function(subject) {
+	if (subject) {
+		if (subject.length <= 10) {
+			return 'valid';
+		}
+		else {
+			return 'toomuch';
+		}
+	}
+	else {
+		return 'empty'
+	}		
+};
+
+exports.isValidDescription = function(description) {
+	if (description) {
+		if (description.length <= 256) {
+			return 'valid';
+		}
+		else {
+			return 'toomuch';
+		}
+	}
+	else {
+		return 'empty'
+	}	
+};
+
+exports.isValidLocation = function(location) {
+	if (location) {
+		if (location.length <= 30) {
+			return 'valid';
+		}
+		else {
+			return 'toomuch';
+		}
+	}
+	else {
+		return 'empty'
+	}	
+};
+
+exports.isValidTitle = function(title) {
+	if (title) {
+		if (title.length <= 30) {
+			return 'valid';
+		}
+		else {
+			return 'toomuch';
+		}
+	}
+	else {
+		return 'empty'
+	}		
+};
+
+exports.isValidCapacity = function(capacity, guestList) {
+	if (capacity) {
+		if (/^\d+$/.test(capacity)) {
+			if (capacity < guestList) {
+				return 'smallerThanGuest'
+			} else if (capacity > 0) {
+				return 'valid'
+			} else {
+				return 'lessThanZero'
+			}
+		} else {
+			return 'notNumber'
+		}	
+	} else {
+		return 'empty'
+	}
+	
+};
 
 },{"moment":162}],411:[function(require,module,exports){
 const moment = require('moment');

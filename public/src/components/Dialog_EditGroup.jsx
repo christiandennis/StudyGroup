@@ -119,7 +119,7 @@ var LoginDialog = React.createClass({
 				title.setErrorText("This field is required");
 				return false;
 				break;
-		}
+		};
 		// if (title.getValue()) {
 		// 	if (title.getValue().length <= 30){
 		// 		title.setErrorText("");
@@ -136,57 +136,70 @@ var LoginDialog = React.createClass({
 
 	validateGroupDescription() {
 		var description = this.refs.editGroupDescription;
-		if (description.getValue()) {
-			if(description.getValue().length <= 256){
+		var descriptionString = description.getValue();
+		switch (helper.isValidDescription(descriptionString)) {
+			case 'valid':
 				description.setErrorText("");
 				return true;
-			} else {
+				break;
+			case 'toomuch':
 				description.setErrorText("Max 256 character");
 				return false;
-			}
-		} else {
-			description.setErrorText("This field is required");
-			return false;
-		}
+				break
+			case 'empty':
+				description.setErrorText("This field is required");
+				return false;
+				break;
+		};
 	},
 
 	validateGroupLocation() {
 		var location = this.refs.editGroupLocation;
-		if (location.getValue()) {
-			if (location.getValue().length <= 30){
-				location.setErrorText("");
+		var locationString = location.getValue();
+		switch (helper.isValidLocation(locationString)) {
+			case 'valid':
+				location.setErrorText('');
 				return true;
-			} else {
+				break;
+			case 'toomuch':
 				location.setErrorText("Max 30 characters");
 				return false;
-			}
-		} else {
-			location.setErrorText("This field is required");
-			return false;
+				break;
+			case 'empty':
+				location.setErrorText("This field is required");
+				return false;
+				break;
 		}
+		
 	},
 
 	validateGroupCapacity() {
 		var capacity = this.refs.editGroupCapacity;
-		if (capacity.getValue()) {
-			if (/^\d+$/.test(capacity.getValue())) {
-				if (parseInt(capacity.getValue()) < this.props.studyGroup.guestlist){
-					capacity.setErrorText("Capacity must be bigger than guest numer: "+ this.props.studyGroup.guestlist);
-					return false;
-				} else if (parseInt(capacity.getValue()) > 0){
-					capacity.setErrorText("");
-					return true;
-				} else {
-					capacity.setErrorText("Must be greater than 0");
-					return false;
-				}
-			} else {
+		var capacityString = capacity.getValue();
+		var guestList = this.props.studyGroup.guestlist;
+		console.log(guestList);
+		switch (helper.isValidCapacity(capacityString,guestList)) {
+			case 'smallerThanGuest':
+				capacity.setErrorText("Capacity must be bigger than guest number: "+ this.props.studyGroup.guestlist);
+				return false;
+				break;
+			case 'valid':
+				capacity.setErrorText('');
+				return true;
+				break;
+			case 'lessThanZero':
+				capacity.setErrorText("Must be greater than 0");
+				return false;
+				break;
+			case 'notNumber':
 				capacity.setErrorText("Capacity must be a number");
 				return false;
-			}
-		} else {
-			capacity.setErrorText("This field is required");
-			return false;
+				break;
+			case 'empty':
+				capacity.setErrorText("This field is required");
+				return false;
+				break;
+
 		}
 	},
 
