@@ -50595,46 +50595,9 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 		}
 	},
 
-	// checkUserGoing(studyGroup, user) {
-	// 	for (var i in studyGroup.users) {
-	//      	if (studyGroup.users[i].id === user.id) {
-	//        		return true;
-	//      	}
-	//    	}
-	//    	return false;
-	// },
-
-	// getJoinText(studyGroup, user) {
-	// 	if (studyGroup.host === user.nickname) {
-	// 		return 'Dismiss';
-	// 	} else if(helper.checkUserGoing(studyGroup, user)) {
-	// 		return 'Leave';
-	// 	} else if (studyGroup.guestlist === studyGroup.capacity) {
-	// 		return 'Full';
-	// 	} else {
-	// 		return 'Join';
-	// 	}
-	// },
-
 	confirmDismiss:function() {
 		StudyGroupStore.dismissGroup(this.props.studyGroup.id, this.refs.successDismiss, this.refs.failedDismiss);
 	},
-
-	// checkDisabled(studyGroup) {
-	// 	return (new Date(studyGroup.date) < new Date());
-	// },
-
-	// getTimeString(time) {
-	// 	// var d = new Date(0);
-	// 	// d.setUTCSeconds(Number(time));
-	// 	return moment(time).format("h:mm a").toString();
-	// },
-
-	// getDateString(date) {
-	// 	// var d = new Date(0);
-	// 	// d.setUTCSeconds(Number(date));
-	// 	return moment(date).format("ddd, MMM D").toString();
-	// },
 
 	render:function() {
 		var studyGroup = this.props.studyGroup;
@@ -52347,14 +52310,12 @@ exports.checkDisabled = function(studyGroup) {
 exports.getTimeString = function(time) {
 		// var d = new Date(0);
 		// d.setUTCSeconds(Number(time));
-		console.log("kerun");
 		return moment(time).format("h:mm a").toString();
 };
 
 exports.getDateString = function(date) {
 		// var d = new Date(0);
 		// d.setUTCSeconds(Number(date));
-		console.log("kerun");
 		return moment(date).format("ddd, MMM D").toString();
 };
 
@@ -52417,12 +52378,12 @@ exports.validateEmail = function(email) {
 
 exports.validatePasswordMatch = function(filled, password, confirmPassword) {
 	if (filled && password===confirmPassword) {
-		if(password.length < 8){
+		if(password.length <= 8){
 			return 'tooshort';
 		}
 		return 'good';
 	} else if (filled) {
-		if(password.length < 8){
+		if(password.length <= 8){
 			return 'tooshort';
 		} else {
 			return 'nomatch';
@@ -53107,7 +53068,7 @@ var StudyGroupSource = {
 
 	dismissGroup:function() {
 		return {
-			remote:function(state, groupID){
+			remote:function(state, groupID, success, failed){
 				var header = null;
 		  	try {
 			    header ={
@@ -53119,7 +53080,7 @@ var StudyGroupSource = {
 			catch(err) {
 			    window.location.href = '/';
 			}
-			return new Promise(function(resolve, reject, success, failed){
+			return new Promise(function(resolve, reject){
 					// console.log('--------------DISMISS GROUP--------------');
 				    $.ajax({ url: '/groups/delete',
 				        type: 'DELETE',
