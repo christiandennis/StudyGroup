@@ -47,7 +47,7 @@ var LoginDialog = React.createClass({
 		var failedSnackbar = this.refs.editGroupFailedSnackbar;
 		var successSnackbar = this.refs.editGroupSuccessSnackbar;
 
-		var isGroupDateTimeValid = helper.validateGroupDateTime(this.refs.editGroupTime, this.refs.editGroupDate);
+		var isGroupDateTimeValid = helper.validateGroupDateTime(this.refs.editGroupTime.getTime(), this.refs.editGroupDate.getDate());
 
 		if(!isGroupDateTimeValid) {
 			this.refs.dateSnackbar.show();
@@ -67,7 +67,7 @@ var LoginDialog = React.createClass({
 	// 		} else {
 	// 			return false;
 	// 		}
-	// 	}
+	// 	} 
 	// },
 
 	validateGroupSubject() {
