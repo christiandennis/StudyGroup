@@ -1,24 +1,25 @@
 require 'test_helper'
 
 class GroupTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
 
   def setup
   	@group = Group.new(
-  		title: "s",
-  		subject: "s",
-  		description: "t",
-  		date: 1.5,
-  		location: "s",
-  		school: "s",
+  		title: "Help write tests!",
+  		subject: "cs169",
+  		description: "Wow this is great",
+  		date: DateTime.new(2016, 07, 11, 20, 10, 0),
+  		location: "Bechtel",
+  		school: "UC Berkeley",
   		capacity: 1,
-  		guestlist: "t",
-  		comments: "t",
+  		guestlist: 1,
+  		#comments: ["t"],
   		privacy: 1,
-  		host: 1
+  		host: "host_name"
   		)
+  end
+
+  test "assert true" do
+    assert true
   end
 
   test "should be valid" do
@@ -26,7 +27,7 @@ class GroupTest < ActiveSupport::TestCase
   end
 
   test "title should be present" do
-  	@group.title = "     "
+  	@group.title = ""
   	assert_not @group.valid?
   end
 
@@ -61,12 +62,7 @@ class GroupTest < ActiveSupport::TestCase
   end
 
   test "guestlist should be present" do
-  	@group.guestlist = "     "
-  	assert_not @group.valid?
-  end
-
-  test "privacy should be present" do
-  	@group.privacy = nil
+  	@group.guestlist = nil
   	assert_not @group.valid?
   end
 
@@ -75,10 +71,6 @@ class GroupTest < ActiveSupport::TestCase
   	assert_not @group.valid?
   end
 
-  test "going should be present" do
-  	@group.going = "     "
-  	assert_not @group.valid?
-  end
 
   test "capacity should be nonnegative" do
   	@group.capacity = -1
@@ -90,14 +82,24 @@ class GroupTest < ActiveSupport::TestCase
   	assert_not @group.valid?
   end
 
-  test "host should be nonnegative" do
-  	@group.host = -1
-  	assert_not @group.valid?
+  test "capacity should be a number" do
+    @group.capacity = "s"
+    assert_not @group.valid?
   end
 
-  test "host should be nonzero" do
-  	@group.host = 0
-  	assert_not @group.valid?
+  test "guestlist should be nonnegative" do
+    @group.guestlist = -1
+    assert_not @group.valid?
+  end
+
+  test "guestlist should be nonzero" do
+    @group.guestlist = 0
+    assert_not @group.valid?
+  end
+
+  test "guestlist should be a number" do
+    @group.guestlist = "s"
+    assert_not @group.valid?
   end
 
 end

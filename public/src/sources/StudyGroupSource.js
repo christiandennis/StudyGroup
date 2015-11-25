@@ -567,7 +567,7 @@ var StudyGroupSource = {
 
 	dismissGroup() {
 		return {
-			remote(state, groupID){
+			remote(state, groupID, success, failed){
 				var header = null;
 		  	try {
 			    header ={
@@ -579,7 +579,7 @@ var StudyGroupSource = {
 			catch(err) {
 			    window.location.href = '/';
 			}
-			return new Promise(function(resolve, reject, success, failed){
+			return new Promise(function(resolve, reject){
 					// console.log('--------------DISMISS GROUP--------------');
 				    $.ajax({ url: '/groups/delete',
 				        type: 'DELETE',
