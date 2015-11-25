@@ -177,7 +177,7 @@ var StudyGroups = React.createClass ({
 		if (this.props.studyGroups!=null) {
 			return (
 				<Tabs tabItemContainerStyle={{backgroundColor:"#0D47A1"}}
-						inkBarStyle={{backgroundColor:"#FFC107"}}>
+						inkBarStyle={{backgroundColor:"#FFC107", color:'rgba(255, 255, 255, 0)'}}>
 					<Tab label={this.props.user.school}
 							onActive={this.emptySearch}>
 						<AltContainer store={StudyGroupStore}>
