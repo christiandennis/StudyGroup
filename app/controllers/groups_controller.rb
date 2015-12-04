@@ -280,7 +280,7 @@ class GroupsController < ApplicationController
 		@groups = []
 
 
-		for group in Group.where("lower(school) = ? ", current_user.school.downcase).order("date") do
+		for group in Group.where("lower(school) = ? and date >= ?", current_user.school.downcase, DateTime.now).order("date") do
 			sub = group.subject.downcase
 			t = group.title.downcase
 
