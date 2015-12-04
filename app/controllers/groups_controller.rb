@@ -201,18 +201,6 @@ class GroupsController < ApplicationController
 
 	def update
 		id = params[:id]
-		@group = nil
-		if id.nil?
-			render json: {'status'=>-1,'errors:'=>['Please pass in a valid group id']}, status: 400
-			return
-		else
-			@group = Group.find(params[:id])
-			if @group.nil?
-				render json: {'status'=>-1,'errors:'=>['Could not find group with id']}, status: 400
-				return
-			end
-		end
-
 		title = params[:title]
 		subject = params[:subject]
 		description = params[:description]
@@ -222,6 +210,21 @@ class GroupsController < ApplicationController
 		capacity = params[:capacity]
 		privacy = params[:privacy]
 		school = params[:school]
+
+		@group = nil
+		if id.nil?
+			render json: {'status'=>-1,'errors:'=>['Please pass in a valid group id']}, status: 400
+			return
+		else
+			@group = Group.find(params[:id])
+			if @group.nil?
+				render json: {'status'=>-1,'errors:'=>['Could not find group with id']}, status: 400
+				return
+			elsif capacity.to_i < @group.guestlist
+				render json: {'status'=>-1,'errors:'=>['Capacity is too low']}, status: 400
+				return
+			end
+		end
 
 		if not title.nil?
 			@group.title = title
