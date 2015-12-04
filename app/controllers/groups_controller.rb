@@ -23,7 +23,7 @@ class GroupsController < ApplicationController
 		params[:host] = current_user.nickname
 		@name = current_user
 
-		if title.nil? || title.length==0
+		if title.blank? || title.length==0
 			status = -1
 			error_messages << "Please enter a title"
 		elsif title.length > 30
@@ -31,7 +31,7 @@ class GroupsController < ApplicationController
 			error_messages << "Please enter title less than 30 characters" 
 		end
 
-		if subject.nil? || subject.length==0
+		if subject.blank? || subject.length==0
 			status = -1
 			error_messages << "Please enter a class"
 		elsif subject.length > 10
@@ -39,7 +39,7 @@ class GroupsController < ApplicationController
 			error_messages << "Please enter a class less than 10 characters" 
 		end
 
-		if description.nil? || description.length==0
+		if description.blank? || description.length==0
 			status = -1
 			error_messages << "Please enter a description"
 		elsif description.length > 256
@@ -47,7 +47,7 @@ class GroupsController < ApplicationController
 			error_messages << "Please enter description less than 256 characters" 
 		end
 
-		if location.nil? || location.length==0
+		if location.blank? || location.length==0
 			status = -1
 			error_messages << "Please enter a location"
 		elsif location.length > 30
@@ -55,7 +55,7 @@ class GroupsController < ApplicationController
 			error_messages << "Please enter location less than 30 characters" 
 		end
 
-		if capacity.nil? || capacity.length==0
+		if capacity.blank? || capacity.length==0
 			status = -1
 			error_messages << "Please enter capacity" 
 		end
@@ -65,7 +65,7 @@ class GroupsController < ApplicationController
 		#	error_messages << "Please set privacy of 0 or 1"
 		#end
 
-		if date.nil?
+		if date.blank?
 			status = -1
 			error_messages << "Please pass in a date"
 		else
