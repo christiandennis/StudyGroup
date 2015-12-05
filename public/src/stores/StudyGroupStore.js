@@ -117,6 +117,15 @@ class StudyGroupStore {
    	       		break;
    	     	}
    	   	}
+
+   	   	if(this.searchResults!=null){
+	   		for (var i in this.searchResults) {
+		     	if (this.searchResults[i].id == studyGroupID) {
+		       		this.searchResults.splice(i, 1);
+   	       			break;
+		     	}
+	   		}
+	   	}
 	}
 
 	handlePostComment(comment) {
@@ -146,7 +155,7 @@ class StudyGroupStore {
 		       		this.searchResults[i].comments.push(comment);
 		        	break;
 		     	}
-	   	}
+	   		}
 	   	}
 	}
 
@@ -182,7 +191,7 @@ class StudyGroupStore {
 			var found = false;
 			for (var i in this.upcomingGroups) {
 		     	if (this.upcomingGroups[i].id === myGroup.groupID) {
-		       		found = true
+		       		found = true;
 		        	break;
 		     	}
 		   	}
@@ -206,6 +215,15 @@ class StudyGroupStore {
 	     	}
 	   	}
 
+	   	if(this.searchResults!=null){
+	   		for (var i in this.searchResults) {
+		     	if (this.searchResults[i].id == myGroup.groupID) {
+		       		this.searchResults[i] = myGroup.group;
+		        	break;
+		     	}
+	   		}
+	   	}
+
 	   	this.upcomingGroups.sort(this.compare);
 	}
 
@@ -216,6 +234,16 @@ class StudyGroupStore {
 	        	break;
 	     	}
 	   	}
+
+	   	if(this.searchResults!=null){
+	   		for (var i in this.searchResults) {
+		     	if (this.searchResults[i].id == studyGroup.id) {
+		       		this.searchResults[i] = studyGroup;
+		        	break;
+		     	}
+	   		}
+	   	}
+
 		this.studyGroups.sort(this.compare);
 	}
 

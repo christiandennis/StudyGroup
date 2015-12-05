@@ -53464,6 +53464,15 @@ const moment = require('moment');
    	       		break;
    	     	}
    	   	}
+
+   	   	if(this.searchResults!=null){
+	   		for (var i in this.searchResults) {
+		     	if (this.searchResults[i].id == studyGroupID) {
+		       		this.searchResults.splice(i, 1);
+   	       			break;
+		     	}
+	   		}
+	   	}
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handlePostComment",{writable:true,configurable:true,value:function(comment) {"use strict";
@@ -53493,7 +53502,7 @@ const moment = require('moment');
 		       		this.searchResults[i].comments.push(comment);
 		        	break;
 		     	}
-	   	}
+	   		}
 	   	}
 	}});
 
@@ -53529,7 +53538,7 @@ const moment = require('moment');
 			var found = false;
 			for (var i in this.upcomingGroups) {
 		     	if (this.upcomingGroups[i].id === myGroup.groupID) {
-		       		found = true
+		       		found = true;
 		        	break;
 		     	}
 		   	}
@@ -53553,6 +53562,15 @@ const moment = require('moment');
 	     	}
 	   	}
 
+	   	if(this.searchResults!=null){
+	   		for (var i in this.searchResults) {
+		     	if (this.searchResults[i].id == myGroup.groupID) {
+		       		this.searchResults[i] = myGroup.group;
+		        	break;
+		     	}
+	   		}
+	   	}
+
 	   	this.upcomingGroups.sort(this.compare);
 	}});
 
@@ -53563,6 +53581,16 @@ const moment = require('moment');
 	        	break;
 	     	}
 	   	}
+
+	   	if(this.searchResults!=null){
+	   		for (var i in this.searchResults) {
+		     	if (this.searchResults[i].id == studyGroup.id) {
+		       		this.searchResults[i] = studyGroup;
+		        	break;
+		     	}
+	   		}
+	   	}
+
 		this.studyGroups.sort(this.compare);
 	}});
 
