@@ -50814,7 +50814,7 @@ var AllComments = React.createClass({displayName: "AllComments",
 			);
 		}
 
-		if (this.props.studyGroup.comments){
+		if (this.props.studyGroup.comments.length>0){
 			var comments = this.props.studyGroup.comments;
 			return (
 				React.createElement("div", null, 
@@ -50822,8 +50822,14 @@ var AllComments = React.createClass({displayName: "AllComments",
 						return (
 							React.createElement("div", {key: comment.id}, 
 								React.createElement(ListItem, {
+									style: {textAlign:'left'}, 
 								    leftAvatar: React.createElement(Avatar, null, " ", comment.users[0].nickname.slice(0,1).toUpperCase(), " "), 
-								    primaryText: comment.users[0].nickname, 
+								    primaryText: 
+								    			React.createElement("p", {style: {marginTop:'8px'}}, 
+								    				React.createElement("span", {style: {color: '#000000'}}, comment.users[0].nickname), 
+								    				React.createElement("span", {style: {color: '#808080', fontSize:'10px'}}, " at ", new Date(comment.created_at).toString().slice(0,21))
+								    			), 
+								    			
 								    secondaryText: React.createElement("p", null, comment.content)}), 
 								React.createElement(ListDivider, null)
 							)
@@ -50846,7 +50852,7 @@ var Comments = React.createClass ({displayName: "Comments",
 	},
 
 	render:function(){
-		if (this.props.studyGroup) {
+		if (this.props.studyGroup.comments.length>0) {
 			return (
 				React.createElement("div", null, 
 						React.createElement("div", {ref: "commentTitle", className: "groupdesc-comment-title", style: {marginTop:"20px"}}, "Comments"), 
@@ -50870,11 +50876,26 @@ var Comments = React.createClass ({displayName: "Comments",
 			             	autoHideDuration: "1000"})
 				)
 			);
-		}
-		return (
-			React.createElement("div", null
+		} else {
+			return (
+				React.createElement("div", null, 
+					React.createElement("div", {className: "groupdesc-comment-title", style: {marginTop:"20px"}}, " No Comments "), 
+					React.createElement(TextField, {	ref: "commentText", 
+									hintText: "New Comment", 
+									onEnterKeyDown: this.postComment, 
+									multiLine: true, 
+									fullWidth: true}), " ", React.createElement(FlatButton, {label: "post", onClick: this.postComment}), 
+					React.createElement(Snackbar, {
+		           		ref: "success", 
+		             	message: "Comment posted", 
+		             	autoHideDuration: "1000"}), 
+		             React.createElement(Snackbar, {
+		           		ref: "failed", 
+		             	message: "Failed to post comment", 
+		             	autoHideDuration: "1000"})
+				)
 			)
-		);
+		}
 	}
 });
 
@@ -51282,7 +51303,7 @@ var GroupDetailDialog = React.createClass({displayName: "GroupDetailDialog",
 							style: {textAlign:"center", color:"#0D47A1 !important"}, 
 							actions: [], 
 					  		autoDetectWindowHeight: true, 
-					  		autoScrollBodyContent: false}, 
+					  		autoScrollBodyContent: true}, 
 					    React.createElement(Paper, {zDepth: 2, 
 					    style: {padding:"30px"}}, 
 					    	React.createElement("div", {className: "groupdesc-title"}, "Class"), 

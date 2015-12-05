@@ -59,7 +59,7 @@ var AllComments = React.createClass({
 			);
 		}
 
-		if (this.props.studyGroup.comments){
+		if (this.props.studyGroup.comments.length>0){
 			var comments = this.props.studyGroup.comments;
 			return (
 				<div>
@@ -67,8 +67,14 @@ var AllComments = React.createClass({
 						return (
 							<div key={comment.id}>
 								<ListItem
+									style={{textAlign:'left'}}
 								    leftAvatar={<Avatar> {comment.users[0].nickname.slice(0,1).toUpperCase()} </Avatar>}
-								    primaryText={comment.users[0].nickname}
+								    primaryText={
+								    			<p style={{marginTop:'8px'}}>
+								    				<span style={{color: '#000000'}}>{comment.users[0].nickname}</span> 
+								    				<span style={{color: '#808080', fontSize:'10px'}}> at {new Date(comment.created_at).toString().slice(0,21)}</span>
+								    			</p>
+								    			}
 								    secondaryText={<p>{comment.content}</p>} />
 								<ListDivider/>
 							</div>
@@ -91,7 +97,7 @@ var Comments = React.createClass ({
 	},
 
 	render(){
-		if (this.props.studyGroup) {
+		if (this.props.studyGroup.comments.length>0) {
 			return (
 				<div>
 						<div ref="commentTitle" className="groupdesc-comment-title" style={{marginTop:"20px"}}>Comments</div>
@@ -115,11 +121,26 @@ var Comments = React.createClass ({
 			             	autoHideDuration="1000"/>
 				</div>
 			);
+		} else {
+			return (
+				<div>
+					<div className="groupdesc-comment-title" style={{marginTop:"20px"}}> No Comments </div>
+					<TextField 	ref="commentText" 
+									hintText="New Comment" 
+									onEnterKeyDown = {this.postComment}
+									multiLine={true}
+									fullWidth={true}/> <FlatButton label="post" onClick={this.postComment}/>
+					<Snackbar
+		           		ref = "success"
+		             	message="Comment posted"
+		             	autoHideDuration="1000"/>
+		             <Snackbar
+		           		ref = "failed"
+		             	message="Failed to post comment"
+		             	autoHideDuration="1000"/>
+				</div>
+			)
 		}
-		return (
-			<div>
-			</div>
-		);
 	}
 });
 
