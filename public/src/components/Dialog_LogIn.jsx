@@ -41,7 +41,7 @@ var LoginDialog = React.createClass({
 							    primary={true}
 							    onTouchTap={this.submitLogIn} />]}
 				  		autoDetectWindowHeight={true} 
-				  		autoScrollBodyContent={true}>
+				  		autoScrollBodyContent={false}>
 
 				    <TextField
 				      onEnterKeyDown = {this.submitLogIn}

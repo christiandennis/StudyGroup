@@ -149,7 +149,7 @@ var SignUpDialog = React.createClass({
 							    primary={true}
 							    onTouchTap={this.submitSignUp} />]}
 				  		autoDetectWindowHeight={true} 
-				  		autoScrollBodyContent={true}>
+				  		autoScrollBodyContent={false}>
 				    <div>
 				    	<TextField
 				    	  onEnterKeyDown = {this.submitSignUp}

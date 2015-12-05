@@ -169,7 +169,7 @@ var NewGroupDialog = React.createClass({
 							    primary={true}
 							    onTouchTap={this.submitNewGroup} />]}
 				  		autoDetectWindowHeight={true} 
-				  		autoScrollBodyContent={true}>
+				  		autoScrollBodyContent={false}>
 				    <div>
 				    	<div style={{width:'35%', float:'left'}}><TextField
 				    		onEnterKeyDown = {this.submitNewGroup}
