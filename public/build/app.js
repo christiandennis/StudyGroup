@@ -50203,6 +50203,14 @@ function MyGroupsActions(){"use strict";}
 		this.dispatch(myGroups);
 	}});
 
+	Object.defineProperty(MyGroupsActions.prototype,"fetchUpcomingGroups",{writable:true,configurable:true,value:function(upcomingGroups) {"use strict";
+		this.dispatch(upcomingGroups);
+	}});
+
+	Object.defineProperty(MyGroupsActions.prototype,"fetchPastGroups",{writable:true,configurable:true,value:function(pastGroups) {"use strict";
+		this.dispatch(pastGroups);
+	}});
+
 	Object.defineProperty(MyGroupsActions.prototype,"joinOrLeaveGroup",{writable:true,configurable:true,value:function(myGroups) {"use strict";
 		this.dispatch(myGroups);
 	}});
@@ -52218,9 +52226,13 @@ var PastGroups = React.createClass({displayName: "PastGroups",
 var StudyGroups = React.createClass ({displayName: "StudyGroups",
 	componentDidMount: function() {
 		StudyGroupStore.fetchStudyGroups();	
-		StudyGroupStore.fetchMyGroups();
-		setInterval(function() {StudyGroupStore.fetchMyGroups();} , refreshInterval);
+		// StudyGroupStore.fetchMyGroups();
+		StudyGroupStore.fetchPastGroups();
+		StudyGroupStore.fetchUpcomingGroups();
+		// setInterval(function() {StudyGroupStore.fetchMyGroups();} , refreshInterval);
 		setInterval(function() {StudyGroupStore.fetchStudyGroups();} , refreshInterval);
+		setInterval(function() {StudyGroupStore.fetchPastGroups();} , refreshInterval);
+		setInterval(function() {StudyGroupStore.fetchUpcomingGroups();} , refreshInterval);
 	},
 
 	emptySearch:function() {
@@ -53013,6 +53025,94 @@ var StudyGroupSource = {
 		}
 	},
 
+	fetchPastGroups:function() {
+		return {
+			remote:function(state){
+				var header = null;
+		  	try {
+			    header ={
+		      				"access-token": state.user.accesstoken,
+		      				"client": state.user.client,
+		      				"uid": state.user.uid
+      					}
+			}
+			catch(err) {
+			    window.location.href = '/';
+			}
+			return new Promise(function(resolve, reject){
+					// console.log('--------------FETCH MY GROUPS--------------');
+				    $.ajax({ url: '/groups/user/past',
+				        type: 'GET',
+				        headers: header,
+				        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+				        success: function(data, status, xhr) {
+				        	// console.log('__SUCCESS__');
+					        // console.log('groups' ,data.groups);
+					        resolve(data.groups);
+					        // console.log('**************END FETCH MY GROUPS**************');
+				        },
+				        error: function(response) {
+				        	// console.log('__FAILED__');
+				          // console.log('response' ,response);
+				          reject(null);
+				          // console.log('**************END FETCH MY GROUPS**************');
+				        }
+				    })
+				})
+			},
+			local:function() {
+				return null;
+			},
+			success: MyGroupsActions.fetchPastGroups,
+		  error: UserActions.doNothing
+		}
+	},
+
+	fetchUpcomingGroups:function() {
+		return {
+			remote:function(state){
+				var header = null;
+		  	try {
+			    header ={
+		      				"access-token": state.user.accesstoken,
+		      				"client": state.user.client,
+		      				"uid": state.user.uid
+      					}
+			}
+			catch(err) {
+			    window.location.href = '/';
+			}
+			return new Promise(function(resolve, reject){
+					// console.log('--------------FETCH MY GROUPS--------------');
+				    $.ajax({ url: '/groups/user/upcoming',
+				        type: 'GET',
+				        headers: header,
+				        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+				        success: function(data, status, xhr) {
+				        	// console.log('__SUCCESS__');
+					        // console.log('groups' ,data.groups);
+					        resolve(data.groups);
+					        // console.log('**************END FETCH MY GROUPS**************');
+				        },
+				        error: function(response) {
+				        	// console.log('__FAILED__');
+				          // console.log('response' ,response);
+				          reject(null);
+				          // console.log('**************END FETCH MY GROUPS**************');
+				        }
+				    })
+				})
+			},
+			local:function() {
+				return null;
+			},
+			success: MyGroupsActions.fetchUpcomingGroups,
+		  	error: UserActions.doNothing
+		}
+	},
+
+
+
 	joinOrLeaveGroup:function() {
 		return {
 			remote:function(state, groupID, joinOrLeave, success, failed){
@@ -53269,11 +53369,15 @@ const moment = require('moment');
 			handlePostNewGroup: StudyGroupActions.POST_NEW_GROUP,
 			handleRefreshGroups: StudyGroupActions.REFRESH_GROUPS,
 			handleEditGroup: StudyGroupActions.EDIT_GROUP,
+
 			handleSearchGroups: StudyGroupActions.SEARCH_GROUPS,
 			handleEmptySearch: StudyGroupActions.EMPTY_SEARCH,
 			handleSetSearchTerm: StudyGroupActions.SET_SEARCH_TERM,
 
 			handleFetchMyGroups: MyGroupsActions.FETCH_MY_GROUPS,
+			handleFetchPastGroups: MyGroupsActions.FETCH_PAST_GROUPS,
+			handleFetchUpcomingGroups: MyGroupsActions.FETCH_UPCOMING_GROUPS,
+			
 			handleJoinOrLeaveGroup: MyGroupsActions.JOIN_OR_LEAVE_GROUP,
 			handleDismissGroup: MyGroupsActions.DISMISS_GROUP,
 
@@ -53397,6 +53501,14 @@ const moment = require('moment');
 	   	this.upcomingGroups.sort(this.compare);
 	   	this.pastGroups.sort(this.compare);
 	   	this.pastGroups.reverse();
+	}});
+
+	Object.defineProperty(StudyGroupStore.prototype,"handleFetchPastGroups",{writable:true,configurable:true,value:function(pastGroups) {"use strict";
+		this.pastGroups = pastGroups;
+	}});
+
+	Object.defineProperty(StudyGroupStore.prototype,"handleFetchUpcomingGroups",{writable:true,configurable:true,value:function(upcomingGroups) {"use strict";
+		this.upcomingGroups = upcomingGroups;
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleJoinOrLeaveGroup",{writable:true,configurable:true,value:function(myGroup) {"use strict";

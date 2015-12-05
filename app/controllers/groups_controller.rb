@@ -144,6 +144,14 @@ class GroupsController < ApplicationController
 		render json: {'status'=>1,'groups' => current_user.groups} 
 	end
 
+	def upcoming
+		render json: {'status'=>1,'groups' => current_user.groups.where("date >= ?",  DateTime.now).order("date")} 
+	end
+
+	def past
+		render json: {'status'=>1,'groups' => current_user.groups.where("date <= ?",  DateTime.now).order("date DESC")} 
+	end
+
 
 	#TODO?: Make sure you can't remove host
 	def addremoveuser

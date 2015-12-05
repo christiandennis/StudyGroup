@@ -11,7 +11,7 @@ Rails.application.routes.draw do
 
   # You can have the root of your site routed with "root"
   root 'landing#index'
-
+ 
   get '/feed', to: 'main#index'
 
 
@@ -25,6 +25,10 @@ Rails.application.routes.draw do
   delete '/groups/delete', to: 'groups#deletewithid'
 
   get '/groups/search', to: 'groups#search'
+
+  get '/groups/user/upcoming', to: 'groups#upcoming'
+
+  get '/groups/user/past', to: 'groups#past'
 
   #comments
   get '/comments/:id', to: 'comment#commentsInGroup'

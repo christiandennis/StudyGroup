@@ -511,6 +511,94 @@ var StudyGroupSource = {
 		}
 	},
 
+	fetchPastGroups() {
+		return {
+			remote(state){
+				var header = null;
+		  	try {
+			    header ={
+		      				"access-token": state.user.accesstoken,
+		      				"client": state.user.client,
+		      				"uid": state.user.uid
+      					}
+			}
+			catch(err) {
+			    window.location.href = '/';
+			}
+			return new Promise(function(resolve, reject){
+					// console.log('--------------FETCH MY GROUPS--------------');
+				    $.ajax({ url: '/groups/user/past',
+				        type: 'GET',
+				        headers: header,
+				        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+				        success: function(data, status, xhr) {
+				        	// console.log('__SUCCESS__');
+					        // console.log('groups' ,data.groups);
+					        resolve(data.groups);
+					        // console.log('**************END FETCH MY GROUPS**************');
+				        },
+				        error: function(response) {
+				        	// console.log('__FAILED__');
+				          // console.log('response' ,response);
+				          reject(null);
+				          // console.log('**************END FETCH MY GROUPS**************');
+				        }
+				    })
+				})
+			},
+			local() {
+				return null;
+			},
+			success: MyGroupsActions.fetchPastGroups,
+		  error: UserActions.doNothing
+		}
+	},
+
+	fetchUpcomingGroups() {
+		return {
+			remote(state){
+				var header = null;
+		  	try {
+			    header ={
+		      				"access-token": state.user.accesstoken,
+		      				"client": state.user.client,
+		      				"uid": state.user.uid
+      					}
+			}
+			catch(err) {
+			    window.location.href = '/';
+			}
+			return new Promise(function(resolve, reject){
+					// console.log('--------------FETCH MY GROUPS--------------');
+				    $.ajax({ url: '/groups/user/upcoming',
+				        type: 'GET',
+				        headers: header,
+				        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+				        success: function(data, status, xhr) {
+				        	// console.log('__SUCCESS__');
+					        // console.log('groups' ,data.groups);
+					        resolve(data.groups);
+					        // console.log('**************END FETCH MY GROUPS**************');
+				        },
+				        error: function(response) {
+				        	// console.log('__FAILED__');
+				          // console.log('response' ,response);
+				          reject(null);
+				          // console.log('**************END FETCH MY GROUPS**************');
+				        }
+				    })
+				})
+			},
+			local() {
+				return null;
+			},
+			success: MyGroupsActions.fetchUpcomingGroups,
+		  	error: UserActions.doNothing
+		}
+	},
+
+
+
 	joinOrLeaveGroup() {
 		return {
 			remote(state, groupID, joinOrLeave, success, failed){

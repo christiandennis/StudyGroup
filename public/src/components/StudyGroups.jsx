@@ -164,9 +164,13 @@ var PastGroups = React.createClass({
 var StudyGroups = React.createClass ({
 	componentDidMount: function() {
 		StudyGroupStore.fetchStudyGroups();	
-		StudyGroupStore.fetchMyGroups();
-		setInterval(function() {StudyGroupStore.fetchMyGroups();} , refreshInterval);
+		// StudyGroupStore.fetchMyGroups();
+		StudyGroupStore.fetchPastGroups();
+		StudyGroupStore.fetchUpcomingGroups();
+		// setInterval(function() {StudyGroupStore.fetchMyGroups();} , refreshInterval);
 		setInterval(function() {StudyGroupStore.fetchStudyGroups();} , refreshInterval);
+		setInterval(function() {StudyGroupStore.fetchPastGroups();} , refreshInterval);
+		setInterval(function() {StudyGroupStore.fetchUpcomingGroups();} , refreshInterval);
 	},
 
 	emptySearch() {

@@ -34,11 +34,15 @@ class StudyGroupStore {
 			handlePostNewGroup: StudyGroupActions.POST_NEW_GROUP,
 			handleRefreshGroups: StudyGroupActions.REFRESH_GROUPS,
 			handleEditGroup: StudyGroupActions.EDIT_GROUP,
+
 			handleSearchGroups: StudyGroupActions.SEARCH_GROUPS,
 			handleEmptySearch: StudyGroupActions.EMPTY_SEARCH,
 			handleSetSearchTerm: StudyGroupActions.SET_SEARCH_TERM,
 
 			handleFetchMyGroups: MyGroupsActions.FETCH_MY_GROUPS,
+			handleFetchPastGroups: MyGroupsActions.FETCH_PAST_GROUPS,
+			handleFetchUpcomingGroups: MyGroupsActions.FETCH_UPCOMING_GROUPS,
+			
 			handleJoinOrLeaveGroup: MyGroupsActions.JOIN_OR_LEAVE_GROUP,
 			handleDismissGroup: MyGroupsActions.DISMISS_GROUP,
 
@@ -162,6 +166,14 @@ class StudyGroupStore {
 	   	this.upcomingGroups.sort(this.compare);
 	   	this.pastGroups.sort(this.compare);
 	   	this.pastGroups.reverse();
+	}
+
+	handleFetchPastGroups(pastGroups) {
+		this.pastGroups = pastGroups;
+	}
+
+	handleFetchUpcomingGroups(upcomingGroups) {
+		this.upcomingGroups = upcomingGroups;
 	}
 
 	handleJoinOrLeaveGroup(myGroup) {

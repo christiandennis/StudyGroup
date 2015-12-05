@@ -5,6 +5,14 @@ class MyGroupsActions {
 		this.dispatch(myGroups);
 	}
 
+	fetchUpcomingGroups(upcomingGroups) {
+		this.dispatch(upcomingGroups);
+	}
+
+	fetchPastGroups(pastGroups) {
+		this.dispatch(pastGroups);
+	}
+
 	joinOrLeaveGroup(myGroups) {
 		this.dispatch(myGroups);
 	}
