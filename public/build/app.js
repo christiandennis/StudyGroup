@@ -53464,16 +53464,16 @@ const moment = require('moment');
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleUpdateStudyGroups",{writable:true,configurable:true,value:function(studyGroups){"use strict";
 		this.studyGroups = studyGroups;
-		this.studyGroups.sort(this.compare);
-		var curr_epoch = moment(new Date().toString()).unix();
-		var index;
-		for (var i in this.studyGroups) {
-	     	if (new Date(this.studyGroups[i].date) >= new Date()) {
-	       		index = i;
-	        	break;
-	     	}
-	   	}
-	   	this.studyGroups.splice(0, index);
+		// this.studyGroups.sort(this.compare);
+		// var curr_epoch = moment(new Date().toString()).unix();
+		// var index;
+		// for (var i in this.studyGroups) {
+	 //     	if (new Date(this.studyGroups[i].date) >= new Date()) {
+	 //       		index = i;
+	 //        	break;
+	 //     	}
+	 //   	}
+	 //   	this.studyGroups.splice(0, index);
 		this.errorMessage = null;
 	}});
 

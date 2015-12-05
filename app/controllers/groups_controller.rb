@@ -104,7 +104,7 @@ class GroupsController < ApplicationController
 	def userindex
 		#based on school/user
 		# what to initially show
-		@groups = Group.where("lower(school) = ? ", current_user.school.downcase).order("date")
+		@groups = Group.where("lower(school) = ? and date >= ?", current_user.school.downcase, DateTime.now).order("date")
 		render json: {'status'=>1,'groups' => @groups}
 	end
 
