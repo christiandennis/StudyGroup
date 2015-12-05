@@ -50451,7 +50451,7 @@ var TopBar = React.createClass({displayName: "TopBar",
     startTypingTimer:function() {
     	clearTimeout(typingTimer);
     	var searchTerm = this.refs.searchField.getValue();
-    	typingTimer = setTimeout(function(){StudyGroupStore.searchGroups(searchTerm);}, 500);
+    	typingTimer = setTimeout(function(){StudyGroupStore.searchGroups(searchTerm);}, 250);
     },
 
     clearTypingTimer:function() {
@@ -50471,6 +50471,11 @@ var TopBar = React.createClass({displayName: "TopBar",
     		return ""
     	}
     	return "Search class/title"
+    },
+
+    emptySearchTerm:function() {
+    	this.refs.searchField.clearValue();
+    	StudyGroupActions.emptySearch(null);
     },
 
 	render:function() {
@@ -50501,11 +50506,10 @@ var TopBar = React.createClass({displayName: "TopBar",
 							  					iconStyle: {fontSize:'24px', color:'#CCCCCC'}}, "search"), 
 							  		React.createElement(TextField, {
 							  			ref: "searchField", 
-							  			value: this.props.searchTerm, 
 							  		  	hintText: hintText, 
 						  		  		style: {
 						  		  					marginTop:'8px', 
-						  		  					marginRight:'5px',
+						  		  					marginRight:'0px',
 						  		  					width:'150px'}, 
 						  		  	  	inputStyle: {
 						  		  	  				color:'#D3D3D3',
@@ -50516,6 +50520,15 @@ var TopBar = React.createClass({displayName: "TopBar",
 						  		  	  				fontSize:'12px'}, 
 						  		  	  	onKeyDown: this.clearTypingTimer, 
 										onKeyUp: this.startTypingTimer}), 
+									React.createElement(IconButton, {iconClassName: "material-icons", 
+							  					tooltip: "Clear Search", 
+							  					onClick: this.emptySearchTerm, 
+							  					style: {
+							  						height:'inherit',
+							  						marginTop:'4px',
+							  						marginLeft:'-10px'}, 
+							  					iconStyle: {fontSize:'16px', color:'#CCCCCC', fontWeight:'bold'}}, "close"), 
+
 							  		React.createElement(IconButton, {iconClassName: "material-icons", 
 							  					style: {height:'inherit'}, 
 							  					iconStyle: {fontSize:'24px', color:'rgba(255, 255, 255, 1)'}, 
@@ -52245,20 +52258,17 @@ var StudyGroups = React.createClass ({displayName: "StudyGroups",
 			return (
 				React.createElement(Tabs, {tabItemContainerStyle: {backgroundColor:"#0D47A1"}, 
 						inkBarStyle: {backgroundColor:"#FFC107", color:'rgba(255, 255, 255, 0)'}}, 
-					React.createElement(Tab, {label: this.props.user.school, 
-							onActive: this.emptySearch}, 
+					React.createElement(Tab, {label: this.props.user.school}, 
 						React.createElement(AltContainer, {store: StudyGroupStore}, 
 							React.createElement(AllStudyGroups, null)
 						)
 					), 
-					React.createElement(Tab, {label: "My Upcoming Groups", 
-							onActive: this.emptySearch}, 
+					React.createElement(Tab, {label: "My Upcoming Groups"}, 
 						React.createElement(AltContainer, {store: StudyGroupStore}, 
 							React.createElement(UpcomingGroups, null)
 						)
 					), 
-					React.createElement(Tab, {label: "My Past Groups", 
-							onActive: this.emptySearch}, 
+					React.createElement(Tab, {label: "My Past Groups"}, 
 						React.createElement(AltContainer, {store: StudyGroupStore}, 
 							React.createElement(PastGroups, null)
 						)

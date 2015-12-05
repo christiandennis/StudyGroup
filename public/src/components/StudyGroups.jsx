@@ -183,20 +183,17 @@ var StudyGroups = React.createClass ({
 			return (
 				<Tabs tabItemContainerStyle={{backgroundColor:"#0D47A1"}}
 						inkBarStyle={{backgroundColor:"#FFC107", color:'rgba(255, 255, 255, 0)'}}>
-					<Tab label={this.props.user.school}
-							onActive={this.emptySearch}>
+					<Tab label={this.props.user.school}>
 						<AltContainer store={StudyGroupStore}>
 							<AllStudyGroups />
 						</AltContainer>
 					</Tab>
-					<Tab label="My Upcoming Groups"
-							onActive={this.emptySearch}>
+					<Tab label="My Upcoming Groups">
 						<AltContainer store={StudyGroupStore}>
 							<UpcomingGroups />
 						</AltContainer>
 					</Tab>
-					<Tab label="My Past Groups"
-							onActive={this.emptySearch}>
+					<Tab label="My Past Groups">
 						<AltContainer store={StudyGroupStore}>
 							<PastGroups />
 						</AltContainer>

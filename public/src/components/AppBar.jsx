@@ -142,7 +142,7 @@ var TopBar = React.createClass({
     startTypingTimer() {
     	clearTimeout(typingTimer);
     	var searchTerm = this.refs.searchField.getValue();
-    	typingTimer = setTimeout(function(){StudyGroupStore.searchGroups(searchTerm);}, 500);
+    	typingTimer = setTimeout(function(){StudyGroupStore.searchGroups(searchTerm);}, 250);
     },
 
     clearTypingTimer() {
@@ -162,6 +162,11 @@ var TopBar = React.createClass({
     		return ""
     	}
     	return "Search class/title"
+    },
+
+    emptySearchTerm() {
+    	this.refs.searchField.clearValue();
+    	StudyGroupActions.emptySearch(null);
     },
 
 	render() {
@@ -192,11 +197,10 @@ var TopBar = React.createClass({
 							  					iconStyle={{fontSize:'24px', color:'#CCCCCC'}}>search</IconButton>
 							  		<TextField
 							  			ref='searchField'
-							  			value={this.props.searchTerm}
 							  		  	hintText={hintText} 
 						  		  		style = {{
 						  		  					marginTop:'8px', 
-						  		  					marginRight:'5px',
+						  		  					marginRight:'0px',
 						  		  					width:'150px'}}
 						  		  	  	inputStyle={{
 						  		  	  				color:'#D3D3D3',
@@ -207,6 +211,15 @@ var TopBar = React.createClass({
 						  		  	  				fontSize:'12px'}}
 						  		  	  	onKeyDown={this.clearTypingTimer}
 										onKeyUp={this.startTypingTimer}/>
+									<IconButton iconClassName="material-icons" 
+							  					tooltip="Clear Search"
+							  					onClick={this.emptySearchTerm}
+							  					style={{
+							  						height:'inherit',
+							  						marginTop:'4px',
+							  						marginLeft:'-10px'}}
+							  					iconStyle={{fontSize:'16px', color:'#CCCCCC', fontWeight:'bold'}}>close</IconButton>
+
 							  		<IconButton iconClassName="material-icons" 
 							  					style={{height:'inherit'}}
 							  					iconStyle={{fontSize:'24px', color:'rgba(255, 255, 255, 1)'}} 
