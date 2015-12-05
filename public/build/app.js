@@ -52119,19 +52119,7 @@ var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
 			);
 		}
 
-		if (this.props.searchResults){
-			return (
-				React.createElement(Masonry, {
-	                className: 'my-gallery-class', 
-	                elementType: 'ul', 
-	                options: masonryOptions, 
-	                disableImagesLoaded: false}, 
-					this.props.searchResults.map(function(studyGroup, i)  {
-					    return ( React.createElement(Card_MainGroupView, {studyGroup: studyGroup, user: this.props.user, key: studyGroup.id}));
-					}.bind(this))
-				)		
-			);
-		} else if (this.props.studyGroups){
+		if (this.props.studyGroups){
 			return (
 				React.createElement(Masonry, {
 	                className: 'my-gallery-class', 
@@ -52155,19 +52143,7 @@ var UpcomingGroups = React.createClass({displayName: "UpcomingGroups",
 			);
 		}
 
-		if (this.props.searchResults){
-			return (
-				React.createElement(Masonry, {
-	                className: 'my-gallery-class', 
-	                elementType: 'ul', 
-	                options: masonryOptions, 
-	                disableImagesLoaded: false}, 
-					this.props.searchResults.map(function(studyGroup, i)  {
-					    return ( React.createElement(Card_MainGroupView, {studyGroup: studyGroup, user: this.props.user, key: studyGroup.id}));
-					}.bind(this))
-				)		
-			);
-		} else if (this.props.upcomingGroups){
+		if (this.props.upcomingGroups){
 			return (
 				React.createElement(Masonry, {
 	                className: 'my-gallery-class', 
@@ -52193,6 +52169,32 @@ var PastGroups = React.createClass({displayName: "PastGroups",
 			);
 		}
 
+		if (this.props.pastGroups){
+			return (
+				React.createElement(Masonry, {
+	                className: 'my-gallery-class', 
+	                elementType: 'ul', 
+	                options: masonryOptions, 
+	                disableImagesLoaded: false}, 
+					this.props.pastGroups.map(function(studyGroup, i)  {
+					    return ( React.createElement(Card_MainGroupView, {studyGroup: studyGroup, user: this.props.user, key: studyGroup.id}));
+					}.bind(this))
+				)		
+			);
+		} else {
+			return (React.createElement("div", null, "Loading..."));
+		}
+	}
+});
+
+var GroupSearch = React.createClass({displayName: "GroupSearch",
+	render:function() {
+		if (this.props.errorMessage) {
+			return (
+				React.createElement("div", null, this.props.errorMessage)
+			);
+		}
+
 		if (this.props.searchResults){
 			return (
 				React.createElement(Masonry, {
@@ -52201,18 +52203,6 @@ var PastGroups = React.createClass({displayName: "PastGroups",
 	                options: masonryOptions, 
 	                disableImagesLoaded: false}, 
 					this.props.searchResults.map(function(studyGroup, i)  {
-					    return ( React.createElement(Card_MainGroupView, {studyGroup: studyGroup, user: this.props.user, key: studyGroup.id}));
-					}.bind(this))
-				)		
-			);
-		} else if (this.props.pastGroups){
-			return (
-				React.createElement(Masonry, {
-	                className: 'my-gallery-class', 
-	                elementType: 'ul', 
-	                options: masonryOptions, 
-	                disableImagesLoaded: false}, 
-					this.props.pastGroups.map(function(studyGroup, i)  {
 					    return ( React.createElement(Card_MainGroupView, {studyGroup: studyGroup, user: this.props.user, key: studyGroup.id}));
 					}.bind(this))
 				)		
@@ -52240,7 +52230,18 @@ var StudyGroups = React.createClass ({displayName: "StudyGroups",
 	},
 
 	render:function(){
-		if (this.props.studyGroups!=null) {
+		if (this.props.searchResults!=null) {
+			return (
+				React.createElement(Tabs, {tabItemContainerStyle: {backgroundColor:"#0D47A1"}, 
+						inkBarStyle: {backgroundColor:"#FFC107", color:'rgba(255, 255, 255, 0)'}}, 
+					React.createElement(Tab, {label: "Search Results"}, 
+						React.createElement(AltContainer, {store: StudyGroupStore}, 
+							React.createElement(GroupSearch, null)
+						)
+					)
+				)
+			)
+		} else if (this.props.studyGroups!=null) {
 			return (
 				React.createElement(Tabs, {tabItemContainerStyle: {backgroundColor:"#0D47A1"}, 
 						inkBarStyle: {backgroundColor:"#FFC107", color:'rgba(255, 255, 255, 0)'}}, 
