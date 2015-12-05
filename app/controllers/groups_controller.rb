@@ -220,38 +220,41 @@ class GroupsController < ApplicationController
 			if @group.nil?
 				render json: {'status'=>-1,'errors:'=>['Could not find group with id']}, status: 400
 				return
+			elsif title.blank? || subject.blank? || description.blank? || capacity.blank? 
+				render json: {'status'=>-1,'errors:'=>['Invalid Parameters']}, status: 400
+				return
 			elsif capacity.to_i < @group.guestlist
 				render json: {'status'=>-1,'errors:'=>['Capacity is too low']}, status: 400
 				return
 			end
 		end
 
-		if not title.nil?
+		if not title.blank?
 			@group.title = title
 		end
-		if not subject.nil?
+		if not subject.blank?
 			@group.subject = subject
 		end
-		if not description.nil?
+		if not description.blank?
 			@group.description = description
 		end
-		if not date.nil?
+		if not date.blank?
 			@group.date = date
 		end
-		if not location.nil?
+		if not location.blank?
 			@group.location = location
 		end
-		if not time.nil?
+		if not time.blank?
 			@group.time = time
 		end
-		if not capacity.nil?
+		if not capacity.blank?
 			@group.capacity = capacity
 		end
 
-		if not privacy.nil?
+		if not privacy.blank?
 			@group.privacy = privacy
 		end
-		if not school.nil?
+		if not school.blank?
 			@group.school = school
 		end
 
