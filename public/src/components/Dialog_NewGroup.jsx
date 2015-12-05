@@ -229,17 +229,17 @@ var NewGroupDialog = React.createClass({
 				<Snackbar
 	           		ref = "createGroupFailedSnackbar"
 	             	message="Failed to create group"
-	             	autoHideDuration="5000"/>
+	             	autoHideDuration="1000"/>
 
 	    		<Snackbar
 	           		ref = "createGroupSuccessSnackbar"
 	             	message="Group Created"
-	             	autoHideDuration="5000"/>
+	             	autoHideDuration="1000"/>
 
 	             <Snackbar
 	           		ref = "dateSnackbar"
 	             	message="Please enter a date/time in the future"
-	             	autoHideDuration="5000"/>
+	             	autoHideDuration="1000"/>
             </div>
 		)
 	}

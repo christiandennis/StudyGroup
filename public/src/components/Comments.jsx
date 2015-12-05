@@ -108,11 +108,11 @@ var Comments = React.createClass ({
 						<Snackbar
 			           		ref = "success"
 			             	message="Comment posted"
-			             	autoHideDuration="5000"/>
+			             	autoHideDuration="1000"/>
 			             <Snackbar
 			           		ref = "failed"
 			             	message="Failed to post comment"
-			             	autoHideDuration="5000"/>
+			             	autoHideDuration="1000"/>
 				</div>
 			);
 		}

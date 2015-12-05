@@ -50719,32 +50719,32 @@ var MainGroupViewCard = React.createClass({displayName: "MainGroupViewCard",
 		        React.createElement(Snackbar, {
 	           		ref: "successJoin", 
 	             	message: "Joined the group", 
-	             	autoHideDuration: "5000"}), 
+	             	autoHideDuration: "1000"}), 
 
 	            React.createElement(Snackbar, {
 	           		ref: "failedJoin", 
 	             	message: "Failed to join group", 
-	             	autoHideDuration: "5000"}), 
+	             	autoHideDuration: "1000"}), 
 
 	             React.createElement(Snackbar, {
 	           		ref: "successLeave", 
 	             	message: "Left the group", 
-	             	autoHideDuration: "5000"}), 
+	             	autoHideDuration: "1000"}), 
 
 	            React.createElement(Snackbar, {
 	           		ref: "failedLeave", 
 	             	message: "Failed to leave group", 
-	             	autoHideDuration: "5000"}), 
+	             	autoHideDuration: "1000"}), 
 
 	             React.createElement(Snackbar, {
 	           		ref: "successDismiss", 
 	             	message: "Group dismissed", 
-	             	autoHideDuration: "5000"}), 
+	             	autoHideDuration: "1000"}), 
 
 	            React.createElement(Snackbar, {
 	           		ref: "failedDismiss", 
 	             	message: "Failed to dismiss group", 
-	             	autoHideDuration: "5000"})
+	             	autoHideDuration: "1000"})
 	    	)
 		)
 	}
@@ -50863,11 +50863,11 @@ var Comments = React.createClass ({displayName: "Comments",
 						React.createElement(Snackbar, {
 			           		ref: "success", 
 			             	message: "Comment posted", 
-			             	autoHideDuration: "5000"}), 
+			             	autoHideDuration: "1000"}), 
 			             React.createElement(Snackbar, {
 			           		ref: "failed", 
 			             	message: "Failed to post comment", 
-			             	autoHideDuration: "5000"})
+			             	autoHideDuration: "1000"})
 				)
 			);
 		}
@@ -51191,7 +51191,7 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
                  React.createElement(Snackbar, {
 	           		ref: "dateSnackbar", 
 	             	message: "Please enter a date/time in the future", 
-	             	autoHideDuration: "5000"})
+	             	autoHideDuration: "1000"})
 			)
 		)
 	}
@@ -51731,17 +51731,17 @@ var NewGroupDialog = React.createClass({displayName: "NewGroupDialog",
 				React.createElement(Snackbar, {
 	           		ref: "createGroupFailedSnackbar", 
 	             	message: "Failed to create group", 
-	             	autoHideDuration: "5000"}), 
+	             	autoHideDuration: "1000"}), 
 
 	    		React.createElement(Snackbar, {
 	           		ref: "createGroupSuccessSnackbar", 
 	             	message: "Group Created", 
-	             	autoHideDuration: "5000"}), 
+	             	autoHideDuration: "1000"}), 
 
 	             React.createElement(Snackbar, {
 	           		ref: "dateSnackbar", 
 	             	message: "Please enter a date/time in the future", 
-	             	autoHideDuration: "5000"})
+	             	autoHideDuration: "1000"})
             )
 		)
 	}

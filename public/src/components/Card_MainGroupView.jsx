@@ -130,32 +130,32 @@ var MainGroupViewCard = React.createClass({
 		        <Snackbar
 	           		ref = "successJoin"
 	             	message="Joined the group"
-	             	autoHideDuration="5000"/>
+	             	autoHideDuration="1000"/>
 
 	            <Snackbar
 	           		ref = "failedJoin"
 	             	message="Failed to join group"
-	             	autoHideDuration="5000"/>
+	             	autoHideDuration="1000"/>
 
 	             <Snackbar
 	           		ref = "successLeave"
 	             	message="Left the group"
-	             	autoHideDuration="5000"/>
+	             	autoHideDuration="1000"/>
 
 	            <Snackbar
 	           		ref = "failedLeave"
 	             	message="Failed to leave group"
-	             	autoHideDuration="5000"/>
+	             	autoHideDuration="1000"/>
 
 	             <Snackbar
 	           		ref = "successDismiss"
 	             	message="Group dismissed"
-	             	autoHideDuration="5000"/>
+	             	autoHideDuration="1000"/>
 
 	            <Snackbar
 	           		ref = "failedDismiss"
 	             	message="Failed to dismiss group"
-	             	autoHideDuration="5000"/>
+	             	autoHideDuration="1000"/>
 	    	</div>
 		)
 	}
