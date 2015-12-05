@@ -4,6 +4,7 @@ var render = require('react-dom').render;
 var Router = require('react-router');
 
 var StudyGroupStore = require('../stores/StudyGroupStore');
+var StudyGroupActions = require('../actions/StudyGroupActions');
 
 // Matertial UI components
 const TextField = require('material-ui/lib/text-field');
@@ -198,12 +199,16 @@ var NewGroupDialog = React.createClass({
 				    	  	hintText="9:00 pm"
 				    	  	fullWidth={true}
 				    	  	autoOk={true}
-				    	  	floatingLabelText="Time"/></div>
+				    	  	floatingLabelText="Time"
+				    	  	onShow={StudyGroupActions.pauseShortPolling}
+				    	  	onDismiss={StudyGroupActions.continueShortPolling}/></div>
 				    	<div style={{width:'65%', float:'left'}}><DatePicker
 				    		ref = "createGroupDate"
 				    	  	hintText="Nov 22, 2015"
 				    	  	fullWidth={true}
-				    	  	floatingLabelText="Date"/></div>
+				    	  	floatingLabelText="Date"
+				    	  	onShow={StudyGroupActions.pauseShortPolling}
+				    	  	onDismiss={StudyGroupActions.continueShortPolling}/></div>
 				    	<div style={{width:'80%', float:'left'}}><TextField
 				    		onEnterKeyDown = {this.submitNewGroup}
 				    		onChange={this.validateGroupLocation}

@@ -16,6 +16,7 @@ class StudyGroupStore {
 		this.pastGroups = null;
 		this.searchResults = null;
 		this.searchTerm = null;
+		this.poll = true;
 
 
 		this.bindListeners({
@@ -47,7 +48,10 @@ class StudyGroupStore {
 			handleDismissGroup: MyGroupsActions.DISMISS_GROUP,
 
 			handleFetchComments: CommentsActions.FETCH_COMMENTS,
-			handlePostComment: CommentsActions.POST_COMMENT
+			handlePostComment: CommentsActions.POST_COMMENT,
+
+			handlePausePolling: StudyGroupActions.PAUSE_SHORT_POLLING,
+			handleContinuePolling: StudyGroupActions.CONTINUE_SHORT_POLLING
 		});
 
 
@@ -55,6 +59,14 @@ class StudyGroupStore {
 			getStudyGroup: this.getStudyGroup
 		});
 		this.exportAsync(StudyGroupSource);
+	}
+
+	handlePausePolling(){
+		this.poll = false;
+	}
+
+	handleContinuePolling(){
+		this.poll = true;
 	}
 
 	getCookie(cname) {
@@ -178,10 +190,16 @@ class StudyGroupStore {
 	}
 
 	handleFetchPastGroups(pastGroups) {
+		if (!this.poll){
+			return;
+		}
 		this.pastGroups = pastGroups;
 	}
 
 	handleFetchUpcomingGroups(upcomingGroups) {
+		if (!this.poll){
+			return;
+		}
 		this.upcomingGroups = upcomingGroups;
 	}
 
@@ -268,6 +286,9 @@ class StudyGroupStore {
 	}
 
 	handleUpdateStudyGroups(studyGroups){
+		if (!this.poll){
+			return;
+		}
 		this.studyGroups = studyGroups;
 		// this.studyGroups.sort(this.compare);
 		// var curr_epoch = moment(new Date().toString()).unix();

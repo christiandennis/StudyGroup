@@ -36,6 +36,14 @@ class StudyGroupActions {
 	setSearchTerm(searchTerm) {
 		this.dispatch(searchTerm);
 	}
+
+	pauseShortPolling(){
+		this.dispatch();
+	}
+
+	continueShortPolling(){
+		this.dispatch();
+	}
 }
 
 module.exports = alt.createActions(StudyGroupActions);

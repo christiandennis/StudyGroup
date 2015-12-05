@@ -46,7 +46,7 @@ var axios = require('axios');
 
 var ReactTestUtils = require('react-addons-test-utils');
 
-var refreshInterval = 10000;
+var refreshInterval = 15000;
 
 
 var AllStudyGroups = React.createClass({
@@ -158,9 +158,14 @@ var StudyGroups = React.createClass ({
 		StudyGroupStore.fetchPastGroups();
 		StudyGroupStore.fetchUpcomingGroups();
 		// setInterval(function() {StudyGroupStore.fetchMyGroups();} , refreshInterval);
-		setInterval(function() {StudyGroupStore.fetchStudyGroups();} , refreshInterval);
-		setInterval(function() {StudyGroupStore.fetchPastGroups();} , refreshInterval);
-		setInterval(function() {StudyGroupStore.fetchUpcomingGroups();} , refreshInterval);
+		var poll = this.checkPoll;
+		setInterval(function() {if(poll()){StudyGroupStore.fetchStudyGroups();}} , refreshInterval);
+		setInterval(function() {if(poll()){StudyGroupStore.fetchPastGroups();}} , refreshInterval);
+		setInterval(function() {if(poll()){StudyGroupStore.fetchUpcomingGroups();}} , refreshInterval);
+	},
+
+	checkPoll() {
+		return this.props.poll;
 	},
 
 	emptySearch() {

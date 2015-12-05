@@ -50262,6 +50262,14 @@ function StudyGroupActions(){"use strict";}
 		this.dispatch(searchTerm);
 	}});
 
+	Object.defineProperty(StudyGroupActions.prototype,"pauseShortPolling",{writable:true,configurable:true,value:function(){"use strict";
+		this.dispatch();
+	}});
+
+	Object.defineProperty(StudyGroupActions.prototype,"continueShortPolling",{writable:true,configurable:true,value:function(){"use strict";
+		this.dispatch();
+	}});
+
 
 module.exports = alt.createActions(StudyGroupActions);
 
@@ -50877,7 +50885,9 @@ module.exports = Comments;
 var React = require('react');
 var render = require('react-dom').render;
 var Router = require('react-router');
+
 var StudyGroupStore = require('../stores/StudyGroupStore');
+var StudyGroupActions = require('../actions/StudyGroupActions');
 
 // Matertial UI components
 const TextField = require('material-ui/lib/text-field');
@@ -51138,13 +51148,17 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 	         	    	  	fullWidth: true, 
 	         	    	  	autoOk: true, 
 	         	    	  	defaultTime: date, 
-	         	    	  	floatingLabelText: "Time"})), 
+	         	    	  	floatingLabelText: "Time", 
+	         	    	  	onShow: StudyGroupActions.pauseShortPolling, 
+	         	    	  	onDismiss: StudyGroupActions.continueShortPolling})), 
 	         	    	React.createElement("div", {style: {width:'65%', float:'left'}}, React.createElement(DatePicker, {
 	         	    		ref: "editGroupDate", 
 	         	    	  	hintText: "Nov 22, 2015", 
 	         	    	  	fullWidth: true, 
 	         	    	  	defaultDate: date, 
-	         	    	  	floatingLabelText: "Date"})), 
+	         	    	  	floatingLabelText: "Date", 
+	         	    	  	onShow: StudyGroupActions.pauseShortPolling, 
+	         	    	  	onDismiss: StudyGroupActions.continueShortPolling})), 
 	         	    	React.createElement("div", {style: {width:'80%', float:'left'}}, React.createElement(TextField, {
 	         	    		onEnterKeyDown: this.submitEditGroupDetail, 
 	         	    		onChange: this.validateGroupLocation, 
@@ -51185,7 +51199,7 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 
 module.exports = LoginDialog;
 
-},{"../helper/Helper_Form":413,"../stores/StudyGroupStore":415,"material-ui/lib/date-picker/date-picker":73,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/snackbar":106,"material-ui/lib/text-field":128,"material-ui/lib/time-picker/time-picker":137,"moment":162,"react":391,"react-dom":168,"react-router":205}],402:[function(require,module,exports){
+},{"../actions/StudyGroupActions":395,"../helper/Helper_Form":413,"../stores/StudyGroupStore":415,"material-ui/lib/date-picker/date-picker":73,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/snackbar":106,"material-ui/lib/text-field":128,"material-ui/lib/time-picker/time-picker":137,"moment":162,"react":391,"react-dom":168,"react-router":205}],402:[function(require,module,exports){
 // React, react-reouter, alt
 var React = require('react');
 var render = require('react-dom').render;
@@ -51492,6 +51506,7 @@ var render = require('react-dom').render;
 var Router = require('react-router');
 
 var StudyGroupStore = require('../stores/StudyGroupStore');
+var StudyGroupActions = require('../actions/StudyGroupActions');
 
 // Matertial UI components
 const TextField = require('material-ui/lib/text-field');
@@ -51686,12 +51701,16 @@ var NewGroupDialog = React.createClass({displayName: "NewGroupDialog",
 				    	  	hintText: "9:00 pm", 
 				    	  	fullWidth: true, 
 				    	  	autoOk: true, 
-				    	  	floatingLabelText: "Time"})), 
+				    	  	floatingLabelText: "Time", 
+				    	  	onShow: StudyGroupActions.pauseShortPolling, 
+				    	  	onDismiss: StudyGroupActions.continueShortPolling})), 
 				    	React.createElement("div", {style: {width:'65%', float:'left'}}, React.createElement(DatePicker, {
 				    		ref: "createGroupDate", 
 				    	  	hintText: "Nov 22, 2015", 
 				    	  	fullWidth: true, 
-				    	  	floatingLabelText: "Date"})), 
+				    	  	floatingLabelText: "Date", 
+				    	  	onShow: StudyGroupActions.pauseShortPolling, 
+				    	  	onDismiss: StudyGroupActions.continueShortPolling})), 
 				    	React.createElement("div", {style: {width:'80%', float:'left'}}, React.createElement(TextField, {
 				    		onEnterKeyDown: this.submitNewGroup, 
 				    		onChange: this.validateGroupLocation, 
@@ -51730,7 +51749,7 @@ var NewGroupDialog = React.createClass({displayName: "NewGroupDialog",
 
 module.exports = NewGroupDialog;
 
-},{"../helper/Helper_Form":413,"../stores/StudyGroupStore":415,"material-ui/lib/date-picker/date-picker":73,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/snackbar":106,"material-ui/lib/text-field":128,"material-ui/lib/time-picker/time-picker":137,"moment":162,"react":391,"react-dom":168,"react-router":205}],406:[function(require,module,exports){
+},{"../actions/StudyGroupActions":395,"../helper/Helper_Form":413,"../stores/StudyGroupStore":415,"material-ui/lib/date-picker/date-picker":73,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/snackbar":106,"material-ui/lib/text-field":128,"material-ui/lib/time-picker/time-picker":137,"moment":162,"react":391,"react-dom":168,"react-router":205}],406:[function(require,module,exports){
 // React, react-reouter, alt
 var React = require('react');
 var render = require('react-dom').render;
@@ -52121,7 +52140,7 @@ var axios = require('axios');
 
 var ReactTestUtils = require('react-addons-test-utils');
 
-var refreshInterval = 10000;
+var refreshInterval = 15000;
 
 
 var AllStudyGroups = React.createClass({displayName: "AllStudyGroups",
@@ -52233,9 +52252,14 @@ var StudyGroups = React.createClass ({displayName: "StudyGroups",
 		StudyGroupStore.fetchPastGroups();
 		StudyGroupStore.fetchUpcomingGroups();
 		// setInterval(function() {StudyGroupStore.fetchMyGroups();} , refreshInterval);
-		setInterval(function() {StudyGroupStore.fetchStudyGroups();} , refreshInterval);
-		setInterval(function() {StudyGroupStore.fetchPastGroups();} , refreshInterval);
-		setInterval(function() {StudyGroupStore.fetchUpcomingGroups();} , refreshInterval);
+		var poll = this.checkPoll;
+		setInterval(function() {if(poll()){StudyGroupStore.fetchStudyGroups();}} , refreshInterval);
+		setInterval(function() {if(poll()){StudyGroupStore.fetchPastGroups();}} , refreshInterval);
+		setInterval(function() {if(poll()){StudyGroupStore.fetchUpcomingGroups();}} , refreshInterval);
+	},
+
+	checkPoll:function() {
+		return this.props.poll;
 	},
 
 	emptySearch:function() {
@@ -53363,6 +53387,7 @@ const moment = require('moment');
 		this.pastGroups = null;
 		this.searchResults = null;
 		this.searchTerm = null;
+		this.poll = true;
 
 
 		this.bindListeners({
@@ -53394,7 +53419,10 @@ const moment = require('moment');
 			handleDismissGroup: MyGroupsActions.DISMISS_GROUP,
 
 			handleFetchComments: CommentsActions.FETCH_COMMENTS,
-			handlePostComment: CommentsActions.POST_COMMENT
+			handlePostComment: CommentsActions.POST_COMMENT,
+
+			handlePausePolling: StudyGroupActions.PAUSE_SHORT_POLLING,
+			handleContinuePolling: StudyGroupActions.CONTINUE_SHORT_POLLING
 		});
 
 
@@ -53403,6 +53431,14 @@ const moment = require('moment');
 		});
 		this.exportAsync(StudyGroupSource);
 	}
+
+	Object.defineProperty(StudyGroupStore.prototype,"handlePausePolling",{writable:true,configurable:true,value:function(){"use strict";
+		this.poll = false;
+	}});
+
+	Object.defineProperty(StudyGroupStore.prototype,"handleContinuePolling",{writable:true,configurable:true,value:function(){"use strict";
+		this.poll = true;
+	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"getCookie",{writable:true,configurable:true,value:function(cname) {"use strict";
 	    var name = cname + "=";
@@ -53525,10 +53561,16 @@ const moment = require('moment');
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleFetchPastGroups",{writable:true,configurable:true,value:function(pastGroups) {"use strict";
+		if (!this.poll){
+			return;
+		}
 		this.pastGroups = pastGroups;
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleFetchUpcomingGroups",{writable:true,configurable:true,value:function(upcomingGroups) {"use strict";
+		if (!this.poll){
+			return;
+		}
 		this.upcomingGroups = upcomingGroups;
 	}});
 
@@ -53615,6 +53657,9 @@ const moment = require('moment');
 	}});
 
 	Object.defineProperty(StudyGroupStore.prototype,"handleUpdateStudyGroups",{writable:true,configurable:true,value:function(studyGroups){"use strict";
+		if (!this.poll){
+			return;
+		}
 		this.studyGroups = studyGroups;
 		// this.studyGroups.sort(this.compare);
 		// var curr_epoch = moment(new Date().toString()).unix();
