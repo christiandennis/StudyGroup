@@ -52246,8 +52246,9 @@ var StudyGroups = React.createClass ({displayName: "StudyGroups",
 		if (this.props.searchResults!=null) {
 			return (
 				React.createElement(Tabs, {tabItemContainerStyle: {backgroundColor:"#0D47A1"}, 
-						inkBarStyle: {backgroundColor:"#FFC107", color:'rgba(255, 255, 255, 0)'}}, 
-					React.createElement(Tab, {label: "Search Results"}, 
+						inkBarStyle: {backgroundColor:"#FFC107", color:'rgba(255, 255, 255, 0)'}, 
+						valueLink: {value: 'search'}}, 
+					React.createElement(Tab, {label: "Search Results", value: "search"}, 
 						React.createElement(AltContainer, {store: StudyGroupStore}, 
 							React.createElement(GroupSearch, null)
 						)

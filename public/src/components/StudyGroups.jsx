@@ -171,8 +171,9 @@ var StudyGroups = React.createClass ({
 		if (this.props.searchResults!=null) {
 			return (
 				<Tabs tabItemContainerStyle={{backgroundColor:"#0D47A1"}}
-						inkBarStyle={{backgroundColor:"#FFC107", color:'rgba(255, 255, 255, 0)'}}>
-					<Tab label="Search Results">
+						inkBarStyle={{backgroundColor:"#FFC107", color:'rgba(255, 255, 255, 0)'}}
+						valueLink={{value: 'search'}}>
+					<Tab label="Search Results" value="search">
 						<AltContainer store={StudyGroupStore}>
 							<GroupSearch />
 						</AltContainer>
