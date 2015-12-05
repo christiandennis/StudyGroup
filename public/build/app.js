@@ -50819,21 +50819,41 @@ var AllComments = React.createClass({displayName: "AllComments",
 			return (
 				React.createElement("div", null, 
 					comments.map(function(comment, i)  {
-						return (
-							React.createElement("div", {key: comment.id}, 
-								React.createElement(ListItem, {
-									style: {textAlign:'left'}, 
-								    leftAvatar: React.createElement(Avatar, null, " ", comment.users[0].nickname.slice(0,1).toUpperCase(), " "), 
-								    primaryText: 
-								    			React.createElement("p", {style: {marginTop:'8px'}}, 
-								    				React.createElement("span", {style: {color: '#000000'}}, comment.users[0].nickname), 
-								    				React.createElement("span", {style: {color: '#808080', fontSize:'10px'}}, " at ", new Date(comment.created_at).toString().slice(0,21))
-								    			), 
-								    			
-								    secondaryText: React.createElement("p", null, comment.content)}), 
-								React.createElement(ListDivider, null)
+						if (i<comments.length -1) {
+							return (
+								React.createElement("div", {key: comment.id}, 
+									React.createElement(ListItem, {
+									disabled: true, 
+										style: {textAlign:'left'}, 
+									    leftAvatar: React.createElement(Avatar, null, " ", comment.users[0].nickname.slice(0,1).toUpperCase(), " "), 
+									    primaryText: 
+									    			React.createElement("p", {style: {marginTop:'8px'}}, 
+									    				React.createElement("span", {style: {color: '#000000'}}, comment.users[0].nickname), 
+									    				React.createElement("span", {style: {color: '#808080', fontSize:'10px'}}, " at ", new Date(comment.created_at).toString().slice(0,21))
+									    			), 
+									    			
+									    secondaryText: React.createElement("p", {style: {color: '#000000'}}, comment.content)}), 
+										React.createElement(ListDivider, null)
+								)
 							)
-						)
+						} else {
+							return (
+								React.createElement("div", {key: comment.id}, 
+									React.createElement(ListItem, {
+									disabled: true, 
+										style: {textAlign:'left'}, 
+									    leftAvatar: React.createElement(Avatar, null, " ", comment.users[0].nickname.slice(0,1).toUpperCase(), " "), 
+									    primaryText: 
+									    			React.createElement("p", {style: {marginTop:'8px'}}, 
+									    				React.createElement("span", {style: {color: '#000000'}}, comment.users[0].nickname), 
+									    				React.createElement("span", {style: {color: '#808080', fontSize:'10px'}}, " at ", new Date(comment.created_at).toString().slice(0,21))
+									    			), 
+									    			
+									    secondaryText: React.createElement("p", {style: {color: '#000000'}}, comment.content)})
+
+								)
+							)
+						}
 					})
 				)
 			);

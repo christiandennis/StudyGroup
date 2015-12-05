@@ -64,21 +64,41 @@ var AllComments = React.createClass({
 			return (
 				<div>
 					{comments.map((comment, i) => {
-						return (
-							<div key={comment.id}>
-								<ListItem
-									style={{textAlign:'left'}}
-								    leftAvatar={<Avatar> {comment.users[0].nickname.slice(0,1).toUpperCase()} </Avatar>}
-								    primaryText={
-								    			<p style={{marginTop:'8px'}}>
-								    				<span style={{color: '#000000'}}>{comment.users[0].nickname}</span> 
-								    				<span style={{color: '#808080', fontSize:'10px'}}> at {new Date(comment.created_at).toString().slice(0,21)}</span>
-								    			</p>
-								    			}
-								    secondaryText={<p>{comment.content}</p>} />
-								<ListDivider/>
-							</div>
-						)
+						if (i<comments.length -1) {
+							return (
+								<div key={comment.id}>
+									<ListItem
+									disabled={true}
+										style={{textAlign:'left'}}
+									    leftAvatar={<Avatar> {comment.users[0].nickname.slice(0,1).toUpperCase()} </Avatar>}
+									    primaryText={
+									    			<p style={{marginTop:'8px'}}>
+									    				<span style={{color: '#000000'}}>{comment.users[0].nickname}</span> 
+									    				<span style={{color: '#808080', fontSize:'10px'}}> at {new Date(comment.created_at).toString().slice(0,21)}</span>
+									    			</p>
+									    			}
+									    secondaryText={<p style={{color: '#000000'}}>{comment.content}</p>} />
+										<ListDivider />
+								</div>
+							)
+						} else {
+							return (
+								<div key={comment.id}>
+									<ListItem
+									disabled={true}
+										style={{textAlign:'left'}}
+									    leftAvatar={<Avatar> {comment.users[0].nickname.slice(0,1).toUpperCase()} </Avatar>}
+									    primaryText={
+									    			<p style={{marginTop:'8px'}}>
+									    				<span style={{color: '#000000'}}>{comment.users[0].nickname}</span> 
+									    				<span style={{color: '#808080', fontSize:'10px'}}> at {new Date(comment.created_at).toString().slice(0,21)}</span>
+									    			</p>
+									    			}
+									    secondaryText={<p style={{color: '#000000'}}>{comment.content}</p>} />
+
+								</div>
+							)
+						}
 					})}
 				</div>
 			);
