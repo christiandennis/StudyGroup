@@ -43,7 +43,7 @@ var GroupDetailDialog = React.createClass({
 					  		autoDetectWindowHeight={true} 
 					  		autoScrollBodyContent={true}>
 					    <Paper zDepth={2}
-					    style = {{padding:"30px"}}>
+					    style = {{padding:"30px", textAlign:'left'}}>
 					    	<div className="groupdesc-title">Class</div>
 					    	<div ref="groupdetailClass" className="groupdesc-subtitle">{studyGroup.subject}</div>
 

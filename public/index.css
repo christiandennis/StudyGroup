@@ -23,11 +23,13 @@ body {
 .groupdesc-title { 
 	color: grey;
 	font-size: 12px;
+	text-align: left;
 }
 
 .groupdesc-subtitle {
 	color: black;
 	font-size: 18px;
+	text-align: left;
 }
 
 .mygroupdesc-title { 
