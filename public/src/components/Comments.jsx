@@ -150,11 +150,16 @@ var Comments = React.createClass ({
 			return (
 				<div>
 					<div className="groupdesc-comment-title" style={{marginTop:"20px"}}> No Comments </div>
-					<TextField 	ref="commentText" 
-									hintText="New Comment" 
-									onEnterKeyDown = {this.postComment}
-									multiLine={true}
-									fullWidth={true}/> <FlatButton label="post" onClick={this.postComment}/>
+					<div style={{backgroundColor:"#fefefe",
+										border: '1px solid #dddddd',
+										paddingLeft:'10px',
+										paddingRight:'10px'}}>
+						<TextField 	ref="commentText" 
+								hintText="New Comment" 
+								onEnterKeyDown = {this.postComment}
+								multiLine={true}
+								fullWidth={true}/>
+					</div>
 					<Snackbar
 		           		ref = "success"
 		             	message="Comment posted"
