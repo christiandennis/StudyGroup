@@ -8,10 +8,11 @@ class CreateGroups < ActiveRecord::Migration
       t.string :location
       t.string :school
       t.integer :capacity
-      t.text :guestlist
+      t.integer :guestlist
       t.text :comments
       t.integer :privacy
-      t.integer :host
+      t.string :host
+      t.string :going
 
       t.timestamps null: false
     end
