@@ -139,10 +139,16 @@ var TopBar = React.createClass({
     	StudyGroupStore.fetchMyGroups();
     },
 
-    startTypingTimer() {
+    startTypingTimer(e) {
     	clearTimeout(typingTimer);
-    	var searchTerm = this.refs.searchField.getValue();
-    	typingTimer = setTimeout(function(){StudyGroupStore.searchGroups(searchTerm);}, 250);
+    	if (e.which == 27){
+    		this.emptySearchTerm();
+    	} else if (e.which == 13){
+    		StudyGroupStore.searchGroups(this.refs.searchField.getValue());
+    	} else {
+    		var searchTerm = this.refs.searchField.getValue();
+    		typingTimer = setTimeout(function(){StudyGroupStore.searchGroups(searchTerm);}, 250);
+    	}
     },
 
     clearTypingTimer() {
