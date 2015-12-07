@@ -86,15 +86,15 @@ var AllComments = React.createClass({
 								<div key={comment.id}>
 									<ListItem
 									disabled={true}
-										style={{textAlign:'left'}}
+										style={{textAlign:'left', paddingTop:'10px', paddingBottom:'10px'}}
 									    leftAvatar={<Avatar> {comment.users[0].nickname.slice(0,1).toUpperCase()} </Avatar>}
 									    primaryText={
 									    			<p style={{marginTop:'8px'}}>
 									    				<span style={{color: '#000000'}}>{comment.users[0].nickname}</span> 
 									    				<span style={{color: '#808080', fontSize:'10px'}}> at {new Date(comment.created_at).toString().slice(0,21)}</span>
+									    				<br/><span style={{color: '#000000', fontSize:'15px'}}>{comment.content}</span>
 									    			</p>
-									    			}
-									    secondaryText={<p style={{color: '#000000'}}>{comment.content}</p>} />
+									    			}/>
 
 								</div>
 							)
@@ -126,11 +126,16 @@ var Comments = React.createClass ({
 								<AllComments studyGroup={this.props.studyGroup}/>
 							</List>
 						</Paper>
-						<TextField 	ref="commentText" 
+						<div style={{backgroundColor:"#fefefe",
+											border: '1px solid #dddddd',
+											paddingLeft:'10px',
+											paddingRight:'10px'}}>
+							<TextField 	ref="commentText" 
 									hintText="New Comment" 
 									onEnterKeyDown = {this.postComment}
 									multiLine={true}
-									fullWidth={true}/> <FlatButton label="post" onClick={this.postComment}/>
+									fullWidth={true}/>
+						</div>
 						<Snackbar
 			           		ref = "success"
 			             	message="Comment posted"

@@ -11,6 +11,7 @@ var Comments = require('./Comments.jsx');
 const TextField = require('material-ui/lib/text-field');
 const Dialog = require('material-ui/lib/dialog');
 const FlatButton = require('material-ui/lib/flat-button');
+const RaisedButton = require('material-ui/lib/raised-button');
 const Paper = require('material-ui/lib/paper');
 
 const moment = require('moment');
@@ -18,8 +19,10 @@ const helper = require('../helper/Helper_Dialog_GroupDetail');
 
 var GroupDetailDialog = React.createClass({
 	openEditGroupDialog() {
-		this.refs.groupDetailDialog.dismiss();
-		this.refs.editGroupDialog.refs.editGroupDialog.show();
+		if (!this.props.disabled){
+			this.refs.groupDetailDialog.dismiss();
+			this.refs.editGroupDialog.refs.editGroupDialog.show();
+		}
 	},
 
 	render() {
@@ -33,77 +36,65 @@ var GroupDetailDialog = React.createClass({
 		}
 		if (user.nickname === studyGroup.host) {
 			return (
-				<div>
+				<div style={{backgroundColor:"#D9E7FC"}}>
 					<Dialog_EditGroup ref='editGroupDialog' studyGroup={studyGroup}/>
 
 					<Dialog ref="groupDetailDialog"
-							title="StudyGroup Detail"
-							style = {{textAlign:"center", color:"#0D47A1 !important"}} 
+							bodyStyle={{backgroundColor:"#D9E7FC"}}
 							actions={[]}
 					  		autoDetectWindowHeight={true} 
 					  		autoScrollBodyContent={true}>
-					    <Paper zDepth={2}
-					    style = {{padding:"30px", textAlign:'left'}}>
-					    	<div className="groupdesc-title">Class</div>
-					    	<div ref="groupdetailClass" className="groupdesc-subtitle">{studyGroup.subject}</div>
+					    	<div style={{textAlign:'center', fontSize:'40px'}}>
+					    		{studyGroup.subject}: {studyGroup.title}
+					    		<span style={{textAlign:'right', fontSize:'10px', color:'#0000FF', cursor:'pointer'}} onClick={this.openEditGroupDialog}>
+					    			Edit
+					    		</span>
+					    	</div>
+					    	<div style={{textAlign:'center', fontSize:'15px'}}>
+					    		by {studyGroup.host}
+					    	</div>
+					    	<br/>
+					    	<div className="groupdesc-title" style={{textAlign:'center'}}>Description</div>
+					    	<div style={{textAlign:'center', fontSize:'20px'}}>
+					    		{studyGroup.description}
+					    	</div>
 
-					    	<div className="groupdesc-title">Title</div>
-					    	<div ref="groupdetailTitle" className="groupdesc-subtitle">{studyGroup.title}</div>
+					    	<br/>
+				    		<div style={{textAlign:'left'}}> {studyGroup.location} </div>
+				    		<div style={{textAlign:'left'}}> {date} at {time} </div>
+				    		<br/>
 
-					    	<div className="groupdesc-title">Host</div>
-					    	<div ref="groupdetailHost" className="groupdesc-subtitle">{studyGroup.host}</div>
-
-					    	<div className="groupdesc-title">Date</div>
-					    	<div ref="groupdetailDate" className="groupdesc-subtitle">{date}</div>
-
-					    	<div className="groupdesc-title">Time</div>
-					    	<div ref="groupdetailTime" className="groupdesc-subtitle">{time}</div>
-
-					    	<div className="groupdesc-title">Location</div>
-					    	<div ref="groupdetailLocation" className="groupdesc-subtitle">{studyGroup.location}</div>
-
-					    	<div className="groupdesc-title">Description</div>
-					    	<div ref="groupdetailDescription" className="groupdesc-subtitle">{studyGroup.description}</div>
-
-					    	<FlatButton label="Edit" onClick={this.openEditGroupDialog} disabled={this.props.disabled}/>
-
-					    </Paper>
 					    <Comments studyGroup={studyGroup}/>
 					</Dialog>
 				</div>
 			);
 		} else {
 			return (
-				<div>
+				<div style={{backgroundColor:"#D9E7FC"}}>
+					<Dialog_EditGroup ref='editGroupDialog' studyGroup={studyGroup}/>
+
 					<Dialog ref="groupDetailDialog"
-							title="StudyGroup Detail"
-							style = {{textAlign:"center", color:"#0D47A1 !important"}} 
+							bodyStyle={{backgroundColor:"#D9E7FC"}}
 							actions={[]}
 					  		autoDetectWindowHeight={true} 
 					  		autoScrollBodyContent={true}>
-					    <Paper zDepth={2}
-					    style = {{padding:"30px"}}>
-					    	<div className="groupdesc-title">Class</div>
-					    	<div ref="groupdetailClass" className="groupdesc-subtitle">{studyGroup.subject}</div>
+					    	<div style={{textAlign:'center', fontSize:'40px'}}>
+					    		{studyGroup.subject}: {studyGroup.title}
+					    	</div>
+					    	<div style={{textAlign:'center', fontSize:'15px'}}>
+					    		by {studyGroup.host}
+					    	</div>
+					    	<br/>
+					    	<div className="groupdesc-title" style={{textAlign:'center'}}>Description</div>
+					    	<div style={{textAlign:'center', fontSize:'20px'}}>
+					    		{studyGroup.description}
+					    	</div>
 
-					    	<div className="groupdesc-title">Title</div>
-					    	<div ref="groupdetailTitle" className="groupdesc-subtitle">{studyGroup.title}</div>
+					    	<br/>
+				    		<div style={{textAlign:'left'}}> {studyGroup.location} </div>
+				    		<div style={{textAlign:'left'}}> {date} at {time} </div>
+				    		<br/>
 
-					    	<div className="groupdesc-title">Host</div>
-					    	<div ref="groupdetailHost" className="groupdesc-subtitle">{studyGroup.host}</div>
-
-					    	<div className="groupdesc-title">Date</div>
-					    	<div ref="groupdetailDate" className="groupdesc-subtitle">{date}</div>
-
-					    	<div className="groupdesc-title">Time</div>
-					    	<div ref="groupdetailTime" className="groupdesc-subtitle">{time}</div>
-
-					    	<div className="groupdesc-title">Location</div>
-					    	<div ref="groupdetailLocation" className="groupdesc-subtitle">{studyGroup.location}</div>
-
-					    	<div className="groupdesc-title">Description</div>
-					    	<div ref="groupdetailDescription" className="groupdesc-subtitle">{studyGroup.description}</div>
-					    </Paper>
 					    <Comments studyGroup={studyGroup}/>
 					</Dialog>
 				</div>

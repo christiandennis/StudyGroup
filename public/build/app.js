@@ -50841,15 +50841,15 @@ var AllComments = React.createClass({displayName: "AllComments",
 								React.createElement("div", {key: comment.id}, 
 									React.createElement(ListItem, {
 									disabled: true, 
-										style: {textAlign:'left'}, 
+										style: {textAlign:'left', paddingTop:'10px', paddingBottom:'10px'}, 
 									    leftAvatar: React.createElement(Avatar, null, " ", comment.users[0].nickname.slice(0,1).toUpperCase(), " "), 
 									    primaryText: 
 									    			React.createElement("p", {style: {marginTop:'8px'}}, 
 									    				React.createElement("span", {style: {color: '#000000'}}, comment.users[0].nickname), 
-									    				React.createElement("span", {style: {color: '#808080', fontSize:'10px'}}, " at ", new Date(comment.created_at).toString().slice(0,21))
-									    			), 
-									    			
-									    secondaryText: React.createElement("p", {style: {color: '#000000'}}, comment.content)})
+									    				React.createElement("span", {style: {color: '#808080', fontSize:'10px'}}, " at ", new Date(comment.created_at).toString().slice(0,21)), 
+									    				React.createElement("br", null), React.createElement("span", {style: {color: '#000000', fontSize:'15px'}}, comment.content)
+									    			)
+									    			})
 
 								)
 							)
@@ -50881,11 +50881,16 @@ var Comments = React.createClass ({displayName: "Comments",
 								React.createElement(AllComments, {studyGroup: this.props.studyGroup})
 							)
 						), 
-						React.createElement(TextField, {	ref: "commentText", 
+						React.createElement("div", {style: {backgroundColor:"#fefefe",
+											border: '1px solid #dddddd',
+											paddingLeft:'10px',
+											paddingRight:'10px'}}, 
+							React.createElement(TextField, {	ref: "commentText", 
 									hintText: "New Comment", 
 									onEnterKeyDown: this.postComment, 
 									multiLine: true, 
-									fullWidth: true}), " ", React.createElement(FlatButton, {label: "post", onClick: this.postComment}), 
+									fullWidth: true})
+						), 
 						React.createElement(Snackbar, {
 			           		ref: "success", 
 			             	message: "Comment posted", 
@@ -51254,6 +51259,7 @@ var Comments = require('./Comments.jsx');
 const TextField = require('material-ui/lib/text-field');
 const Dialog = require('material-ui/lib/dialog');
 const FlatButton = require('material-ui/lib/flat-button');
+const RaisedButton = require('material-ui/lib/raised-button');
 const Paper = require('material-ui/lib/paper');
 
 const moment = require('moment');
@@ -51261,8 +51267,10 @@ const helper = require('../helper/Helper_Dialog_GroupDetail');
 
 var GroupDetailDialog = React.createClass({displayName: "GroupDetailDialog",
 	openEditGroupDialog:function() {
-		this.refs.groupDetailDialog.dismiss();
-		this.refs.editGroupDialog.refs.editGroupDialog.show();
+		if (!this.props.disabled){
+			this.refs.groupDetailDialog.dismiss();
+			this.refs.editGroupDialog.refs.editGroupDialog.show();
+		}
 	},
 
 	render:function() {
@@ -51276,77 +51284,65 @@ var GroupDetailDialog = React.createClass({displayName: "GroupDetailDialog",
 		}
 		if (user.nickname === studyGroup.host) {
 			return (
-				React.createElement("div", null, 
+				React.createElement("div", {style: {backgroundColor:"#D9E7FC"}}, 
 					React.createElement(Dialog_EditGroup, {ref: "editGroupDialog", studyGroup: studyGroup}), 
 
 					React.createElement(Dialog, {ref: "groupDetailDialog", 
-							title: "StudyGroup Detail", 
-							style: {textAlign:"center", color:"#0D47A1 !important"}, 
+							bodyStyle: {backgroundColor:"#D9E7FC"}, 
 							actions: [], 
 					  		autoDetectWindowHeight: true, 
 					  		autoScrollBodyContent: true}, 
-					    React.createElement(Paper, {zDepth: 2, 
-					    style: {padding:"30px", textAlign:'left'}}, 
-					    	React.createElement("div", {className: "groupdesc-title"}, "Class"), 
-					    	React.createElement("div", {ref: "groupdetailClass", className: "groupdesc-subtitle"}, studyGroup.subject), 
+					    	React.createElement("div", {style: {textAlign:'center', fontSize:'40px'}}, 
+					    		studyGroup.subject, ": ", studyGroup.title, 
+					    		React.createElement("span", {style: {textAlign:'right', fontSize:'10px', color:'#0000FF', cursor:'pointer'}, onClick: this.openEditGroupDialog}, 
+					    			"Edit"
+					    		)
+					    	), 
+					    	React.createElement("div", {style: {textAlign:'center', fontSize:'15px'}}, 
+					    		"by ", studyGroup.host
+					    	), 
+					    	React.createElement("br", null), 
+					    	React.createElement("div", {className: "groupdesc-title", style: {textAlign:'center'}}, "Description"), 
+					    	React.createElement("div", {style: {textAlign:'center', fontSize:'20px'}}, 
+					    		studyGroup.description
+					    	), 
 
-					    	React.createElement("div", {className: "groupdesc-title"}, "Title"), 
-					    	React.createElement("div", {ref: "groupdetailTitle", className: "groupdesc-subtitle"}, studyGroup.title), 
+					    	React.createElement("br", null), 
+				    		React.createElement("div", {style: {textAlign:'left'}}, " ", studyGroup.location, " "), 
+				    		React.createElement("div", {style: {textAlign:'left'}}, " ", date, " at ", time, " "), 
+				    		React.createElement("br", null), 
 
-					    	React.createElement("div", {className: "groupdesc-title"}, "Host"), 
-					    	React.createElement("div", {ref: "groupdetailHost", className: "groupdesc-subtitle"}, studyGroup.host), 
-
-					    	React.createElement("div", {className: "groupdesc-title"}, "Date"), 
-					    	React.createElement("div", {ref: "groupdetailDate", className: "groupdesc-subtitle"}, date), 
-
-					    	React.createElement("div", {className: "groupdesc-title"}, "Time"), 
-					    	React.createElement("div", {ref: "groupdetailTime", className: "groupdesc-subtitle"}, time), 
-
-					    	React.createElement("div", {className: "groupdesc-title"}, "Location"), 
-					    	React.createElement("div", {ref: "groupdetailLocation", className: "groupdesc-subtitle"}, studyGroup.location), 
-
-					    	React.createElement("div", {className: "groupdesc-title"}, "Description"), 
-					    	React.createElement("div", {ref: "groupdetailDescription", className: "groupdesc-subtitle"}, studyGroup.description), 
-
-					    	React.createElement(FlatButton, {label: "Edit", onClick: this.openEditGroupDialog, disabled: this.props.disabled})
-
-					    ), 
 					    React.createElement(Comments, {studyGroup: studyGroup})
 					)
 				)
 			);
 		} else {
 			return (
-				React.createElement("div", null, 
+				React.createElement("div", {style: {backgroundColor:"#D9E7FC"}}, 
+					React.createElement(Dialog_EditGroup, {ref: "editGroupDialog", studyGroup: studyGroup}), 
+
 					React.createElement(Dialog, {ref: "groupDetailDialog", 
-							title: "StudyGroup Detail", 
-							style: {textAlign:"center", color:"#0D47A1 !important"}, 
+							bodyStyle: {backgroundColor:"#D9E7FC"}, 
 							actions: [], 
 					  		autoDetectWindowHeight: true, 
 					  		autoScrollBodyContent: true}, 
-					    React.createElement(Paper, {zDepth: 2, 
-					    style: {padding:"30px"}}, 
-					    	React.createElement("div", {className: "groupdesc-title"}, "Class"), 
-					    	React.createElement("div", {ref: "groupdetailClass", className: "groupdesc-subtitle"}, studyGroup.subject), 
+					    	React.createElement("div", {style: {textAlign:'center', fontSize:'40px'}}, 
+					    		studyGroup.subject, ": ", studyGroup.title
+					    	), 
+					    	React.createElement("div", {style: {textAlign:'center', fontSize:'15px'}}, 
+					    		"by ", studyGroup.host
+					    	), 
+					    	React.createElement("br", null), 
+					    	React.createElement("div", {className: "groupdesc-title", style: {textAlign:'center'}}, "Description"), 
+					    	React.createElement("div", {style: {textAlign:'center', fontSize:'20px'}}, 
+					    		studyGroup.description
+					    	), 
 
-					    	React.createElement("div", {className: "groupdesc-title"}, "Title"), 
-					    	React.createElement("div", {ref: "groupdetailTitle", className: "groupdesc-subtitle"}, studyGroup.title), 
+					    	React.createElement("br", null), 
+				    		React.createElement("div", {style: {textAlign:'left'}}, " ", studyGroup.location, " "), 
+				    		React.createElement("div", {style: {textAlign:'left'}}, " ", date, " at ", time, " "), 
+				    		React.createElement("br", null), 
 
-					    	React.createElement("div", {className: "groupdesc-title"}, "Host"), 
-					    	React.createElement("div", {ref: "groupdetailHost", className: "groupdesc-subtitle"}, studyGroup.host), 
-
-					    	React.createElement("div", {className: "groupdesc-title"}, "Date"), 
-					    	React.createElement("div", {ref: "groupdetailDate", className: "groupdesc-subtitle"}, date), 
-
-					    	React.createElement("div", {className: "groupdesc-title"}, "Time"), 
-					    	React.createElement("div", {ref: "groupdetailTime", className: "groupdesc-subtitle"}, time), 
-
-					    	React.createElement("div", {className: "groupdesc-title"}, "Location"), 
-					    	React.createElement("div", {ref: "groupdetailLocation", className: "groupdesc-subtitle"}, studyGroup.location), 
-
-					    	React.createElement("div", {className: "groupdesc-title"}, "Description"), 
-					    	React.createElement("div", {ref: "groupdetailDescription", className: "groupdesc-subtitle"}, studyGroup.description)
-					    ), 
 					    React.createElement(Comments, {studyGroup: studyGroup})
 					)
 				)
@@ -51358,7 +51354,7 @@ var GroupDetailDialog = React.createClass({displayName: "GroupDetailDialog",
 
 module.exports = GroupDetailDialog;
 
-},{"../helper/Helper_Dialog_GroupDetail":411,"../stores/StudyGroupStore":415,"./Comments.jsx":400,"./Dialog_EditGroup.jsx":401,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/paper":100,"material-ui/lib/text-field":128,"moment":162,"react":391,"react-dom":168,"react-router":205}],403:[function(require,module,exports){
+},{"../helper/Helper_Dialog_GroupDetail":411,"../stores/StudyGroupStore":415,"./Comments.jsx":400,"./Dialog_EditGroup.jsx":401,"material-ui/lib/dialog":76,"material-ui/lib/flat-button":80,"material-ui/lib/paper":100,"material-ui/lib/raised-button":101,"material-ui/lib/text-field":128,"moment":162,"react":391,"react-dom":168,"react-router":205}],403:[function(require,module,exports){
 // React, react-reouter, alt
 var React = require('react');
 var render = require('react-dom').render;
