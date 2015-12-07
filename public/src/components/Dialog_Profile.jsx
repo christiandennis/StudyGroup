@@ -36,7 +36,7 @@ var ProfileDialog = React.createClass({
 					onShow={this.viewProfileShow}
 					style = {{textAlign:"center"}}
 			  		autoDetectWindowHeight={true} 
-			  		autoScrollBodyContent={false}>
+			  		autoScrollBodyContent={true}>
 			    	<div className="profile-box"
 			    	style={{paddingTop:"50px", paddingBottom:"50px"}}>
 				    	<div style={{fontWeight:"bold", fontSize:"30px", paddingBottom:"20px", color:"#FFFFFF"}} ref="profileName" >{this.props.user.name}</div>

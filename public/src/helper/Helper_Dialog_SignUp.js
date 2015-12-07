@@ -43,7 +43,6 @@ exports.validateEmail = function(email) {
 };
 
 exports.validatePasswordMatch = function(filled, password, confirmPassword) {
-	console.log('password', password, password.length);
 	if (filled && password===confirmPassword) {
 		if(password.length < 8){
 			return 'tooshort';
