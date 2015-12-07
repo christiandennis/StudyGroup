@@ -51402,7 +51402,7 @@ var LoginDialog = React.createClass({displayName: "LoginDialog",
 							    primary: true, 
 							    onTouchTap: this.submitLogIn})], 
 				  		autoDetectWindowHeight: true, 
-				  		autoScrollBodyContent: false}, 
+				  		autoScrollBodyContent: true}, 
 
 				    React.createElement(TextField, {
 				      onEnterKeyDown: this.submitLogIn, 
@@ -51523,7 +51523,7 @@ var MyGroups = React.createClass ({displayName: "MyGroups",
 							bodyStyle: {background:"linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url('abstract.jpg') no-repeat",
 										backgroundSize:'cover'}, 
 							autoDetectWindowHeight: true, 
-	  						autoScrollBodyContent: false}, 
+	  						autoScrollBodyContent: true}, 
 						React.createElement(AltContainer, {store: StudyGroupStore}, 
 							React.createElement(AllSimpleGroup, null)
 						)
@@ -51713,7 +51713,7 @@ var NewGroupDialog = React.createClass({displayName: "NewGroupDialog",
 							    primary: true, 
 							    onTouchTap: this.submitNewGroup})], 
 				  		autoDetectWindowHeight: true, 
-				  		autoScrollBodyContent: false}, 
+				  		autoScrollBodyContent: true}, 
 				    React.createElement("div", null, 
 				    	React.createElement("div", {style: {width:'35%', float:'left'}}, React.createElement(TextField, {
 				    		onEnterKeyDown: this.submitNewGroup, 
@@ -51829,7 +51829,7 @@ var ProfileDialog = React.createClass({displayName: "ProfileDialog",
 					onShow: this.viewProfileShow, 
 					style: {textAlign:"center"}, 
 			  		autoDetectWindowHeight: true, 
-			  		autoScrollBodyContent: false}, 
+			  		autoScrollBodyContent: true}, 
 			    	React.createElement("div", {className: "profile-box", 
 			    	style: {paddingTop:"50px", paddingBottom:"50px"}}, 
 				    	React.createElement("div", {style: {fontWeight:"bold", fontSize:"30px", paddingBottom:"20px", color:"#FFFFFF"}, ref: "profileName"}, this.props.user.name), 
@@ -51995,7 +51995,7 @@ var SignUpDialog = React.createClass({displayName: "SignUpDialog",
 							    primary: true, 
 							    onTouchTap: this.submitSignUp})], 
 				  		autoDetectWindowHeight: true, 
-				  		autoScrollBodyContent: false}, 
+				  		autoScrollBodyContent: true}, 
 				    React.createElement("div", null, 
 				    	React.createElement(TextField, {
 				    	  onEnterKeyDown: this.submitSignUp, 
@@ -52466,7 +52466,6 @@ exports.validateEmail = function(email) {
 };
 
 exports.validatePasswordMatch = function(filled, password, confirmPassword) {
-	console.log('password', password, password.length);
 	if (filled && password===confirmPassword) {
 		if(password.length < 8){
 			return 'tooshort';
